@@ -36,6 +36,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartResolver;
@@ -57,7 +58,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author ActiveEon Team
  */
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
+@Configuration
+@EnableAutoConfiguration(exclude = { MultipartAutoConfiguration.class })
 @EnableSwagger2
 @PropertySource("classpath:application.properties")
 public class Application extends WebMvcConfigurerAdapter {
@@ -68,13 +70,13 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false).
-                favorParameter(true).
-                parameterName("format").
-                ignoreAcceptHeader(true).
-                useJaf(false).
-                defaultContentType(MediaType.APPLICATION_JSON).
-                mediaType("json", MediaType.APPLICATION_JSON);
+        configurer.favorPathExtension(false)
+                  .favorParameter(true)
+                  .parameterName("format")
+                  .ignoreAcceptHeader(true)
+                  .useJaf(false)
+                  .defaultContentType(MediaType.APPLICATION_JSON)
+                  .mediaType("json", MediaType.APPLICATION_JSON);
     }
 
     @Bean
@@ -83,29 +85,27 @@ public class Application extends WebMvcConfigurerAdapter {
     }
 
     /*
-    The following code is for Swagger documentation
+     * The following code is for Swagger documentation
      */
     @Bean
-    public Docket microserviceApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .groupName("microservice-template")
-                .select()
-                .paths(allowedPaths())
-                .build();
+    public Docket schedulingApi() {
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+                                                      .groupName("scheduling-api")
+                                                      .select()
+                                                      .paths(allowedPaths())
+                                                      .build();
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("microservice-template API")
-                .description("The purpose of the microservice-template is ...\n")
-                .licenseUrl("https://github.com/ow2-proactive/microservice-template/blob/master/LICENSE")
-                .version("1.0")
-                .build();
+        return new ApiInfoBuilder().title("Scheduling API")
+                                   .description("The purpose of the scheduling api is ...\n")
+                                   .licenseUrl("https://github.com/ow2-proactive/scheduling-api/blob/master/LICENSE")
+                                   .version("1.0")
+                                   .build();
     }
 
     private Predicate<String> allowedPaths() {
-        return PathSelectors.regex("/users.*");
+        return PathSelectors.regex("/*.*");
     }
 
 }

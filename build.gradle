@@ -96,6 +96,10 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
         exclude module: 'spring-boot-starter-validation'
     }
+    
+    compile 'org.hibernate:hibernate-validator:5.3.0.Final'
+    
+    
     compile 'org.springframework.hateoas:spring-hateoas:0.19.0.RELEASE'
 
     // TODO change to providedCompiled before releasing (required for now in order to debug from IDE)
@@ -109,6 +113,7 @@ dependencies {
 
 
     compile 'com.graphql-java:graphql-java-annotations:0.13.0'
+    compile 'com.graphql-java:graphql-java-servlet:0.7.0'
 
     compile 'com.mysema.querydsl:querydsl-jpa:3.7.1'
     querydsl 'com.mysema.querydsl:querydsl-apt:3.7.1'
