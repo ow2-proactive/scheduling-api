@@ -98,12 +98,15 @@ dependencies {
     }
     compile 'org.springframework.hateoas:spring-hateoas:0.19.0.RELEASE'
 
-    providedCompile 'org.springframework.boot:spring-boot-starter-tomcat:1.3.3.RELEASE'
+    // TODO change to providedCompiled before releasing (required for now in order to debug from IDE)
+    compile 'org.springframework.boot:spring-boot-starter-tomcat:1.3.3.RELEASE'
 
     compile 'io.springfox:springfox-spring-web:2.4.0'
     compile 'io.springfox:springfox-swagger2:2.4.0'
     compile 'io.springfox:springfox-swagger-ui:2.4.0'
     compile 'com.google.guava:guava:19.0'
+    compile 'org.hibernate:hibernate-validator:5.1.0.Final'
+
 
     compile 'com.graphql-java:graphql-java-annotations:0.13.0'
 
@@ -195,7 +198,7 @@ jacocoTestReport {
 
 clean {
     sourceSets.generated.java.srcDirs.each {
-       srcDir -> delete srcDir
+        srcDir -> delete srcDir
     }
 }
 
