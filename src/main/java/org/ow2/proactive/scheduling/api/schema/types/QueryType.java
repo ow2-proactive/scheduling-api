@@ -58,6 +58,11 @@ public class QueryType {
     }
 
     @GraphQLField
+    public String name() {
+        return "ProActive Workflows and Scheduling";
+    }
+
+    @GraphQLField
     public String version() {
         return "42";
     }

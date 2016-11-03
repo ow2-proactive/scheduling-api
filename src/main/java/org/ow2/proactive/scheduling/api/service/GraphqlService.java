@@ -66,10 +66,10 @@ public class GraphqlService {
     public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
     }
 
-    public Map<String, Object> executeQuery(String query, Map<String, Object> variables) {
+    public Map<String, Object> executeQuery(String query, String operationName, Map<String, Object> variables) {
         // TODO see how to integrate data fetcher instead of
         // static value (cf. second parameter passed to execute)
-        ExecutionResult executionResult = graphql.execute(query, new QueryType(), variables);
+        ExecutionResult executionResult = graphql.execute(query, operationName, new QueryType(), variables);
 
         Map<String, Object> result = new LinkedHashMap<>();
 
