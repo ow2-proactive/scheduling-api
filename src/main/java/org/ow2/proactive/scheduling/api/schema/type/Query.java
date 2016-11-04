@@ -32,14 +32,16 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.types;
+package org.ow2.proactive.scheduling.api.schema.type;
 
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import com.google.common.collect.Lists;
 import graphql.annotations.GraphQLConnection;
 import graphql.annotations.GraphQLField;
+import graphql.annotations.GraphQLNonNull;
 import graphql.annotations.GraphQLType;
 
 
@@ -47,13 +49,15 @@ import graphql.annotations.GraphQLType;
  * @author ActiveEon Team
  */
 @GraphQLType
-public class QueryType {
+public class Query {
 
     @GraphQLField
     @GraphQLConnection
-    public List<JobType> jobs() {
-        JobType job1 = JobType.builder().id(1).name("Super").build();
-        JobType job2 = JobType.builder().id(2).name("Cool").build();
+    public List<Job> jobs() {
+        Job job1 = Job.builder().id(1).name("Super").variables(Lists.newArrayList(
+                Variable.builder().key("vk1").value("vv1").build(),
+                Variable.builder().key("vk2").value("vv2").build())).build();
+        Job job2 = Job.builder().id(2).name("Cool").build();
         return ImmutableList.of(job1, job2);
     }
 
@@ -65,6 +69,12 @@ public class QueryType {
     @GraphQLField
     public String version() {
         return "42";
+    }
+
+    @GraphQLField
+    @GraphQLNonNull
+    public User viewer() {
+        return User.builder().build();
     }
 
 }

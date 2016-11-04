@@ -32,26 +32,21 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.types;
+package org.ow2.proactive.scheduling.api.schema.type.interfaces;
+
 
 import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLType;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-
-/**
- * @author ActiveEon Team
- */
-@Builder
+@AllArgsConstructor
 @Getter
-@GraphQLType
-public class JobType {
+public abstract class KeyValue {
 
     @GraphQLField
-    private long id;
+    protected String key;
 
     @GraphQLField
-    private String name;
+    protected String value;
 
 }

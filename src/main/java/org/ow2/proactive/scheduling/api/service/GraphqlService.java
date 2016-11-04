@@ -40,7 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.controller.GraphQLController;
-import org.ow2.proactive.scheduling.api.schema.types.QueryType;
+import org.ow2.proactive.scheduling.api.schema.type.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,7 @@ public class GraphqlService {
 
     private static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
 
-    private GraphQLObjectType queryObject = GraphQLAnnotations.object(QueryType.class);
+    private GraphQLObjectType queryObject = GraphQLAnnotations.object(Query.class);
 
     private GraphQL graphql = new GraphQL(newSchema().query(queryObject).build());
 
@@ -70,7 +70,7 @@ public class GraphqlService {
         // TODO see how to integrate data fetcher instead of
         // static value (cf. second parameter passed to execute)
 
-        ExecutionResult executionResult = graphql.execute(query, operationName, new QueryType(), variables);
+        ExecutionResult executionResult = graphql.execute(query, operationName, new Query(), variables);
 
         Map<String, Object> result = new LinkedHashMap<>();
 
