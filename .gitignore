@@ -1,8 +1,9 @@
 build
 bin
-generated
-src/generated
 classes
+generated
+scheduling-api.log
+src/generated
 .gradletasknamecache
 *.iml
 .idea
