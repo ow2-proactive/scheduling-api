@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.service.GraphqlService;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 
 
 /**
@@ -47,8 +47,7 @@ public class GraphQLController {
     @ResponseBody
     public Map<String, Object> executeOperation(@RequestParam(DEFAULT_QUERY_KEY) String query,
             @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
-            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables)
-            throws IOException {
+            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
 
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
     }

@@ -37,8 +37,8 @@ package org.ow2.proactive.scheduling.api.schema.type;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-
 import com.google.common.collect.Lists;
+
 import graphql.annotations.GraphQLConnection;
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLNonNull;
@@ -54,9 +54,12 @@ public class Query {
     @GraphQLField
     @GraphQLConnection
     public List<Job> jobs() {
-        Job job1 = Job.builder().id(1).name("Super").variables(Lists.newArrayList(
-                Variable.builder().key("vk1").value("vv1").build(),
-                Variable.builder().key("vk2").value("vv2").build())).build();
+        Job job1 = Job.builder()
+                      .id(1)
+                      .name("Super")
+                      .variables(Lists.newArrayList(Variable.builder().key("vk1").value("vv1").build(),
+                                                    Variable.builder().key("vk2").value("vv2").build()))
+                      .build();
         Job job2 = Job.builder().id(2).name("Cool").build();
         return ImmutableList.of(job1, job2);
     }

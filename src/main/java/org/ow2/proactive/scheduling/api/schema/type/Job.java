@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
 import com.google.common.collect.ImmutableList;
@@ -82,17 +83,16 @@ public class Job {
     private List<GenericInformation> genericInformation;
 
     @GraphQLField
-    public List<GenericInformation> genericInformation(@GraphQLName("key") String key,
-            @GraphQLName("value") String value) {
-        return filterKeyValue(genericInformation, key, value);
+    public List<GenericInformation> genericInformation(KeyValueInput arg) {
+        return filterKeyValue(genericInformation, arg.getKey(), arg.getValue());
     }
 
     // TODO: most probably to remove when using data fetchers
     private List<Variable> variables;
 
     @GraphQLField
-    public List<Variable> variables(@GraphQLName("key") String key, @GraphQLName("value") String value) {
-        return filterKeyValue(variables, key, value);
+    public List<Variable> variables(KeyValueInput arg) {
+        return filterKeyValue(variables, arg.getKey(), arg.getValue());
     }
 
     private <T extends KeyValue> List<T> filterKeyValue(List<T> entries, @GraphQLName("key") String key,
@@ -108,8 +108,9 @@ public class Job {
         } else if (key != null && value == null) {
             return entries.stream().filter(v -> key.equals(v.getKey())).collect(Collectors.toList());
         } else {
-            return entries.stream().filter(v -> key.equals(v.getKey()) && value.equals(v.getValue()))
-                    .collect(Collectors.toList());
+            return entries.stream()
+                          .filter(v -> key.equals(v.getKey()) && value.equals(v.getValue()))
+                          .collect(Collectors.toList());
         }
     }
 
