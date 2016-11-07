@@ -41,18 +41,17 @@ import graphql.annotations.GraphQLType;
 @GraphQLType
 public enum JobPriority {
 
-    /** Lowest priority*/
-    @GraphQLDescription("oops")
+    @GraphQLDescription("Idle.")
     IDLE,
-    /** Lowest priority */
+    @GraphQLDescription("Lowest priority.")
     LOWEST,
-    /** Low priority */
+    @GraphQLDescription("Low priority.")
     LOW,
-    /** Normal Priority */
+    @GraphQLDescription("Normal priority.")
     NORMAL,
-    /** High priority*/
+    @GraphQLDescription("High priority.")
     HIGH,
-    /** Highest priority*/
+    @GraphQLDescription("Highest priority.")
     HIGHEST
 
 }

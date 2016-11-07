@@ -34,72 +34,39 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.enums;
 
+import graphql.annotations.GraphQLDescription;
 import graphql.annotations.GraphQLType;
 
 @GraphQLType
 public enum TaskStatus {
 
-    /**
-     * The task has just been submitted by the user.
-     */
+    @GraphQLDescription("The task has just been submitted by the user.")
     SUBMITTED,
-    /**
-     * The task is in the scheduler pending queue.
-     */
+    @GraphQLDescription("The task is in the scheduler pending queue.")
     PENDING,
-    /**
-     * The task is paused.
-     */
+    @GraphQLDescription("The task is paused.")
     PAUSED,
-    /**
-     * The task is executing.
-     */
+    @GraphQLDescription("The task is executing.")
     RUNNING,
-    /**
-     * The task is waiting for restart after an error. (ie:native code != 0 or exception)
-     */
+    @GraphQLDescription("The task is waiting for restart after an error (i.e. native code != 0 or exception).")
     WAITING_ON_ERROR,
-    /**
-     * The task is waiting for restart after a failure. (ie:node down)
-     */
+    @GraphQLDescription("The task is waiting for restart after a failure (i.e. node down).")
     WAITING_ON_FAILURE,
-    /**
-     * The task is failed
-     * (only if max execution time has been reached and the node on which it was started is down).
-     */
+    @GraphQLDescription("The task is failed (only if max execution time has been reached and the node on which it was started is down).")
     FAILED,
-    /**
-     * The task could not be started.<br>
-     * It means that the task could not be started due to
-     * dependences failure.
-     */
+    @GraphQLDescription("The task could not be started. It means that the task could not be started due to one ore more dependency failure.")
     NOT_STARTED,
-    /**
-     * The task could not be restarted.<br>
-     * It means that the task could not be restarted after an error
-     * during the previous execution
-     */
+    @GraphQLDescription("The task could not be restarted. It means that the task could not be restarted after an error during the previous execution.")
     NOT_RESTARTED,
-    /**
-     * The task has been aborted by an exception on an other task while the task is running. (job is cancelOnError=true)
-     * Can be also in this status if the job is killed while the concerned task was running.
-     */
+    @GraphQLDescription("The task has been aborted by an exception on an other task while the task is running (job has cancelOnError=true). Can be also in this status if the job is killed while the concerned task was running.")
     ABORTED,
-    /**
-     * The task has finished execution with error code (!=0) or exception.
-     */
+    @GraphQLDescription("The task has finished execution with error code (!=0) or exception.")
     FAULTY,
-    /**
-     * The task has finished execution.
-     */
+    @GraphQLDescription("The task has finished execution.")
     FINISHED,
-    /**
-     * The task was not executed: it was the non-selected branch of an IF/ELSE control flow action
-     */
+    @GraphQLDescription("The task was not executed: it was the non-selected branch of an IF/ELSE control flow action.")
     SKIPPED,
-    /**
-     * The task is suspended after first error and is waiting for a manual restart action.
-     */
+    @GraphQLDescription("The task is suspended after first error and is waiting for a manual restart action.")
     IN_ERROR;
 
 }
