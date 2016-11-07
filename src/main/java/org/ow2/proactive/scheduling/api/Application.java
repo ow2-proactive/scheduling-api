@@ -38,30 +38,22 @@ import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.google.common.base.Predicate;
-
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 
 /**
  * @author ActiveEon Team
  */
-@SpringBootApplication
 @Configuration
 @EnableAutoConfiguration(exclude = { MultipartAutoConfiguration.class })
-@EnableSwagger2
-@PropertySource("classpath:application.properties")
+@PropertySources({ @PropertySource(value = "classpath:application.properties"),
+        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
+@SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {
@@ -70,42 +62,14 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false)
-                  .favorParameter(true)
-                  .parameterName("format")
-                  .ignoreAcceptHeader(true)
-                  .useJaf(false)
-                  .defaultContentType(MediaType.APPLICATION_JSON)
-                  .mediaType("json", MediaType.APPLICATION_JSON);
+        configurer.favorPathExtension(false).favorParameter(true).parameterName("format")
+                .ignoreAcceptHeader(true).useJaf(false).defaultContentType(MediaType.APPLICATION_JSON)
+                .mediaType("json", MediaType.APPLICATION_JSON);
     }
 
     @Bean
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
-    }
-
-    /*
-     * The following code is for Swagger documentation
-     */
-    @Bean
-    public Docket schedulingApi() {
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
-                                                      .groupName("scheduling-api")
-                                                      .select()
-                                                      .paths(allowedPaths())
-                                                      .build();
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Scheduling API")
-                                   .description("The purpose of the scheduling api is ...\n")
-                                   .licenseUrl("https://github.com/ow2-proactive/scheduling-api/blob/master/LICENSE")
-                                   .version("1.0")
-                                   .build();
-    }
-
-    private Predicate<String> allowedPaths() {
-        return PathSelectors.regex("/*.*");
     }
 
 }
