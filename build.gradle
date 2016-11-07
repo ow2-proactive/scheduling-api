@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        mavenCentral()
         jcenter()
     }
 
@@ -34,8 +33,6 @@ configurations {
 
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
-
-    querydsl
 }
 
 compileJava {
@@ -53,7 +50,9 @@ ext {
 }
 
 repositories {
+    if (project.hasProperty('local')) mavenLocal()
     jcenter()
+    maven { url 'http://repository.activeeon.com/content/groups/proactive/' }
 }
 
 sourceSets {
@@ -108,8 +107,7 @@ dependencies {
     compile 'com.graphql-java:graphql-java-annotations:0.13.0'
     compile 'com.graphql-java:graphql-java-servlet:0.7.0'
 
-    compile 'com.mysema.querydsl:querydsl-jpa:3.7.1'
-    querydsl 'com.mysema.querydsl:querydsl-apt:3.7.1'
+    compile "org.ow2.proactive:scheduler-server:$version"
 
     testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
     testCompile 'com.google.truth:truth:0.28'
@@ -155,33 +153,6 @@ task integrationTest(type: Test) {
         events "passed", "skipped", "failed"
     }
 }
-
-task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
-    // place the output of the QueryDSL predicate processor in a new location.
-    def outputDir = file("$generatedSrcDir")
-    outputs.dir outputDir
-    doFirst {
-        // make sure the directory exists.
-        outputDir.exists() || outputDir.mkdirs()
-    }
-
-    source = sourceSets.main.java
-    classpath = configurations.compile + configurations.querydsl
-
-    options.compilerArgs = [
-            "-proc:only",
-            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
-    ]
-
-    // generated code goes into the generated code directory.
-    destinationDir = outputDir
-
-    dependencyCacheDir = compileJava.dependencyCacheDir
-
-}
-
-compileJava.dependsOn generateQueryDSL
-compileJava.source generateQueryDSL.outputs.files, sourceSets.main.java
 
 jacocoTestReport {
     executionData test, integrationTest
