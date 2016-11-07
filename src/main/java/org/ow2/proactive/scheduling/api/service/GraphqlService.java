@@ -70,7 +70,7 @@ public class GraphqlService {
         // TODO see how to integrate data fetcher instead of
         // static value (cf. second parameter passed to execute)
 
-        ExecutionResult executionResult = graphql.execute(query, operationName, new Query(), variables);
+        ExecutionResult executionResult = graphql.execute(query, operationName, null, variables);
 
         Map<String, Object> result = new LinkedHashMap<>();
 

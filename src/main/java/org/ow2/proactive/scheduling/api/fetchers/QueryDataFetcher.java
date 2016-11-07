@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -32,39 +32,17 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type;
+package org.ow2.proactive.scheduling.api.fetchers;
 
-import java.util.List;
+import org.ow2.proactive.scheduling.api.schema.type.Query;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
-import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
+public class QueryDataFetcher implements DataFetcher {
 
-import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLDataFetcher;
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLNonNull;
-import graphql.annotations.GraphQLType;
-
-
-/**
- * @author ActiveEon Team
- */
-@GraphQLType
-public class Query {
-
-    @GraphQLField
-    @GraphQLConnection
-    @GraphQLDataFetcher(JobDataFetcher.class)
-    public List<Job> jobs;
-
-    @GraphQLField
-    public String version() {
-        return "42";
-    }
-
-    @GraphQLField
-    public User viewer(@GraphQLName("sessionId") String sessionId) {
-        return User.builder().sessionId(sessionId).login("Bobot").build();
+    @Override
+    public Object get(DataFetchingEnvironment environment) {
+        return new Query();
     }
 
 }

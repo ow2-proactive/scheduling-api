@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -32,39 +32,22 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type;
+package org.ow2.proactive.scheduling.api.fetchers;
 
-import java.util.List;
+import org.ow2.proactive.scheduling.api.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.schema.type.Variable;
 
-import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
+import com.google.common.collect.Lists;
 
-import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLDataFetcher;
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLNonNull;
-import graphql.annotations.GraphQLType;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
 
-/**
- * @author ActiveEon Team
- */
-@GraphQLType
-public class Query {
+public class GenericInformationDataFetcher implements DataFetcher {
 
-    @GraphQLField
-    @GraphQLConnection
-    @GraphQLDataFetcher(JobDataFetcher.class)
-    public List<Job> jobs;
-
-    @GraphQLField
-    public String version() {
-        return "42";
-    }
-
-    @GraphQLField
-    public User viewer(@GraphQLName("sessionId") String sessionId) {
-        return User.builder().sessionId(sessionId).login("Bobot").build();
+    @Override
+    public Object get(DataFetchingEnvironment environment) {
+        return Lists.newArrayList(GenericInformation.builder().key("gi").value("sd").build());
     }
 
 }

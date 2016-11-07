@@ -37,15 +37,18 @@ package org.ow2.proactive.scheduling.api.schema.type;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
+import org.ow2.proactive.scheduling.api.fetchers.VariableDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
 import com.google.common.collect.ImmutableList;
 
 import graphql.annotations.GraphQLConnection;
+import graphql.annotations.GraphQLDataFetcher;
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
+import graphql.annotations.GraphQLNonNull;
 import graphql.annotations.GraphQLType;
 import lombok.Builder;
 import lombok.Getter;
@@ -62,6 +65,7 @@ import lombok.ToString;
 public class Job {
 
     @GraphQLField
+    @GraphQLNonNull
     private long id;
 
     @GraphQLField
@@ -80,39 +84,13 @@ public class Job {
     @GraphQLConnection
     private List<Task> tasks;
 
+    @GraphQLField
+    @GraphQLDataFetcher(GenericInformationDataFetcher.class)
     private List<GenericInformation> genericInformation;
 
     @GraphQLField
-    public List<GenericInformation> genericInformation(KeyValueInput arg) {
-        return filterKeyValue(genericInformation, arg.getKey(), arg.getValue());
-    }
-
-    // TODO: most probably to remove when using data fetchers
+    @GraphQLDataFetcher(VariableDataFetcher.class)
     private List<Variable> variables;
-
-    @GraphQLField
-    public List<Variable> variables(KeyValueInput arg) {
-        return filterKeyValue(variables, arg.getKey(), arg.getValue());
-    }
-
-    private <T extends KeyValue> List<T> filterKeyValue(List<T> entries, @GraphQLName("key") String key,
-            @GraphQLName("value") String value) {
-        if (entries == null) {
-            return ImmutableList.of();
-        }
-
-        if (key == null && value == null) {
-            return entries;
-        } else if (key == null && value != null) {
-            return entries.stream().filter(v -> value.equals(v.getValue())).collect(Collectors.toList());
-        } else if (key != null && value == null) {
-            return entries.stream().filter(v -> key.equals(v.getKey())).collect(Collectors.toList());
-        } else {
-            return entries.stream()
-                          .filter(v -> key.equals(v.getKey()) && value.equals(v.getValue()))
-                          .collect(Collectors.toList());
-        }
-    }
 
     @GraphQLField
     private long startTime;
@@ -149,5 +127,23 @@ public class Job {
 
     @GraphQLField
     private int numberOfInErrorTasks;
+
+    private <T extends KeyValue> List<T> filterKeyValue(List<T> entries, @GraphQLName("key") String key,
+            @GraphQLName("value") String value) {
+        if (entries == null) {
+            return ImmutableList.of();
+        }
+
+        if (key == null && value == null) {
+            return entries;
+        } else if (key == null && value != null) {
+            return entries.stream().filter(v -> value.equals(v.getValue())).collect(Collectors.toList());
+        } else if (key != null && value == null) {
+            return entries.stream().filter(v -> key.equals(v.getKey())).collect(Collectors.toList());
+        } else {
+            return entries.stream().filter(v -> key.equals(v.getKey()) && value.equals(v.getValue()))
+                    .collect(Collectors.toList());
+        }
+    }
 
 }
