@@ -52,7 +52,6 @@ import graphql.schema.DataFetchingEnvironment;
  * @author ActiveEon Team
  */
 @GraphQLType
-
 public class Query {
 
     @GraphQLField

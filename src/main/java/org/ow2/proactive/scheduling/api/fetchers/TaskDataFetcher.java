@@ -34,19 +34,54 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.ow2.proactive.scheduler.core.db.TaskData;
+import org.ow2.proactive.scheduling.api.repository.TaskRepository;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
+import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
 
-import com.google.common.collect.Lists;
-
+import com.google.common.collect.Maps;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
 
 public class TaskDataFetcher implements DataFetcher {
 
+    private TaskRepository taskRepository;
+
+    public TaskDataFetcher() {
+        this.taskRepository = ApplicationContextProvider.getApplicationContext()
+                .getBean(TaskRepository.class);
+    }
+
     @Override
     public Object get(DataFetchingEnvironment environment) {
-        return Lists.newArrayList(Task.builder().id(1234).name("test").build());
+        Job job = (Job) environment.getSource();
+        List<TaskData> tasks = taskRepository.findByIdJobId(job.getId());
+
+        // TODO Task progress not accessible from DB
+        // TODO Variables for tasks
+
+        return tasks.stream()
+                .map(taskData -> Task.builder().id(taskData.getId().getTaskId())
+                        .jobId(taskData.getId().getJobId()).name(taskData.getTaskName())
+                        .status(TaskStatus.valueOf(taskData.getTaskStatus().name()))
+                        .genericInformation(taskData.getGenericInformation())
+                        .executionDuration(taskData.getExecutionDuration())
+                        .executionHostName(taskData.getExecutionHostName())
+                        .finishedTime(taskData.getFinishedTime()).inErrorTime(taskData.getInErrorTime())
+                        .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
+                        .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
+                        .scheduledTime(taskData.getScheduledTime()).startTime(taskData.getStartTime())
+                        .progress(-1)
+                        .variables(Maps.newHashMap())
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
 }

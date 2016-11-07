@@ -34,9 +34,14 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import org.ow2.proactive.scheduling.api.schema.type.Job;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import com.google.common.collect.Lists;
+import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.repository.JobRepository;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -44,9 +49,40 @@ import graphql.schema.DataFetchingEnvironment;
 
 public class JobDataFetcher implements DataFetcher {
 
+    private JobRepository jobRepository;
+
+    public JobDataFetcher() {
+        this.jobRepository = ApplicationContextProvider.getApplicationContext().getBean(JobRepository.class);
+    }
+
     @Override
     public Object get(DataFetchingEnvironment environment) {
-        return Lists.newArrayList(Job.builder().id(1234).name("test").build());
+        Iterable<JobData> jobs = jobRepository.findAll();
+
+        return StreamSupport.stream(jobs.spliterator(), false).map(jobData ->
+            Job.builder()
+                    .id(jobData.getId())
+                    .name(jobData.getJobName())
+                    .description(jobData.getDescription())
+                    .priority(JobPriority.valueOf(jobData.getPriority().name()))
+                    .owner(jobData.getOwner())
+                    .projectName(jobData.getProjectName())
+                    .startTime(jobData.getStartTime())
+                    .inErrorTime(jobData.getInErrorTime())
+                    .finishedTime(jobData.getFinishedTime())
+                    .submittedTime(jobData.getSubmittedTime())
+                    .removedTime(jobData.getRemovedTime())
+                    .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
+                    .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
+                    .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
+                    .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
+                    .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
+                    .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
+                    .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
+                    .genericInformation(jobData.getGenericInformation())
+                    .variables(jobData.getVariables())
+                    .build()
+        ).collect(Collectors.toList());
     }
 
 }

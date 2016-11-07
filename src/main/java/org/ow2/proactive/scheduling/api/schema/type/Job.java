@@ -35,14 +35,18 @@
 package org.ow2.proactive.scheduling.api.schema.type;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
-import org.ow2.proactive.scheduling.api.fetchers.VariableDataFetcher;
+import org.ow2.proactive.scheduling.api.fetchers.TaskDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
+import org.ow2.proactive.scheduling.api.util.KeyValues;
 
 import com.google.common.collect.ImmutableList;
 
@@ -56,6 +60,8 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
 
 
 /**
@@ -75,6 +81,9 @@ public class Job {
     private String name;
 
     @GraphQLField
+    private String description;
+
+    @GraphQLField
     private JobPriority priority;
 
     @GraphQLField
@@ -85,6 +94,7 @@ public class Job {
 
     @GraphQLField
     @GraphQLConnection
+    @GraphQLDataFetcher(TaskDataFetcher.class)
     private List<Task> tasks;
 
     @GraphQLField
@@ -123,34 +133,24 @@ public class Job {
     @GraphQLField
     private int numberOfInErrorTasks;
 
+    private Map<String, String> genericInformation;
+
+    private Map<String, String> variables;
+
     @GraphQLField
     public List<GenericInformation> genericInformation(DataFetchingEnvironment dataFetchingEnvironment,
             @GraphQLName("input") GenericInformationInput input) {
-        return (List<GenericInformation>) new GenericInformationDataFetcher().get(dataFetchingEnvironment);
+
+        Job job = (Job) dataFetchingEnvironment.getSource();
+        return filterKeyValue(job.getGenericInformation(), input, () -> new GenericInformation());
     }
 
     @GraphQLField
     public List<Variable> variables(DataFetchingEnvironment dataFetchingEnvironment,
             @GraphQLName("input") VariableInput input) {
-        return (List<Variable>) new VariableDataFetcher().get(dataFetchingEnvironment);
-    }
 
-    private <T extends KeyValue> List<T> filterKeyValue(List<T> entries, @GraphQLName("key") String key,
-            @GraphQLName("value") String value) {
-        if (entries == null) {
-            return ImmutableList.of();
-        }
-
-        if (key == null && value == null) {
-            return entries;
-        } else if (key == null && value != null) {
-            return entries.stream().filter(v -> value.equals(v.getValue())).collect(Collectors.toList());
-        } else if (key != null && value == null) {
-            return entries.stream().filter(v -> key.equals(v.getKey())).collect(Collectors.toList());
-        } else {
-            return entries.stream().filter(v -> key.equals(v.getKey()) && value.equals(v.getValue()))
-                    .collect(Collectors.toList());
-        }
+        Job job = (Job) dataFetchingEnvironment.getSource();
+        return filterKeyValue(job.getVariables(), input, () -> new Variable());
     }
 
 }

@@ -37,14 +37,14 @@ package org.ow2.proactive.scheduling.api.schema.type;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
 import graphql.annotations.GraphQLType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
+@AllArgsConstructor
 @GraphQLType
 public class GenericInformation extends KeyValue {
 
-    @Builder
-    public GenericInformation(String key, String value) {
-        super(key, value);
-    }
 }

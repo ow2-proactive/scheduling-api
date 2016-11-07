@@ -38,9 +38,13 @@ package org.ow2.proactive.scheduling.api.schema.type.interfaces;
 import graphql.annotations.GraphQLField;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public abstract class KeyValue {
 
     @GraphQLField

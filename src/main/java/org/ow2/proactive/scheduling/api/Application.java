@@ -35,6 +35,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -51,6 +52,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 @EnableAutoConfiguration(exclude = { MultipartAutoConfiguration.class })
+@EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
 @PropertySources({ @PropertySource(value = "classpath:application.properties"),
         @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
 @SpringBootApplication
