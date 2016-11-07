@@ -45,6 +45,7 @@ import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
 import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
 
 import com.google.common.collect.Maps;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
@@ -54,8 +55,7 @@ public class TaskDataFetcher implements DataFetcher {
     private TaskRepository taskRepository;
 
     public TaskDataFetcher() {
-        this.taskRepository = ApplicationContextProvider.getApplicationContext()
-                .getBean(TaskRepository.class);
+        this.taskRepository = ApplicationContextProvider.getApplicationContext().getBean(TaskRepository.class);
     }
 
     @Override
@@ -67,20 +67,25 @@ public class TaskDataFetcher implements DataFetcher {
         // TODO Variables for tasks
 
         return tasks.stream()
-                .map(taskData -> Task.builder().id(taskData.getId().getTaskId())
-                        .jobId(taskData.getId().getJobId()).name(taskData.getTaskName())
-                        .status(TaskStatus.valueOf(taskData.getTaskStatus().name()))
-                        .genericInformation(taskData.getGenericInformation())
-                        .executionDuration(taskData.getExecutionDuration())
-                        .executionHostName(taskData.getExecutionHostName())
-                        .finishedTime(taskData.getFinishedTime()).inErrorTime(taskData.getInErrorTime())
-                        .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
-                        .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
-                        .scheduledTime(taskData.getScheduledTime()).startTime(taskData.getStartTime())
-                        .progress(-1)
-                        .variables(Maps.newHashMap())
-                        .build())
-                .collect(Collectors.toList());
+                    .parallel()
+                    .map(taskData -> Task.builder()
+                                         .id(taskData.getId().getTaskId())
+                                         .jobId(taskData.getId().getJobId())
+                                         .name(taskData.getTaskName())
+                                         .status(TaskStatus.valueOf(taskData.getTaskStatus().name()))
+                                         .genericInformation(taskData.getGenericInformation())
+                                         .executionDuration(taskData.getExecutionDuration())
+                                         .executionHostName(taskData.getExecutionHostName())
+                                         .finishedTime(taskData.getFinishedTime())
+                                         .inErrorTime(taskData.getInErrorTime())
+                                         .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
+                                         .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
+                                         .scheduledTime(taskData.getScheduledTime())
+                                         .startTime(taskData.getStartTime())
+                                         .progress(-1)
+                                         .variables(Maps.newHashMap())
+                                         .build())
+                    .collect(Collectors.toList());
 
     }
 
