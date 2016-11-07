@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -32,43 +32,24 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type;
+package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.List;
-
-import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
-import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
-
-import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLDataFetcher;
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLNonNull;
-import graphql.annotations.GraphQLType;
-import graphql.schema.DataFetchingEnvironment;
+import java.util.HashMap;
 
 
-/**
- * @author ActiveEon Team
- */
-@GraphQLType
+public class GenericInformationInput extends KeyValueInput {
 
-public class Query {
-
-    @GraphQLField
-    @GraphQLConnection
-    @GraphQLDataFetcher(JobDataFetcher.class)
-    public List<Job> jobs;
-
-    @GraphQLField
-    public String version() {
-        return "42";
+    public GenericInformationInput(String key, String value) {
+        super(key, value);
     }
 
-    @GraphQLField
-    public User viewer(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLNonNull @GraphQLName("sessionId") String sessionId) {
-        return (User) new UserDataFetcher().get(dataFetchingEnvironment);
+    public GenericInformationInput(HashMap input) {
+        super(input);
+    }
+
+    @Override
+    public String getName() {
+        return this.getClass().getName();
     }
 
 }

@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class KeyValueInput implements GraphQLInputType {
+public abstract class KeyValueInput implements GraphQLInputType {
 
     private static final String KEY_FIELD_NAME = "key";
 
@@ -30,11 +30,6 @@ public class KeyValueInput implements GraphQLInputType {
             key = (String) input.get(KEY_FIELD_NAME);
             value = (String) input.get(VALUE_FIELD_NAME);
         }
-    }
-
-    @Override
-    public String getName() {
-        return this.getClass().getName();
     }
 
 }

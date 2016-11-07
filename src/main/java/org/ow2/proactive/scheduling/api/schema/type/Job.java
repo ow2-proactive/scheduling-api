@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.VariableDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
 import com.google.common.collect.ImmutableList;
@@ -50,6 +52,7 @@ import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
 import graphql.annotations.GraphQLNonNull;
 import graphql.annotations.GraphQLType;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -83,14 +86,6 @@ public class Job {
     @GraphQLField
     @GraphQLConnection
     private List<Task> tasks;
-
-    @GraphQLField
-    @GraphQLDataFetcher(GenericInformationDataFetcher.class)
-    private List<GenericInformation> genericInformation;
-
-    @GraphQLField
-    @GraphQLDataFetcher(VariableDataFetcher.class)
-    private List<Variable> variables;
 
     @GraphQLField
     private long startTime;
@@ -127,6 +122,18 @@ public class Job {
 
     @GraphQLField
     private int numberOfInErrorTasks;
+
+    @GraphQLField
+    public List<GenericInformation> genericInformation(DataFetchingEnvironment dataFetchingEnvironment,
+            @GraphQLName("input") GenericInformationInput input) {
+        return (List<GenericInformation>) new GenericInformationDataFetcher().get(dataFetchingEnvironment);
+    }
+
+    @GraphQLField
+    public List<Variable> variables(DataFetchingEnvironment dataFetchingEnvironment,
+            @GraphQLName("input") VariableInput input) {
+        return (List<Variable>) new VariableDataFetcher().get(dataFetchingEnvironment);
+    }
 
     private <T extends KeyValue> List<T> filterKeyValue(List<T> entries, @GraphQLName("key") String key,
             @GraphQLName("value") String value) {
