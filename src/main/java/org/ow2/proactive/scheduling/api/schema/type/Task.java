@@ -69,6 +69,12 @@ public class Task {
     private String name;
 
     @GraphQLField
+    private String description;
+
+    @GraphQLField
+    private String tag;
+
+    @GraphQLField
     private TaskStatus status;
 
     @GraphQLField

@@ -34,24 +34,17 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
+import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
+
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.fetchers.TaskDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
-import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
-import org.ow2.proactive.scheduling.api.util.KeyValues;
-
-import com.google.common.collect.ImmutableList;
 
 import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLDataFetcher;
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
 import graphql.annotations.GraphQLNonNull;
@@ -60,8 +53,6 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
 
 
 /**
@@ -93,8 +84,7 @@ public class Job {
     private String projectName;
 
     @GraphQLField
-    @GraphQLConnection
-    @GraphQLDataFetcher(TaskDataFetcher.class)
+    @GraphQLConnection(connection = TaskDataFetcher.class)
     private List<Task> tasks;
 
     @GraphQLField
