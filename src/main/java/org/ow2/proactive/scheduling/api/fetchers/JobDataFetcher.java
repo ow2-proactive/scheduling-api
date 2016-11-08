@@ -51,13 +51,16 @@ public class JobDataFetcher implements DataFetcher {
 
     private JobRepository jobRepository;
 
-    public JobDataFetcher() {
-        this.jobRepository = ApplicationContextProvider.getApplicationContext().getBean(JobRepository.class);
+    private JobRepository getJobRepository() {
+        if (jobRepository == null) {
+            this.jobRepository = ApplicationContextProvider.getApplicationContext().getBean(JobRepository.class);
+        }
+        return jobRepository;
     }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
-        Iterable<JobData> jobs = jobRepository.findAll();
+        Iterable<JobData> jobs = getJobRepository().findAll();
 
         return StreamSupport.stream(jobs.spliterator(), false)
                             .parallel()

@@ -54,14 +54,17 @@ public class TaskDataFetcher implements DataFetcher {
 
     private TaskRepository taskRepository;
 
-    public TaskDataFetcher() {
-        this.taskRepository = ApplicationContextProvider.getApplicationContext().getBean(TaskRepository.class);
+    private TaskRepository getTaskRepository() {
+        if (taskRepository == null) {
+            this.taskRepository = ApplicationContextProvider.getApplicationContext().getBean(TaskRepository.class);
+        }
+        return taskRepository;
     }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
         Job job = (Job) environment.getSource();
-        List<TaskData> tasks = taskRepository.findByIdJobId(job.getId());
+        List<TaskData> tasks = getTaskRepository().findByIdJobId(job.getId());
 
         // TODO Task progress not accessible from DB
         // TODO Variables for tasks
