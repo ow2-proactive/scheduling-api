@@ -35,12 +35,13 @@
 package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
 /**
+ * @param <F> the type of the GraphQL field.
  * @param <T> the type of the offset managed by the cursor.
  */
-public interface CursorFactory<E, T> {
+public interface CursorMapper<F, T> {
 
     T getOffsetFromCursor(String cursor);
 
-    String createCursor(E field);
+    String createCursor(F field);
 
 }

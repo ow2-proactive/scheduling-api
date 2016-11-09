@@ -46,9 +46,11 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> executeOperation(@RequestParam(DEFAULT_QUERY_KEY) String query,
-                                                @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
-                                                @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
+    public Map<String, Object> executeOperation(
+            @RequestParam(DEFAULT_QUERY_KEY) String query,
+            @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
+            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables)
+            throws IOException {
 
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
     }
@@ -58,7 +60,9 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> executeOperation(@RequestBody Map<String, Object> body) throws IOException {
+    public Map<String, Object> executeOperation(@RequestBody Map<String, Object> body)
+            throws IOException {
+
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
         String variables = (String) body.get(DEFAULT_VARIABLES_KEY);

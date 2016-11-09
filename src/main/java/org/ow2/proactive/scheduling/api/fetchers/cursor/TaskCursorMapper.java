@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -32,40 +32,15 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type;
+package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
-import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
-import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
+import org.ow2.proactive.scheduling.api.schema.type.Task;
 
-import java.util.List;
+public class TaskCursorMapper extends IntegerCursorMapper<Task> {
 
-import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLNonNull;
-import graphql.annotations.GraphQLType;
-import graphql.schema.DataFetchingEnvironment;
-
-
-/**
- * @author ActiveEon Team
- */
-@GraphQLType
-public class Query {
-
-    @GraphQLField
-    @GraphQLConnection(connection = JobDataFetcher.class)
-    public List<Job> jobs;
-
-    @GraphQLField
-    public String version() {
-        return "42";
-    }
-
-    @GraphQLField
-    public User viewer(DataFetchingEnvironment dataFetchingEnvironment,
-                       @GraphQLNonNull @GraphQLName("sessionId") String sessionId) {
-        return (User) new UserDataFetcher().get(dataFetchingEnvironment);
+    @Override
+    String toString(Task task) {
+        return Integer.toString((int) task.getId());
     }
 
 }

@@ -38,7 +38,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import org.ow2.proactive.scheduler.core.db.TaskData;
-import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorFactory;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
@@ -62,12 +62,9 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
         super(ImmutableList.of());
     }
 
-
     @Override
     public Object get(DataFetchingEnvironment environment) {
         Job job = (Job) environment.getSource();
-
-        Class<TaskData> entityClass = TaskData.class;
 
         Function<Root<TaskData>, Path<? extends Number>> entityId =
                 root -> root.get("id").get("taskId");
@@ -77,9 +74,9 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                         new Predicate[]{
                                 criteriaBuilder.equal(root.get("id").get("jobId"), job.getId())};
 
-        return createPaginatedConnection(environment, entityClass, entityId,
+        return createPaginatedConnection(environment, TaskData.class, entityId,
                 (t1, t2) -> Long.compare(t1.getId().getTaskId(), t2.getId().getTaskId()),
-                criteria, new TaskCursorFactory());
+                criteria, new TaskCursorMapper());
     }
 
     protected Stream<Task> dataMapping(Stream<TaskData> taskStream) {

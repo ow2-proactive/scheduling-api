@@ -34,29 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
-import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
 
-import graphql.relay.Base64;
-
-public class TaskCursorFactory implements CursorFactory<Task, Integer> {
-
-    protected static final String DUMMY_CURSOR_PREFIX = "graphql-cursor";
+public class JobCursorMapper extends IntegerCursorMapper<Job> {
 
     @Override
-    public Integer getOffsetFromCursor(String cursor) {
-        if (cursor == null) {
-            return null;
-        }
-
-        String string = Base64.fromBase64(cursor);
-        return Integer.parseInt(string.substring(DUMMY_CURSOR_PREFIX.length()));
-    }
-
-    @Override
-    public String createCursor(Task task) {
-        return Base64.toBase64(
-                DUMMY_CURSOR_PREFIX +
-                        Integer.toString((int) task.getId()));
+    String toString(Job job) {
+        return Integer.toString((int) job.getId());
     }
 
 }

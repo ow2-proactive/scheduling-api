@@ -34,59 +34,73 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import com.google.common.collect.ImmutableList;
+
 import org.ow2.proactive.scheduler.core.db.JobData;
-import org.ow2.proactive.scheduling.api.repository.JobRepository;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
-import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
 
-public class JobDataFetcher implements DataFetcher {
+public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
-    private JobRepository jobRepository;
+    public JobDataFetcher() {
+        super(ImmutableList.of());
+    }
 
-    private JobRepository getJobRepository() {
-        if (jobRepository == null) {
-            this.jobRepository = ApplicationContextProvider.getApplicationContext().getBean(JobRepository.class);
-        }
-        return jobRepository;
+    public JobDataFetcher(DataFetcher dataFetcher) {
+        super(ImmutableList.of());
     }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
-        Iterable<JobData> jobs = getJobRepository().findAll();
 
-        return StreamSupport.stream(jobs.spliterator(), false)
-                .parallel()
-                .map(jobData -> Job.builder()
+        Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
+
+        BiFunction<CriteriaBuilder, Root<JobData>, Predicate[]> criteria =
+                (criteriaBuilder, root) -> new Predicate[0];
+
+        return createPaginatedConnection(environment, JobData.class, entityId,
+                (t1, t2) -> Long.compare(t1.getId(), t2.getId()),
+                criteria, new JobCursorMapper());
+    }
+
+    protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
+        return taskStream.parallel().map(
+                jobData -> Job.builder()
                         .id(jobData.getId())
-                        .name(jobData.getJobName())
                         .description(jobData.getDescription())
-                        .priority(JobPriority.valueOf(jobData.getPriority().name()))
-                        .owner(jobData.getOwner())
-                        .projectName(jobData.getProjectName())
-                        .startTime(jobData.getStartTime())
-                        .inErrorTime(jobData.getInErrorTime())
                         .finishedTime(jobData.getFinishedTime())
-                        .submittedTime(jobData.getSubmittedTime())
-                        .removedTime(jobData.getRemovedTime())
-                        .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                        .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
-                        .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
-                        .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
+                        .genericInformation(jobData.getGenericInformation())
+                        .inErrorTime(jobData.getInErrorTime())
+                        .name(jobData.getJobName())
                         .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
                         .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
+                        .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
                         .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
-                        .genericInformation(jobData.getGenericInformation())
+                        .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
+                        .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
+                        .owner(jobData.getOwner())
+                        .priority(JobPriority.valueOf(jobData.getPriority().name()))
+                        .projectName(jobData.getProjectName())
+                        .removedTime(jobData.getRemovedTime())
+                        .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
+                        .startTime(jobData.getStartTime())
+                        .submittedTime(jobData.getSubmittedTime())
                         .variables(jobData.getVariables())
-                        .build())
-                .collect(Collectors.toList());
+                        .build());
     }
 
 }

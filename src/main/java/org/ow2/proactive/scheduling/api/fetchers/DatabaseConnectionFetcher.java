@@ -36,7 +36,7 @@ package org.ow2.proactive.scheduling.api.fetchers;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import org.ow2.proactive.scheduling.api.fetchers.cursor.CursorFactory;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.CursorMapper;
 import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
 
 import java.util.Comparator;
@@ -109,15 +109,15 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
             Function<Root<E>, Path<? extends Number>> entityId,
             Comparator<E> entityComparator,
             BiFunction<CriteriaBuilder, Root<E>, Predicate[]> criteria,
-            CursorFactory<T, Integer> cursorFactory) {
+            CursorMapper<T, Integer> cursorMapper) {
 
         Integer first = environment.getArgument(RELAY_ARGUMENT_FIRST);
         Integer last = environment.getArgument(RELAY_ARGUMENT_LAST);
 
         Integer after =
-                cursorFactory.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_AFTER));
+                cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_AFTER));
         Integer before =
-                cursorFactory.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_BEFORE));
+                cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_BEFORE));
 
         EntityManager entityManager = getEntityManager();
 
@@ -162,7 +162,7 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
         Connection connection =
                 createRelayConnection(
                         entityManager, entityClass, criteriaBuilder,
-                        predicates, cursorFactory, data, first, last);
+                        predicates, cursorMapper, data, first, last);
 
         return connection;
     }
@@ -240,10 +240,10 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
             Class<E> entityClass,
             CriteriaBuilder criteriaBuilder,
             Predicate[] predicates,
-            CursorFactory<T, Integer> cursorFactory,
+            CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
-        List<Edge> edges = buildEdges(data, cursorFactory);
+        List<Edge> edges = buildEdges(data, cursorMapper);
 
         PageInfo pageInfo = new PageInfo();
 
@@ -273,16 +273,20 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
 
         CriteriaQuery<Long> counterQuery = criteriaBuilder.createQuery(Long.class);
 
-        counterQuery.select(
-                criteriaBuilder.count(counterQuery.from(entityClass))).where(predicates);
+        CriteriaQuery<Long> select =
+                counterQuery.select(criteriaBuilder.count(counterQuery.from(entityClass)));
+
+        if (predicates.length > 0) {
+            select.where(predicates);
+        }
 
         return entityManager.createQuery(counterQuery).getSingleResult().intValue();
     }
 
     @VisibleForTesting
-    List<Edge> buildEdges(Stream<T> data, CursorFactory<T, Integer> cursorFactory) {
+    List<Edge> buildEdges(Stream<T> data, CursorMapper<T, Integer> cursorMapper) {
         return data.map(entry ->
-                new Edge(entry, new ConnectionCursor(cursorFactory.createCursor(entry))))
+                new Edge(entry, new ConnectionCursor(cursorMapper.createCursor(entry))))
                 .collect(Collectors.toList());
     }
 
