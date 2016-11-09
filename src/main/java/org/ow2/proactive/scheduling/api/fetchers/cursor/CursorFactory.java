@@ -35,7 +35,6 @@
 package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
 /**
- *
  * @param <T> the type of the offset managed by the cursor.
  */
 public interface CursorFactory<E, T> {

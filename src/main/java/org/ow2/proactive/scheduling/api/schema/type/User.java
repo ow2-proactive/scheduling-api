@@ -35,7 +35,6 @@
 package org.ow2.proactive.scheduling.api.schema.type;
 
 import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLNonNull;
 import graphql.annotations.GraphQLType;
 import lombok.Builder;
 import lombok.Getter;

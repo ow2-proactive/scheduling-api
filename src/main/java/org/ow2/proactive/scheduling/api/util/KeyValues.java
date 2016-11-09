@@ -34,16 +34,17 @@
  */
 package org.ow2.proactive.scheduling.api.util;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
+
+import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
+import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
-import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
 
 
 public class KeyValues {
@@ -72,7 +73,7 @@ public class KeyValues {
 
     @VisibleForTesting
     protected static <T extends KeyValue> List<T> filterBy(Map<String, String> keyValueEntries,
-            Predicate<Map.Entry<String, String>> predicate, Supplier<T> keyValueSupplier) {
+                                                           Predicate<Map.Entry<String, String>> predicate, Supplier<T> keyValueSupplier) {
         return keyValueEntries.entrySet().stream().filter(predicate).map(entry -> {
             T keyValue = keyValueSupplier.get();
             keyValue.setKey(entry.getKey());

@@ -34,15 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
-
-import java.util.List;
-import java.util.Map;
-
 import org.ow2.proactive.scheduling.api.fetchers.TaskDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
+
+import java.util.List;
+import java.util.Map;
 
 import graphql.annotations.GraphQLConnection;
 import graphql.annotations.GraphQLField;
@@ -53,6 +51,8 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
 
 
 /**
@@ -129,7 +129,7 @@ public class Job {
 
     @GraphQLField
     public List<GenericInformation> genericInformation(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLName("input") GenericInformationInput input) {
+                                                       @GraphQLName("input") GenericInformationInput input) {
 
         Job job = (Job) dataFetchingEnvironment.getSource();
         return filterKeyValue(job.getGenericInformation(), input, () -> new GenericInformation());
@@ -137,7 +137,7 @@ public class Job {
 
     @GraphQLField
     public List<Variable> variables(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLName("input") VariableInput input) {
+                                    @GraphQLName("input") VariableInput input) {
 
         Job job = (Job) dataFetchingEnvironment.getSource();
         return filterKeyValue(job.getVariables(), input, () -> new Variable());

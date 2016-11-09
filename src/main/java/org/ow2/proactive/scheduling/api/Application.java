@@ -51,10 +51,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author ActiveEon Team
  */
 @Configuration
-@EnableAutoConfiguration(exclude = { MultipartAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
-@PropertySources({ @PropertySource(value = "classpath:application.properties"),
-        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
+@PropertySources({@PropertySource(value = "classpath:application.properties"),
+        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true)})
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
 

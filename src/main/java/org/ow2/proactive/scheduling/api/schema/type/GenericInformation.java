@@ -38,9 +38,6 @@ import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
 import graphql.annotations.GraphQLType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @AllArgsConstructor

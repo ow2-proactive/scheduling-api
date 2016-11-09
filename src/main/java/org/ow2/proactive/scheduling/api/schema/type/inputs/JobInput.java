@@ -1,8 +1,8 @@
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.HashMap;
-
 import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+
+import java.util.HashMap;
 
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;

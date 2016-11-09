@@ -43,8 +43,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ApiController {
 
-    @RequestMapping(value = "/v1", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
-            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT, RequestMethod.TRACE })
+    @RequestMapping(value = "/v1", method = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
+            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT, RequestMethod.TRACE})
     @ResponseBody
     public String v1() {
         return "TODO: forward to /rest/";

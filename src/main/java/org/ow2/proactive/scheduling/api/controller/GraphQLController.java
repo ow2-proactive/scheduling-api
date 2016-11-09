@@ -1,8 +1,8 @@
 package org.ow2.proactive.scheduling.api.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.base.Strings;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.ow2.proactive.scheduling.api.service.GraphqlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -46,8 +47,8 @@ public class GraphQLController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> executeOperation(@RequestParam(DEFAULT_QUERY_KEY) String query,
-            @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
-            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
+                                                @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
+                                                @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
 
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
     }

@@ -34,10 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import java.util.List;
-
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
+
+import java.util.List;
 
 import graphql.annotations.GraphQLConnection;
 import graphql.annotations.GraphQLDataFetcher;
@@ -66,7 +66,7 @@ public class Query {
 
     @GraphQLField
     public User viewer(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLNonNull @GraphQLName("sessionId") String sessionId) {
+                       @GraphQLNonNull @GraphQLName("sessionId") String sessionId) {
         return (User) new UserDataFetcher().get(dataFetchingEnvironment);
     }
 

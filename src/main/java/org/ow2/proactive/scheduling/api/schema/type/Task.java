@@ -34,13 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import java.util.List;
-import java.util.Map;
-
 import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
-import graphql.annotations.GraphQLConnection;
+
+import java.util.List;
+import java.util.Map;
+
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
 import graphql.annotations.GraphQLType;
@@ -110,7 +110,7 @@ public class Task {
 
     @GraphQLField
     public List<GenericInformation> genericInformation(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLName("input") GenericInformationInput input) {
+                                                       @GraphQLName("input") GenericInformationInput input) {
 
         Task task = (Task) dataFetchingEnvironment.getSource();
         return filterKeyValue(task.getGenericInformation(), input, () -> new GenericInformation());
@@ -118,7 +118,7 @@ public class Task {
 
     @GraphQLField
     public List<Variable> variables(DataFetchingEnvironment dataFetchingEnvironment,
-            @GraphQLName("input") VariableInput input) {
+                                    @GraphQLName("input") VariableInput input) {
 
         Task task = (Task) dataFetchingEnvironment.getSource();
         return filterKeyValue(task.getVariables(), input, () -> new Variable());

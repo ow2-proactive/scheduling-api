@@ -34,21 +34,21 @@
  */
 package org.ow2.proactive.scheduling.api.service;
 
-import static graphql.schema.GraphQLSchema.newSchema;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.ow2.proactive.scheduling.api.controller.GraphQLController;
 import org.ow2.proactive.scheduling.api.schema.type.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.annotations.GraphQLAnnotations;
 import graphql.schema.GraphQLObjectType;
+
+import static graphql.schema.GraphQLSchema.newSchema;
 
 
 /**
