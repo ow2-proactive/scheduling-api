@@ -51,8 +51,5 @@ public final class Inputs {
             return defaultValue;
         }
     }
-
-    public static final Function<String, Long> STRING2LONG = i -> Long.valueOf(i);
-
-    public static final Function<String, String> STRING2STRING = i -> i;
+    
 }

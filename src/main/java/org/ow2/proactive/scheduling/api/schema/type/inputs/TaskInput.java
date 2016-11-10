@@ -45,8 +45,7 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2LONG;
-import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2STRING;
+import static java.util.function.Function.identity;
 import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
 
 
@@ -75,10 +74,10 @@ public class TaskInput {
 
     public TaskInput(HashMap<String, String> input) {
         if (input != null) {
-            id = getValue(input, ID_FIELD_NAME, STRING2LONG, -1l);
-            jobId = getValue(input, JOB_ID_FIELD_NAME, STRING2LONG, -1l);
-            status = getValue(input, TASK_STATUS_FIELD_NAME, STRING2STRING, null);
-            taskName = getValue(input, TASK_NAME_FIELD_NAME, STRING2STRING, null);
+            id = getValue(input, ID_FIELD_NAME, Long::valueOf, -1l);
+            jobId = getValue(input, JOB_ID_FIELD_NAME, Long::valueOf, -1l);
+            status = getValue(input, TASK_STATUS_FIELD_NAME, identity(), null);
+            taskName = getValue(input, TASK_NAME_FIELD_NAME, identity(), null);
         } else {
             id = -1;
             jobId = -1;
