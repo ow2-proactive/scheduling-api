@@ -1,9 +1,10 @@
 /*
+ *  *
  * ProActive Parallel Suite(TM): The Java(TM) library for
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -25,10 +26,12 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  *
- * Initial developer(s):               The ProActive Team
- *                         http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-
 package org.ow2.proactive.scheduling.api;
 
 import org.springframework.boot.SpringApplication;
@@ -51,10 +54,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author ActiveEon Team
  */
 @Configuration
-@EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = { MultipartAutoConfiguration.class })
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
-@PropertySources({@PropertySource(value = "classpath:application.properties"),
-        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true)})
+@PropertySources( { @PropertySource(value = "classpath:application.properties"),
+        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
 
@@ -64,8 +67,12 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false).favorParameter(true).parameterName("format")
-                .ignoreAcceptHeader(true).useJaf(false).defaultContentType(MediaType.APPLICATION_JSON)
+        configurer.favorPathExtension(false)
+                .favorParameter(true)
+                .parameterName("format")
+                .ignoreAcceptHeader(true)
+                .useJaf(false)
+                .defaultContentType(MediaType.APPLICATION_JSON)
                 .mediaType("json", MediaType.APPLICATION_JSON);
     }
 

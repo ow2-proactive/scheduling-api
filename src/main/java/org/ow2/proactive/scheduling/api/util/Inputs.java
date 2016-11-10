@@ -32,13 +32,27 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type.enums;
+package org.ow2.proactive.scheduling.api.util;
 
-/**
- * @author ActiveEon team
- */
-public enum JobPriority {
+import java.util.HashMap;
+import java.util.function.Function;
 
-    HIGH, HIGHEST, IDLE, LOW, LOWEST, NORMAL;
 
+public final class Inputs {
+
+    public static final <T> T getValue(HashMap<String, String> input, String fieldName,
+            Function<String, T> function, T defaultValue) {
+
+        String fieldValue = input.get(fieldName);
+
+        if (fieldValue != null) {
+            return function.apply(fieldValue);
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public static final Function<String, Long> STRING2LONG = i -> Long.valueOf(i);
+
+    public static final Function<String, String> STRING2STRING = i -> i;
 }

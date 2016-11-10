@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,21 +34,33 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLType;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
+import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
 import lombok.Getter;
 
 
+/**
+ * @author ActiveEon Team
+ */
 @Builder
 @Getter
-@GraphQLType
 public class User {
 
-    @GraphQLField
-    private String sessionId;
+    private final String login;
 
-    @GraphQLField
-    private String login = "Oh oh oh";
+    private final String sessionId;
+
+    public static final GraphQLObjectType TYPE = GraphQLObjectType.newObject()
+            .name("User")
+            .field(newFieldDefinition().name("login")
+                    .description("Login name of the viewer")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("sessionId")
+                    .description("Session ID of the viewer")
+                    .type(GraphQLString))
+            .build();
 
 }

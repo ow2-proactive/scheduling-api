@@ -32,13 +32,33 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type.enums;
+package org.ow2.proactive.scheduling.api.schema.type;
 
-/**
- * @author ActiveEon team
- */
-public enum JobPriority {
+import java.util.List;
 
-    HIGH, HIGHEST, IDLE, LOW, LOWEST, NORMAL;
+import com.google.common.collect.ImmutableList;
 
+import graphql.relay.Relay;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLObjectType;
+
+
+public final class TasksConnection {
+
+    private TasksConnection() {
+    }
+
+    private final static Relay RELAY = new Relay();
+
+    private final static GraphQLObjectType TASKS_EDGE_TYPE = RELAY.edgeType("Tasks",
+            Task.TYPE,
+            null,
+            ImmutableList.of());
+
+    public final static GraphQLObjectType TYPE = RELAY.connectionType("Tasks", TASKS_EDGE_TYPE,
+            ImmutableList.of());
+
+    public final static List<GraphQLArgument> getConnectionFieldArguments() {
+        return RELAY.getConnectionFieldArguments();
+    }
 }

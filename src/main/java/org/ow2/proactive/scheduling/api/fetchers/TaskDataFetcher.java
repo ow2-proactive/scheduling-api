@@ -34,15 +34,6 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-
-import org.ow2.proactive.scheduler.core.db.TaskData;
-import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.Task;
-import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -52,35 +43,40 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import graphql.schema.DataFetcher;
+import org.ow2.proactive.scheduler.core.db.TaskData;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
+
+import com.google.common.collect.Maps;
+
 import graphql.schema.DataFetchingEnvironment;
 
 
 public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
-    public TaskDataFetcher(DataFetcher dataFetcher) {
-        super(ImmutableList.of());
-    }
-
     @Override
     public Object get(DataFetchingEnvironment environment) {
         Job job = (Job) environment.getSource();
 
-        Function<Root<TaskData>, Path<? extends Number>> entityId =
-                root -> root.get("id").get("taskId");
+        Function<Root<TaskData>, Path<? extends Number>> entityId = root -> root.get("id").get("taskId");
 
-        BiFunction<CriteriaBuilder, Root<TaskData>, Predicate[]> criteria =
-                (criteriaBuilder, root) ->
-                        new Predicate[]{
-                                criteriaBuilder.equal(root.get("id").get("jobId"), job.getId())};
+        BiFunction<CriteriaBuilder, Root<TaskData>, Predicate[]> criteria = (criteriaBuilder,
+                root) -> new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()) };
 
-        return createPaginatedConnection(environment, TaskData.class, entityId,
+        return createPaginatedConnection(environment,
+                TaskData.class,
+                entityId,
                 (t1, t2) -> Long.compare(t1.getId().getTaskId(), t2.getId().getTaskId()),
-                criteria, new TaskCursorMapper());
+                criteria,
+                new TaskCursorMapper());
     }
 
+    @Override
     protected Stream<Task> dataMapping(Stream<TaskData> taskStream) {
-        // TODO Task progress not accessible from DB, needs to establish connection with SchedulerFrontend
+        // TODO Task progress not accessible from DB, needs to establish connection with
+        // SchedulerFrontend
         // --> Active Object to get the value that is in Scheduler memory
         // TODO Variables for tasks
         return taskStream.map(taskData -> Task.builder()
@@ -96,7 +92,8 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                 .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
                 .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
                 .scheduledTime(taskData.getScheduledTime())
-                .startTime(taskData.getStartTime()).progress(-1)
+                .startTime(taskData.getStartTime())
+                .progress(-1)
                 .status(TaskStatus.valueOf(taskData.getTaskStatus().name()))
                 .tag(taskData.getTag())
                 .variables(Maps.newHashMap())

@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,39 +34,24 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.enums;
 
-import graphql.annotations.GraphQLDescription;
-import graphql.annotations.GraphQLType;
-
-@GraphQLType
+/**
+ * @author ActiveEon team
+ */
 public enum TaskStatus {
 
-    @GraphQLDescription("The task has just been submitted by the user.")
-    SUBMITTED,
-    @GraphQLDescription("The task is in the scheduler pending queue.")
-    PENDING,
-    @GraphQLDescription("The task is paused.")
-    PAUSED,
-    @GraphQLDescription("The task is executing.")
-    RUNNING,
-    @GraphQLDescription("The task is waiting for restart after an error (i.e. native code != 0 or exception).")
-    WAITING_ON_ERROR,
-    @GraphQLDescription("The task is waiting for restart after a failure (i.e. node down).")
-    WAITING_ON_FAILURE,
-    @GraphQLDescription("The task is failed (only if max execution time has been reached and the node on which it was started is down).")
-    FAILED,
-    @GraphQLDescription("The task could not be started. It means that the task could not be started due to one ore more dependency failure.")
-    NOT_STARTED,
-    @GraphQLDescription("The task could not be restarted. It means that the task could not be restarted after an error during the previous execution.")
-    NOT_RESTARTED,
-    @GraphQLDescription("The task has been aborted by an exception on an other task while the task is running (job has cancelOnError=true). Can be also in this status if the job is killed while the concerned task was running.")
     ABORTED,
-    @GraphQLDescription("The task has finished execution with error code (!=0) or exception.")
+    FAILED,
     FAULTY,
-    @GraphQLDescription("The task has finished execution.")
     FINISHED,
-    @GraphQLDescription("The task was not executed: it was the non-selected branch of an IF/ELSE control flow action.")
-    SKIPPED,
-    @GraphQLDescription("The task is suspended after first error and is waiting for a manual restart action.")
-    IN_ERROR;
+    IN_ERROR,
+    NOT_RESTARTED,
+    NOT_STARTED,
+    PAUSED,
+    PENDING,
+    RUNNING,
+    SUBMITTED,
+    WAITING_ON_ERROR,
+    WAITING_ON_FAILURE,
+    SKIPPED;
 
 }

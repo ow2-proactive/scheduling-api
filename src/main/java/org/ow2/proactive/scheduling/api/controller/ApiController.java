@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -43,8 +43,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ApiController {
 
-    @RequestMapping(value = "/v1", method = {RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
-            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT, RequestMethod.TRACE})
+    @RequestMapping(value = "/v1", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
+            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
+            RequestMethod.TRACE })
     @ResponseBody
     public String v1() {
         return "TODO: forward to /rest/";

@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,38 +34,55 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-import graphql.annotations.GraphQLConnection;
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLNonNull;
-import graphql.annotations.GraphQLType;
-import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLNonNull;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.StaticDataFetcher;
 
 
 /**
  * @author ActiveEon Team
  */
-@GraphQLType
-public class Query {
+@Component
+public final class Query {
 
-    @GraphQLField
-    @GraphQLConnection(connection = JobDataFetcher.class)
-    public List<Job> jobs;
+    @Autowired
+    private UserDataFetcher userDataFetcher;
 
-    @GraphQLField
-    public String version() {
-        return "42";
-    }
-
-    @GraphQLField
-    public User viewer(DataFetchingEnvironment dataFetchingEnvironment,
-                       @GraphQLNonNull @GraphQLName("sessionId") String sessionId) {
-        return (User) new UserDataFetcher().get(dataFetchingEnvironment);
+    public GraphQLObjectType buildType() {
+        return GraphQLObjectType.newObject()
+                .name("Query")
+                .field(newFieldDefinition().name("jobs")
+                        .description("Jobs list, it will be empty if there is none")
+                        .type(JobsConnection.TYPE)
+                        .argument(newArgument().name("input")
+                                .description("Jobs filter input")
+                                .type(JobInput.TYPE)
+                                .build())
+                        .argument(JobsConnection.getConnectionFieldArguments())
+                        .dataFetcher(new JobDataFetcher()))
+                .field(newFieldDefinition().name("version")
+                        .description("Query schema version")
+                        .type(GraphQLString)
+                        .dataFetcher(new StaticDataFetcher("2.0.0-alpha.1")))
+                .field(newFieldDefinition().name("viewer")
+                        .description("Viewer of the query")
+                        .type(User.TYPE)
+                        .argument(newArgument().name("sessionId")
+                                .description("Viewer's session id")
+                                .type(new GraphQLNonNull(GraphQLString))
+                                .build())
+                        .dataFetcher(userDataFetcher))
+                .build();
     }
 
 }

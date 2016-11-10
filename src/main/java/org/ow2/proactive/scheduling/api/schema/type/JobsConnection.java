@@ -32,24 +32,35 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type.inputs;
+package org.ow2.proactive.scheduling.api.schema.type;
 
-import java.util.HashMap;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
+import graphql.relay.Relay;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLObjectType;
 
 
-public class GenericInformationInput extends KeyValueInput {
+/**
+ * @author ActiveEon Team
+ */
+public final class JobsConnection {
 
-    public GenericInformationInput(String key, String value) {
-        super(key, value);
+    private JobsConnection() {
     }
 
-    public GenericInformationInput(HashMap input) {
-        super(input);
-    }
+    private final static Relay RELAY = new Relay();
 
-    @Override
-    public String getName() {
-        return this.getClass().getName();
+    private final static GraphQLObjectType JOBS_EDGE_TYPE = RELAY.edgeType("Jobs", Job.TYPE, null,
+            ImmutableList.of());
+
+    public final static GraphQLObjectType TYPE = RELAY.connectionType("Jobs", JOBS_EDGE_TYPE,
+            ImmutableList.of());
+
+    public final static List<GraphQLArgument> getConnectionFieldArguments() {
+        return RELAY.getConnectionFieldArguments();
     }
 
 }

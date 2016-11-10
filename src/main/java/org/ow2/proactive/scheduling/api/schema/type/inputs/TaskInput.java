@@ -44,8 +44,8 @@ import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
 
 import java.util.HashMap;
 
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
 
 import graphql.schema.GraphQLInputType;
 import lombok.AllArgsConstructor;
@@ -57,58 +57,54 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public class JobInput {
+public class TaskInput {
 
     private static final String ID_FIELD_NAME = "id";
 
-    private static final String JOB_NAME_FIELD_NAME = "name";
+    private static final String JOB_ID_FIELD_NAME = "jobId";
 
-    private static final String OWNER_FIELD_NAME = "owner";
+    private static final String TASK_NAME_FIELD_NAME = "name";
 
-    private static final String PRIORITY_FIELD_NAME = "priority";
+    private static final String TASK_STATUS_FIELD_NAME = "status";
 
-    private static final String PROJ_NAME_FIELD_NAME = "projectName";
+    private final long id;
 
-    private long id;
+    private final long jobId;
 
-    private String jobName;
+    private final TaskStatus status;
 
-    private String owner;
+    private final String taskName;
 
-    private JobPriority priority;
-
-    private String projectName;
-
-    public JobInput(HashMap<String, String> input) {
+    public TaskInput(HashMap<String, String> input) {
         if (input != null) {
             id = getValue(input, ID_FIELD_NAME, STRING2LONG, -1l);
-            jobName = getValue(input, JOB_NAME_FIELD_NAME, STRING2STRING, null);
-            owner = getValue(input, OWNER_FIELD_NAME, STRING2STRING, null);
-            priority = getValue(input, PRIORITY_FIELD_NAME, i -> JobPriority.valueOf(i), null);
-            projectName = getValue(input, PROJ_NAME_FIELD_NAME, STRING2STRING, null);
+            jobId = getValue(input, JOB_ID_FIELD_NAME, STRING2LONG, -1l);
+            status = getValue(input, TASK_STATUS_FIELD_NAME, i -> TaskStatus.valueOf(i), null);
+            taskName = getValue(input, TASK_NAME_FIELD_NAME, STRING2STRING, null);
+        } else {
+            id = -1;
+            jobId = -1;
+            status = null;
+            taskName = null;
         }
     }
 
-    public final static GraphQLInputType TYPE = newInputObject().name("JobInput")
-            .description("Job filter input")
+    public final static GraphQLInputType TYPE = newInputObject().name("TaskInput")
+            .description("Task filter input")
             .field(newInputObjectField().name("id")
-                    .description("Job ID")
+                    .description("Task identifier")
                     .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name("jobName")
-                    .description("Job name")
-                    .type(GraphQLString)
+            .field(newInputObjectField().name("jobId")
+                    .description("Identifier of the Job which the task belongs to")
+                    .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name("owner")
-                    .description("Job owner")
-                    .type(GraphQLString)
+            .field(newInputObjectField().name("status")
+                    .description("Task status")
+                    .type(Task.TASK_STATUS_ENUM)
                     .build())
-            .field(newInputObjectField().name("priority")
-                    .description("Job priority")
-                    .type(Job.JOB_PRIORITY_ENUM)
-                    .build())
-            .field(newInputObjectField().name("projectName")
-                    .description("Project name which the job belongs to")
+            .field(newInputObjectField().name("taskName")
+                    .description("Task name")
                     .type(GraphQLString)
                     .build())
             .build();

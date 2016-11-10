@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,94 +34,183 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.GenericInformationInput;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.VariableInput;
+import static graphql.Scalars.GraphQLInt;
+import static graphql.Scalars.GraphQLLong;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import java.util.List;
 import java.util.Map;
 
-import graphql.annotations.GraphQLField;
-import graphql.annotations.GraphQLName;
-import graphql.annotations.GraphQLType;
-import graphql.schema.DataFetchingEnvironment;
+import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
+import org.ow2.proactive.scheduling.api.fetchers.VariablesDataFetcher;
+import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
+import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
+
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
 import lombok.Getter;
-
-import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
+import lombok.ToString;
 
 
 /**
  * @author ActiveEon Team
  */
-@Builder
 @Getter
-@GraphQLType
-public class Task {
+@ToString
+public class Task extends JobTaskCommon {
 
-    @GraphQLField
-    private long id;
-
-    @GraphQLField
-    private long jobId;
-
-    @GraphQLField
-    private String name;
-
-    @GraphQLField
-    private String description;
-
-    @GraphQLField
-    private String tag;
-
-    @GraphQLField
-    private TaskStatus status;
-
-    @GraphQLField
     private long executionDuration = -1;
 
-    @GraphQLField
     private String executionHostName;
 
-    @GraphQLField
-    private long inErrorTime = -1;
+    private long jobId;
 
-    @GraphQLField
-    private long finishedTime = -1;
-
-    @GraphQLField
-    private long scheduledTime = -1;
-
-    @GraphQLField
     private int numberOfExecutionLeft = 1;
 
-    @GraphQLField
     private int numberOfExecutionOnFailureLeft = 1;
 
-    @GraphQLField
     private int progress;
 
-    @GraphQLField
-    private long startTime = -1;
+    private long scheduledTime = -1;
 
-    private Map<String, String> genericInformation;
+    private TaskStatus status;
 
-    private Map<String, String> variables;
+    private String tag;
 
-    @GraphQLField
-    public List<GenericInformation> genericInformation(DataFetchingEnvironment dataFetchingEnvironment,
-                                                       @GraphQLName("input") GenericInformationInput input) {
+    public final static GraphQLEnumType TASK_STATUS_ENUM = newEnum().name("TaskStatus")
+            .description("Task status list")
+            .value("ABORTED",
+                    "ABORTED",
+                    "The task has been aborted by an exception on an other task while the task is running (job has cancelOnError=true). Can be also in this status if the job is killed while the concerned task was running")
+            .value("FAILED",
+                    "FAILED",
+                    "The task is failed (only if max execution time has been reached and the node on which it was started is down)")
+            .value("FAULTY",
+                    "FAULTY",
+                    "The task has finished execution with error code (!=0) or exception")
+            .value("FINISHED",
+                    "FINISHED",
+                    "The task has finished execution")
+            .value("IN_ERROR",
+                    "IN_ERROR",
+                    "The task is suspended after first error and is waiting for a manual restart action")
+            .value("NOT_RESTARTED",
+                    "NOT_RESTARTED",
+                    "The task could not be restarted. It means that the task could not be restarted after an error during the previous execution")
+            .value("NOT_STARTED",
+                    "NOT_STARTED",
+                    "The task could not be started. It means that the task could not be started due to one ore more dependency failure")
+            .value("PAUSED", "PAUSED", "The task is paused")
+            .value("PENDING",
+                    "PENDING",
+                    "The task is in the scheduler pending queue")
+            .value("RUNNING",
+                    "RUNNING",
+                    "The task is executing")
+            .value("SKIPPED",
+                    "SKIPPED",
+                    "The task was not executed: it was the non-selected branch of an IF/ELSE control flow action")
+            .value("SUBMITTED",
+                    "SUBMITTED",
+                    "The task has just been submitted by the user")
+            .value("WAITING_ON_ERROR",
+                    "WAITING_ON_ERROR",
+                    "The task is waiting for restart after an error (i.e. native code != 0 or exception)")
+            .value("WAITING_ON_FAILURE",
+                    "WAITING_ON_FAILURE",
+                    "The task is waiting for restart after a failure (i.e. node down)")
+            .build();
 
-        Task task = (Task) dataFetchingEnvironment.getSource();
-        return filterKeyValue(task.getGenericInformation(), input, () -> new GenericInformation());
-    }
+    public final static GraphQLObjectType TYPE = GraphQLObjectType.newObject()
+            .name("Task")
+            .description("Task of a scheduler job")
+            .withInterface(JobTaskCommon.TYPE)
+            .field(newFieldDefinition().name("description")
+                    .description("description")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("executionDuration")
+                    .description("Execution duration of the task")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("executionHostName")
+                    .description("Execution host name on which the task is running")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("finishedTime")
+                    .description("Finished time")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("genericInformation")
+                    .description("Generic information list, empty if there is none")
+                    .type(new GraphQLList(GenericInformation.TYPE))
+                    .argument(newArgument().name("input")
+                            .description("Generic information input filter")
+                            .type(KeyValueInput.TYPE)
+                            .build())
+                    .dataFetcher(new GenericInformationDataFetcher()))
+            .field(newFieldDefinition().name("id")
+                    .description("Unique identifier")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("inErrorTime")
+                    .description("In error time")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("jobId")
+                    .description("ID of the job which the task belongs to")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("name")
+                    .description("Name")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("numberOfExecutionLeft")
+                    .description("Number of execution left")
+                    .type(GraphQLInt))
+            .field(newFieldDefinition().name("numberOfExecutionOnFailureLeft")
+                    .description("Number of execution on failure left")
+                    .type(GraphQLInt))
+            .field(newFieldDefinition().name("progress")
+                    .description("Progress status of the task")
+                    .type(GraphQLInt))
+            .field(newFieldDefinition().name("scheduledTime")
+                    .description("Scheduled time for running the task")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("startTime")
+                    .description("Start time")
+                    .type(GraphQLLong))
+            .field(newFieldDefinition().name("status")
+                    .description("Task status")
+                    .type(new GraphQLList(TASK_STATUS_ENUM)))
+            .field(newFieldDefinition().name("tag")
+                    .description("Task tag")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("variables")
+                    .description("Variable list, empty if there is none")
+                    .type(new GraphQLList(Variable.TYPE))
+                    .argument(newArgument().name("input")
+                            .description("Variables input filter")
+                            .type(KeyValueInput.TYPE)
+                            .build())
+                    .dataFetcher(new VariablesDataFetcher()))
+            .build();
 
-    @GraphQLField
-    public List<Variable> variables(DataFetchingEnvironment dataFetchingEnvironment,
-                                    @GraphQLName("input") VariableInput input) {
+    @Builder
+    public Task(String description, long executionDuration, String executionHostName, long finishedTime,
+            long id,
+            long inErrorTime, Map<String, String> genericInformation, long jobId, String name,
+            int numberOfExecutionLeft, int numberOfExecutionOnFailureLeft, int progress, long scheduledTime,
+            long startTime, TaskStatus status, String tag, Map<String, String> variables) {
 
-        Task task = (Task) dataFetchingEnvironment.getSource();
-        return filterKeyValue(task.getVariables(), input, () -> new Variable());
+        super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
+
+        this.executionDuration = executionDuration;
+        this.executionHostName = executionHostName;
+        this.jobId = jobId;
+        this.numberOfExecutionLeft = numberOfExecutionLeft;
+        this.numberOfExecutionOnFailureLeft = numberOfExecutionOnFailureLeft;
+        this.progress = progress;
+        this.scheduledTime = scheduledTime;
+        this.status = status;
+        this.tag = tag;
     }
 
 }

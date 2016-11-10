@@ -1,8 +1,42 @@
+/*
+ *  *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2015 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ *  * $$ACTIVEEON_INITIAL_DEV$$
+ */
 package org.ow2.proactive.scheduling.api.controller;
 
-import com.google.common.base.Strings;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.service.GraphqlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +48,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 
 
 /**
  * This controller follows the basics from the GraphQL spec:
- *
+ * <p>
  * http://graphql.org/learn/serving-over-http/
  *
  * @author ActiveEon Team
@@ -46,11 +79,9 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> executeOperation(
-            @RequestParam(DEFAULT_QUERY_KEY) String query,
+    public Map<String, Object> executeOperation(@RequestParam(DEFAULT_QUERY_KEY) String query,
             @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
-            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables)
-            throws IOException {
+            @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
 
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
     }
@@ -60,8 +91,7 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> executeOperation(@RequestBody Map<String, Object> body)
-            throws IOException {
+    public Map<String, Object> executeOperation(@RequestBody Map<String, Object> body) throws IOException {
 
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
@@ -70,6 +100,7 @@ public class GraphQLController {
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, Object> decodeIntoMap(final String variables) throws IOException {
         if (Strings.isNullOrEmpty(variables)) {
             return new HashMap<>();

@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,13 +34,28 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
-import graphql.annotations.GraphQLType;
+import graphql.schema.GraphQLObjectType;
 import lombok.AllArgsConstructor;
 
+
 @AllArgsConstructor
-@GraphQLType
 public class Variable extends KeyValue {
+
+    public static final GraphQLObjectType TYPE = GraphQLObjectType.newObject()
+            .name("Variable")
+            .description("Variables")
+            .withInterface(KeyValue.TYPE)
+            .field(newFieldDefinition().name("key")
+                    .description("Key as the key in a map")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("value")
+                    .description("Value as the value in a map")
+                    .type(GraphQLString))
+            .build();
 
 }

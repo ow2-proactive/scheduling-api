@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,11 +34,6 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import com.google.common.annotations.VisibleForTesting;
-
-import org.ow2.proactive.scheduling.api.fetchers.cursor.CursorMapper;
-import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -54,12 +49,18 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import graphql.annotations.DispatchingConnection;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.CursorMapper;
+import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
+
+import com.google.common.annotations.VisibleForTesting;
+
 import graphql.relay.Connection;
 import graphql.relay.ConnectionCursor;
 import graphql.relay.Edge;
 import graphql.relay.PageInfo;
+import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+
 
 /**
  * Manage pagination for entities stored in a relational database that have to be mapped to a
@@ -68,7 +69,7 @@ import graphql.schema.DataFetchingEnvironment;
  * @param <E> entity class type
  * @param <T> graphql class type
  */
-public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnection {
+public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     /*
      * Arguments for forward pagination.
@@ -83,10 +84,6 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
     protected static final String RELAY_ARGUMENT_BEFORE = "before";
 
     protected static final String RELAY_ARGUMENT_LAST = "last";
-
-    protected DatabaseConnectionFetcher(Object o) {
-        super(o);
-    }
 
     /**
      * Maps entity objects to GraphQL schema objects.
@@ -104,20 +101,16 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
      * <p>
      * The opaque cursor that is returned to the client makes use of the entity ID internally.
      */
-    protected Connection createPaginatedConnection(
-            DataFetchingEnvironment environment, Class<E> entityClass,
-            Function<Root<E>, Path<? extends Number>> entityId,
-            Comparator<E> entityComparator,
+    protected Connection createPaginatedConnection(DataFetchingEnvironment environment, Class<E> entityClass,
+            Function<Root<E>, Path<? extends Number>> entityId, Comparator<E> entityComparator,
             BiFunction<CriteriaBuilder, Root<E>, Predicate[]> criteria,
             CursorMapper<T, Integer> cursorMapper) {
 
         Integer first = environment.getArgument(RELAY_ARGUMENT_FIRST);
         Integer last = environment.getArgument(RELAY_ARGUMENT_LAST);
 
-        Integer after =
-                cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_AFTER));
-        Integer before =
-                cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_BEFORE));
+        Integer after = cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_AFTER));
+        Integer before = cursorMapper.getOffsetFromCursor(environment.getArgument(RELAY_ARGUMENT_BEFORE));
 
         EntityManager entityManager = getEntityManager();
 
@@ -126,8 +119,7 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
         Root<E> entityRoot = criteriaQuery.from(entityClass);
         Path<? extends Number> entityIdPath = entityId.apply(entityRoot);
 
-        Predicate cursorPredicate =
-                createCursorPredicate(criteriaBuilder, entityIdPath, after, before);
+        Predicate cursorPredicate = createCursorPredicate(criteriaBuilder, entityIdPath, after, before);
 
         int maxResults = applySlicing(criteriaQuery, criteriaBuilder, entityIdPath, first, last);
 
@@ -159,10 +151,14 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
 
         Stream<T> data = dataMapping(dataStream);
 
-        Connection connection =
-                createRelayConnection(
-                        entityManager, entityClass, criteriaBuilder,
-                        predicates, cursorMapper, data, first, last);
+        Connection connection = createRelayConnection(entityManager,
+                entityClass,
+                criteriaBuilder,
+                predicates,
+                cursorMapper,
+                data,
+                first,
+                last);
 
         return connection;
     }
@@ -171,9 +167,8 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
         return ApplicationContextProvider.getApplicationContext().getBean(EntityManager.class);
     }
 
-    protected int applySlicing(CriteriaQuery<E> criteriaQuery,
-                               CriteriaBuilder criteriaBuilder,
-                               Path<? extends Number> taskIdPath, Integer first, Integer last) {
+    protected int applySlicing(CriteriaQuery<E> criteriaQuery, CriteriaBuilder criteriaBuilder,
+            Path<? extends Number> taskIdPath, Integer first, Integer last) {
         // apply slicing
         int maxResults = -1;
 
@@ -213,8 +208,8 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
     }
 
     protected Predicate createCursorPredicate(CriteriaBuilder criteriaBuilder,
-                                              Path<? extends Number> taskIdPath,
-                                              Integer after, Integer before) {
+            Path<? extends Number> taskIdPath,
+            Integer after, Integer before) {
         // apply cursors to tasks
         Predicate cursorPredicate = null;
 
@@ -235,12 +230,8 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
         return cursorPredicate;
     }
 
-    protected Connection createRelayConnection(
-            EntityManager entityManager,
-            Class<E> entityClass,
-            CriteriaBuilder criteriaBuilder,
-            Predicate[] predicates,
-            CursorMapper<T, Integer> cursorMapper,
+    protected Connection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
+            CriteriaBuilder criteriaBuilder, Predicate[] predicates, CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
         List<Edge> edges = buildEdges(data, cursorMapper);
@@ -252,8 +243,8 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
             pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
         }
 
-        int nbEntriesBeforeSlicing =
-                getNbEntriesBeforeSlicing(entityManager, entityClass, criteriaBuilder, predicates);
+        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityManager, entityClass, criteriaBuilder,
+                predicates);
 
         pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last));
         pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first));
@@ -266,15 +257,14 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
     }
 
     @VisibleForTesting
-    int getNbEntriesBeforeSlicing(EntityManager entityManager,
-                                  Class<E> entityClass,
-                                  CriteriaBuilder criteriaBuilder,
-                                  Predicate[] predicates) {
+    int getNbEntriesBeforeSlicing(EntityManager entityManager, Class<E> entityClass,
+            CriteriaBuilder criteriaBuilder,
+            Predicate[] predicates) {
 
         CriteriaQuery<Long> counterQuery = criteriaBuilder.createQuery(Long.class);
 
-        CriteriaQuery<Long> select =
-                counterQuery.select(criteriaBuilder.count(counterQuery.from(entityClass)));
+        CriteriaQuery<Long> select = counterQuery.select(
+                criteriaBuilder.count(counterQuery.from(entityClass)));
 
         if (predicates.length > 0) {
             select.where(predicates);
@@ -285,8 +275,7 @@ public abstract class DatabaseConnectionFetcher<E, T> extends DispatchingConnect
 
     @VisibleForTesting
     List<Edge> buildEdges(Stream<T> data, CursorMapper<T, Integer> cursorMapper) {
-        return data.map(entry ->
-                new Edge(entry, new ConnectionCursor(cursorMapper.createCursor(entry))))
+        return data.map(entry -> new Edge(entry, new ConnectionCursor(cursorMapper.createCursor(entry))))
                 .collect(Collectors.toList());
     }
 

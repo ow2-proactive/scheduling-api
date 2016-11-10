@@ -34,13 +34,6 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import com.google.common.collect.ImmutableList;
-
-import org.ow2.proactive.scheduler.core.db.JobData;
-import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -50,36 +43,35 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import graphql.schema.DataFetcher;
+import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
+
 import graphql.schema.DataFetchingEnvironment;
 
 
 public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
-
-    public JobDataFetcher() {
-        super(ImmutableList.of());
-    }
-
-    public JobDataFetcher(DataFetcher dataFetcher) {
-        super(ImmutableList.of());
-    }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, Predicate[]> criteria =
-                (criteriaBuilder, root) -> new Predicate[0];
+        BiFunction<CriteriaBuilder, Root<JobData>, Predicate[]> criteria = (criteriaBuilder, root) -> new Predicate[0];
 
-        return createPaginatedConnection(environment, JobData.class, entityId,
+        return createPaginatedConnection(environment,
+                JobData.class,
+                entityId,
                 (t1, t2) -> Long.compare(t1.getId(), t2.getId()),
-                criteria, new JobCursorMapper());
+                criteria,
+                new JobCursorMapper());
     }
 
+    @Override
     protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
-        return taskStream.parallel().map(
-                jobData -> Job.builder()
+        return taskStream.parallel()
+                .map(jobData -> Job.builder()
                         .id(jobData.getId())
                         .description(jobData.getDescription())
                         .finishedTime(jobData.getFinishedTime())

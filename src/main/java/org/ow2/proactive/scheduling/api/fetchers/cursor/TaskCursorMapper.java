@@ -36,6 +36,7 @@ package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
 import org.ow2.proactive.scheduling.api.schema.type.Task;
 
+
 public class TaskCursorMapper extends IntegerCursorMapper<Task> {
 
     @Override

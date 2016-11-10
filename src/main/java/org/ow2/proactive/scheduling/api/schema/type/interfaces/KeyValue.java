@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,23 +34,53 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.interfaces;
 
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import graphql.annotations.GraphQLField;
+import org.ow2.proactive.scheduling.api.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.schema.type.Variable;
+
+import graphql.schema.GraphQLInterfaceType;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.TypeResolver;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+
+/**
+ * @author ActiveEon team
+ */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public abstract class KeyValue {
 
-    @GraphQLField
     protected String key;
 
-    @GraphQLField
     protected String value;
+
+    public static final GraphQLInterfaceType TYPE = GraphQLInterfaceType.newInterface()
+            .name("KeyValue")
+            .description("Key value type as a map")
+            .field(newFieldDefinition().name("key")
+                    .description("Key as the key in a map")
+                    .type(GraphQLString))
+            .field(newFieldDefinition().name("value")
+                    .description("Value as the value in a map")
+                    .type(GraphQLString))
+            .typeResolver(new TypeResolver() {
+
+                @Override
+                public GraphQLObjectType getType(
+                        Object object) {
+                    if (object instanceof GenericInformation) {
+                        return GenericInformation.TYPE;
+                    }
+                    return Variable.TYPE;
+                }
+
+            })
+            .build();
 
 }

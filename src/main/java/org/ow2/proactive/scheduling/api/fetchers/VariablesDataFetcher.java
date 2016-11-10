@@ -32,24 +32,21 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.schema.type.inputs;
+package org.ow2.proactive.scheduling.api.fetchers;
 
-import java.util.HashMap;
+import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
+
+import org.ow2.proactive.scheduling.api.schema.type.Variable;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
 
-public class VariableInput extends KeyValueInput {
-
-    public VariableInput(String key, String value) {
-        super(key, value);
-    }
-
-    public VariableInput(HashMap input) {
-        super(input);
-    }
+public class VariablesDataFetcher implements DataFetcher {
 
     @Override
-    public String getName() {
-        return this.getClass().getName();
+    public Object get(DataFetchingEnvironment environment) {
+        return filterKeyValue(environment, jobCommon -> jobCommon.getVariables(), () -> new Variable());
     }
 
 }

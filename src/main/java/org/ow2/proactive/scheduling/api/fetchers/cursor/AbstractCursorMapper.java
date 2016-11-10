@@ -36,6 +36,7 @@ package org.ow2.proactive.scheduling.api.fetchers.cursor;
 
 import graphql.relay.Base64;
 
+
 public abstract class AbstractCursorMapper<F, T> implements CursorMapper<F, T> {
 
     protected static final String DUMMY_CURSOR_PREFIX = "graphql-cursor";
@@ -53,9 +54,7 @@ public abstract class AbstractCursorMapper<F, T> implements CursorMapper<F, T> {
 
     @Override
     public String createCursor(F field) {
-        return Base64.toBase64(
-                DUMMY_CURSOR_PREFIX +
-                        toString(field));
+        return Base64.toBase64(DUMMY_CURSOR_PREFIX + toString(field));
     }
 
     abstract String toString(F field);

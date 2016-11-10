@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -32,11 +32,23 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.repository;
+package org.ow2.proactive.scheduling.api.fetchers;
 
-import org.ow2.proactive.scheduler.core.db.JobData;
-import org.springframework.data.repository.CrudRepository;
+import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
 
-public interface JobRepository extends CrudRepository<JobData, Long> {
+import org.ow2.proactive.scheduling.api.schema.type.GenericInformation;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
+
+
+public class GenericInformationDataFetcher implements DataFetcher {
+
+    @Override
+    public Object get(DataFetchingEnvironment environment) {
+        return filterKeyValue(environment,
+                jobCommon -> jobCommon.getGenericInformation(),
+                () -> new GenericInformation());
+    }
 
 }

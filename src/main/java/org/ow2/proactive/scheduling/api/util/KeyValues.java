@@ -34,20 +34,41 @@
  */
 package org.ow2.proactive.scheduling.api.util;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-
-import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
-import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
-
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
+import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
+import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
 
-public class KeyValues {
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
+
+import graphql.schema.DataFetchingEnvironment;
+
+
+/**
+ * @author ActiveEon team
+ */
+public final class KeyValues {
+
+    private KeyValues() {
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends KeyValue, I extends KeyValueInput> List<T> filterKeyValue(
+            DataFetchingEnvironment environment, Function<JobTaskCommon, Map<String, String>> function,
+            Supplier<T> keyValueSupplier) {
+
+        JobTaskCommon object = (JobTaskCommon) environment.getSource();
+        I input = (I) environment.getArgument("input");
+
+        return filterKeyValue(function.apply(object), input, keyValueSupplier);
+    }
 
     public static <T extends KeyValue, I extends KeyValueInput> List<T> filterKeyValue(
             Map<String, String> keyValueEntries, I input, Supplier<T> keyValueSupplier) {
@@ -67,19 +88,22 @@ public class KeyValues {
             return filterBy(keyValueEntries, entry -> key.equals(entry.getKey()), keyValueSupplier);
         } else {
             return filterBy(keyValueEntries,
-                    entry -> value.equals(entry.getValue()) && key.equals(entry.getKey()), keyValueSupplier);
+                    entry -> value.equals(entry.getValue()) && key.equals(entry.getKey()),
+                    keyValueSupplier);
         }
     }
 
     @VisibleForTesting
     protected static <T extends KeyValue> List<T> filterBy(Map<String, String> keyValueEntries,
-                                                           Predicate<Map.Entry<String, String>> predicate, Supplier<T> keyValueSupplier) {
+            Predicate<Map.Entry<String, String>> predicate, Supplier<T> keyValueSupplier) {
+
         return keyValueEntries.entrySet().stream().filter(predicate).map(entry -> {
             T keyValue = keyValueSupplier.get();
             keyValue.setKey(entry.getKey());
             keyValue.setValue(entry.getValue());
             return keyValue;
         }).collect(Collectors.toList());
+
     }
 
 }

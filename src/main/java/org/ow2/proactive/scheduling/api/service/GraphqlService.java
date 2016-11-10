@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2016 INRIA/University of
+ * Copyright (C) 1997-2015 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,21 +34,22 @@
  */
 package org.ow2.proactive.scheduling.api.service;
 
-import org.ow2.proactive.scheduling.api.controller.GraphQLController;
-import org.ow2.proactive.scheduling.api.schema.type.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import static graphql.schema.GraphQLSchema.newSchema;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.ow2.proactive.scheduling.api.controller.GraphQLController;
+import org.ow2.proactive.scheduling.api.schema.type.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import graphql.ExecutionResult;
 import graphql.GraphQL;
-import graphql.annotations.GraphQLAnnotations;
-import graphql.schema.GraphQLObjectType;
-
-import static graphql.schema.GraphQLSchema.newSchema;
 
 
 /**
@@ -59,14 +60,21 @@ public class GraphqlService {
 
     private static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
 
-    private GraphQLObjectType queryObject = GraphQLAnnotations.object(Query.class);
+    @Autowired
+    private Query query;
 
-    private GraphQL graphql = new GraphQL(newSchema().query(queryObject).build());
+    private GraphQL graphql;
 
     public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
     }
 
-    public Map<String, Object> executeQuery(String query, String operationName, Map<String, Object> variables) {
+    @PostConstruct
+    public void init() {
+        graphql = new GraphQL(newSchema().query(query.buildType()).build());
+    }
+
+    public Map<String, Object> executeQuery(String query, String operationName,
+            Map<String, Object> variables) {
 
         ExecutionResult executionResult = graphql.execute(query, operationName, null, variables);
 

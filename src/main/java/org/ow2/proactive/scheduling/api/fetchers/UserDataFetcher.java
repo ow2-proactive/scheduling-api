@@ -34,17 +34,65 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import org.ow2.proactive.scheduling.api.schema.type.User;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
+import org.ow2.proactive.scheduling.api.schema.type.User;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 
+@Component
 public class UserDataFetcher implements DataFetcher {
+
+    @Value("${pa.scheduler.rest.url}")
+    private String schedulerRestUrl;
+
+    @Value("${api.viewer.localcache.expire.min}")
+    private Integer localCacheExpireMin;
+
+    private RestTemplate restTemplate = new RestTemplate();
+
+    private String loginFetchUrl;
+
+    private LoadingCache<String, User> localCache ;
+
+    @PostConstruct
+    protected void init() {
+        loginFetchUrl = schedulerRestUrl + "/scheduler/logins/sessionid/";
+
+        localCache = CacheBuilder.newBuilder()
+                .maximumSize(500)
+                .expireAfterWrite(localCacheExpireMin, TimeUnit.MINUTES)
+                .build(new CacheLoader<String, User>() {
+                    public User load(String sessionId)
+                            throws Exception {
+                        return getLoginFromSessionId(sessionId);
+                    }
+
+                });
+    }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
-        return User.builder().sessionId(environment.getArgument("sessionId")).login("Bobot").build();
+        String sessionId = environment.getArgument("sessionId");
+        try {
+            return localCache.get(sessionId);
+        } catch (Exception e) {
+            return User.builder().build();
+        }
+    }
+
+    private User getLoginFromSessionId(String sessionId) {
+        String login = restTemplate.getForObject(loginFetchUrl + sessionId, String.class);
+        return User.builder().sessionId(sessionId).login(login).build();
     }
 
 }
