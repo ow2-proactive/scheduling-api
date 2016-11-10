@@ -166,6 +166,9 @@ public class Task extends JobTaskCommon {
             .field(newFieldDefinition().name("numberOfExecutionOnFailureLeft")
                     .description("Number of execution on failure left")
                     .type(GraphQLInt))
+            .field(newFieldDefinition().name("onTaskError")
+                    .description("The behaviour applied on Tasks when an error occurs")
+                    .type(ON_TASK_ERROR))
             .field(newFieldDefinition().name("progress")
                     .description("Progress status of the task")
                     .type(GraphQLInt))
@@ -193,12 +196,12 @@ public class Task extends JobTaskCommon {
 
     @Builder
     public Task(String description, long executionDuration, String executionHostName, long finishedTime,
-            long id,
-            long inErrorTime, Map<String, String> genericInformation, long jobId, String name,
-            int numberOfExecutionLeft, int numberOfExecutionOnFailureLeft, int progress, long scheduledTime,
+            long id, long inErrorTime, Map<String, String> genericInformation, long jobId, String name,
+            int numberOfExecutionLeft, int numberOfExecutionOnFailureLeft, String onTaskError, int progress,
+            long scheduledTime,
             long startTime, String status, String tag, Map<String, String> variables) {
-
-        super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
+        super(description, finishedTime, genericInformation, id, inErrorTime, name, onTaskError, startTime,
+                variables);
 
         this.executionDuration = executionDuration;
         this.executionHostName = executionHostName;

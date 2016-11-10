@@ -43,9 +43,12 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
+import com.google.common.base.CaseFormat;
 import graphql.schema.DataFetchingEnvironment;
 
 
@@ -56,7 +59,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, Predicate[]> criteria = (criteriaBuilder, root) -> new Predicate[0];
+        BiFunction<CriteriaBuilder, Root<JobData>, Predicate[]> criteria =
+                (criteriaBuilder, root) -> new Predicate[0];
 
         return createPaginatedConnection(environment,
                 JobData.class,
@@ -70,11 +74,19 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
         return taskStream.parallel()
                 .map(jobData -> Job.builder()
-                        .id(jobData.getId())
+                        .dataManagement(
+                                DataManagement.builder()
+                                        .globalSpaceUrl(jobData.getGlobalSpace())
+                                        .inputSpaceUrl(jobData.getInputSpace())
+                                        .outputSpaceUrl(jobData.getOutputSpace())
+                                        .userSpaceUrl(jobData.getUserSpace()).build()
+                        )
                         .description(jobData.getDescription())
                         .finishedTime(jobData.getFinishedTime())
                         .genericInformation(jobData.getGenericInformation())
+                        .id(jobData.getId())
                         .inErrorTime(jobData.getInErrorTime())
+                        .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
                         .name(jobData.getJobName())
                         .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
                         .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
@@ -82,13 +94,17 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                         .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
                         .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
                         .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
+                        .onTaskError(
+                                CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                        jobData.getOnTaskErrorString()))
                         .owner(jobData.getOwner())
                         .priority(jobData.getPriority().name())
                         .projectName(jobData.getProjectName())
                         .removedTime(jobData.getRemovedTime())
-                        .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
+                        .status(jobData.getStatus().name())
                         .startTime(jobData.getStartTime())
                         .submittedTime(jobData.getSubmittedTime())
+                        .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
                         .variables(jobData.getVariables())
                         .build());
     }

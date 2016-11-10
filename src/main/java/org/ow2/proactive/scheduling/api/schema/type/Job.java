@@ -67,6 +67,10 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @ToString
 public class Job extends JobTaskCommon {
 
+    private DataManagement dataManagement;
+
+    private int maxNumberOfExecution;
+
     private int numberOfFailedTasks;
 
     private int numberOfFaultyTasks;
@@ -87,6 +91,8 @@ public class Job extends JobTaskCommon {
 
     private long removedTime;
 
+    private String status;
+
     private long submittedTime;
 
     private List<Task> tasks;
@@ -94,24 +100,48 @@ public class Job extends JobTaskCommon {
     private int totalNumberOfTasks;
 
     public final static GraphQLEnumType JOB_PRIORITY_ENUM = newEnum().name("JobPriority")
-            .description("Job's priority list")
+            .description("Available job's priorities")
             .value("HIGH", "HIGH", "High priority")
             .value("HIGHEST", "HIGHEST", "Highest priority")
             .value("IDLE", "IDLE", "Idle")
             .value("LOW", "LOW", "Low priority")
             .value("LOWEST", "LOWEST", "Lowest priority")
-            .value("NORMAL", "NORMAL", "Normal priority.")
+            .value("NORMAL", "NORMAL", "Normal priority")
+            .build();
+
+    public final static GraphQLEnumType JOB_STATUS_ENUM = newEnum().name("JobStatus")
+            .description("Available job's statuses")
+            .value("CANCELED", "CANCELED", "The job has been canceled due to user exception and order. " +
+                    "This status runs when a user exception occurs in a task and when the user has asked " +
+                    "to cancel On exception.")
+            .value("FAILED", "FAILED",
+                    "The job has failed. One or more tasks have failed (due to resources " +
+                            "failure). There is no more executionOnFailure left for a task.")
+            .value("FINISHED", "FINISHED", "The job is finished. Every tasks are finished.")
+            .value("IN_ERROR", "IN_ERROR", "The job has at least one in-error task and in-error tasks are " +
+                    "the last, among others which have changed their state (i.e. Job status is depicted " +
+                    "by the last action).")
+            .value("KILLED", "KILLED", "The job has been killed by a user. Nothing can be done anymore on " +
+                    "this job except reading execution information such as output, time, etc.")
+            .value("PAUSED", "PAUSED", "The job is paused waiting for user to resume it.")
+            .value("PENDING", "PENDING", "The job is waiting to be scheduled.")
+            .value("RUNNING", "RUNNING", "The job is running. Actually at least one of its task " +
+                    "has been scheduled.")
+            .value("STALLED", "STALLED", "The job has been launched but no task are currently running")
             .build();
 
     public final static GraphQLObjectType TYPE = GraphQLObjectType.newObject()
             .name("Job")
             .description("Scheduler job")
             .withInterface(JobTaskCommon.TYPE)
+            .field(newFieldDefinition().name("dataManagement")
+                    .description("User configuration for data spaces")
+                    .type(DataManagement.TYPE))
             .field(newFieldDefinition().name("description")
-                    .description("description")
+                    .description("The description of the job")
                     .type(GraphQLString))
             .field(newFieldDefinition().name("finishedTime")
-                    .description("Finished time")
+                    .description("The timestamp at which the Job has finished its execution")
                     .type(GraphQLLong))
             .field(newFieldDefinition().name("genericInformation")
                     .description("Generic information list, empty if there is none")
@@ -130,7 +160,6 @@ public class Job extends JobTaskCommon {
             .field(newFieldDefinition().name("name")
                     .description("Name")
                     .type(GraphQLString))
-
             .field(newFieldDefinition().name("numberOfFailedTasks")
                     .description("Number of the failed tasks of the job")
                     .type(GraphQLInt))
@@ -149,6 +178,9 @@ public class Job extends JobTaskCommon {
             .field(newFieldDefinition().name("numberOfRunningTasks")
                     .description("Number of the running tasks of the job")
                     .type(GraphQLInt))
+            .field(newFieldDefinition().name("onTaskError")
+                    .description("The behaviour applied on Tasks when an error occurs")
+                    .type(ON_TASK_ERROR))
             .field(newFieldDefinition().name("owner")
                     .description("Job's owner")
                     .type(GraphQLString))
@@ -164,6 +196,9 @@ public class Job extends JobTaskCommon {
             .field(newFieldDefinition().name("startTime")
                     .description("Start time")
                     .type(GraphQLLong))
+            .field(newFieldDefinition().name("status")
+                    .description("Scheduling status of a job.")
+                    .type(JOB_STATUS_ENUM))
             .field(newFieldDefinition().name("submittedTime")
                     .description("Job submitted time")
                     .type(GraphQLLong))
@@ -190,15 +225,19 @@ public class Job extends JobTaskCommon {
             .build();
 
     @Builder
-    public Job(String description, long finishedTime, Map<String, String> genericInformation, long id,
-            long inErrorTime, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
-            int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks,
-            int numberOfRunningTasks, String owner, String priority, String projectName, long removedTime,
-            long submittedTime, List<Task> tasks, int totalNumberOfTasks, long startTime,
+    public Job(DataManagement dataManagement, String description, long finishedTime,
+            Map<String, String> genericInformation, long id, long inErrorTime, int maxNumberOfExecution,
+            String name, int numberOfFailedTasks, int numberOfFaultyTasks, int numberOfFinishedTasks,
+            int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks, String onTaskError,
+            String owner, String priority, String projectName, long removedTime, long startTime,
+            String status, long submittedTime, List<Task> tasks, int totalNumberOfTasks,
             Map<String, String> variables) {
 
-        super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
+        super(description, finishedTime, genericInformation,
+                id, inErrorTime, name, onTaskError, startTime, variables);
 
+        this.dataManagement = dataManagement;
+        this.maxNumberOfExecution = maxNumberOfExecution;
         this.numberOfFailedTasks = numberOfFailedTasks;
         this.numberOfFaultyTasks = numberOfFaultyTasks;
         this.numberOfFinishedTasks = numberOfFinishedTasks;
@@ -209,10 +248,10 @@ public class Job extends JobTaskCommon {
         this.priority = priority;
         this.projectName = projectName;
         this.removedTime = removedTime;
+        this.status = status;
         this.submittedTime = submittedTime;
         this.tasks = tasks;
         this.totalNumberOfTasks = totalNumberOfTasks;
-
     }
 
 }
