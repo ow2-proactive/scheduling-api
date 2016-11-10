@@ -34,6 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
+import java.util.HashMap;
+
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import graphql.schema.GraphQLInputType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -41,15 +48,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2LONG;
 import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2STRING;
 import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
-
-import java.util.HashMap;
-
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
-
-import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 
 /**
@@ -75,7 +73,7 @@ public class JobInput {
 
     private String owner;
 
-    private JobPriority priority;
+    private String priority;
 
     private String projectName;
 
@@ -84,7 +82,7 @@ public class JobInput {
             id = getValue(input, ID_FIELD_NAME, STRING2LONG, -1l);
             jobName = getValue(input, JOB_NAME_FIELD_NAME, STRING2STRING, null);
             owner = getValue(input, OWNER_FIELD_NAME, STRING2STRING, null);
-            priority = getValue(input, PRIORITY_FIELD_NAME, i -> JobPriority.valueOf(i), null);
+            priority = getValue(input, PRIORITY_FIELD_NAME, STRING2STRING, null);
             projectName = getValue(input, PROJ_NAME_FIELD_NAME, STRING2STRING, null);
         }
     }

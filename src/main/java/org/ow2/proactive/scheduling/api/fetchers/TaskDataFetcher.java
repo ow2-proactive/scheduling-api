@@ -47,10 +47,7 @@ import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
-import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
-
 import com.google.common.collect.Maps;
-
 import graphql.schema.DataFetchingEnvironment;
 
 
@@ -94,7 +91,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                 .scheduledTime(taskData.getScheduledTime())
                 .startTime(taskData.getStartTime())
                 .progress(-1)
-                .status(TaskStatus.valueOf(taskData.getTaskStatus().name()))
+                .status(taskData.getTaskStatus().name())
                 .tag(taskData.getTag())
                 .variables(Maps.newHashMap())
                 .build());

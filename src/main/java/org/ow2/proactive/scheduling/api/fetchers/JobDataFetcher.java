@@ -46,8 +46,6 @@ import javax.persistence.criteria.Root;
 import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
-
 import graphql.schema.DataFetchingEnvironment;
 
 
@@ -85,7 +83,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                         .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
                         .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
                         .owner(jobData.getOwner())
-                        .priority(JobPriority.valueOf(jobData.getPriority().name()))
+                        .priority(jobData.getPriority().name())
                         .projectName(jobData.getProjectName())
                         .removedTime(jobData.getRemovedTime())
                         .totalNumberOfTasks(jobData.getTotalNumberOfTasks())

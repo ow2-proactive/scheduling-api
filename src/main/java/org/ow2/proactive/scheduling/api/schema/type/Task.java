@@ -34,27 +34,25 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import static graphql.Scalars.GraphQLInt;
-import static graphql.Scalars.GraphQLLong;
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLArgument.newArgument;
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.VariablesDataFetcher;
-import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
-
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import static graphql.Scalars.GraphQLInt;
+import static graphql.Scalars.GraphQLLong;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 
 /**
@@ -78,7 +76,7 @@ public class Task extends JobTaskCommon {
 
     private long scheduledTime = -1;
 
-    private TaskStatus status;
+    private String status;
 
     private String tag;
 
@@ -179,7 +177,7 @@ public class Task extends JobTaskCommon {
                     .type(GraphQLLong))
             .field(newFieldDefinition().name("status")
                     .description("Task status")
-                    .type(new GraphQLList(TASK_STATUS_ENUM)))
+                    .type(TASK_STATUS_ENUM))
             .field(newFieldDefinition().name("tag")
                     .description("Task tag")
                     .type(GraphQLString))
@@ -198,7 +196,7 @@ public class Task extends JobTaskCommon {
             long id,
             long inErrorTime, Map<String, String> genericInformation, long jobId, String name,
             int numberOfExecutionLeft, int numberOfExecutionOnFailureLeft, int progress, long scheduledTime,
-            long startTime, TaskStatus status, String tag, Map<String, String> variables) {
+            long startTime, String status, String tag, Map<String, String> variables) {
 
         super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
 

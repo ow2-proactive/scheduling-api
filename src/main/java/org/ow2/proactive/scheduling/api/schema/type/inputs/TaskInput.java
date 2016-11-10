@@ -34,6 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
+import java.util.HashMap;
+
+import org.ow2.proactive.scheduling.api.schema.type.Task;
+import graphql.schema.GraphQLInputType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -41,15 +48,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2LONG;
 import static org.ow2.proactive.scheduling.api.util.Inputs.STRING2STRING;
 import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
-
-import java.util.HashMap;
-
-import org.ow2.proactive.scheduling.api.schema.type.Task;
-import org.ow2.proactive.scheduling.api.schema.type.enums.TaskStatus;
-
-import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 
 /**
@@ -71,7 +69,7 @@ public class TaskInput {
 
     private final long jobId;
 
-    private final TaskStatus status;
+    private final String status;
 
     private final String taskName;
 
@@ -79,7 +77,7 @@ public class TaskInput {
         if (input != null) {
             id = getValue(input, ID_FIELD_NAME, STRING2LONG, -1l);
             jobId = getValue(input, JOB_ID_FIELD_NAME, STRING2LONG, -1l);
-            status = getValue(input, TASK_STATUS_FIELD_NAME, i -> TaskStatus.valueOf(i), null);
+            status = getValue(input, TASK_STATUS_FIELD_NAME, STRING2STRING, null);
             taskName = getValue(input, TASK_NAME_FIELD_NAME, STRING2STRING, null);
         } else {
             id = -1;

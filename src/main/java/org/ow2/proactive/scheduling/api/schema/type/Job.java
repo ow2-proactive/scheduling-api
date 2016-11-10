@@ -34,24 +34,15 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import static graphql.Scalars.GraphQLInt;
-import static graphql.Scalars.GraphQLLong;
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLArgument.newArgument;
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
 import java.util.List;
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.TaskDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.VariablesDataFetcher;
-import org.ow2.proactive.scheduling.api.schema.type.enums.JobPriority;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
-
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
@@ -59,6 +50,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import static graphql.Scalars.GraphQLInt;
+import static graphql.Scalars.GraphQLLong;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 
 /**
@@ -83,7 +81,7 @@ public class Job extends JobTaskCommon {
 
     private String owner;
 
-    private JobPriority priority;
+    private String priority;
 
     private String projectName;
 
@@ -156,7 +154,7 @@ public class Job extends JobTaskCommon {
                     .type(GraphQLString))
             .field(newFieldDefinition().name("priority")
                     .description("Job priority")
-                    .type(new GraphQLList(JOB_PRIORITY_ENUM)))
+                    .type(JOB_PRIORITY_ENUM))
             .field(newFieldDefinition().name("projectName")
                     .description("Project name which the job belongs to")
                     .type(GraphQLString))
@@ -196,7 +194,7 @@ public class Job extends JobTaskCommon {
             long inErrorTime,
             String name, int numberOfFailedTasks, int numberOfFaultyTasks, int numberOfFinishedTasks,
             int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks, String owner,
-            JobPriority priority, String projectName, long removedTime, long submittedTime, List<Task> tasks,
+            String priority, String projectName, long removedTime, long submittedTime, List<Task> tasks,
             int totalNumberOfTasks, long startTime, Map<String, String> variables) {
 
         super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
