@@ -40,8 +40,8 @@ import java.util.function.Function;
 
 public final class Inputs {
 
-    public static final <T> T getValue(HashMap<String, String> input, String fieldName,
-            Function<String, T> function, T defaultValue) {
+    public static final <T> T getValue(HashMap<String, String> input,
+            String fieldName, Function<String, T> function, T defaultValue) {
 
         String fieldValue = input.get(fieldName);
 
@@ -51,5 +51,5 @@ public final class Inputs {
             return defaultValue;
         }
     }
-    
+
 }

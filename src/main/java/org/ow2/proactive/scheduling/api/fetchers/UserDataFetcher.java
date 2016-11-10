@@ -44,6 +44,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -82,7 +83,9 @@ public class UserDataFetcher implements DataFetcher {
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
+
         String sessionId = environment.getArgument("sessionId");
+
         try {
             return localCache.get(sessionId);
         } catch (Exception e) {
@@ -90,9 +93,14 @@ public class UserDataFetcher implements DataFetcher {
         }
     }
 
-    private User getLoginFromSessionId(String sessionId) {
+    private User getLoginFromSessionId(String sessionId) throws RuntimeException {
+
         String login = restTemplate.getForObject(loginFetchUrl + sessionId, String.class);
-        return User.builder().sessionId(sessionId).login(login).build();
+
+        if(StringUtils.isNotBlank(login)) {
+            return User.builder().sessionId(sessionId).login(login).build();
+        }
+        throw new RuntimeException("session id does not exist");
     }
 
 }

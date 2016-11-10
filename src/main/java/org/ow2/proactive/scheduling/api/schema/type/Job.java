@@ -191,11 +191,11 @@ public class Job extends JobTaskCommon {
 
     @Builder
     public Job(String description, long finishedTime, Map<String, String> genericInformation, long id,
-            long inErrorTime,
-            String name, int numberOfFailedTasks, int numberOfFaultyTasks, int numberOfFinishedTasks,
-            int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks, String owner,
-            String priority, String projectName, long removedTime, long submittedTime, List<Task> tasks,
-            int totalNumberOfTasks, long startTime, Map<String, String> variables) {
+            long inErrorTime, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
+            int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks,
+            int numberOfRunningTasks, String owner, String priority, String projectName, long removedTime,
+            long submittedTime, List<Task> tasks, int totalNumberOfTasks, long startTime,
+            Map<String, String> variables) {
 
         super(description, finishedTime, genericInformation, id, inErrorTime, name, startTime, variables);
 
