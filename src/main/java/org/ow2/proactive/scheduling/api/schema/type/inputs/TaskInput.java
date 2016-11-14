@@ -34,9 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.util.Inputs;
 import graphql.schema.GraphQLInputType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,8 +46,6 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static java.util.function.Function.identity;
-import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
 
 
 /**
@@ -54,53 +53,32 @@ import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
  */
 @AllArgsConstructor
 @Getter
-public class TaskInput {
-
-    private static final String ID_FIELD_NAME = "id";
-
-    private static final String JOB_ID_FIELD_NAME = "jobId";
+public class TaskInput extends AbstractInput {
 
     private static final String TASK_NAME_FIELD_NAME = "name";
 
-    private static final String TASK_STATUS_FIELD_NAME = "status";
-
-    private final long id;
-
-    private final long jobId;
-
-    private final String status;
-
     private final String taskName;
 
-    public TaskInput(HashMap<String, String> input) {
+    public TaskInput(LinkedHashMap<String, Object> input) {
+        super(input);
         if (input != null) {
-            id = getValue(input, ID_FIELD_NAME, Long::valueOf, -1l);
-            jobId = getValue(input, JOB_ID_FIELD_NAME, Long::valueOf, -1l);
-            status = getValue(input, TASK_STATUS_FIELD_NAME, identity(), null);
-            taskName = getValue(input, TASK_NAME_FIELD_NAME, identity(), null);
+            taskName = Inputs.getValue(input, InputFieldNameEnum.TASK_NAME.value(), null);
         } else {
-            id = -1;
-            jobId = -1;
-            status = null;
             taskName = null;
         }
     }
 
     public final static GraphQLInputType TYPE = newInputObject().name("TaskInput")
             .description("Task filter input")
-            .field(newInputObjectField().name("id")
+            .field(newInputObjectField().name(InputFieldNameEnum.ID.value())
                     .description("Task identifier")
                     .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name("jobId")
-                    .description("Identifier of the Job which the task belongs to")
-                    .type(GraphQLLong)
-                    .build())
-            .field(newInputObjectField().name("status")
+            .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
                     .description("Task status")
                     .type(Task.TASK_STATUS_ENUM)
                     .build())
-            .field(newInputObjectField().name("taskName")
+            .field(newInputObjectField().name(InputFieldNameEnum.TASK_NAME.value())
                     .description("Task name")
                     .type(GraphQLString)
                     .build())

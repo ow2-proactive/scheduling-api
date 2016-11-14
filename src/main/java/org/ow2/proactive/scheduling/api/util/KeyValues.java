@@ -37,18 +37,14 @@ package org.ow2.proactive.scheduling.api.util;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-
 import graphql.schema.DataFetchingEnvironment;
+import org.apache.commons.collections.CollectionUtils;
 
 
 /**
@@ -59,50 +55,48 @@ public final class KeyValues {
     private KeyValues() {
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends KeyValue, I extends KeyValueInput> List<T> filterKeyValue(
+    public static <T extends KeyValue, I extends List<KeyValueInput>> List<T> filterKeyValue(
             DataFetchingEnvironment environment, Function<JobTaskCommon, Map<String, String>> function,
             Supplier<T> keyValueSupplier) {
 
         JobTaskCommon object = (JobTaskCommon) environment.getSource();
-        I input = (I) environment.getArgument("input");
+        List<KeyValueInput> input = environment.getArgument("input");
 
         return filterKeyValue(function.apply(object), input, keyValueSupplier);
     }
 
-    public static <T extends KeyValue, I extends KeyValueInput> List<T> filterKeyValue(
-            Map<String, String> keyValueEntries, I input, Supplier<T> keyValueSupplier) {
+    public static <T extends KeyValue> List<T> filterKeyValue(Map<String, String> keyValueEntries,
+            List<KeyValueInput> input, Supplier<T> keyValueSupplier) {
 
-        if (input == null) {
-            return ImmutableList.of();
-        }
-
-        String key = input.getKey();
-        Object value = input.getValue();
-
-        if (key == null && value == null) {
-            return filterBy(keyValueEntries, entry -> true, keyValueSupplier);
-        } else if (key == null && value != null) {
-            return filterBy(keyValueEntries, entry -> value.equals(entry.getValue()), keyValueSupplier);
-        } else if (key != null && value == null) {
-            return filterBy(keyValueEntries, entry -> key.equals(entry.getKey()), keyValueSupplier);
-        } else {
-            return filterBy(keyValueEntries,
-                    entry -> value.equals(entry.getValue()) && key.equals(entry.getKey()),
-                    keyValueSupplier);
-        }
-    }
-
-    @VisibleForTesting
-    protected static <T extends KeyValue> List<T> filterBy(Map<String, String> keyValueEntries,
-            Predicate<Map.Entry<String, String>> predicate, Supplier<T> keyValueSupplier) {
-
-        return keyValueEntries.entrySet().stream().filter(predicate).map(entry -> {
+        final Function<Map.Entry<String, String>, T> mapper = entry -> {
             T keyValue = keyValueSupplier.get();
             keyValue.setKey(entry.getKey());
             keyValue.setValue(entry.getValue());
             return keyValue;
-        }).collect(Collectors.toList());
+        };
+
+        if (input == null || CollectionUtils.isEmpty(input)) {
+            keyValueEntries.entrySet().parallelStream().map(mapper).collect(Collectors.toList());
+        }
+
+        // for each entry set compare it with the input criteria list
+        return keyValueEntries.entrySet().parallelStream().filter(entry -> {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            for (KeyValueInput i : input) {
+                if (i.getKey() != null && i.getValue() != null) {
+                    return key.equals(i.getKey()) && value.equals(i.getValue());
+                } else if (i.getKey() != null && i.getValue() == null) {
+                    return key.equals(i.getKey());
+                } else if (i.getKey() == null && i.getValue() != null) {
+                    return value.equals(i.getValue());
+                }
+            }
+
+            return false;
+
+        }).map(mapper).collect(Collectors.toList());
 
     }
 

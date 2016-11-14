@@ -41,6 +41,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import graphql.schema.GraphQLList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -66,7 +67,7 @@ public final class Query {
                         .type(JobsConnection.TYPE)
                         .argument(newArgument().name("input")
                                 .description("Jobs filter input")
-                                .type(JobInput.TYPE)
+                                .type(new GraphQLList(JobInput.TYPE))
                                 .build())
                         .argument(JobsConnection.getConnectionFieldArguments())
                         .dataFetcher(new JobDataFetcher()))

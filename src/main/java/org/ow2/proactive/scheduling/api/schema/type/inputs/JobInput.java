@@ -34,9 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.util.Inputs;
 import graphql.schema.GraphQLInputType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,8 +46,6 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static java.util.function.Function.identity;
-import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
 
 
 /**
@@ -54,19 +53,7 @@ import static org.ow2.proactive.scheduling.api.util.Inputs.getValue;
  */
 @AllArgsConstructor
 @Getter
-public class JobInput {
-
-    private static final String ID_FIELD_NAME = "id";
-
-    private static final String JOB_NAME_FIELD_NAME = "name";
-
-    private static final String OWNER_FIELD_NAME = "owner";
-
-    private static final String PRIORITY_FIELD_NAME = "priority";
-
-    private static final String PROJ_NAME_FIELD_NAME = "projectName";
-
-    private long id;
+public class JobInput extends AbstractInput {
 
     private String jobName;
 
@@ -76,36 +63,40 @@ public class JobInput {
 
     private String projectName;
 
-    public JobInput(HashMap<String, String> input) {
+    public JobInput(LinkedHashMap<String, Object> input) {
+        super(input);
         if (input != null) {
-            id = getValue(input, ID_FIELD_NAME, Long::valueOf, -1l);
-            jobName = getValue(input, JOB_NAME_FIELD_NAME, identity(), null);
-            owner = getValue(input, OWNER_FIELD_NAME, identity(), null);
-            priority = getValue(input, PRIORITY_FIELD_NAME, identity(), null);
-            projectName = getValue(input, PROJ_NAME_FIELD_NAME, identity(), null);
+            jobName = Inputs.getValue(input, InputFieldNameEnum.JOB_NAME.value(), null);
+            owner = Inputs.getValue(input, InputFieldNameEnum.OWNER.value(), null);
+            priority = Inputs.getValue(input, InputFieldNameEnum.PRIORITY.value(), null);
+            projectName = Inputs.getValue(input, InputFieldNameEnum.PROJECT_NAME.value(), null);
         }
     }
 
     public final static GraphQLInputType TYPE = newInputObject().name("JobInput")
             .description("Job filter input")
-            .field(newInputObjectField().name("id")
+            .field(newInputObjectField().name(InputFieldNameEnum.ID.value())
                     .description("Job ID")
                     .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name("jobName")
+            .field(newInputObjectField().name(InputFieldNameEnum.JOB_NAME.value())
                     .description("Job name")
                     .type(GraphQLString)
                     .build())
-            .field(newInputObjectField().name("owner")
+            .field(newInputObjectField().name(InputFieldNameEnum.OWNER.value())
                     .description("Job owner")
                     .type(GraphQLString)
                     .build())
-            .field(newInputObjectField().name("priority")
+            .field(newInputObjectField().name(InputFieldNameEnum.PRIORITY.value())
                     .description("Job priority")
                     .type(Job.JOB_PRIORITY_ENUM)
                     .build())
-            .field(newInputObjectField().name("projectName")
+            .field(newInputObjectField().name(InputFieldNameEnum.PROJECT_NAME.value())
                     .description("Project name which the job belongs to")
+                    .type(GraphQLString)
+                    .build())
+            .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
+                    .description("Job status")
                     .type(GraphQLString)
                     .build())
             .build();

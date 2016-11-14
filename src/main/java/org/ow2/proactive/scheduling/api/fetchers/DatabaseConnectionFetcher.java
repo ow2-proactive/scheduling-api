@@ -34,6 +34,7 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -51,15 +52,14 @@ import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.fetchers.cursor.CursorMapper;
 import org.ow2.proactive.scheduling.api.service.ApplicationContextProvider;
-
 import com.google.common.annotations.VisibleForTesting;
-
 import graphql.relay.Connection;
 import graphql.relay.ConnectionCursor;
 import graphql.relay.Edge;
 import graphql.relay.PageInfo;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import org.apache.commons.collections.CollectionUtils;
 
 
 /**
@@ -103,7 +103,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      */
     protected Connection createPaginatedConnection(DataFetchingEnvironment environment, Class<E> entityClass,
             Function<Root<E>, Path<? extends Number>> entityId, Comparator<E> entityComparator,
-            BiFunction<CriteriaBuilder, Root<E>, Predicate[]> criteria,
+            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria,
             CursorMapper<T, Integer> cursorMapper) {
 
         Integer first = environment.getArgument(RELAY_ARGUMENT_FIRST);
@@ -123,16 +123,14 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
         int maxResults = applySlicing(criteriaQuery, criteriaBuilder, entityIdPath, first, last);
 
-        Predicate[] predicates = criteria.apply(criteriaBuilder, entityRoot);
-
-        if (cursorPredicate != null) {
-            predicates = concatenatePredicates(predicates, cursorPredicate);
-        }
-
         CriteriaQuery<E> select = criteriaQuery.select(entityRoot);
 
-        if (predicates.length > 0) {
-            select.where(criteriaBuilder.and(predicates));
+        List<Predicate[]> predicates = criteria.apply(criteriaBuilder, entityRoot);
+
+        Predicate[] wherePredicate = buildWherePredicate(predicates, cursorPredicate, criteriaBuilder);
+
+        if (wherePredicate.length > 0) {
+            select.where(wherePredicate);
         }
 
         TypedQuery<E> query = entityManager.createQuery(select);
@@ -154,13 +152,45 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         Connection connection = createRelayConnection(entityManager,
                 entityClass,
                 criteriaBuilder,
-                predicates,
+                wherePredicate,
                 cursorMapper,
                 data,
                 first,
                 last);
 
         return connection;
+    }
+
+    private Predicate[] buildWherePredicate(List<Predicate[]> predicates, Predicate cursorPredicate,
+            CriteriaBuilder criteriaBuilder) {
+
+        List<Predicate> concatenatePredicate = new ArrayList<>();
+
+        if (CollectionUtils.isNotEmpty(predicates)) {
+            List<Predicate> andPredicates = predicates.stream().map(
+                    array -> criteriaBuilder.and(array)).collect(
+                    Collectors.toList());
+
+            concatenatePredicate.add(
+                    criteriaBuilder.or(andPredicates.toArray(new Predicate[andPredicates.size()])));
+        }
+
+        if (cursorPredicate != null) {
+            concatenatePredicate.add(cursorPredicate);
+        }
+
+        List<Predicate> wherePredicate = new ArrayList<>();
+
+        if (concatenatePredicate.size() > 1) {
+            wherePredicate.add(criteriaBuilder.and(
+                    concatenatePredicate.toArray(new Predicate[concatenatePredicate.size()])));
+        } else if (concatenatePredicate.size() == 1) {
+            wherePredicate.addAll(concatenatePredicate);
+        } else {
+            return new Predicate[] {};
+        }
+
+        return wherePredicate.toArray(new Predicate[wherePredicate.size()]);
     }
 
     protected EntityManager getEntityManager() {
@@ -198,15 +228,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return maxResults;
     }
 
-    @VisibleForTesting
-    Predicate[] concatenatePredicates(Predicate[] predicates, Predicate cursorPredicate) {
-        Predicate[] tmp = new Predicate[predicates.length + 1];
-        System.arraycopy(predicates, 0, tmp, 0, predicates.length);
-        tmp[tmp.length - 1] = cursorPredicate;
-        predicates = tmp;
-        return predicates;
-    }
-
     protected Predicate createCursorPredicate(CriteriaBuilder criteriaBuilder,
             Path<? extends Number> taskIdPath,
             Integer after, Integer before) {
@@ -231,7 +252,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     }
 
     protected Connection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
-            CriteriaBuilder criteriaBuilder, Predicate[] predicates, CursorMapper<T, Integer> cursorMapper,
+            CriteriaBuilder criteriaBuilder, Predicate[] predicates,
+            CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
         List<Edge> edges = buildEdges(data, cursorMapper);

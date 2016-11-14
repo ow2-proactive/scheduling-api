@@ -207,7 +207,7 @@ public class Job extends JobTaskCommon {
                     .type(TasksConnection.TYPE)
                     .argument(newArgument().name("input")
                             .description("task filter input")
-                            .type(TaskInput.TYPE)
+                            .type(new GraphQLList(TaskInput.TYPE))
                             .build())
                     .argument(TasksConnection.getConnectionFieldArguments())
                     .dataFetcher(new TaskDataFetcher()))

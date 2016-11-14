@@ -32,22 +32,55 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
 import java.util.LinkedHashMap;
 
+import org.ow2.proactive.scheduling.api.util.Inputs;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public final class Inputs {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public abstract class AbstractInput {
 
-    public static final <T> T getValue(LinkedHashMap<String, Object> input, String fieldName, T defaultValue) {
+    protected long id;
 
-        Object fieldValue = input.get(fieldName);
+    protected String status;
 
-        if (fieldValue != null) {
-            return (T) fieldValue;
+    // TODO custom orderby feature, not implemented yet in data fetcher
+    private String orderBy;
+
+    public AbstractInput(LinkedHashMap<String, Object> input) {
+
+        if (input != null) {
+            id = Inputs.getValue(input, InputFieldNameEnum.ID.value(), -1l);
+            status = Inputs.getValue(input, InputFieldNameEnum.STATUS.value(), null);
         } else {
-            return defaultValue;
+            id = -1l;
+            status = null;
         }
     }
 
+    public enum InputFieldNameEnum {
+        ID("id"),
+        STATUS("status"),
+        TASK_NAME("taskName"),
+        JOB_NAME("jobName"),
+        OWNER("owner"),
+        PRIORITY("priority"),
+        PROJECT_NAME("projectName");
+
+        private String value;
+
+        private InputFieldNameEnum(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return this.value;
+        }
+    }
 }

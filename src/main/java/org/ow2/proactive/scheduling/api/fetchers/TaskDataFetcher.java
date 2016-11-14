@@ -34,8 +34,13 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -43,12 +48,16 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
 import com.google.common.collect.Maps;
 import graphql.schema.DataFetchingEnvironment;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
@@ -59,8 +68,51 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         Function<Root<TaskData>, Path<? extends Number>> entityId = root -> root.get("id").get("taskId");
 
-        BiFunction<CriteriaBuilder, Root<TaskData>, Predicate[]> criteria = (criteriaBuilder,
-                root) -> new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()) };
+        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = (criteriaBuilder, root) -> {
+
+            List<TaskInput> input = null;
+
+            if(environment.getArgument("input") != null) {
+                List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
+                input = args.stream().map(arg -> new TaskInput(arg)).collect(Collectors.toList());
+            }
+
+            List<Predicate[]> filters = null;
+
+            if (CollectionUtils.isNotEmpty(input)) {
+                filters = input.stream().map(i -> {
+                    List<Predicate> predicates = new ArrayList<>();
+
+                    long taskId = i.getId();
+                    String status = i.getStatus();
+                    String taskName = i.getTaskName();
+
+                    predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
+
+                    if (taskId != -1l) {
+                        predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
+                    }
+                    if (StringUtils.isNotBlank(status)) {
+                        predicates.add(
+                                criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
+                    }
+                    if (StringUtils.isNotBlank(taskName)) {
+                        predicates.add(criteriaBuilder.equal(root.get("taskName"), taskName));
+                    }
+
+                    return predicates.toArray(new Predicate[predicates.size()]);
+
+                }).filter(array -> array.length > 1).collect(Collectors.toList());
+
+            }
+
+            if (CollectionUtils.isEmpty(filters)) {
+                filters = Collections.singletonList(
+                        new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()) });
+            }
+
+            return filters;
+        };
 
         return createPaginatedConnection(environment,
                 TaskData.class,
