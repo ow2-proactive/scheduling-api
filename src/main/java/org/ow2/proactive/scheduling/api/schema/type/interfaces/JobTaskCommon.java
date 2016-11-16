@@ -73,7 +73,7 @@ public abstract class JobTaskCommon {
                     .type(new GraphQLList(GenericInformation.TYPE))
                     .argument(newArgument().name("input")
                             .description("Generic information input filter")
-                            .type(KeyValueInput.TYPE)
+                            .type(new GraphQLList(KeyValueInput.TYPE))
                             .build())
                     .dataFetcher(new GenericInformationDataFetcher()))
             .field(newFieldDefinition().name("id")
@@ -96,7 +96,7 @@ public abstract class JobTaskCommon {
                     .type(new GraphQLList(Variable.TYPE))
                     .argument(newArgument().name("input")
                             .description("Variables input filter")
-                            .type(KeyValueInput.TYPE)
+                            .type(new GraphQLList(KeyValueInput.TYPE))
                             .build())
                     .dataFetcher(new VariablesDataFetcher()))
             .typeResolver(new TypeResolver() {

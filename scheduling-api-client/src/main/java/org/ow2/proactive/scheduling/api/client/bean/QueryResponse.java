@@ -32,22 +32,15 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.bean;
 
-import java.util.Map;
+import lombok.Data;
 
+@Data
+public class QueryResponse {
 
-public final class Inputs {
+    private Object data;
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
-    }
+    private Object errors;
 
 }

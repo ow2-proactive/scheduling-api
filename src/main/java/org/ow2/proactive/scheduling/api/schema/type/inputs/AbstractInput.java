@@ -34,7 +34,7 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.util.Inputs;
 import lombok.AllArgsConstructor;
@@ -53,7 +53,7 @@ public abstract class AbstractInput {
     // TODO custom orderby feature, not implemented yet in data fetcher
     private String orderBy;
 
-    public AbstractInput(LinkedHashMap<String, Object> input) {
+    public AbstractInput(Map<String, Object> input) {
 
         if (input != null) {
             id = Inputs.getValue(input, InputFieldNameEnum.ID.value(), -1l);
@@ -75,7 +75,7 @@ public abstract class AbstractInput {
 
         private String value;
 
-        private InputFieldNameEnum(String value) {
+        InputFieldNameEnum(String value) {
             this.value = value;
         }
 

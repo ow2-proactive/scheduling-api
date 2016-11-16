@@ -1,0 +1,5 @@
+project(":scheduling-api-client") {
+    dependencies {
+        compile 'org.jboss.resteasy:resteasy-client:3.0.19.Final'
+    }
+}

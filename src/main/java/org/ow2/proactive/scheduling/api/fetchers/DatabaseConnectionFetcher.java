@@ -34,8 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -161,11 +163,20 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return connection;
     }
 
+    /**
+     * build final sql select where predicate
+     *
+     * @param predicates
+     * @param cursorPredicate
+     * @param criteriaBuilder
+     * @return where predicate array of the sql
+     */
     private Predicate[] buildWherePredicate(List<Predicate[]> predicates, Predicate cursorPredicate,
             CriteriaBuilder criteriaBuilder) {
 
         List<Predicate> concatenatePredicate = new ArrayList<>();
 
+        // custom filter predicates
         if (CollectionUtils.isNotEmpty(predicates)) {
             List<Predicate> andPredicates = predicates.stream().map(
                     array -> criteriaBuilder.and(array)).collect(
@@ -179,6 +190,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             concatenatePredicate.add(cursorPredicate);
         }
 
+        // final where clause predicate list
         List<Predicate> wherePredicate = new ArrayList<>();
 
         if (concatenatePredicate.size() > 1) {

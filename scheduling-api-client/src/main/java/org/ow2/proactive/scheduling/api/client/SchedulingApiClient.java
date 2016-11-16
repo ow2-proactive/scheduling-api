@@ -32,21 +32,40 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client;
 
-import java.util.Map;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+
+import org.ow2.proactive.scheduling.api.client.bean.Query;
+import org.ow2.proactive.scheduling.api.client.bean.QueryResponse;
+import org.ow2.proactive.scheduling.api.client.exception.SchedulingApiException;
+import org.apache.commons.lang3.StringUtils;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 
-public final class Inputs {
+public class SchedulingApiClient {
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
+    private final ResteasyClient client = new ResteasyClientBuilder().build();
 
-        Object fieldValue = input.get(fieldName);
+    private final String url;
 
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
+    public SchedulingApiClient(String url) {
+        this.url = url;
+    }
+
+    public QueryResponse postQuery(Query query) throws SchedulingApiException {
+        if(StringUtils.isBlank(url)) {
+            throw new SchedulingApiException("API server URL is not initialized");
+        }
+
+        try {
+            ResteasyWebTarget target = client.target(url);
+            return target.request().post(Entity.entity(query.getQueryMap(), MediaType.APPLICATION_JSON_TYPE), QueryResponse.class);
+        } catch(Exception e) {
+            throw new SchedulingApiException("API server URL is not initialized");
         }
     }
 

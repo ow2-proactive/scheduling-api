@@ -32,22 +32,29 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.bean;
 
-import java.util.Map;
+import lombok.Data;
 
+@Data
+public class Variables extends KeyValue {
 
-public final class Inputs {
-
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
+    public Variables(String queryString) {
+        super(queryString);
     }
 
+    public static class Builder extends KeyValue.Builder {
+
+        private static final String NAME = "variables";
+
+        @Override
+        public String getKeyValueBeanName() {
+            return NAME;
+        }
+
+        @Override
+        public Variables build() {
+            return new Variables(buildQueryString());
+        }
+    }
 }

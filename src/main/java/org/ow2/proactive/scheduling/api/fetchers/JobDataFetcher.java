@@ -53,6 +53,8 @@ import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.User;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.AbstractInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
 import com.google.common.base.CaseFormat;
 import graphql.schema.DataFetchingEnvironment;
@@ -69,11 +71,20 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = (criteriaBuilder, root) -> {
 
-            List<JobInput> input = null;
+            List<JobInput> input = new ArrayList<>();
 
-            if(environment.getArgument("input") != null) {
+            // use the {@code user} result to create a new input filter on jobs connection,
+            // so that the job list contains jobs belonging to the user only
+            if ("User".equals(environment.getParentType().getName())) {
+                User user = (User) environment.getSource();
+                LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
+                ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
+                input.add(new JobInput(ownerInput));
+            }
+
+            if (environment.getArgument("input") != null) {
                 List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
-                input = args.stream().map(arg -> new JobInput(arg)).collect(Collectors.toList());
+                input.addAll(args.stream().map(arg -> new JobInput(arg)).collect(Collectors.toList()));
             }
 
             List<Predicate[]> filters = null;

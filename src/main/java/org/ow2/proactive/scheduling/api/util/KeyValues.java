@@ -34,12 +34,14 @@
  */
 package org.ow2.proactive.scheduling.api.util;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.KeyValue;
@@ -60,7 +62,13 @@ public final class KeyValues {
             Supplier<T> keyValueSupplier) {
 
         JobTaskCommon object = (JobTaskCommon) environment.getSource();
-        List<KeyValueInput> input = environment.getArgument("input");
+
+        List<KeyValueInput> input = null;
+
+        if(environment.getArgument("input") != null) {
+            List<LinkedHashMap<String, String>> args = environment.getArgument("input");
+            input = args.stream().map(arg -> new KeyValueInput(arg)).collect(Collectors.toList());
+        }
 
         return filterKeyValue(function.apply(object), input, keyValueSupplier);
     }
@@ -76,7 +84,7 @@ public final class KeyValues {
         };
 
         if (input == null || CollectionUtils.isEmpty(input)) {
-            keyValueEntries.entrySet().parallelStream().map(mapper).collect(Collectors.toList());
+            return keyValueEntries.entrySet().parallelStream().map(mapper).collect(Collectors.toList());
         }
 
         // for each entry set compare it with the input criteria list

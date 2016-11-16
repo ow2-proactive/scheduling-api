@@ -39,6 +39,7 @@ import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import graphql.schema.GraphQLInputType;
 import lombok.AllArgsConstructor;
@@ -60,10 +61,10 @@ public class KeyValueInput {
 
     private final String value;
 
-    public KeyValueInput(HashMap<String, String> input) {
+    public KeyValueInput(LinkedHashMap<String, String> input) {
         if (input != null) {
-            key = (String) input.get(KEY_FIELD_NAME);
-            value = (String) input.get(VALUE_FIELD_NAME);
+            key = input.get(KEY_FIELD_NAME);
+            value = input.get(VALUE_FIELD_NAME);
         } else {
             key = null;
             value = null;

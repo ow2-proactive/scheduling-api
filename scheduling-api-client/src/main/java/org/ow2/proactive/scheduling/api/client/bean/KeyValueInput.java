@@ -32,22 +32,49 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.bean;
 
-import java.util.Map;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
+import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
 
-public final class Inputs {
+@Data
+public class KeyValueInput implements ApiType {
+    private final String queryString;
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
+    private KeyValueInput(String queryString) {
+        this.queryString = queryString;
     }
 
+    public static class Builder {
+        private String key;
+        private String value;
+
+        private StringBuilder sb = new StringBuilder();
+
+        public Builder key(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public Builder value(String value) {
+            this.value = value;
+            return this;
+        }
+
+        public KeyValueInput build() {
+            sb.append("{");
+            if (StringUtils.isNotBlank(this.key)) {
+                sb.append(" key : ").append(QUOTE);
+                sb.append(this.key).append(QUOTE);
+            }
+            if (StringUtils.isNotBlank(this.value)) {
+                sb.append(" value : ").append(QUOTE);
+                sb.append(this.value).append(QUOTE);
+            }
+            sb.append(" }");
+            return new KeyValueInput(sb.toString());
+        }
+    }
 }

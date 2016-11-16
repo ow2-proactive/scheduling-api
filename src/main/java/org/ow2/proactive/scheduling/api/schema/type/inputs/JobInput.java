@@ -34,12 +34,11 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.util.Inputs;
 import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import static graphql.Scalars.GraphQLLong;
@@ -51,7 +50,6 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 /**
  * @author ActiveEon team
  */
-@AllArgsConstructor
 @Getter
 public class JobInput extends AbstractInput {
 
@@ -63,7 +61,7 @@ public class JobInput extends AbstractInput {
 
     private String projectName;
 
-    public JobInput(LinkedHashMap<String, Object> input) {
+    public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
             jobName = Inputs.getValue(input, InputFieldNameEnum.JOB_NAME.value(), null);

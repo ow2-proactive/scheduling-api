@@ -32,22 +32,25 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.bean;
 
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 
-public final class Inputs {
+public class Inputs {
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
+    public static final String buildQueryString(List<? extends ApiType> input) {
+        if (CollectionUtils.isNotEmpty(input)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("(input : [");
+            String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
+                    Collectors.joining(","));
+            sb.append(inputQuery);
+            sb.append("])");
+            return sb.toString();
         }
+        return "";
     }
-
 }

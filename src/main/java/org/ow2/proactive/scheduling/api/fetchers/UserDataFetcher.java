@@ -34,11 +34,16 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
 import org.ow2.proactive.scheduling.api.schema.type.User;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.AbstractInput;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -63,7 +68,7 @@ public class UserDataFetcher implements DataFetcher {
 
     private String loginFetchUrl;
 
-    private LoadingCache<String, User> localCache ;
+    private LoadingCache<String, User> localCache;
 
     @PostConstruct
     protected void init() {
@@ -97,7 +102,7 @@ public class UserDataFetcher implements DataFetcher {
 
         String login = restTemplate.getForObject(loginFetchUrl + sessionId, String.class);
 
-        if(StringUtils.isNotBlank(login)) {
+        if (StringUtils.isNotBlank(login)) {
             return User.builder().sessionId(sessionId).login(login).build();
         }
         throw new RuntimeException("session id does not exist");

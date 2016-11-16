@@ -34,12 +34,16 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-
+import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
 import lombok.Getter;
+
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 
 /**
@@ -61,6 +65,15 @@ public class User {
             .field(newFieldDefinition().name("sessionId")
                     .description("Session ID of the viewer")
                     .type(GraphQLString))
+            .field(newFieldDefinition().name("jobs")
+                    .description("Jobs list, it will be empty if there is none")
+                    .type(JobsConnection.TYPE)
+                    .argument(newArgument().name("input")
+                            .description("Jobs filter input")
+                            .type(new GraphQLList(JobInput.TYPE))
+                            .build())
+                    .argument(JobsConnection.getConnectionFieldArguments())
+                    .dataFetcher(new JobDataFetcher()))
             .build();
 
 }

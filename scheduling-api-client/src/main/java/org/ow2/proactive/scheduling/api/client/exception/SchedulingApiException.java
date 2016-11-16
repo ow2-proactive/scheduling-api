@@ -32,22 +32,44 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.exception;
 
-import java.util.Map;
+public class SchedulingApiException extends RuntimeException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-public final class Inputs {
-
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
+    /**
+     *
+     */
+    public SchedulingApiException() {
+        super();
     }
 
+    /**
+     *
+     * @param message exception message
+     */
+    public SchedulingApiException(String message) {
+        super(message);
+    }
+
+    /**
+     *
+     * @param message exception message
+     * @param cause exception cause
+     */
+    public SchedulingApiException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     *
+     * @param cause exception cause
+     */
+    public SchedulingApiException(Throwable cause) {
+        super(cause);
+    }
 }

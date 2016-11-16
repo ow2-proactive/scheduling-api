@@ -32,22 +32,10 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.client.bean;
 
-import java.util.Map;
+public final class Constants {
+    public static final String RETURN = "\n";
 
-
-public final class Inputs {
-
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
-    }
-
+    public static final String QUOTE = "\"";
 }
