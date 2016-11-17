@@ -32,38 +32,25 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.ow2.proactive.scheduling.api.client.bean.Query;
-import org.ow2.proactive.scheduling.api.client.exception.SchedulingApiException;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.client.RestTemplate;
+import org.apache.commons.collections4.CollectionUtils;
 
+public class Inputs {
 
-public class SchedulingApiClient {
-
-    private final RestTemplate client = new RestTemplate();
-
-    private final String url;
-
-    public SchedulingApiClient(String url) {
-        this.url = url;
-    }
-
-    public Query postQuery(Query query) throws SchedulingApiException {
-        if (StringUtils.isBlank(url)) {
-            throw new SchedulingApiException("API server URL is not initialized");
+    public static final String buildQueryString(List<? extends ApiType> input) {
+        if (CollectionUtils.isNotEmpty(input)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("(input : [");
+            String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
+                    Collectors.joining(","));
+            sb.append(inputQuery);
+            sb.append("])");
+            return sb.toString();
         }
-
-        try {
-            Map<String, Object> result = client.postForObject(url, query.getQueryMap(), Map.class);
-            query.setQueryResponse(result);
-            return query;
-        } catch (Exception e) {
-            throw new SchedulingApiException("Exception", e);
-        }
+        return "";
     }
-
 }

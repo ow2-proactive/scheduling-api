@@ -32,15 +32,12 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
-
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.KEY;
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.VALUE;
 
 @Data
 public abstract class KeyValue implements ApiType {
@@ -82,10 +79,10 @@ public abstract class KeyValue implements ApiType {
             sb.append(Inputs.buildQueryString(input));
             sb.append("{").append(Constants.RETURN);
             if (key) {
-                sb.append(KEY.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.KEY.getKey()).append(Constants.RETURN);
             }
             if (value) {
-                sb.append(VALUE.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.VALUE.getKey()).append(Constants.RETURN);
             }
             sb.append("}").append(Constants.RETURN);
             return sb.toString();

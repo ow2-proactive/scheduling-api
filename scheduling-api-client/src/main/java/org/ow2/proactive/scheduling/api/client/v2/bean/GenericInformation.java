@@ -32,44 +32,27 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.exception;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
-public class SchedulingApiException extends RuntimeException {
+import lombok.Data;
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+@Data
+public class GenericInformation extends KeyValue implements ApiType {
 
-    /**
-     *
-     */
-    public SchedulingApiException() {
-        super();
+    public GenericInformation(String queryString) {
+        super(queryString);
     }
 
-    /**
-     *
-     * @param message exception message
-     */
-    public SchedulingApiException(String message) {
-        super(message);
-    }
+    public static class Builder extends KeyValue.Builder {
 
-    /**
-     *
-     * @param message exception message
-     * @param cause exception cause
-     */
-    public SchedulingApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
+        @Override
+        public String getKeyValueBeanName() {
+            return ApiTypeKeyEnum.GENERIC_INFORMATION.getKey();
+        }
 
-    /**
-     *
-     * @param cause exception cause
-     */
-    public SchedulingApiException(Throwable cause) {
-        super(cause);
+        @Override
+        public GenericInformation build() {
+            return new GenericInformation(buildQueryString());
+        }
     }
 }

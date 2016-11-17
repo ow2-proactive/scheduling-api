@@ -32,14 +32,9 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
-
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.LOGIN;
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.SESSION_ID;
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
 
 @Data
 public class Viewer implements ApiType {
@@ -78,18 +73,18 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append("{").append(RETURN).append("viewer (sessionId : \"");
-            sb.append(sessionIdInput).append(QUOTE).append("{").append(RETURN);
+            sb.append("{").append(Constants.RETURN).append("viewer (sessionId : \"");
+            sb.append(sessionIdInput).append(Constants.QUOTE).append("{").append(Constants.RETURN);
             if (login) {
-                sb.append(LOGIN.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.LOGIN.getKey()).append(Constants.RETURN);
             }
             if (sessionId) {
-                sb.append(SESSION_ID.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.SESSION_ID.getKey()).append(Constants.RETURN);
             }
             if (jobs != null) {
                 sb.append(jobs.getQueryString());
             }
-            sb.append("}").append(RETURN).append("}");
+            sb.append("}").append(Constants.RETURN).append("}");
 
             return new Viewer(sb.toString());
         }

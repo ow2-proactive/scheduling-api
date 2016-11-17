@@ -32,58 +32,47 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
-public class TaskInput implements ApiType {
+public class KeyValueInput implements ApiType {
     private final String queryString;
 
-    private TaskInput(String queryString) {
+    private KeyValueInput(String queryString) {
         this.queryString = queryString;
     }
 
     public static class Builder {
-        private String id;
-        private String taskName;
-        private String status;
+        private String key;
+        private String value;
 
         private StringBuilder sb = new StringBuilder();
 
-        public TaskInput.Builder id(String id) {
-            this.id = id;
+        public Builder key(String key) {
+            this.key = key;
             return this;
         }
 
-        public TaskInput.Builder taskName(String taskName) {
-            this.taskName = taskName;
+        public Builder value(String value) {
+            this.value = value;
             return this;
         }
 
-        public TaskInput.Builder status(String status) {
-            this.status = status;
-            return this;
-        }
-
-        public TaskInput build() {
+        public KeyValueInput build() {
             sb.append("{");
-            if (StringUtils.isNotBlank(this.id)) {
-                sb.append(" id : ");
-                sb.append(this.id);
+            if (StringUtils.isNotBlank(this.key)) {
+                sb.append(" key : ").append(Constants.QUOTE);
+                sb.append(this.key).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.taskName)) {
-                sb.append(" taskName : ").append(Constants.QUOTE);
-                sb.append(this.taskName).append(Constants.QUOTE);
-                sb.append(" ");
-            }
-            if (StringUtils.isNotBlank(this.status)) {
-                sb.append(" status : ").append(Constants.QUOTE);
-                sb.append(this.status).append(Constants.QUOTE);
+            if (StringUtils.isNotBlank(this.value)) {
+                sb.append(" value : ").append(Constants.QUOTE);
+                sb.append(this.value).append(Constants.QUOTE);
             }
             sb.append(" }");
-            return new TaskInput(sb.toString());
+            return new KeyValueInput(sb.toString());
         }
     }
 }

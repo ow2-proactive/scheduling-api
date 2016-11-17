@@ -32,47 +32,28 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 @Data
-public class KeyValueInput implements ApiType {
-    private final String queryString;
+public class Variables extends KeyValue {
 
-    private KeyValueInput(String queryString) {
-        this.queryString = queryString;
+    public Variables(String queryString) {
+        super(queryString);
     }
 
-    public static class Builder {
-        private String key;
-        private String value;
+    public static class Builder extends KeyValue.Builder {
 
-        private StringBuilder sb = new StringBuilder();
-
-        public Builder key(String key) {
-            this.key = key;
-            return this;
+        @Override
+        public String getKeyValueBeanName() {
+            return ApiTypeKeyEnum.VARIABLES.getKey();
         }
 
-        public Builder value(String value) {
-            this.value = value;
-            return this;
-        }
-
-        public KeyValueInput build() {
-            sb.append("{");
-            if (StringUtils.isNotBlank(this.key)) {
-                sb.append(" key : ").append(Constants.QUOTE);
-                sb.append(this.key).append(Constants.QUOTE);
-            }
-            if (StringUtils.isNotBlank(this.value)) {
-                sb.append(" value : ").append(Constants.QUOTE);
-                sb.append(this.value).append(Constants.QUOTE);
-            }
-            sb.append(" }");
-            return new KeyValueInput(sb.toString());
+        @Override
+        public Variables build() {
+            // FIXME, not really implemented yet
+            return new Variables(buildQueryString());
         }
     }
 }

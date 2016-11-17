@@ -32,29 +32,38 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2;
 
-import lombok.Data;
+import java.util.Map;
 
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.GENERIC_INFORMATION;
+import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
+import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
-@Data
-public class GenericInformation extends KeyValue implements ApiType {
 
-    public GenericInformation(String queryString) {
-        super(queryString);
+public class SchedulingApiV2Client {
+
+    private final RestTemplate client = new RestTemplate();
+
+    private final String url;
+
+    public SchedulingApiV2Client(String url) {
+        this.url = url;
     }
 
-    public static class Builder extends KeyValue.Builder {
-
-        @Override
-        public String getKeyValueBeanName() {
-            return GENERIC_INFORMATION.getKey();
+    public Query postQuery(Query query) throws SchedulingApiException {
+        if (StringUtils.isBlank(url)) {
+            throw new SchedulingApiException("API server URL is not initialized");
         }
 
-        @Override
-        public GenericInformation build() {
-            return new GenericInformation(buildQueryString());
+        try {
+            Map<String, Object> result = client.postForObject(url, query.getQueryMap(), Map.class);
+            query.setQueryResponse(result);
+            return query;
+        } catch (Exception e) {
+            throw new SchedulingApiException("Exception", e);
         }
     }
+
 }

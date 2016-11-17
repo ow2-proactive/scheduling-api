@@ -32,25 +32,44 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.exception;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public class SchedulingApiException extends RuntimeException {
 
-import org.apache.commons.collections4.CollectionUtils;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-public class Inputs {
+    /**
+     *
+     */
+    public SchedulingApiException() {
+        super();
+    }
 
-    public static final String buildQueryString(List<? extends ApiType> input) {
-        if (CollectionUtils.isNotEmpty(input)) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("(input : [");
-            String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
-                    Collectors.joining(","));
-            sb.append(inputQuery);
-            sb.append("])");
-            return sb.toString();
-        }
-        return "";
+    /**
+     *
+     * @param message exception message
+     */
+    public SchedulingApiException(String message) {
+        super(message);
+    }
+
+    /**
+     *
+     * @param message exception message
+     * @param cause exception cause
+     */
+    public SchedulingApiException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     *
+     * @param cause exception cause
+     */
+    public SchedulingApiException(Throwable cause) {
+        super(cause);
     }
 }

@@ -32,15 +32,12 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
-
-import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.*;
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
 
 @Data
 public class Jobs implements ApiType {
@@ -241,7 +238,7 @@ public class Jobs implements ApiType {
         }
 
         public Jobs build() {
-            sb.append("{").append(RETURN).append(JOBS.getKey());
+            sb.append("{").append(Constants.RETURN).append(ApiTypeKeyEnum.JOBS.getKey());
             sb.append(Inputs.buildQueryString(input));
             sb.append("{").append(Constants.RETURN);
             if (pageInfo != null) {
@@ -250,7 +247,7 @@ public class Jobs implements ApiType {
             sb.append("edges{").append(Constants.RETURN);
 
             if (cursor) {
-                sb.append(CURSOR.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.CURSOR.getKey()).append(Constants.RETURN);
             }
 
             sb.append("node{").append(Constants.RETURN);
@@ -259,70 +256,70 @@ public class Jobs implements ApiType {
                 sb.append(dataManagement.getQueryString()).append(Constants.RETURN);
             }
             if (description) {
-                sb.append(DESCRIPTION.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.DESCRIPTION.getKey()).append(Constants.RETURN);
             }
             if (finishedTime) {
-                sb.append(FINISHED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.FINISHED_TIME.getKey()).append(Constants.RETURN);
             }
             if (genericInformation != null) {
                 sb.append(genericInformation.getQueryString()).append(Constants.RETURN);
             }
             if (id) {
-                sb.append(ID.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.ID.getKey()).append(Constants.RETURN);
             }
             if (inErrorTime) {
-                sb.append(IN_ERROR_TIME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.IN_ERROR_TIME.getKey()).append(Constants.RETURN);
             }
             if (name) {
-                sb.append(NAME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NAME.getKey()).append(Constants.RETURN);
             }
             if (numberOfFailedTasks) {
-                sb.append(NUMBER_OF_FAILED_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfFaultyTasks) {
-                sb.append(NUMBER_OF_FAULTY_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_FAULTY_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfFinishedTasks) {
-                sb.append(NUMBER_OF_FINISHED_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_FINISHED_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfInErrorTasks) {
-                sb.append(NUMBER_OF_IN_ERROR_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_IN_ERROR_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfPendingTasks) {
-                sb.append(NUMBER_OF_PENDING_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_PENDING_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfRunningTasks) {
-                sb.append(NUMBER_OF_RUNNING_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_RUNNING_TASKS.getKey()).append(Constants.RETURN);
             }
             if (onTaskError) {
-                sb.append(ON_TASK_ERROR.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.ON_TASK_ERROR.getKey()).append(Constants.RETURN);
             }
             if (owner) {
-                sb.append(OWNER.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.OWNER.getKey()).append(Constants.RETURN);
             }
             if (priority) {
-                sb.append(PRIORITY.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.PRIORITY.getKey()).append(Constants.RETURN);
             }
             if (projectName) {
-                sb.append(PROJECT_NAME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.PROJECT_NAME.getKey()).append(Constants.RETURN);
             }
             if (removedTime) {
-                sb.append(REMOVED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.REMOVED_TIME.getKey()).append(Constants.RETURN);
             }
             if (startTime) {
-                sb.append(START_TIME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.START_TIME.getKey()).append(Constants.RETURN);
             }
             if (status) {
-                sb.append(STATUS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.STATUS.getKey()).append(Constants.RETURN);
             }
             if (submittedTime) {
-                sb.append(SUBMITTED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.SUBMITTED_TIME.getKey()).append(Constants.RETURN);
             }
             if (tasks != null) {
                 sb.append(tasks.getQueryString());
             }
             if (totalNumberOfTasks) {
-                sb.append(TOTAL_NUMBER_OF_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(ApiTypeKeyEnum.TOTAL_NUMBER_OF_TASKS.getKey()).append(Constants.RETURN);
             }
             if (variables != null) {
                 sb.append(variables.getQueryString());
