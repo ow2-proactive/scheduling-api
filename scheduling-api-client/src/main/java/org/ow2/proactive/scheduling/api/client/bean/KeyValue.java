@@ -36,12 +36,11 @@ package org.ow2.proactive.scheduling.api.client.bean;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.Data;
-import org.apache.commons.collections4.CollectionUtils;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.KEY;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.VALUE;
 
 @Data
 public abstract class KeyValue implements ApiType {
@@ -53,9 +52,6 @@ public abstract class KeyValue implements ApiType {
     }
 
     public static abstract class Builder {
-
-        private static final String KEY = "key";
-        private static final String VALUE = "value";
 
         private boolean key = true;
         private boolean value = true;
@@ -84,14 +80,14 @@ public abstract class KeyValue implements ApiType {
         protected String buildQueryString() {
             sb.append(getKeyValueBeanName());
             sb.append(Inputs.buildQueryString(input));
-            sb.append("{").append(RETURN);
+            sb.append("{").append(Constants.RETURN);
             if (key) {
-                sb.append(KEY).append(RETURN);
+                sb.append(KEY.getKey()).append(Constants.RETURN);
             }
             if (value) {
-                sb.append(VALUE).append(RETURN);
+                sb.append(VALUE.getKey()).append(Constants.RETURN);
             }
-            sb.append("}").append(RETURN);
+            sb.append("}").append(Constants.RETURN);
             return sb.toString();
         }
 

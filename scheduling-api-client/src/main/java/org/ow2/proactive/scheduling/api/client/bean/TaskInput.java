@@ -37,8 +37,6 @@ package org.ow2.proactive.scheduling.api.client.bean;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
-
 @Data
 public class TaskInput implements ApiType {
     private final String queryString;
@@ -76,13 +74,13 @@ public class TaskInput implements ApiType {
                 sb.append(this.id);
             }
             if (StringUtils.isNotBlank(this.taskName)) {
-                sb.append(" taskName : ").append(QUOTE);
-                sb.append(this.taskName).append(QUOTE);
+                sb.append(" taskName : ").append(Constants.QUOTE);
+                sb.append(this.taskName).append(Constants.QUOTE);
                 sb.append(" ");
             }
             if (StringUtils.isNotBlank(this.status)) {
-                sb.append(" status : ").append(QUOTE);
-                sb.append(this.status).append(QUOTE);
+                sb.append(" status : ").append(Constants.QUOTE);
+                sb.append(this.status).append(Constants.QUOTE);
             }
             sb.append(" }");
             return new TaskInput(sb.toString());

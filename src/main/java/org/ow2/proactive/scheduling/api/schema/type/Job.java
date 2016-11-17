@@ -57,6 +57,7 @@ import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
 
 
 /**
@@ -210,6 +211,10 @@ public class Job extends JobTaskCommon {
                             .type(new GraphQLList(TaskInput.TYPE))
                             .build())
                     .argument(TasksConnection.getConnectionFieldArguments())
+                    .argument(newArgument()
+                            .name("first")
+                            .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                            .build())
                     .dataFetcher(new TaskDataFetcher()))
             .field(newFieldDefinition().name("totalNumberOfTasks")
                     .description("Total number of tasks of the job")

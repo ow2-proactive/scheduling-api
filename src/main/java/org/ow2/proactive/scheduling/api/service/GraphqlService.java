@@ -43,6 +43,7 @@ import javax.annotation.PostConstruct;
 
 import org.ow2.proactive.scheduling.api.controller.GraphQLController;
 import org.ow2.proactive.scheduling.api.schema.type.Query;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,8 @@ import graphql.GraphQL;
  * @author ActiveEon Team
  */
 @Service
+@Log4j2
 public class GraphqlService {
-
-    private static final Logger log = LoggerFactory.getLogger(GraphQLController.class);
 
     @Autowired
     private Query query;

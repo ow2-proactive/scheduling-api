@@ -34,9 +34,11 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
+import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
 
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
@@ -70,6 +72,10 @@ public final class Query {
                                 .type(new GraphQLList(JobInput.TYPE))
                                 .build())
                         .argument(JobsConnection.getConnectionFieldArguments())
+                        .argument(newArgument()
+                                .name("first")
+                                .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                                .build())
                         .dataFetcher(new JobDataFetcher()))
                 .field(newFieldDefinition().name("version")
                         .description("Query schema version")

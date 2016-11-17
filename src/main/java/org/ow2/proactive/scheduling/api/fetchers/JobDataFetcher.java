@@ -50,6 +50,7 @@ import javax.persistence.criteria.Root;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.exception.InvalidUserException;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
@@ -76,10 +77,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
             // use the {@code user} result to create a new input filter on jobs connection,
             // so that the job list contains jobs belonging to the user only
             if ("User".equals(environment.getParentType().getName())) {
-                User user = (User) environment.getSource();
-                LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
-                ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
-                input.add(new JobInput(ownerInput));
+                filterOnUser(environment, input);
             }
 
             if (environment.getArgument("input") != null) {
@@ -136,6 +134,17 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                 (t1, t2) -> Long.compare(t1.getId(), t2.getId()),
                 criteria,
                 new JobCursorMapper());
+    }
+
+    private void filterOnUser(DataFetchingEnvironment environment, List<JobInput> input) {
+        User user = (User) environment.getSource();
+        LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
+        if(StringUtils.isNotBlank(user.getLogin())) {
+            ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
+        } else {
+            throw new InvalidUserException("Session ID expired ?");
+        }
+        input.add(new JobInput(ownerInput));
     }
 
     @Override

@@ -45,15 +45,14 @@ public class Variables extends KeyValue {
 
     public static class Builder extends KeyValue.Builder {
 
-        private static final String NAME = "variables";
-
         @Override
         public String getKeyValueBeanName() {
-            return NAME;
+            return ApiTypeKeyEnum.VARIABLES.getKey();
         }
 
         @Override
         public Variables build() {
+            // FIXME, not really implemented yet
             return new Variables(buildQueryString());
         }
     }

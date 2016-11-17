@@ -39,7 +39,7 @@ import java.util.List;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.*;
 
 @Data
 public class Tasks implements ApiType {
@@ -199,76 +199,78 @@ public class Tasks implements ApiType {
 
 
         public Tasks build() {
-            sb.append("tasks");
+            sb.append(TASKS.getKey());
             sb.append(Inputs.buildQueryString(input));
-            sb.append("{").append(RETURN);
+            sb.append("{").append(Constants.RETURN);
             if (pageInfo != null) {
                 sb.append(pageInfo.getQueryString());
             }
-            sb.append("edges{").append(RETURN);
+            sb.append("edges{").append(Constants.RETURN);
 
             if (cursor) {
-                sb.append("cursor").append(RETURN);
+                sb.append(CURSOR.getKey()).append(Constants.RETURN);
             }
 
-            sb.append("node{").append(RETURN);
+            sb.append("node{").append(Constants.RETURN);
 
             if (description) {
-                sb.append("description").append(RETURN);
+                sb.append(DESCRIPTION.getKey()).append(Constants.RETURN);
             }
             if (executionDuration) {
-                sb.append("executionDuration").append(RETURN);
+                sb.append(EXECUTION_DURATION.getKey()).append(Constants.RETURN);
             }
             if (executionHostName) {
-                sb.append("executionHostName").append(RETURN);
+                sb.append(EXECUTION_HOST_NAME.getKey()).append(Constants.RETURN);
             }
             if (finishedTime) {
-                sb.append("finishedTime").append(RETURN);
+                sb.append(FINISHED_TIME.getKey()).append(Constants.RETURN);
             }
             if (genericInformation != null) {
-                sb.append(genericInformation.getQueryString()).append(RETURN);
+                sb.append(genericInformation.getQueryString()).append(Constants.RETURN);
             }
             if (id) {
-                sb.append("id").append(RETURN);
+                sb.append(ID.getKey()).append(Constants.RETURN);
             }
             if (inErrorTime) {
-                sb.append("inErrorTime").append(RETURN);
+                sb.append(IN_ERROR_TIME.getKey()).append(Constants.RETURN);
             }
             if (jobId) {
-                sb.append("jobId").append(RETURN);
+                sb.append(JOB_ID.getKey()).append(Constants.RETURN);
             }
             if (name) {
-                sb.append("name").append(RETURN);
+                sb.append(NAME.getKey()).append(Constants.RETURN);
             }
             if (numberOfExecutionLeft) {
-                sb.append("numberOfExecutionLeft").append(RETURN);
+                sb.append(NUMBER_OF_EXECUTION_LEFT.getKey()).append(Constants.RETURN);
             }
             if (numberOfExecutionOnFailureLeft) {
-                sb.append("numberOfExecutionOnFailureLeft").append(RETURN);
+                sb.append(NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getKey()).append(
+                        Constants.RETURN);
             }
             if (onTaskError) {
-                sb.append("onTaskError").append(RETURN);
+                sb.append(ON_TASK_ERROR.getKey()).append(Constants.RETURN);
             }
             if (progress) {
-                sb.append("progress").append(RETURN);
+                sb.append(PROGRESS.getKey()).append(Constants.RETURN);
             }
             if (scheduledTime) {
-                sb.append("scheduledTime").append(RETURN);
+                sb.append(SCHEDULED_TIME.getKey()).append(Constants.RETURN);
             }
             if (startTime) {
-                sb.append("startTime").append(RETURN);
+                sb.append(START_TIME.getKey()).append(Constants.RETURN);
             }
             if (status) {
-                sb.append("status").append(RETURN);
+                sb.append(STATUS.getKey()).append(Constants.RETURN);
             }
             if (tag) {
-                sb.append("tag").append(RETURN);
+                sb.append(TAG.getKey()).append(Constants.RETURN);
             }
             if (variables != null) {
                 sb.append(variables.getQueryString());
             }
 
-            sb.append("}").append(RETURN).append("}").append(RETURN).append("}").append(RETURN);
+            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
+                    Constants.RETURN);
             return new Tasks(sb.toString());
         }
     }

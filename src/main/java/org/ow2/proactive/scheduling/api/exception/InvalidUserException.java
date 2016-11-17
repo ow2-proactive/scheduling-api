@@ -32,15 +32,24 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.bean;
+package org.ow2.proactive.scheduling.api.exception;
 
-import lombok.Data;
+public class InvalidUserException extends RuntimeException {
 
-@Data
-public class QueryResponse {
+    public InvalidUserException() {
+        super();
+    }
 
-    private Object data;
+    public InvalidUserException(String s) {
+        super(s);
+    }
 
-    private Object errors;
+    public InvalidUserException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public InvalidUserException(Throwable cause) {
+        super(cause);
+    }
 
 }

@@ -37,8 +37,6 @@ package org.ow2.proactive.scheduling.api.client.bean;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
-
 @Data
 public class KeyValueInput implements ApiType {
     private final String queryString;
@@ -66,12 +64,12 @@ public class KeyValueInput implements ApiType {
         public KeyValueInput build() {
             sb.append("{");
             if (StringUtils.isNotBlank(this.key)) {
-                sb.append(" key : ").append(QUOTE);
-                sb.append(this.key).append(QUOTE);
+                sb.append(" key : ").append(Constants.QUOTE);
+                sb.append(this.key).append(Constants.QUOTE);
             }
             if (StringUtils.isNotBlank(this.value)) {
-                sb.append(" value : ").append(QUOTE);
-                sb.append(this.value).append(QUOTE);
+                sb.append(" value : ").append(Constants.QUOTE);
+                sb.append(this.value).append(Constants.QUOTE);
             }
             sb.append(" }");
             return new KeyValueInput(sb.toString());

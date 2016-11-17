@@ -41,9 +41,11 @@ import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
 import lombok.Getter;
 
+import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
 
 
 /**
@@ -73,6 +75,10 @@ public class User {
                             .type(new GraphQLList(JobInput.TYPE))
                             .build())
                     .argument(JobsConnection.getConnectionFieldArguments())
+                    .argument(newArgument()
+                            .name("first")
+                            .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                            .build())
                     .dataFetcher(new JobDataFetcher()))
             .build();
 

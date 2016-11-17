@@ -56,6 +56,8 @@ public class Query {
 
     private final String variables;
 
+    private Map<String, Object> queryResponse;
+
     private Query(Map<String, String> query) {
         this.operationName = query.get(KEY_OPERATION_NAME);
         this.query = query.get(KEY_QUERY);
@@ -85,15 +87,10 @@ public class Query {
 
         public Query build() {
             Map<String, String> result = new LinkedHashMap<>();
-            if(this.operationName != null) {
-                result.put(KEY_OPERATION_NAME, this.operationName);
-            }
-            if(this.query != null) {
-                result.put(KEY_QUERY, this.query);
-            }
-            if(this.variables != null) {
-                result.put(KEY_VARIABLES, this.variables);
-            }
+            result.put(KEY_OPERATION_NAME, this.operationName);
+            result.put(KEY_QUERY, this.query);
+            result.put(KEY_VARIABLES, this.variables);
+
             return new Query(result);
         }
 

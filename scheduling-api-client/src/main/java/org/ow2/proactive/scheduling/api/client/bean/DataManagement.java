@@ -36,7 +36,11 @@ package org.ow2.proactive.scheduling.api.client.bean;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.DATA_MANAGEMENT;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.GLOBLE_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.INPUT_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.OUTPUT_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.USER_SPACE_URL;
 
 @Data
 public class DataManagement implements ApiType {
@@ -49,11 +53,7 @@ public class DataManagement implements ApiType {
 
     public static class Builder {
 
-        private static final String GLOBLE_SPACE_URL = "globalSpaceUrl";
-        private static final String INPUT_SPACE_URL = "inputSpaceUrl";
-        private static final String NAME = "dataManagement";
-        private static final String OUTPUT_SPACE_URL = "outputSpaceUrl";
-        private static final String USER_SPACE_URL = "userSpaceUrl";
+
 
         private boolean globalSpaceUrl = true;
         private boolean inputSpaceUrl = true;
@@ -83,21 +83,21 @@ public class DataManagement implements ApiType {
         }
 
         public DataManagement build() {
-            sb.append(NAME);
-            sb.append("{").append(RETURN);
+            sb.append(DATA_MANAGEMENT.getKey());
+            sb.append("{").append(Constants.RETURN);
             if(globalSpaceUrl) {
-                sb.append(GLOBLE_SPACE_URL).append(RETURN);
+                sb.append(GLOBLE_SPACE_URL.getKey()).append(Constants.RETURN);
             }
             if(inputSpaceUrl) {
-                sb.append(INPUT_SPACE_URL).append(RETURN);
+                sb.append(INPUT_SPACE_URL.getKey()).append(Constants.RETURN);
             }
             if(outputSpaceUrl) {
-                sb.append(OUTPUT_SPACE_URL).append(RETURN);
+                sb.append(OUTPUT_SPACE_URL.getKey()).append(Constants.RETURN);
             }
             if(userSpaceUrl) {
-                sb.append(USER_SPACE_URL).append(RETURN);
+                sb.append(USER_SPACE_URL.getKey()).append(Constants.RETURN);
             }
-            sb.append("}").append(RETURN);
+            sb.append("}").append(Constants.RETURN);
             return new DataManagement(sb.toString());
         }
     }

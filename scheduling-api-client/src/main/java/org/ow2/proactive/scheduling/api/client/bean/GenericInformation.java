@@ -36,6 +36,8 @@ package org.ow2.proactive.scheduling.api.client.bean;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.GENERIC_INFORMATION;
+
 @Data
 public class GenericInformation extends KeyValue implements ApiType {
 
@@ -45,11 +47,9 @@ public class GenericInformation extends KeyValue implements ApiType {
 
     public static class Builder extends KeyValue.Builder {
 
-        private static final String NAME = "genericInformation";
-
         @Override
         public String getKeyValueBeanName() {
-            return NAME;
+            return GENERIC_INFORMATION.getKey();
         }
 
         @Override

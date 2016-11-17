@@ -36,6 +36,9 @@ package org.ow2.proactive.scheduling.api.client.bean;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.LOGIN;
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.SESSION_ID;
+import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
 import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
 
 @Data
@@ -75,18 +78,18 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append("viewer (sessionId : \"");
-            sb.append(sessionIdInput).append("\"").append("{").append(RETURN);
+            sb.append("{").append(RETURN).append("viewer (sessionId : \"");
+            sb.append(sessionIdInput).append(QUOTE).append("{").append(RETURN);
             if (login) {
-                sb.append("login").append(RETURN);
+                sb.append(LOGIN.getKey()).append(RETURN);
             }
             if (sessionId) {
-                sb.append("sessionId").append(RETURN);
+                sb.append(SESSION_ID.getKey()).append(RETURN);
             }
             if (jobs != null) {
                 sb.append(jobs.getQueryString());
             }
-            sb.append("}").append(RETURN);
+            sb.append("}").append(RETURN).append("}");
 
             return new Viewer(sb.toString());
         }

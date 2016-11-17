@@ -37,8 +37,6 @@ package org.ow2.proactive.scheduling.api.client.bean;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import static org.ow2.proactive.scheduling.api.client.bean.Constants.QUOTE;
-
 @Data
 public class JobInput implements ApiType {
     private final String queryString;
@@ -94,24 +92,24 @@ public class JobInput implements ApiType {
                 sb.append(this.id);
             }
             if (StringUtils.isNotBlank(this.jobName)) {
-                sb.append(" jobName : ").append(QUOTE);
-                sb.append(this.jobName).append(QUOTE);
+                sb.append(" jobName : ").append(Constants.QUOTE);
+                sb.append(this.jobName).append(Constants.QUOTE);
             }
             if (StringUtils.isNotBlank(this.owner)) {
-                sb.append(" owner : ").append(QUOTE);
-                sb.append(this.owner).append(QUOTE);
+                sb.append(" owner : ").append(Constants.QUOTE);
+                sb.append(this.owner).append(Constants.QUOTE);
             }
             if (StringUtils.isNotBlank(this.priority)) {
-                sb.append(" priority : ").append(QUOTE);
-                sb.append(this.priority).append(QUOTE);
+                sb.append(" priority : ").append(Constants.QUOTE);
+                sb.append(this.priority).append(Constants.QUOTE);
             }
             if (StringUtils.isNotBlank(this.projectName)) {
-                sb.append(" projectName : ").append(QUOTE);
-                sb.append(this.projectName).append(QUOTE);
+                sb.append(" projectName : ").append(Constants.QUOTE);
+                sb.append(this.projectName).append(Constants.QUOTE);
             }
             if (StringUtils.isNotBlank(this.status)) {
-                sb.append(" status : ").append(QUOTE);
-                sb.append(this.status).append(QUOTE);
+                sb.append(" status : ").append(Constants.QUOTE);
+                sb.append(this.status).append(Constants.QUOTE);
             }
             sb.append(" }");
             return new JobInput(sb.toString());

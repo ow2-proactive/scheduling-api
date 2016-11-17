@@ -39,6 +39,7 @@ import java.util.List;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.bean.ApiTypeKeyEnum.*;
 import static org.ow2.proactive.scheduling.api.client.bean.Constants.RETURN;
 
 @Data
@@ -204,11 +205,6 @@ public class Jobs implements ApiType {
             return this;
         }
 
-        public Builder tasks(Tasks tasks) {
-            this.tasks = tasks;
-            return this;
-        }
-
         public Builder excludeTotalNumberOfTasks() {
             this.totalNumberOfTasks = false;
             return this;
@@ -234,100 +230,106 @@ public class Jobs implements ApiType {
             return this;
         }
 
+        public Builder tasks(Tasks tasks) {
+            this.tasks = tasks;
+            return this;
+        }
+
         public Builder variables(Variables variables) {
             this.variables = variables;
             return this;
         }
 
         public Jobs build() {
-            sb.append("jobs");
+            sb.append("{").append(RETURN).append(JOBS.getKey());
             sb.append(Inputs.buildQueryString(input));
-            sb.append("{").append(RETURN);
+            sb.append("{").append(Constants.RETURN);
             if (pageInfo != null) {
                 sb.append(pageInfo.getQueryString());
             }
-            sb.append("edges{").append(RETURN);
+            sb.append("edges{").append(Constants.RETURN);
 
             if (cursor) {
-                sb.append("cursor").append(RETURN);
+                sb.append(CURSOR.getKey()).append(Constants.RETURN);
             }
 
-            sb.append("node{").append(RETURN);
+            sb.append("node{").append(Constants.RETURN);
 
             if (dataManagement != null) {
-                sb.append(dataManagement.getQueryString()).append(RETURN);
+                sb.append(dataManagement.getQueryString()).append(Constants.RETURN);
             }
             if (description) {
-                sb.append("description").append(RETURN);
+                sb.append(DESCRIPTION.getKey()).append(Constants.RETURN);
             }
             if (finishedTime) {
-                sb.append("finishedTime").append(RETURN);
+                sb.append(FINISHED_TIME.getKey()).append(Constants.RETURN);
             }
             if (genericInformation != null) {
-                sb.append(genericInformation.getQueryString()).append(RETURN);
+                sb.append(genericInformation.getQueryString()).append(Constants.RETURN);
             }
             if (id) {
-                sb.append("id").append(RETURN);
+                sb.append(ID.getKey()).append(Constants.RETURN);
             }
             if (inErrorTime) {
-                sb.append("inErrorTime").append(RETURN);
+                sb.append(IN_ERROR_TIME.getKey()).append(Constants.RETURN);
             }
             if (name) {
-                sb.append("name").append(RETURN);
+                sb.append(NAME.getKey()).append(Constants.RETURN);
             }
             if (numberOfFailedTasks) {
-                sb.append("numberOfFailedTasks").append(RETURN);
+                sb.append(NUMBER_OF_FAILED_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfFaultyTasks) {
-                sb.append("numberOfFaultyTasks").append(RETURN);
+                sb.append(NUMBER_OF_FAULTY_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfFinishedTasks) {
-                sb.append("numberOfFinishedTasks").append(RETURN);
+                sb.append(NUMBER_OF_FINISHED_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfInErrorTasks) {
-                sb.append("numberOfInErrorTasks").append(RETURN);
+                sb.append(NUMBER_OF_IN_ERROR_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfPendingTasks) {
-                sb.append("numberOfPendingTasks").append(RETURN);
+                sb.append(NUMBER_OF_PENDING_TASKS.getKey()).append(Constants.RETURN);
             }
             if (numberOfRunningTasks) {
-                sb.append("numberOfRunningTasks").append(RETURN);
+                sb.append(NUMBER_OF_RUNNING_TASKS.getKey()).append(Constants.RETURN);
             }
             if (onTaskError) {
-                sb.append("onTaskError").append(RETURN);
+                sb.append(ON_TASK_ERROR.getKey()).append(Constants.RETURN);
             }
             if (owner) {
-                sb.append("owner").append(RETURN);
+                sb.append(OWNER.getKey()).append(Constants.RETURN);
             }
             if (priority) {
-                sb.append("priority").append(RETURN);
+                sb.append(PRIORITY.getKey()).append(Constants.RETURN);
             }
             if (projectName) {
-                sb.append("projectName").append(RETURN);
+                sb.append(PROJECT_NAME.getKey()).append(Constants.RETURN);
             }
             if (removedTime) {
-                sb.append("removedTime").append(RETURN);
+                sb.append(REMOVED_TIME.getKey()).append(Constants.RETURN);
             }
             if (startTime) {
-                sb.append("startTime").append(RETURN);
+                sb.append(START_TIME.getKey()).append(Constants.RETURN);
             }
             if (status) {
-                sb.append("status").append(RETURN);
+                sb.append(STATUS.getKey()).append(Constants.RETURN);
             }
             if (submittedTime) {
-                sb.append("submittedTime").append(RETURN);
+                sb.append(SUBMITTED_TIME.getKey()).append(Constants.RETURN);
             }
             if (tasks != null) {
                 sb.append(tasks.getQueryString());
             }
             if (totalNumberOfTasks) {
-                sb.append("totalNumberOfTasks").append(RETURN);
+                sb.append(TOTAL_NUMBER_OF_TASKS.getKey()).append(Constants.RETURN);
             }
             if (variables != null) {
                 sb.append(variables.getQueryString());
             }
 
-            sb.append("}").append(RETURN).append("}").append(RETURN).append("}").append(RETURN);
+            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
+                    Constants.RETURN).append("}");
             return new Jobs(sb.toString());
         }
     }

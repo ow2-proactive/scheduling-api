@@ -32,38 +32,9 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client;
+package org.ow2.proactive.scheduling.api.util;
 
-import java.util.Map;
+public final class Constants {
 
-import org.ow2.proactive.scheduling.api.client.bean.Query;
-import org.ow2.proactive.scheduling.api.client.exception.SchedulingApiException;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.client.RestTemplate;
-
-
-public class SchedulingApiClient {
-
-    private final RestTemplate client = new RestTemplate();
-
-    private final String url;
-
-    public SchedulingApiClient(String url) {
-        this.url = url;
-    }
-
-    public Query postQuery(Query query) throws SchedulingApiException {
-        if (StringUtils.isBlank(url)) {
-            throw new SchedulingApiException("API server URL is not initialized");
-        }
-
-        try {
-            Map<String, Object> result = client.postForObject(url, query.getQueryMap(), Map.class);
-            query.setQueryResponse(result);
-            return query;
-        } catch (Exception e) {
-            throw new SchedulingApiException("Exception", e);
-        }
-    }
-
+    public static final int DEFAULT_FIRST_ELEMENTS = 50;
 }
