@@ -48,12 +48,14 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
 import graphql.schema.DataFetchingEnvironment;
 import org.apache.commons.collections.CollectionUtils;
@@ -72,7 +74,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
             List<TaskInput> input = null;
 
-            if(environment.getArgument("input") != null) {
+            if (environment.getArgument("input") != null) {
                 List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
                 input = args.stream().map(arg -> new TaskInput(arg)).collect(Collectors.toList());
             }
@@ -124,29 +126,50 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
     @Override
     protected Stream<Task> dataMapping(Stream<TaskData> taskStream) {
-        // TODO Task progress not accessible from DB, needs to establish connection with
-        // SchedulerFrontend
-        // --> Active Object to get the value that is in Scheduler memory
-        // TODO Variables for tasks
-        return taskStream.map(taskData -> Task.builder()
-                .id(taskData.getId().getTaskId())
-                .description(taskData.getDescription())
-                .executionDuration(taskData.getExecutionDuration())
-                .executionHostName(taskData.getExecutionHostName())
-                .finishedTime(taskData.getFinishedTime())
-                .genericInformation(taskData.getGenericInformation())
-                .inErrorTime(taskData.getInErrorTime())
-                .jobId(taskData.getId().getJobId())
-                .name(taskData.getTaskName())
-                .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
-                .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
-                .scheduledTime(taskData.getScheduledTime())
-                .startTime(taskData.getStartTime())
-                .progress(-1)
-                .status(taskData.getTaskStatus().name())
-                .tag(taskData.getTag())
-                .variables(Maps.newHashMap())
-                .build());
+        // TODO Task progress not accessible from DB. It implies to establish a connection with
+        // the SchedulerFrontend active object to get the value that is in the Scheduler memory
+
+        return taskStream.map(taskData -> {
+            TaskData.DBTaskId id = taskData.getId();
+
+            return Task.builder()
+                    .additionalClasspath(taskData.getAdditionalClasspath())
+                    .description(taskData.getDescription())
+                    .executionDuration(taskData.getExecutionDuration())
+                    .executionHostname(taskData.getExecutionHostName())
+                    .finishedTime(taskData.getFinishedTime())
+                    .genericInformation(taskData.getGenericInformation())
+                    .id(id.getTaskId())
+                    .inErrorTime(taskData.getInErrorTime())
+                    .javaHome(taskData.getJavaHome())
+                    .jobId(id.getJobId())
+                    .jvmArguments(taskData.getJvmArguments())
+                    .maxNumberOfExecution(taskData.getMaxNumberOfExecution())
+                    .name(taskData.getTaskName())
+                    .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
+                    .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
+                    .onTaskError(
+                            CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                    taskData.getOnTaskErrorString())
+                    )
+                    .preciousLogs(taskData.isPreciousLogs())
+                    .preciousResult(taskData.isPreciousResult())
+                    .restartMode(
+                            RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase())
+                    .resultPreview(taskData.getResultPreview())
+                    .runAsMe(taskData.isRunAsMe())
+                    .scheduledTime(taskData.getScheduledTime())
+                    .startTime(taskData.getStartTime())
+                    .status(taskData.getTaskStatus().name())
+                    .tag(taskData.getTag())
+                    .variables(taskData.getVariables().values().stream().map(
+                            taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
+                                    taskDataVariable.getValue())).collect(
+                            Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue())))
+                    .workingDir(taskData.getWorkingDir())
+                    .walltime(taskData.getWallTime())
+                    .build();
+        });
     }
 
 }

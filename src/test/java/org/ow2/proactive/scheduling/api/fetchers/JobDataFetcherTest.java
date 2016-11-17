@@ -51,7 +51,9 @@ import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 
-
+/**
+ * @author ActiveEon Team
+ */
 public class JobDataFetcherTest {
 
     @Test
@@ -59,7 +61,7 @@ public class JobDataFetcherTest {
 
         JobData jobData = new JobData();
 
-        jobData.setCredentials(null); // currently not in GraphQL data model
+        jobData.setCredentials(null); // currently, not in GraphQL data model
         jobData.setDescription("description");
         jobData.setFinishedTime(1);
         jobData.setGenericInformation(ImmutableMap.of("gk1", "gv1"));
@@ -67,7 +69,7 @@ public class JobDataFetcherTest {
         jobData.setId(42L);
         jobData.setInErrorTime(2);
         jobData.setInputSpace("inputSpace");
-        jobData.setJobContent(ImmutableList.of(new JobContent())); // currently not in GraphQL data model
+        jobData.setJobContent(ImmutableList.of(new JobContent())); // currently, not in GraphQL data model
         jobData.setJobName("name");
         jobData.setMaxNumberOfExecution(3);
         jobData.setNumberOfFailedTasks(4);
@@ -85,8 +87,8 @@ public class JobDataFetcherTest {
         jobData.setStartTime(11);
         jobData.setStatus(JobStatus.RUNNING);
         jobData.setSubmittedTime(12);
-        jobData.setTasks(null); // currently not in GraphQL data model
-        jobData.setToBeRemoved(false); // currently not in GraphQL data model
+        jobData.setTasks(null); // currently, not in GraphQL data model
+        jobData.setToBeRemoved(false); // currently, not in GraphQL data model
         jobData.setTotalNumberOfTasks(13);
         jobData.setUserSpace("userSpace");
         jobData.setVariables(ImmutableMap.of("vk1", "vv1"));
