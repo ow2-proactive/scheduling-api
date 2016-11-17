@@ -35,8 +35,10 @@
 package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Variables extends KeyValue {
 
     public Variables(String queryString) {

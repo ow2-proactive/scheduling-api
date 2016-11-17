@@ -50,6 +50,7 @@ public enum ApiTypeKeyEnum {
     ID("id"),
     INPUT_SPACE_URL("inputSpaceUrl"),
     IN_ERROR_TIME("inErrorTime"),
+    MAX_NUMBER_OF_EXECUTION("maxNumberOfExecution"),
     JOB_ID("jobId"),
     JOB_NAME("jobName"),
     JOBS("jobs"),
