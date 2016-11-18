@@ -43,6 +43,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ApiController {
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String root() {
+        return "/home.html";
+    }
+
     @RequestMapping(value = "/v1", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
             RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
             RequestMethod.TRACE })
