@@ -1,13 +1,13 @@
 {
-  "id": "http://activeeon.com/data/connection",
+  "id": "http://activeeon.com/api/v2/data/connection",
   "javaName": "connection",
   "properties": {
     "edges": {
-      "id": "http://activeeon.com/data/edges",
+      "id": "http://activeeon.com/api/v2/data/edges",
       "items": {
         "properties": {
           "cursor": {
-            "id": "http://activeeon.com/data/edges/cursor",
+            "id": "http://activeeon.com/api/v2/data/edges/cursor",
             "required": false,
             "type": "string"
           },

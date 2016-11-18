@@ -1,5 +1,5 @@
 {
-  "id": "http://activeeon.com/data/jobs",
+  "id": "http://activeeon.com/api/v2/data/jobs",
   "required": false,
   "type": "object",
   "extends": {

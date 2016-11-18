@@ -1,30 +1,30 @@
 {
-  "id": "http://activeeon.com/data/edges/node",
+  "id": "http://activeeon.com/api/v2/data/edges/node",
   "required": false,
   "javaName": "node",
   "type": "object",
   "properties": {
     "description": {
-      "id": "http://activeeon.com/data/edges/node/description",
+      "id": "http://activeeon.com/api/v2/data/edges/node/description",
       "required": false,
       "type": "string"
     },
     "finishedTime": {
-      "id": "http://activeeon.com/data/edges/node/finishedTime",
+      "id": "http://activeeon.com/api/v2/data/edges/node/finishedTime",
       "required": false,
       "type": "number"
     },
     "genericInformation": {
-      "id": "http://activeeon.com/data/edges/node/keyValue",
+      "id": "http://activeeon.com/api/v2/data/edges/node/keyValue",
       "items": {
         "properties": {
           "key": {
-            "id": "http://activeeon.com/data/edges/node/keyValue/key",
+            "id": "http://activeeon.com/api/v2/data/edges/node/keyValue/key",
             "required": false,
             "type": "string"
           },
           "value": {
-            "id": "http://activeeon.com/data/edges/node/keyValue/value",
+            "id": "http://activeeon.com/api/v2/data/edges/node/keyValue/value",
             "required": false,
             "type": "string"
           }
@@ -34,37 +34,37 @@
       "type": "array"
     },
     "id": {
-      "id": "http://activeeon.com/data/edges/node/id",
+      "id": "http://activeeon.com/api/v2/data/edges/node/id",
       "required": false,
       "type": "string"
     },
     "inErrorTime": {
-      "id": "http://activeeon.com/data/edges/node/inErrorTime",
+      "id": "http://activeeon.com/api/v2/data/edges/node/inErrorTime",
       "required": false,
       "type": "number"
     },
     "maxNumberOfExecution": {
-      "id": "http://activeeon.com/data/edges/node/maxNumberOfExecution",
+      "id": "http://activeeon.com/api/v2/data/edges/node/maxNumberOfExecution",
       "required": false,
       "type": "number"
     },
     "name": {
-      "id": "http://activeeon.com/data/edges/node/name",
+      "id": "http://activeeon.com/api/v2/data/edges/node/name",
       "required": false,
       "type": "string"
     },
     "onTaskError": {
-      "id": "http://activeeon.com/data/edges/node/onTaskError",
+      "id": "http://activeeon.com/api/v2/data/edges/node/onTaskError",
       "required": false,
       "type": "string"
     },
     "startTime": {
-      "id": "http://activeeon.com/data/edges/node/startTime",
+      "id": "http://activeeon.com/api/v2/data/edges/node/startTime",
       "required": false,
       "type": "number"
     },
     "status": {
-      "id": "http://activeeon.com/data/edges/node/status",
+      "id": "http://activeeon.com/api/v2/data/edges/node/status",
       "required": false,
       "type": "string"
     },
