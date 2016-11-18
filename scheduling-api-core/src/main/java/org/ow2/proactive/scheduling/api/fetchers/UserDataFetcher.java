@@ -40,12 +40,12 @@ import javax.annotation.PostConstruct;
 
 import org.ow2.proactive.scheduling.api.exceptions.InvalidUserException;
 import org.ow2.proactive.scheduling.api.schema.type.User;
+import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -98,7 +98,7 @@ public class UserDataFetcher implements DataFetcher {
 
         String login = restTemplate.getForObject(loginFetchUrl + sessionId, String.class);
 
-        if (StringUtils.isNotBlank(login)) {
+        if (!Strings.isNullOrEmpty(login)) {
             return User.builder().sessionId(sessionId).login(login).build();
         }
         throw new InvalidUserException("Session ID expired ?");

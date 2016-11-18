@@ -58,9 +58,9 @@ import org.ow2.proactive.scheduling.api.schema.type.User;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.AbstractInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 import graphql.schema.DataFetchingEnvironment;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 
 public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
@@ -101,20 +101,20 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                     if (jobId != -1l) {
                         predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
                     }
-                    if (StringUtils.isNotBlank(jobName)) {
+                    if (!Strings.isNullOrEmpty(jobName)) {
                         predicates.add(criteriaBuilder.equal(root.get("jobName"), jobName));
                     }
-                    if (StringUtils.isNotBlank(owner)) {
+                    if (!Strings.isNullOrEmpty(owner)) {
                         predicates.add(criteriaBuilder.equal(root.get("owner"), owner));
                     }
-                    if (StringUtils.isNotBlank(priority)) {
+                    if (!Strings.isNullOrEmpty(priority)) {
                         predicates.add(criteriaBuilder.equal(root.get("priority"),
                                 JobPriority.valueOf(priority)));
                     }
-                    if (StringUtils.isNotBlank(projectName)) {
+                    if (!Strings.isNullOrEmpty(projectName)) {
                         predicates.add(criteriaBuilder.equal(root.get("projectName"), projectName));
                     }
-                    if (StringUtils.isNotBlank(status)) {
+                    if (!Strings.isNullOrEmpty(status)) {
                         predicates.add(
                                 criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
                     }
@@ -139,7 +139,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     private void filterOnUser(DataFetchingEnvironment environment, List<JobInput> input) {
         User user = (User) environment.getSource();
         LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
-        if(StringUtils.isNotBlank(user.getLogin())) {
+        if(!Strings.isNullOrEmpty(user.getLogin())) {
             ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
         } else {
             throw new InvalidUserException("Session ID expired ?");

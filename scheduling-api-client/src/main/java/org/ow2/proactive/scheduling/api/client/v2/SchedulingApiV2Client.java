@@ -38,7 +38,7 @@ import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
 import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Strings;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -53,7 +53,7 @@ public class SchedulingApiV2Client {
     }
 
     public Query postQuery(Query query) throws SchedulingApiException {
-        if (StringUtils.isBlank(url)) {
+        if (Strings.isNullOrEmpty(url)) {
             throw new SchedulingApiException("API server URL is not initialized");
         }
 

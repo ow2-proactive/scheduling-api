@@ -34,8 +34,8 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2.bean;
 
+import com.google.common.base.Strings;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class KeyValueInput implements ApiType {
@@ -63,11 +63,11 @@ public class KeyValueInput implements ApiType {
 
         public KeyValueInput build() {
             sb.append("{");
-            if (StringUtils.isNotBlank(this.key)) {
+            if (!Strings.isNullOrEmpty(this.key)) {
                 sb.append(" key : ").append(Constants.QUOTE);
                 sb.append(this.key).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.value)) {
+            if (!Strings.isNullOrEmpty(this.value)) {
                 sb.append(" value : ").append(Constants.QUOTE);
                 sb.append(this.value).append(Constants.QUOTE);
             }

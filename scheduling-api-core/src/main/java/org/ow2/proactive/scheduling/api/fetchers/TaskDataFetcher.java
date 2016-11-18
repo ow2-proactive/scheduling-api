@@ -48,7 +48,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
@@ -56,10 +55,9 @@ import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
-
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-
 import graphql.schema.DataFetchingEnvironment;
 
 
@@ -95,11 +93,11 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                     if (taskId != -1l) {
                         predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
                     }
-                    if (StringUtils.isNotBlank(status)) {
+                    if (!Strings.isNullOrEmpty(status)) {
                         predicates.add(
                                 criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
                     }
-                    if (StringUtils.isNotBlank(taskName)) {
+                    if (!Strings.isNullOrEmpty(taskName)) {
                         predicates.add(criteriaBuilder.equal(root.get("taskName"), taskName));
                     }
 

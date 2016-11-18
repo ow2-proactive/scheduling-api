@@ -37,12 +37,10 @@ package org.ow2.proactive.scheduling.api.client.v2.bean;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 public class Inputs {
 
     public static final String buildQueryString(List<? extends ApiType> input) {
-        if (CollectionUtils.isNotEmpty(input)) {
+        if (!input.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             sb.append("(input : [");
             String inputQuery = input.stream().map(i -> i.getQueryString()).collect(

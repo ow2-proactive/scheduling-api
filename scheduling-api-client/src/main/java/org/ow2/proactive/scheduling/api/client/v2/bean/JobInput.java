@@ -34,8 +34,8 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2.bean;
 
+import com.google.common.base.Strings;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class JobInput implements ApiType {
@@ -87,27 +87,27 @@ public class JobInput implements ApiType {
 
         public JobInput build() {
             sb.append("{");
-            if (StringUtils.isNotBlank(this.id)) {
+            if (!Strings.isNullOrEmpty(this.id)) {
                 sb.append(" id : ");
                 sb.append(this.id);
             }
-            if (StringUtils.isNotBlank(this.jobName)) {
+            if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(" jobName : ").append(Constants.QUOTE);
                 sb.append(this.jobName).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.owner)) {
+            if (!Strings.isNullOrEmpty(this.owner)) {
                 sb.append(" owner : ").append(Constants.QUOTE);
                 sb.append(this.owner).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.priority)) {
+            if (!Strings.isNullOrEmpty(this.priority)) {
                 sb.append(" priority : ").append(Constants.QUOTE);
                 sb.append(this.priority).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.projectName)) {
+            if (!Strings.isNullOrEmpty(this.projectName)) {
                 sb.append(" projectName : ").append(Constants.QUOTE);
                 sb.append(this.projectName).append(Constants.QUOTE);
             }
-            if (StringUtils.isNotBlank(this.status)) {
+            if (!Strings.isNullOrEmpty(this.status)) {
                 sb.append(" status : ").append(Constants.QUOTE);
                 sb.append(this.status).append(Constants.QUOTE);
             }
