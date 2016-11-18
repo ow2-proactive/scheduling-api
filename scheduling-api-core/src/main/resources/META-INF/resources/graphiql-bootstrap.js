@@ -43,7 +43,13 @@ function updateURL() {
 }
 // Defines a GraphQL fetcher using the fetch API.
 function graphQLFetcher(graphQLParams) {
-    return fetch(window.location.origin + window.location.pathname + "graphql", {
+    var location = window.location.origin + window.location.pathname;
+
+    if (!location.endsWith('/')) {
+        location = location + '/';
+    }
+
+    return fetch(location + "graphql", {
         method: 'post',
         headers: {
             'Accept': 'application/json',
