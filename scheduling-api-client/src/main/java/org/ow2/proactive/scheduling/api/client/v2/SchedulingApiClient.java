@@ -52,7 +52,7 @@ public class SchedulingApiClient {
         this.url = url;
     }
 
-    public Query postQuery(Query query) throws SchedulingApiException {
+    public Query execute(Query query) throws SchedulingApiException {
         if (Strings.isNullOrEmpty(url)) {
             throw new SchedulingApiException("API server URL is not initialized");
         }
