@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
             if (environment.getArgument("input") != null) {
                 List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
-                input = args.stream().map(arg -> new TaskInput(arg)).collect(Collectors.toList());
+                input = args.stream().map(TaskInput::new).collect(Collectors.toList());
             }
 
             List<Predicate[]> filters = ImmutableList.of();
@@ -91,7 +92,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
                     predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
 
-                    if (taskId != -1l) {
+                    if (taskId != -1L) {
                         predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
                     }
                     if (!Strings.isNullOrEmpty(status)) {
@@ -165,7 +166,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                     .variables(taskData.getVariables().values().stream().map(
                             taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
                                     taskDataVariable.getValue())).collect(
-                            Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue())))
+                            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                     .workingDir(taskData.getWorkingDir())
                     .walltime(taskData.getWallTime())
                     .build();
