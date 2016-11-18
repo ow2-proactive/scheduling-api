@@ -41,6 +41,7 @@ import java.util.Map;
 import org.ow2.proactive.scheduling.api.services.AuthenticationService;
 import org.ow2.proactive.scheduling.api.services.GraphqlService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,10 +112,10 @@ public class GraphQLController {
 
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
-        String variables = (String) body.get(DEFAULT_VARIABLES_KEY);
+        Map<String, Object> variables = (Map<String, Object>) body.get(DEFAULT_VARIABLES_KEY);
 
         return graphqlService.executeQuery(query, operationName,
-                new GraphqlService.GraphqlContext(sessionId, username), decodeIntoMap(variables));
+                new GraphqlService.GraphqlContext(sessionId, username), variables);
     }
 
     @RequestMapping(value = "/schema", method = RequestMethod.GET)
@@ -129,7 +130,10 @@ public class GraphQLController {
             return new HashMap<>();
         }
 
-        return objectMapper.readValue(variables, Map.class);
+        TypeReference<HashMap<String,Object>> typeRef
+                = new TypeReference<HashMap<String,Object>>() {};
+
+        return objectMapper.readValue(variables, typeRef);
     }
 
 }
