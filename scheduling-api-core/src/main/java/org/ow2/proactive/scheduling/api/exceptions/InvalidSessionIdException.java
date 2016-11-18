@@ -32,22 +32,16 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.fetchers;
+package org.ow2.proactive.scheduling.api.exceptions;
 
-import org.ow2.proactive.scheduling.api.schema.type.User;
-import org.ow2.proactive.scheduling.api.services.GraphqlService;
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import org.springframework.stereotype.Component;
+/**
+ * @author ActiveEon Team
+ */
+public class InvalidSessionIdException extends RuntimeException {
 
-
-@Component
-public class UserDataFetcher implements DataFetcher {
-
-    @Override
-    public Object get(DataFetchingEnvironment environment) {
-        GraphqlService.GraphqlContext context = (GraphqlService.GraphqlContext) environment.getContext();
-        return User.builder().login(context.getLogin()).sessionId(context.getSessionId()).build();
+    public InvalidSessionIdException() {
+        super("The specified session ID is invalid or has expired. " +
+                "You need to authenticate through the ProActive identity service to get a valid session ID.");
     }
 
 }

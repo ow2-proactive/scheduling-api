@@ -84,10 +84,6 @@ public final class Query {
                 .field(newFieldDefinition().name("viewer")
                         .description("Viewer of the query")
                         .type(User.TYPE)
-                        .argument(newArgument().name("sessionId")
-                                .description("Viewer's session id")
-                                .type(new GraphQLNonNull(GraphQLString))
-                                .build())
                         .dataFetcher(userDataFetcher))
                 .build();
     }

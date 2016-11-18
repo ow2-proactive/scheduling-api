@@ -43,8 +43,11 @@ import org.ow2.proactive.scheduling.api.schema.type.Query;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableMap;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,9 +80,9 @@ public class GraphqlService {
     }
 
     public Map<String, Object> executeQuery(String query, String operationName,
-            Map<String, Object> variables) {
+            GraphqlContext graphqlContext, Map<String, Object> variables) {
 
-        ExecutionResult executionResult = graphql.execute(query, operationName, null, variables);
+        ExecutionResult executionResult = graphql.execute(query, operationName, graphqlContext, variables);
 
         Map<String, Object> result = new LinkedHashMap<>();
 
@@ -98,6 +101,16 @@ public class GraphqlService {
         ExecutionResult result = graphql.execute(INTROSPECTION_QUERY);
         MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
         return MAPPER.writeValueAsString(result);
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static final class GraphqlContext {
+
+        private final String sessionId;
+
+        private final String login;
+
     }
 
 }

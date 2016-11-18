@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ow2.proactive.scheduling.api.services.AuthenticationService;
 import org.ow2.proactive.scheduling.api.services.GraphqlService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,6 +71,11 @@ public class GraphQLController {
 
     private static final String DEFAULT_VARIABLES_KEY = "variables";
 
+    private static final String REQUEST_HEADER_NAME_SESSION_ID = "sessionid";
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @Autowired
     private GraphqlService graphqlService;
 
@@ -79,11 +86,16 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> executeOperation(@RequestParam(DEFAULT_QUERY_KEY) String query,
+    public Map<String, Object> executeOperation(
+            @RequestHeader(value = REQUEST_HEADER_NAME_SESSION_ID) String sessionId,
+            @RequestParam(DEFAULT_QUERY_KEY) String query,
             @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
             @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
 
-        return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
+        String username = authenticationService.authenticate(sessionId);
+
+        return graphqlService.executeQuery(query, operationName,
+                new GraphqlService.GraphqlContext(sessionId, username), decodeIntoMap(variables));
     }
 
     /*
@@ -91,18 +103,23 @@ public class GraphQLController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> executeOperation(@RequestBody Map<String, Object> body) throws IOException {
+    public Map<String, Object> executeOperation(
+            @RequestHeader(value = REQUEST_HEADER_NAME_SESSION_ID) String sessionId,
+            @RequestBody Map<String, Object> body) throws IOException {
+
+        String username = authenticationService.authenticate(sessionId);
 
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
         String variables = (String) body.get(DEFAULT_VARIABLES_KEY);
 
-        return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
+        return graphqlService.executeQuery(query, operationName,
+                new GraphqlService.GraphqlContext(sessionId, username), decodeIntoMap(variables));
     }
 
     @RequestMapping(value = "/schema", method = RequestMethod.GET)
     @ResponseBody
-    public String executeOperation() throws JsonProcessingException{
+    public String getSchema() throws JsonProcessingException {
         return graphqlService.generateJsonSchema();
     }
 

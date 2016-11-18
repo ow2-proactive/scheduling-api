@@ -48,6 +48,7 @@ function graphQLFetcher(graphQLParams) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'sessionid': localStorage['pa.session']
         },
         body: JSON.stringify(graphQLParams),
         credentials: 'include',

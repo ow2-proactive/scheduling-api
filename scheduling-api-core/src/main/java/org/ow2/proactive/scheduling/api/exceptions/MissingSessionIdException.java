@@ -34,22 +34,14 @@
  */
 package org.ow2.proactive.scheduling.api.exceptions;
 
-public class InvalidUserException extends RuntimeException {
+/**
+ * @author ActiveEon Team
+ */
+public class MissingSessionIdException extends RuntimeException {
 
-    public InvalidUserException() {
-        super();
-    }
-
-    public InvalidUserException(String s) {
-        super(s);
-    }
-
-    public InvalidUserException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InvalidUserException(Throwable cause) {
-        super(cause);
+    public MissingSessionIdException() {
+        super("Missing session ID. " +
+                "You need to authenticate through the ProActive identity service to get a valid session ID.");
     }
 
 }

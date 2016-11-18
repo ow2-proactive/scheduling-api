@@ -50,7 +50,7 @@ import javax.persistence.criteria.Root;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.core.db.JobData;
-import org.ow2.proactive.scheduling.api.exceptions.InvalidUserException;
+import org.ow2.proactive.scheduling.api.exceptions.InvalidSessionIdException;
 import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
@@ -74,15 +74,15 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
             List<JobInput> input = new ArrayList<>();
 
-            // use the {@code user} result to create a new input filter on jobs connection,
+            // use the {@code user} parent field to create a new input filter on jobs connection,
             // so that the job list contains jobs belonging to the user only
-            if ("User".equals(environment.getParentType().getName())) {
+            if (User.TYPE.equals(environment.getParentType())) {
                 filterOnUser(environment, input);
             }
 
             if (environment.getArgument("input") != null) {
                 List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
-                input.addAll(args.stream().map(arg -> new JobInput(arg)).collect(Collectors.toList()));
+                input.addAll(args.stream().map(JobInput::new).collect(Collectors.toList()));
             }
 
             List<Predicate[]> filters = null;
@@ -98,7 +98,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                     String projectName = i.getProjectName();
                     String status = i.getStatus();
 
-                    if (jobId != -1l) {
+                    if (jobId != -1L) {
                         predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
                     }
                     if (!Strings.isNullOrEmpty(jobName)) {
@@ -142,7 +142,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
         if(!Strings.isNullOrEmpty(user.getLogin())) {
             ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
         } else {
-            throw new InvalidUserException("Session ID expired ?");
+            throw new IllegalStateException("Missing login name");
         }
         input.add(new JobInput(ownerInput));
     }
