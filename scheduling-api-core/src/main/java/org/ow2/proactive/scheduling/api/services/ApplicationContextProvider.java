@@ -32,44 +32,36 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.exception;
+package org.ow2.proactive.scheduling.api.services;
 
-public class SchedulingApiException extends RuntimeException {
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
-    public SchedulingApiException() {
-        super();
+/**
+ * @author ActiveEon team
+ */
+@Service
+public class ApplicationContextProvider implements ApplicationContextAware {
+
+    private static ApplicationContext context;
+
+    @Value("${api.default.fetcher.element.num}")
+    private static String defaultFetchNumber;
+
+    public static String getDefaultFetchNumber() {
+        return defaultFetchNumber;
     }
 
-    /**
-     *
-     * @param message exceptions message
-     */
-    public SchedulingApiException(String message) {
-        super(message);
+    public static ApplicationContext getApplicationContext() {
+        return context;
     }
 
-    /**
-     *
-     * @param message exceptions message
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) {
+        context = ctx;
     }
 
-    /**
-     *
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(Throwable cause) {
-        super(cause);
-    }
 }

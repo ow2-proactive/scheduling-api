@@ -32,44 +32,28 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.exception;
+package org.ow2.proactive.scheduling.api.controllers;
 
-public class SchedulingApiException extends RuntimeException {
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     */
-    public SchedulingApiException() {
-        super();
+@Controller
+public class ApiController {
+
+    @RequestMapping(value = "/v1", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
+            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
+            RequestMethod.TRACE })
+    @ResponseBody
+    public String v1() {
+        return "TODO: forward to /rest/";
     }
 
-    /**
-     *
-     * @param message exceptions message
-     */
-    public SchedulingApiException(String message) {
-        super(message);
+    @RequestMapping(value = "/v2", method = RequestMethod.GET)
+    public String v2() {
+        return "/index.html";
     }
 
-    /**
-     *
-     * @param message exceptions message
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    /**
-     *
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(Throwable cause) {
-        super(cause);
-    }
 }

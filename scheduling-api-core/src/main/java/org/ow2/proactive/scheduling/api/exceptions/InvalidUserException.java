@@ -32,44 +32,24 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.exception;
+package org.ow2.proactive.scheduling.api.exceptions;
 
-public class SchedulingApiException extends RuntimeException {
+public class InvalidUserException extends RuntimeException {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     *
-     */
-    public SchedulingApiException() {
+    public InvalidUserException() {
         super();
     }
 
-    /**
-     *
-     * @param message exceptions message
-     */
-    public SchedulingApiException(String message) {
-        super(message);
+    public InvalidUserException(String s) {
+        super(s);
     }
 
-    /**
-     *
-     * @param message exceptions message
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(String message, Throwable cause) {
+    public InvalidUserException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    /**
-     *
-     * @param cause exceptions cause
-     */
-    public SchedulingApiException(Throwable cause) {
+    public InvalidUserException(Throwable cause) {
         super(cause);
     }
+
 }
