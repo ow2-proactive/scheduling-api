@@ -9,7 +9,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "jobs"
+    "jobs",
+    "version",
+    "viewer"
 })
 public class GraphqlData implements Serializable
 {
@@ -19,7 +21,17 @@ public class GraphqlData implements Serializable
      */
     @JsonProperty("jobs")
     private GraphqlJobs jobs;
-    private final static long serialVersionUID = 999066096856793538L;
+    /**
+     * 
+     */
+    @JsonProperty("version")
+    private String version;
+    /**
+     * 
+     */
+    @JsonProperty("viewer")
+    private GraphqlViewer viewer;
+    private final static long serialVersionUID = 1786653703949236759L;
 
     /**
      * 
@@ -39,6 +51,46 @@ public class GraphqlData implements Serializable
     @JsonProperty("jobs")
     public void setJobs(GraphqlJobs jobs) {
         this.jobs = jobs;
+    }
+
+    /**
+     * 
+     * @return
+     *     The version
+     */
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * 
+     * @param version
+     *     The version
+     */
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    /**
+     * 
+     * @return
+     *     The viewer
+     */
+    @JsonProperty("viewer")
+    public GraphqlViewer getViewer() {
+        return viewer;
+    }
+
+    /**
+     * 
+     * @param viewer
+     *     The viewer
+     */
+    @JsonProperty("viewer")
+    public void setViewer(GraphqlViewer viewer) {
+        this.viewer = viewer;
     }
 
     @Override
