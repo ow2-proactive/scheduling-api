@@ -57,6 +57,7 @@ import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import graphql.schema.DataFetchingEnvironment;
 
@@ -71,14 +72,14 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = (criteriaBuilder, root) -> {
 
-            List<TaskInput> input = null;
+            List<TaskInput> input = ImmutableList.of();
 
             if (environment.getArgument("input") != null) {
                 List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
                 input = args.stream().map(arg -> new TaskInput(arg)).collect(Collectors.toList());
             }
 
-            List<Predicate[]> filters = null;
+            List<Predicate[]> filters = ImmutableList.of();
 
             if (!input.isEmpty()) {
                 filters = input.stream().map(i -> {
