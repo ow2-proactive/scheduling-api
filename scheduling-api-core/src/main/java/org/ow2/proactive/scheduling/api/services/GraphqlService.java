@@ -82,6 +82,10 @@ public class GraphqlService {
     public Map<String, Object> executeQuery(String query, String operationName,
             GraphqlContext graphqlContext, Map<String, Object> variables) {
 
+        if (variables == null) {
+            variables = ImmutableMap.of();
+        }
+
         ExecutionResult executionResult = graphql.execute(query, operationName, graphqlContext, variables);
 
         Map<String, Object> result = new LinkedHashMap<>();
