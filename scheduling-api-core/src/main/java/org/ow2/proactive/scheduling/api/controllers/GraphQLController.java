@@ -39,6 +39,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.services.GraphqlService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -48,12 +51,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
-
 
 /**
- * This controllers follows the basics from the GraphQL spec:
+ * This controller follows the basics from the GraphQL spec:
  * <p>
  * http://graphql.org/learn/serving-over-http/
  *
@@ -98,6 +98,12 @@ public class GraphQLController {
         String variables = (String) body.get(DEFAULT_VARIABLES_KEY);
 
         return graphqlService.executeQuery(query, operationName, decodeIntoMap(variables));
+    }
+
+    @RequestMapping(value = "/schema", method = RequestMethod.GET)
+    @ResponseBody
+    public String executeOperation() throws JsonProcessingException{
+        return graphqlService.generateJsonSchema();
     }
 
     @SuppressWarnings("unchecked")

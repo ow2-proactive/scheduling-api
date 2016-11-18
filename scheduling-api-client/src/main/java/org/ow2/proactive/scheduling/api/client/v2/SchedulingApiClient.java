@@ -39,17 +39,24 @@ import java.util.Map;
 import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
 import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
 import com.google.common.base.Strings;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
 public class SchedulingApiClient {
 
-    private final RestTemplate client = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private final String url;
 
-    public SchedulingApiClient(String url) {
+    private final String sessionId;
+
+    public SchedulingApiClient(String url, String sessionId) {
         this.url = url;
+        this.sessionId = sessionId;
     }
 
     public Query execute(Query query) throws SchedulingApiException {
@@ -58,8 +65,16 @@ public class SchedulingApiClient {
         }
 
         try {
-            Map<String, Object> result = client.postForObject(url, query.getQueryMap(), Map.class);
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            headers.add("sessionid", sessionId);
+            headers.add("Content-Type", "application/json");
+
+            HttpEntity<Map<String, String>> request = new HttpEntity<>(query.getQueryMap(), headers);
+
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            Map<String, Object> result = restTemplate.postForObject(url, request, Map.class);
             query.setQueryResponse(result);
+
             return query;
         } catch (Exception e) {
             throw new SchedulingApiException("Exception", e);

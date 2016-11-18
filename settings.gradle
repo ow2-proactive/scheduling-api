@@ -2,3 +2,5 @@ rootProject.name = 'scheduling-api'
 
 include 'scheduling-api-client'
 include 'scheduling-api-core'
+include 'scheduling-api-beans'
+

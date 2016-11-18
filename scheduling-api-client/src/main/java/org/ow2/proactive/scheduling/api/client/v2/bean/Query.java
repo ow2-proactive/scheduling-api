@@ -42,21 +42,22 @@ import lombok.Data;
 @Data
 public class Query {
 
-    private static final String KEY_OPERATION_NAME = "operationName";
-
-    private static final String KEY_QUERY = "query";
-
-    private static final String KEY_VARIABLES = "variables";
-
     private final String operationName;
 
     private final String query;
 
     private final Map<String, String> queryMap;
 
+    private Map<String, Object> queryResponse;
+
     private final String variables;
 
-    private Map<String, Object> queryResponse;
+
+    private static final String KEY_OPERATION_NAME = "operationName";
+
+    private static final String KEY_QUERY = "query";
+
+    private static final String KEY_VARIABLES = "variables";
 
     private Query(Map<String, String> query) {
         this.operationName = query.get(KEY_OPERATION_NAME);
@@ -90,7 +91,6 @@ public class Query {
             result.put(KEY_OPERATION_NAME, this.operationName);
             result.put(KEY_QUERY, this.query);
             result.put(KEY_VARIABLES, this.variables);
-
             return new Query(result);
         }
 

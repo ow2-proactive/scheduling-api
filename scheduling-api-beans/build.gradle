@@ -1,0 +1,3 @@
+dependencies {
+    compile 'org.springframework:spring-web:4.2.5.RELEASE'
+}

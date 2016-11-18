@@ -34,20 +34,22 @@
  */
 package org.ow2.proactive.scheduling.api.services;
 
-import static graphql.schema.GraphQLSchema.newSchema;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.ow2.proactive.scheduling.api.schema.type.Query;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import graphql.ExecutionResult;
+import graphql.GraphQL;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import graphql.ExecutionResult;
-import graphql.GraphQL;
+import static graphql.schema.GraphQLSchema.newSchema;
 
 
 /**
@@ -57,10 +59,14 @@ import graphql.GraphQL;
 @Log4j2
 public class GraphqlService {
 
-    @Autowired
-    private Query query;
+    private static final String INTROSPECTION_QUERY = "\n  query IntrospectionQuery {\n    __schema {\n      queryType { name }\n      mutationType { name }\n      types {\n        ...FullType\n      }\n      directives {\n        name\n        description\n        locations\n        args {\n          ...InputValue\n        }\n      }\n    }\n  }\n\n  fragment FullType on __Type {\n    kind\n    name\n    description\n    fields(includeDeprecated: true) {\n      name\n      description\n      args {\n        ...InputValue\n      }\n      type {\n        ...TypeRef\n      }\n      isDeprecated\n      deprecationReason\n    }\n    inputFields {\n      ...InputValue\n    }\n    interfaces {\n      ...TypeRef\n    }\n    enumValues(includeDeprecated: true) {\n      name\n      description\n      isDeprecated\n      deprecationReason\n    }\n    possibleTypes {\n      ...TypeRef\n    }\n  }\n\n  fragment InputValue on __InputValue {\n    name\n    description\n    type { ...TypeRef }\n    defaultValue\n  }\n\n  fragment TypeRef on __Type {\n    kind\n    name\n    ofType {\n      kind\n      name\n      ofType {\n        kind\n        name\n        ofType {\n          kind\n          name\n          ofType {\n            kind\n            name\n            ofType {\n              kind\n              name\n              ofType {\n                kind\n                name\n                ofType {\n                  kind\n                  name\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n";
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private GraphQL graphql;
+
+    @Autowired
+    private Query query;
 
     public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
     }
@@ -86,6 +92,12 @@ public class GraphqlService {
 
         return result;
 
+    }
+
+    public String generateJsonSchema() throws JsonProcessingException {
+        ExecutionResult result = graphql.execute(INTROSPECTION_QUERY);
+        MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
+        return MAPPER.writeValueAsString(result);
     }
 
 }
