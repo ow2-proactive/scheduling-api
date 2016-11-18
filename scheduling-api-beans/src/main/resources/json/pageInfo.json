@@ -1,0 +1,27 @@
+{
+  "id": "http://activeeon.com/data/pageInfo",
+  "properties": {
+    "endCursor": {
+      "id": "http://activeeon.com/data/pageInfo/endCursor",
+      "required": false,
+      "type": "string"
+    },
+    "hasNextPage": {
+      "id": "http://activeeon.com/data/pageInfo/hasNextPage",
+      "required": false,
+      "type": "boolean"
+    },
+    "hasPreviousPage": {
+      "id": "http://activeeon.com/data/pageInfo/hasPreviousPage",
+      "required": false,
+      "type": "boolean"
+    },
+    "startCursor": {
+      "id": "http://activeeon.com/data/pageInfo/startCursor",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "required": false,
+  "type": "object"
+}

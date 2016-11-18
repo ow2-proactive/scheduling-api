@@ -75,6 +75,7 @@ public enum ApiTypeKeyEnum {
     PROJECT_NAME("projectName"),
     QUERY_RESPONSE("queryResponse"),
     REMOVED_TIME("removedTime"),
+    RESTART_MODE("restartMode"),
     SCHEDULED_TIME("scheduledTime"),
     SESSION_ID("sessionId"),
     START_CURSOR("startCursor"),

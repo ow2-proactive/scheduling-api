@@ -1,0 +1,8 @@
+{
+  "id": "http://activeeon.com/data/jobs",
+  "required": false,
+  "type": "object",
+  "extends": {
+    "$ref": "connection.json"
+  }
+}

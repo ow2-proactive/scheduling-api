@@ -59,7 +59,6 @@ import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 import graphql.schema.DataFetchingEnvironment;
-import org.apache.commons.collections.CollectionUtils;
 
 
 public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
@@ -84,9 +83,9 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                 input.addAll(args.stream().map(JobInput::new).collect(Collectors.toList()));
             }
 
-            List<Predicate[]> filters = null;
+            List<Predicate[]> filters = new ArrayList<>();
 
-            if (CollectionUtils.isNotEmpty(input)) {
+            if (!input.isEmpty()) {
                 filters = input.stream().map(i -> {
                     List<Predicate> predicates = new ArrayList<>();
 

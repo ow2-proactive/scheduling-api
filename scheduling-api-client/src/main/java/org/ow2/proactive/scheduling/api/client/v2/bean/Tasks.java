@@ -45,6 +45,7 @@ import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.JOB
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_LEFT;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PROGRESS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.RESTART_MODE;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SCHEDULED_TIME;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TAG;
 
@@ -145,6 +146,9 @@ public class Tasks implements ApiType {
             }
             if (scheduledTime) {
                 sb.append(SCHEDULED_TIME.getKey()).append(Constants.RETURN);
+            }
+            if(restartMode) {
+                sb.append(RESTART_MODE.getKey()).append(Constants.RETURN);
             }
             if (tag) {
                 sb.append(TAG.getKey()).append(Constants.RETURN);

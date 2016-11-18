@@ -1,0 +1,19 @@
+{
+  "$schema": "http://activeeon.com/api/v2/schema",
+
+  "id": "http://activeeon.com",
+  "properties": {
+    "data": {
+      "id": "http://activeeon.com/data",
+      "properties": {
+        "jobs": {
+          "$ref": "jobs.json"
+        }
+      },
+      "required": false,
+      "type": "object"
+    }
+  },
+  "required": false,
+  "type": "object"
+}

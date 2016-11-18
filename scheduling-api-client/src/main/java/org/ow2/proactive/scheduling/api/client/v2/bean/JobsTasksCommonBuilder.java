@@ -41,6 +41,7 @@ import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.CUR
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.FINISHED_TIME;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.IN_ERROR_TIME;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.ON_TASK_ERROR;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.STATUS;
 
 public abstract class JobsTasksCommonBuilder {
 
@@ -170,6 +171,9 @@ public abstract class JobsTasksCommonBuilder {
         }
         if (onTaskError) {
             sb.append(ON_TASK_ERROR.getKey()).append(Constants.RETURN);
+        }
+        if (status) {
+            sb.append(STATUS.getKey()).append(Constants.RETURN);
         }
         if (variables != null) {
             sb.append(variables.getQueryString());

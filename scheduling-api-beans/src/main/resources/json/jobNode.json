@@ -1,0 +1,101 @@
+{
+  "id": "http://activeeon.com/data/edges/node/job",
+  "required": false,
+  "type": "object",
+  "javaName": "jobNode",
+  "extends":{
+    "$ref": "node.json"
+  },
+  "properties": {
+    "dataManagement": {
+      "id": "http://activeeon.com/data/edges/node/job/dataManagement",
+      "properties": {
+        "globalSpaceUrl": {
+          "id": "http://activeeon.com/data/edges/node/job/dataManagement/globalSpaceUrl",
+          "required": false,
+          "type": "string"
+        },
+        "inputSpaceUrl": {
+          "id": "http://activeeon.com/data/edges/node/job/dataManagement/inputSpaceUrl",
+          "required": false,
+          "type": "string"
+        },
+        "outputSpaceUrl": {
+          "id": "http://activeeon.com/data/edges/node/job/dataManagement/outputSpaceUrl",
+          "required": false,
+          "type": "string"
+        },
+        "userSpaceUrl": {
+          "id": "http://activeeon.com/data/edges/node/job/dataManagement/userSpaceUrl",
+          "required": false,
+          "type": "string"
+        }
+      },
+      "required": false,
+      "type": "object"
+    },
+    "numberOfFailedTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfFailedTasks",
+      "required": false,
+      "type": "number"
+    },
+    "numberOfFaultyTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfFaultyTasks",
+      "required": false,
+      "type": "number"
+    },
+    "numberOfFinishedTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfFinishedTasks",
+      "required": false,
+      "type": "number"
+    },
+    "numberOfInErrorTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfInErrorTasks",
+      "required": false,
+      "type": "number"
+    },
+    "numberOfPendingTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfPendingTasks",
+      "required": false,
+      "type": "number"
+    },
+    "numberOfRunningTasks": {
+      "id": "http://activeeon.com/data/edges/node/job/numberOfRunningTasks",
+      "required": false,
+      "type": "number"
+    },
+    "owner": {
+      "id": "http://activeeon.com/data/edges/node/job/owner",
+      "required": false,
+      "type": "string"
+    },
+    "priority": {
+      "id": "http://activeeon.com/data/edges/node/job/priority",
+      "required": false,
+      "type": "string"
+    },
+    "projectName": {
+      "id": "http://activeeon.com/data/edges/node/job/projectName",
+      "required": false,
+      "type": "string"
+    },
+    "removedTime": {
+      "id": "http://activeeon.com/data/edges/node/job/removedTime",
+      "required": false,
+      "type": "number"
+    },
+    "submittedTime": {
+      "id": "http://activeeon.com/data/edges/node/job/submittedTime",
+      "required": false,
+      "type": "number"
+    },
+    "totalNumberOfTasks": {
+      "type": "number",
+      "id": "http://activeeon.com/data/edges/node/job/totalNumberOfTasks",
+      "required": false
+    },
+    "tasks": {
+      "$ref": "tasks.json"
+    }
+  }
+}

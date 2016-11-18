@@ -68,8 +68,6 @@ public class Jobs implements ApiType {
         private Tasks tasks = null;
         private boolean totalNumberOfTasks = true;
 
-        private StringBuilder sb = new StringBuilder();
-
         public Builder dataManagement(DataManagement dataManagement) {
             this.dataManagement = dataManagement;
             return this;
