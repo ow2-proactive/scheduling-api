@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "key",
     "value"
 })
-public class GraphqlGenericInformation implements Serializable
+public class GraphqlKeyValue implements Serializable
 {
 
     /**
@@ -25,7 +25,7 @@ public class GraphqlGenericInformation implements Serializable
      */
     @JsonProperty("value")
     private String value;
-    private final static long serialVersionUID = -363382460667755706L;
+    private final static long serialVersionUID = 474607715150812592L;
 
     /**
      * 

@@ -9,13 +9,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "jobs",
     "login",
-    "sessionId",
-    "jobs"
+    "sessionId"
 })
 public class GraphqlViewer implements Serializable
 {
 
+    /**
+     * 
+     */
+    @JsonProperty("jobs")
+    private GraphqlJobs jobs;
     /**
      * 
      */
@@ -26,12 +31,27 @@ public class GraphqlViewer implements Serializable
      */
     @JsonProperty("sessionId")
     private String sessionId;
+    private final static long serialVersionUID = 3535245030002134725L;
+
     /**
      * 
+     * @return
+     *     The jobs
      */
     @JsonProperty("jobs")
-    private GraphqlJobs jobs;
-    private final static long serialVersionUID = 3535245030002134725L;
+    public GraphqlJobs getJobs() {
+        return jobs;
+    }
+
+    /**
+     * 
+     * @param jobs
+     *     The jobs
+     */
+    @JsonProperty("jobs")
+    public void setJobs(GraphqlJobs jobs) {
+        this.jobs = jobs;
+    }
 
     /**
      * 
@@ -71,26 +91,6 @@ public class GraphqlViewer implements Serializable
     @JsonProperty("sessionId")
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    /**
-     * 
-     * @return
-     *     The jobs
-     */
-    @JsonProperty("jobs")
-    public GraphqlJobs getJobs() {
-        return jobs;
-    }
-
-    /**
-     * 
-     * @param jobs
-     *     The jobs
-     */
-    @JsonProperty("jobs")
-    public void setJobs(GraphqlJobs jobs) {
-        this.jobs = jobs;
     }
 
     @Override

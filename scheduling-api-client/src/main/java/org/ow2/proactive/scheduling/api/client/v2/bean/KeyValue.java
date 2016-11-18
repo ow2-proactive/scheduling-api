@@ -39,6 +39,10 @@ import java.util.List;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.KEY;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.VALUE;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+
 @Data
 public abstract class KeyValue implements ApiType {
 
@@ -77,14 +81,14 @@ public abstract class KeyValue implements ApiType {
         protected String buildQueryString() {
             sb.append(getKeyValueBeanName());
             sb.append(Inputs.buildQueryString(input));
-            sb.append("{").append(Constants.RETURN);
+            sb.append("{").append(RETURN);
             if (key) {
-                sb.append(ApiTypeKeyEnum.KEY.getKey()).append(Constants.RETURN);
+                sb.append(KEY.getKey()).append(RETURN);
             }
             if (value) {
-                sb.append(ApiTypeKeyEnum.VALUE.getKey()).append(Constants.RETURN);
+                sb.append(VALUE.getKey()).append(RETURN);
             }
-            sb.append("}").append(Constants.RETURN);
+            sb.append("}").append(RETURN);
             return sb.toString();
         }
 

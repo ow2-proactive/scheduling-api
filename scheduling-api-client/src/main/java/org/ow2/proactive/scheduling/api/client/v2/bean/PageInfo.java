@@ -36,6 +36,12 @@ package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.END_CURSOR;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.HAS_NEXT_PAGE;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.HAS_PREVIOUS_PAGE;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.START_CURSOR;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+
 @Data
 public class PageInfo implements ApiType {
     private final String queryString;
@@ -75,20 +81,20 @@ public class PageInfo implements ApiType {
 
         public PageInfo build() {
             sb.append(ApiTypeKeyEnum.PAGE_INFO.getKey());
-            sb.append("{").append(Constants.RETURN);
+            sb.append("{").append(RETURN);
             if (hasNextPage) {
-                sb.append(ApiTypeKeyEnum.HAS_NEXT_PAGE.getKey()).append(Constants.RETURN);
+                sb.append(HAS_NEXT_PAGE.getKey()).append(RETURN);
             }
             if (hasPreviousPage) {
-                sb.append(ApiTypeKeyEnum.HAS_PREVIOUS_PAGE.getKey()).append(Constants.RETURN);
+                sb.append(HAS_PREVIOUS_PAGE.getKey()).append(RETURN);
             }
             if (startCursor) {
-                sb.append(ApiTypeKeyEnum.START_CURSOR.getKey()).append(Constants.RETURN);
+                sb.append(START_CURSOR.getKey()).append(RETURN);
             }
             if (endCursor) {
-                sb.append(ApiTypeKeyEnum.END_CURSOR.getKey()).append(Constants.RETURN);
+                sb.append(END_CURSOR.getKey()).append(RETURN);
             }
-            sb.append("}").append(Constants.RETURN);
+            sb.append("}").append(RETURN);
             return new PageInfo(sb.toString());
         }
     }

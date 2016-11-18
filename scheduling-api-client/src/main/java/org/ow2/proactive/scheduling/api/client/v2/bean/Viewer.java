@@ -36,6 +36,11 @@ package org.ow2.proactive.scheduling.api.client.v2.bean;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.LOGIN;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SESSION_ID;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.QUOTE;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+
 @Data
 public class Viewer implements ApiType {
     private final String queryString;
@@ -73,18 +78,18 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append("{").append(Constants.RETURN).append("viewer (sessionId : \"");
-            sb.append(sessionIdInput).append(Constants.QUOTE).append("{").append(Constants.RETURN);
+            sb.append("{").append(RETURN).append("viewer (sessionId : ").append(QUOTE);
+            sb.append(sessionIdInput).append(QUOTE).append("{").append(RETURN);
             if (login) {
-                sb.append(ApiTypeKeyEnum.LOGIN.getKey()).append(Constants.RETURN);
+                sb.append(LOGIN.getKey()).append(RETURN);
             }
             if (sessionId) {
-                sb.append(ApiTypeKeyEnum.SESSION_ID.getKey()).append(Constants.RETURN);
+                sb.append(SESSION_ID.getKey()).append(RETURN);
             }
             if (jobs != null) {
                 sb.append(jobs.getQueryString());
             }
-            sb.append("}").append(Constants.RETURN).append("}");
+            sb.append("}").append(RETURN).append("}");
 
             return new Viewer(sb.toString());
         }

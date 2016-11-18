@@ -1,8 +1,8 @@
 {
-  "id": "http://activeeon.com/api/v2/data/tasks",
-  "required": false,
-  "type": "object",
   "extends": {
     "$ref": "connection.json"
-  }
+  },
+  "id": "http://activeeon.com/api/v2/data/tasks",
+  "required": false,
+  "type": "object"
 }

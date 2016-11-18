@@ -38,7 +38,6 @@ public enum ApiTypeKeyEnum {
     CURSOR("cursor"),
     DATA_MANAGEMENT("dataManagement"),
     DESCRIPTION("description"),
-    EDGES("edges"),
     END_CURSOR("endCursor"),
     EXECUTION_DURATION("executionDuration"),
     EXECUTION_HOST_NAME("executionHostName"),
@@ -65,7 +64,6 @@ public enum ApiTypeKeyEnum {
     NUMBER_OF_IN_ERROR_TASKS("numberOfInErrorTasks"),
     NUMBER_OF_PENDING_TASKS("numberOfPendingTasks"),
     NUMBER_OF_RUNNING_TASKS("numberOfRunningTasks"),
-    NODE("node"),
     ON_TASK_ERROR("onTaskError"),
     OUTPUT_SPACE_URL("outputSpaceUrl"),
     OWNER("owner"),
@@ -73,7 +71,6 @@ public enum ApiTypeKeyEnum {
     PRIORITY("priority"),
     PROGRESS("progress"),
     PROJECT_NAME("projectName"),
-    QUERY_RESPONSE("queryResponse"),
     REMOVED_TIME("removedTime"),
     RESTART_MODE("restartMode"),
     SCHEDULED_TIME("scheduledTime"),
@@ -87,8 +84,7 @@ public enum ApiTypeKeyEnum {
     TOTAL_NUMBER_OF_TASKS("totalNumberOfTasks"),
     USER_SPACE_URL("userSpaceUrl"),
     VALUE("value"),
-    VARIABLES("variables"),
-    VIEWER("viewer");
+    VARIABLES("variables");
 
     private String key;
 

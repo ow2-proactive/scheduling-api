@@ -40,7 +40,7 @@ public class GraphqlNode implements Serializable
      * 
      */
     @JsonProperty("genericInformation")
-    private List<GraphqlGenericInformation> genericInformation = new ArrayList<GraphqlGenericInformation>();
+    private List<GraphqlKeyValue> genericInformation = new ArrayList<GraphqlKeyValue>();
     /**
      * 
      */
@@ -80,8 +80,8 @@ public class GraphqlNode implements Serializable
      * 
      */
     @JsonProperty("variables")
-    private List<GraphqlVariable> variables = new ArrayList<GraphqlVariable>();
-    private final static long serialVersionUID = -6577666967600310871L;
+    private List<GraphqlKeyValue> variables = new ArrayList<GraphqlKeyValue>();
+    private final static long serialVersionUID = -2426497862041146932L;
 
     /**
      * 
@@ -129,7 +129,7 @@ public class GraphqlNode implements Serializable
      *     The genericInformation
      */
     @JsonProperty("genericInformation")
-    public List<GraphqlGenericInformation> getGenericInformation() {
+    public List<GraphqlKeyValue> getGenericInformation() {
         return genericInformation;
     }
 
@@ -139,7 +139,7 @@ public class GraphqlNode implements Serializable
      *     The genericInformation
      */
     @JsonProperty("genericInformation")
-    public void setGenericInformation(List<GraphqlGenericInformation> genericInformation) {
+    public void setGenericInformation(List<GraphqlKeyValue> genericInformation) {
         this.genericInformation = genericInformation;
     }
 
@@ -289,7 +289,7 @@ public class GraphqlNode implements Serializable
      *     The variables
      */
     @JsonProperty("variables")
-    public List<GraphqlVariable> getVariables() {
+    public List<GraphqlKeyValue> getVariables() {
         return variables;
     }
 
@@ -299,7 +299,7 @@ public class GraphqlNode implements Serializable
      *     The variables
      */
     @JsonProperty("variables")
-    public void setVariables(List<GraphqlVariable> variables) {
+    public void setVariables(List<GraphqlKeyValue> variables) {
         this.variables = variables;
     }
 

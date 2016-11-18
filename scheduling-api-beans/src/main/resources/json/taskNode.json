@@ -1,10 +1,8 @@
 {
-  "id": "http://activeeon.com/api/v2/data/edges/node/task",
-  "required": false,
-  "type": "object",
-  "extends":{
+  "extends": {
     "$ref": "node.json"
   },
+  "id": "http://activeeon.com/api/v2/data/edges/node/task",
   "properties": {
     "additionalClasspath": {
       "id": "http://activeeon.com/api/v2/data/edges/node/task/additionalClasspath",
@@ -101,5 +99,7 @@
       "required": false,
       "type": "string"
     }
-  }
+  },
+  "required": false,
+  "type": "object"
 }

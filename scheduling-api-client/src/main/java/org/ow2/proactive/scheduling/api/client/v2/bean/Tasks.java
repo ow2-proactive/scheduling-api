@@ -48,6 +48,8 @@ import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PRO
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.RESTART_MODE;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SCHEDULED_TIME;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TAG;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
 
 @Data
 public class Tasks implements ApiType {
@@ -123,39 +125,39 @@ public class Tasks implements ApiType {
         }
 
         public Tasks build() {
-            this.build(()->ApiTypeKeyEnum.TASKS.getKey(), input);
+            this.build(()-> TASKS.getKey(), input);
 
             if (executionDuration) {
-                sb.append(EXECUTION_DURATION.getKey()).append(Constants.RETURN);
+                sb.append(EXECUTION_DURATION.getKey()).append(RETURN);
             }
             if (executionHostName) {
-                sb.append(EXECUTION_HOST_NAME.getKey()).append(Constants.RETURN);
+                sb.append(EXECUTION_HOST_NAME.getKey()).append(RETURN);
             }
             if (jobId) {
-                sb.append(JOB_ID.getKey()).append(Constants.RETURN);
+                sb.append(JOB_ID.getKey()).append(RETURN);
             }
             if (numberOfExecutionLeft) {
-                sb.append(NUMBER_OF_EXECUTION_LEFT.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_EXECUTION_LEFT.getKey()).append(RETURN);
             }
             if (numberOfExecutionOnFailureLeft) {
                 sb.append(NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getKey()).append(
-                        Constants.RETURN);
+                        RETURN);
             }
             if (progress) {
-                sb.append(PROGRESS.getKey()).append(Constants.RETURN);
+                sb.append(PROGRESS.getKey()).append(RETURN);
             }
             if (scheduledTime) {
-                sb.append(SCHEDULED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(SCHEDULED_TIME.getKey()).append(RETURN);
             }
             if(restartMode) {
-                sb.append(RESTART_MODE.getKey()).append(Constants.RETURN);
+                sb.append(RESTART_MODE.getKey()).append(RETURN);
             }
             if (tag) {
-                sb.append(TAG.getKey()).append(Constants.RETURN);
+                sb.append(TAG.getKey()).append(RETURN);
             }
 
-            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
-                    Constants.RETURN);
+            sb.append("}").append(RETURN).append("}").append(RETURN).append("}").append(
+                    RETURN);
             return new Tasks(sb.toString());
         }
     }

@@ -1,13 +1,9 @@
 {
   "$schema": "http://activeeon.com/api/v2/schema",
   "id": "http://activeeon.com/api/v2",
-  "required": false,
-  "type": "object",
   "properties": {
     "data": {
       "id": "http://activeeon.com/api/v2/data",
-      "required": false,
-      "type": "object",
       "properties": {
         "jobs": {
           "$ref": "jobs.json"
@@ -19,9 +15,10 @@
         },
         "viewer": {
           "id": "http://activeeon.com/api/v2/viewer",
-          "required": false,
-          "type": "object",
           "properties": {
+            "jobs": {
+              "$ref": "jobs.json"
+            },
             "login": {
               "id": "http://activeeon.com/api/v2/viewer/login",
               "required": false,
@@ -31,13 +28,16 @@
               "id": "http://activeeon.com/api/v2/viewer/sessionId",
               "required": false,
               "type": "string"
-            },
-            "jobs": {
-              "$ref": "jobs.json"
             }
-          }
+          },
+          "required": false,
+          "type": "object"
         }
-      }
+      },
+      "required": false,
+      "type": "object"
     }
-  }
+  },
+  "required": false,
+  "type": "object"
 }

@@ -39,6 +39,21 @@ import java.util.List;
 
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.JOB_NAME;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FAULTY_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FINISHED_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_IN_ERROR_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_PENDING_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_RUNNING_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.OWNER;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PRIORITY;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PROJECT_NAME;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.REMOVED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SUBMITTED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TOTAL_NUMBER_OF_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+
 @Data
 public class Jobs implements ApiType {
 
@@ -54,6 +69,7 @@ public class Jobs implements ApiType {
          * query filter input list
          */
         private List<JobInput> input = new ArrayList<>();
+        private boolean jobName = true;
         private boolean numberOfFailedTasks = true;
         private boolean numberOfFaultyTasks = true;
         private boolean numberOfFinishedTasks = true;
@@ -75,6 +91,11 @@ public class Jobs implements ApiType {
 
         public Builder excludeDataManagement() {
             this.dataManagement = null;
+            return this;
+        }
+
+        public Builder excludeJobName() {
+            this.jobName = false;
             return this;
         }
 
@@ -149,54 +170,57 @@ public class Jobs implements ApiType {
         }
 
         public Jobs build() {
-            sb.append("{").append(Constants.RETURN);
+            sb.append("{").append(RETURN);
             this.build(() -> ApiTypeKeyEnum.JOBS.getKey(), input);
 
             if (dataManagement != null) {
-                sb.append(dataManagement.getQueryString()).append(Constants.RETURN);
+                sb.append(dataManagement.getQueryString()).append(RETURN);
+            }
+            if (jobName) {
+                sb.append(JOB_NAME.getKey()).append(RETURN);
             }
             if (numberOfFailedTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_FAILED_TASKS.getKey()).append(RETURN);
             }
             if (numberOfFaultyTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_FAULTY_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_FAULTY_TASKS.getKey()).append(RETURN);
             }
             if (numberOfFinishedTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_FINISHED_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_FINISHED_TASKS.getKey()).append(RETURN);
             }
             if (numberOfInErrorTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_IN_ERROR_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_IN_ERROR_TASKS.getKey()).append(RETURN);
             }
             if (numberOfPendingTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_PENDING_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_PENDING_TASKS.getKey()).append(RETURN);
             }
             if (numberOfRunningTasks) {
-                sb.append(ApiTypeKeyEnum.NUMBER_OF_RUNNING_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(NUMBER_OF_RUNNING_TASKS.getKey()).append(RETURN);
             }
             if (owner) {
-                sb.append(ApiTypeKeyEnum.OWNER.getKey()).append(Constants.RETURN);
+                sb.append(OWNER.getKey()).append(RETURN);
             }
             if (priority) {
-                sb.append(ApiTypeKeyEnum.PRIORITY.getKey()).append(Constants.RETURN);
+                sb.append(PRIORITY.getKey()).append(RETURN);
             }
             if (projectName) {
-                sb.append(ApiTypeKeyEnum.PROJECT_NAME.getKey()).append(Constants.RETURN);
+                sb.append(PROJECT_NAME.getKey()).append(RETURN);
             }
             if (removedTime) {
-                sb.append(ApiTypeKeyEnum.REMOVED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(REMOVED_TIME.getKey()).append(RETURN);
             }
             if (submittedTime) {
-                sb.append(ApiTypeKeyEnum.SUBMITTED_TIME.getKey()).append(Constants.RETURN);
+                sb.append(SUBMITTED_TIME.getKey()).append(RETURN);
             }
             if (tasks != null) {
                 sb.append(tasks.getQueryString());
             }
             if (totalNumberOfTasks) {
-                sb.append(ApiTypeKeyEnum.TOTAL_NUMBER_OF_TASKS.getKey()).append(Constants.RETURN);
+                sb.append(TOTAL_NUMBER_OF_TASKS.getKey()).append(RETURN);
             }
 
-            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
-                    Constants.RETURN).append("}");
+            sb.append("}").append(RETURN).append("}").append(RETURN).append("}").append(
+                    RETURN).append("}");
             return new Jobs(sb.toString());
         }
     }

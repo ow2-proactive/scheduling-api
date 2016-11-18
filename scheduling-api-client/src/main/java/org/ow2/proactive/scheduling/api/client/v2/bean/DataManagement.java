@@ -41,6 +41,7 @@ import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.GLO
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.INPUT_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.OUTPUT_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.USER_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
 
 @Data
 public class DataManagement implements ApiType {
@@ -52,8 +53,6 @@ public class DataManagement implements ApiType {
     }
 
     public static class Builder {
-
-
 
         private boolean globalSpaceUrl = true;
         private boolean inputSpaceUrl = true;
@@ -84,20 +83,20 @@ public class DataManagement implements ApiType {
 
         public DataManagement build() {
             sb.append(DATA_MANAGEMENT.getKey());
-            sb.append("{").append(Constants.RETURN);
+            sb.append("{").append(RETURN);
             if(globalSpaceUrl) {
-                sb.append(GLOBLE_SPACE_URL.getKey()).append(Constants.RETURN);
+                sb.append(GLOBLE_SPACE_URL.getKey()).append(RETURN);
             }
             if(inputSpaceUrl) {
-                sb.append(INPUT_SPACE_URL.getKey()).append(Constants.RETURN);
+                sb.append(INPUT_SPACE_URL.getKey()).append(RETURN);
             }
             if(outputSpaceUrl) {
-                sb.append(OUTPUT_SPACE_URL.getKey()).append(Constants.RETURN);
+                sb.append(OUTPUT_SPACE_URL.getKey()).append(RETURN);
             }
             if(userSpaceUrl) {
-                sb.append(USER_SPACE_URL.getKey()).append(Constants.RETURN);
+                sb.append(USER_SPACE_URL.getKey()).append(RETURN);
             }
-            sb.append("}").append(Constants.RETURN);
+            sb.append("}").append(RETURN);
             return new DataManagement(sb.toString());
         }
     }

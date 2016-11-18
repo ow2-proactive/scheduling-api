@@ -1,11 +1,9 @@
 {
-  "id": "http://activeeon.com/api/v2/data/edges/node/job",
-  "required": false,
-  "type": "object",
-  "javaName": "jobNode",
-  "extends":{
+  "extends": {
     "$ref": "node.json"
   },
+  "id": "http://activeeon.com/api/v2/data/edges/node/job",
+  "javaName": "jobNode",
   "properties": {
     "dataManagement": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/dataManagement",
@@ -89,13 +87,15 @@
       "required": false,
       "type": "number"
     },
-    "totalNumberOfTasks": {
-      "type": "number",
-      "id": "http://activeeon.com/api/v2/data/edges/node/job/totalNumberOfTasks",
-      "required": false
-    },
     "tasks": {
       "$ref": "tasks.json"
+    },
+    "totalNumberOfTasks": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/job/totalNumberOfTasks",
+      "required": false,
+      "type": "number"
     }
-  }
+  },
+  "required": false,
+  "type": "object"
 }

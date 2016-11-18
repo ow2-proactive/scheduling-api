@@ -1,0 +1,18 @@
+{
+  "id": "http://activeeon.com/api/v2/data/edges/node/keyValue",
+  "properties": {
+    "key": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/keyValue/key",
+      "required": false,
+      "type": "string"
+    },
+    "value": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/keyValue/value",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "javaName": "keyValue",
+  "required": false,
+  "type": "object"
+}

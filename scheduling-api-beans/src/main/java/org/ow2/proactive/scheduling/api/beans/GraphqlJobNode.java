@@ -21,8 +21,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "projectName",
     "removedTime",
     "submittedTime",
-    "totalNumberOfTasks",
-    "tasks"
+    "tasks",
+    "totalNumberOfTasks"
 })
 public class GraphqlJobNode
     extends GraphqlNode
@@ -92,13 +92,13 @@ public class GraphqlJobNode
     /**
      * 
      */
-    @JsonProperty("totalNumberOfTasks")
-    private double totalNumberOfTasks;
+    @JsonProperty("tasks")
+    private GraphqlTasks tasks;
     /**
      * 
      */
-    @JsonProperty("tasks")
-    private GraphqlTasks tasks;
+    @JsonProperty("totalNumberOfTasks")
+    private double totalNumberOfTasks;
     private final static long serialVersionUID = -6807943921286212691L;
 
     /**
@@ -344,26 +344,6 @@ public class GraphqlJobNode
     /**
      * 
      * @return
-     *     The totalNumberOfTasks
-     */
-    @JsonProperty("totalNumberOfTasks")
-    public double getTotalNumberOfTasks() {
-        return totalNumberOfTasks;
-    }
-
-    /**
-     * 
-     * @param totalNumberOfTasks
-     *     The totalNumberOfTasks
-     */
-    @JsonProperty("totalNumberOfTasks")
-    public void setTotalNumberOfTasks(double totalNumberOfTasks) {
-        this.totalNumberOfTasks = totalNumberOfTasks;
-    }
-
-    /**
-     * 
-     * @return
      *     The tasks
      */
     @JsonProperty("tasks")
@@ -379,6 +359,26 @@ public class GraphqlJobNode
     @JsonProperty("tasks")
     public void setTasks(GraphqlTasks tasks) {
         this.tasks = tasks;
+    }
+
+    /**
+     * 
+     * @return
+     *     The totalNumberOfTasks
+     */
+    @JsonProperty("totalNumberOfTasks")
+    public double getTotalNumberOfTasks() {
+        return totalNumberOfTasks;
+    }
+
+    /**
+     * 
+     * @param totalNumberOfTasks
+     *     The totalNumberOfTasks
+     */
+    @JsonProperty("totalNumberOfTasks")
+    public void setTotalNumberOfTasks(double totalNumberOfTasks) {
+        this.totalNumberOfTasks = totalNumberOfTasks;
     }
 
     @Override
