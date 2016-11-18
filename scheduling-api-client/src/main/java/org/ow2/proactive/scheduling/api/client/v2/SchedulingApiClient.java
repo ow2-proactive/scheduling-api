@@ -42,13 +42,13 @@ import com.google.common.base.Strings;
 import org.springframework.web.client.RestTemplate;
 
 
-public class SchedulingApiV2Client {
+public class SchedulingApiClient {
 
     private final RestTemplate client = new RestTemplate();
 
     private final String url;
 
-    public SchedulingApiV2Client(String url) {
+    public SchedulingApiClient(String url) {
         this.url = url;
     }
 
