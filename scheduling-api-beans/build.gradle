@@ -44,7 +44,7 @@ jsonSchema2Pojo {
 
     // Package name used for generated Java classes (for types where a fully qualified name has not
     // been supplied in the schema using the 'javaType' property).
-    targetPackage = 'org.ow2.proactive.scheduling.api.beans'
+    targetPackage = 'org.ow2.proactive.scheduling.api.beans.v2'
 
     // The characters that should be considered as word delimiters when creating Java Bean property
     // names from JSON property names. If blank or not set, JSON properties will be considered to
@@ -109,7 +109,7 @@ jsonSchema2Pojo {
     // that have been generated previously. <strong>Be warned</strong>, when activated this option
     // will cause jsonschema2pojo to <strong>indiscriminately delete the entire contents of the target
     // directory (all files and folders)</strong> before it begins generating sources.
-    removeOldOutput = false
+    removeOldOutput = true
 
     // The character encoding that should be used when writing the generated Java source files
     outputEncoding = 'UTF-8'
@@ -126,7 +126,7 @@ jsonSchema2Pojo {
     initializeCollections = true
 
     // Whether to add a prefix to generated classes.
-    classNamePrefix = "Graphql"
+    classNamePrefix = ""
 
     // Whether to add a suffix to generated classes.
     classNameSuffix = ""

@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,14 +13,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "login",
     "sessionId"
 })
-public class GraphqlViewer implements Serializable
+public class Viewer implements Serializable
 {
 
     /**
      * 
      */
     @JsonProperty("jobs")
-    private GraphqlJobs jobs;
+    private Jobs jobs;
     /**
      * 
      */
@@ -31,7 +31,7 @@ public class GraphqlViewer implements Serializable
      */
     @JsonProperty("sessionId")
     private String sessionId;
-    private final static long serialVersionUID = 3535245030002134725L;
+    private final static long serialVersionUID = 6256695915038554438L;
 
     /**
      * 
@@ -39,7 +39,7 @@ public class GraphqlViewer implements Serializable
      *     The jobs
      */
     @JsonProperty("jobs")
-    public GraphqlJobs getJobs() {
+    public Jobs getJobs() {
         return jobs;
     }
 
@@ -49,7 +49,7 @@ public class GraphqlViewer implements Serializable
      *     The jobs
      */
     @JsonProperty("jobs")
-    public void setJobs(GraphqlJobs jobs) {
+    public void setJobs(Jobs jobs) {
         this.jobs = jobs;
     }
 

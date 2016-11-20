@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "hasPreviousPage",
     "startCursor"
 })
-public class GraphqlPageInfo implements Serializable
+public class PageInfo implements Serializable
 {
 
     /**
@@ -37,7 +37,7 @@ public class GraphqlPageInfo implements Serializable
      */
     @JsonProperty("startCursor")
     private String startCursor;
-    private final static long serialVersionUID = 4275821745396689389L;
+    private final static long serialVersionUID = 3757887689759660844L;
 
     /**
      * 

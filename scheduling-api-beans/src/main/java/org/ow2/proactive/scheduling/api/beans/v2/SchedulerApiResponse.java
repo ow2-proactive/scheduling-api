@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,15 +11,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @JsonPropertyOrder({
     "data"
 })
-public class GraphqlApiResponse implements Serializable
+public class SchedulerApiResponse implements Serializable
 {
 
     /**
      * 
      */
     @JsonProperty("data")
-    private GraphqlData data;
-    private final static long serialVersionUID = 4316831535520427823L;
+    private Data data;
+    private final static long serialVersionUID = -1383556096752282272L;
 
     /**
      * 
@@ -27,7 +27,7 @@ public class GraphqlApiResponse implements Serializable
      *     The data
      */
     @JsonProperty("data")
-    public GraphqlData getData() {
+    public Data getData() {
         return data;
     }
 
@@ -37,7 +37,7 @@ public class GraphqlApiResponse implements Serializable
      *     The data
      */
     @JsonProperty("data")
-    public void setData(GraphqlData data) {
+    public void setData(Data data) {
         this.data = data;
     }
 

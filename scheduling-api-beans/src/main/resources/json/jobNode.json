@@ -3,7 +3,6 @@
     "$ref": "node.json"
   },
   "id": "http://activeeon.com/api/v2/data/edges/node/job",
-  "javaName": "jobNode",
   "properties": {
     "dataManagement": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/dataManagement",
@@ -35,32 +34,32 @@
     "numberOfFailedTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfFailedTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "numberOfFaultyTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfFaultyTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "numberOfFinishedTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfFinishedTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "numberOfInErrorTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfInErrorTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "numberOfPendingTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfPendingTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "numberOfRunningTasks": {
       "id": "http://activeeon.com/api/v2/api/v2/api/v2/data/edges/node/job/numberOfRunningTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     },
     "owner": {
       "id": "http://activeeon.com/api/v2/api/v2/data/edges/node/job/owner",
@@ -78,11 +77,13 @@
       "type": "string"
     },
     "removedTime": {
+      "format" : "utc-millisec",
       "id": "http://activeeon.com/api/v2/data/edges/node/job/removedTime",
       "required": false,
       "type": "number"
     },
     "submittedTime": {
+      "format" : "utc-millisec",
       "id": "http://activeeon.com/api/v2/data/edges/node/job/submittedTime",
       "required": false,
       "type": "number"
@@ -93,7 +94,7 @@
     "totalNumberOfTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/totalNumberOfTasks",
       "required": false,
-      "type": "number"
+      "type": "integer"
     }
   },
   "required": false,

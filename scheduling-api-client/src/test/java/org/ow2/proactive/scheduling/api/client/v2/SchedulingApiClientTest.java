@@ -1,6 +1,6 @@
 package org.ow2.proactive.scheduling.api.client.v2;
 
-import org.ow2.proactive.scheduling.api.beans.GraphqlApiResponse;
+import org.ow2.proactive.scheduling.api.beans.v2.SchedulerApiResponse;
 import org.ow2.proactive.scheduling.api.client.v2.bean.Jobs;
 import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
 import org.junit.Ignore;
@@ -16,7 +16,7 @@ public class SchedulingApiClientTest {
         SchedulingApiClient client = new SchedulingApiClient(url, "");
         Jobs jobs = new Jobs.Builder().build();
         Query query = new Query.Builder().query(jobs.getQueryString()).build();
-        GraphqlApiResponse result = client.execute(query);
+        SchedulerApiResponse result = client.execute(query);
         System.out.println(result);
     }
 

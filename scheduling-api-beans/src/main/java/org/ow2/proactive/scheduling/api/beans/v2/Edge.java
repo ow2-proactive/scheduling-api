@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "cursor",
     "node"
 })
-public class GraphqlEdge implements Serializable
+public class Edge implements Serializable
 {
 
     /**
@@ -22,12 +22,10 @@ public class GraphqlEdge implements Serializable
     private String cursor;
     /**
      * 
-     * Corresponds to the "node" property.
-     * 
      */
     @JsonProperty("node")
-    private GraphqlNode node;
-    private final static long serialVersionUID = -5228033786983334047L;
+    private Node node;
+    private final static long serialVersionUID = -3819066736083018792L;
 
     /**
      * 
@@ -51,25 +49,21 @@ public class GraphqlEdge implements Serializable
 
     /**
      * 
-     * Corresponds to the "node" property.
-     * 
      * @return
      *     The node
      */
     @JsonProperty("node")
-    public GraphqlNode getNode() {
+    public Node getNode() {
         return node;
     }
 
     /**
      * 
-     * Corresponds to the "node" property.
-     * 
      * @param node
      *     The node
      */
     @JsonProperty("node")
-    public void setNode(GraphqlNode node) {
+    public void setNode(Node node) {
         this.node = node;
     }
 

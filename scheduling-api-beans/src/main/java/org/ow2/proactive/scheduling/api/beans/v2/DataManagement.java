@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "outputSpaceUrl",
     "userSpaceUrl"
 })
-public class GraphqlDataManagement implements Serializable
+public class DataManagement implements Serializable
 {
 
     /**
@@ -37,7 +37,7 @@ public class GraphqlDataManagement implements Serializable
      */
     @JsonProperty("userSpaceUrl")
     private String userSpaceUrl;
-    private final static long serialVersionUID = -2502715117140713034L;
+    private final static long serialVersionUID = -9069992739483367022L;
 
     /**
      * 

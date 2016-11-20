@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,12 +10,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @JsonPropertyOrder({
 
 })
-public class GraphqlTasks
-    extends GraphqlConnection
+public class Tasks
+    extends Connection
     implements Serializable
 {
 
-    private final static long serialVersionUID = -7419180983096433260L;
+    private final static long serialVersionUID = 6589288260920833630L;
 
     @Override
     public String toString() {

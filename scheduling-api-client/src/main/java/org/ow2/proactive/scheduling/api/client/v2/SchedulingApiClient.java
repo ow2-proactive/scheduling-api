@@ -36,7 +36,7 @@ package org.ow2.proactive.scheduling.api.client.v2;
 
 import java.util.Map;
 
-import org.ow2.proactive.scheduling.api.beans.GraphqlApiResponse;
+import org.ow2.proactive.scheduling.api.beans.v2.SchedulerApiResponse;
 import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
 import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
 import com.google.common.base.Strings;
@@ -60,7 +60,7 @@ public class SchedulingApiClient {
         this.sessionId = sessionId;
     }
 
-    public GraphqlApiResponse execute(Query query) throws SchedulingApiException {
+    public SchedulerApiResponse execute(Query query) throws SchedulingApiException {
         if (Strings.isNullOrEmpty(url)) {
             throw new SchedulingApiException("API server URL is not initialized");
         }
@@ -73,7 +73,7 @@ public class SchedulingApiClient {
             HttpEntity<Map<String, String>> request = new HttpEntity<>(query.getQueryMap(), headers);
 
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return restTemplate.postForObject(url, request, GraphqlApiResponse.class);
+            return restTemplate.postForObject(url, request, SchedulerApiResponse.class);
         } catch (Exception e) {
             throw new SchedulingApiException("Exception", e);
         }

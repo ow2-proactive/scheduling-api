@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,20 +14,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "edges",
     "pageInfo"
 })
-public class GraphqlConnection implements Serializable
+public class Connection implements Serializable
 {
 
     /**
      * 
      */
     @JsonProperty("edges")
-    private List<GraphqlEdge> edges = new ArrayList<GraphqlEdge>();
+    private List<Edge> edges = new ArrayList<Edge>();
     /**
      * 
      */
     @JsonProperty("pageInfo")
-    private GraphqlPageInfo pageInfo;
-    private final static long serialVersionUID = 233678541247033895L;
+    private PageInfo pageInfo;
+    private final static long serialVersionUID = -5393374317136984371L;
 
     /**
      * 
@@ -35,7 +35,7 @@ public class GraphqlConnection implements Serializable
      *     The edges
      */
     @JsonProperty("edges")
-    public List<GraphqlEdge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 
@@ -45,7 +45,7 @@ public class GraphqlConnection implements Serializable
      *     The edges
      */
     @JsonProperty("edges")
-    public void setEdges(List<GraphqlEdge> edges) {
+    public void setEdges(List<Edge> edges) {
         this.edges = edges;
     }
 
@@ -55,7 +55,7 @@ public class GraphqlConnection implements Serializable
      *     The pageInfo
      */
     @JsonProperty("pageInfo")
-    public GraphqlPageInfo getPageInfo() {
+    public PageInfo getPageInfo() {
         return pageInfo;
     }
 
@@ -65,7 +65,7 @@ public class GraphqlConnection implements Serializable
      *     The pageInfo
      */
     @JsonProperty("pageInfo")
-    public void setPageInfo(GraphqlPageInfo pageInfo) {
+    public void setPageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
     }
 

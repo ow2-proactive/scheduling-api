@@ -1,9 +1,8 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,65 +22,59 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "status",
     "variables"
 })
-public class GraphqlNode implements Serializable
+public class Node implements Serializable
 {
 
     /**
      * 
      */
     @JsonProperty("description")
-    private String description;
+    private java.lang.String description;
     /**
      * 
      */
     @JsonProperty("finishedTime")
-    private double finishedTime;
-    /**
-     * 
-     */
+    private long finishedTime;
     @JsonProperty("genericInformation")
-    private List<GraphqlKeyValue> genericInformation = new ArrayList<GraphqlKeyValue>();
+    private Map<String, String> genericInformation;
     /**
      * 
      */
     @JsonProperty("id")
-    private String id;
+    private long id;
     /**
      * 
      */
     @JsonProperty("inErrorTime")
-    private double inErrorTime;
+    private long inErrorTime;
     /**
      * 
      */
     @JsonProperty("maxNumberOfExecution")
-    private double maxNumberOfExecution;
+    private int maxNumberOfExecution;
     /**
      * 
      */
     @JsonProperty("name")
-    private String name;
+    private java.lang.String name;
     /**
      * 
      */
     @JsonProperty("onTaskError")
-    private String onTaskError;
+    private java.lang.String onTaskError;
     /**
      * 
      */
     @JsonProperty("startTime")
-    private double startTime;
+    private long startTime;
     /**
      * 
      */
     @JsonProperty("status")
-    private String status;
-    /**
-     * 
-     */
+    private java.lang.String status;
     @JsonProperty("variables")
-    private List<GraphqlKeyValue> variables = new ArrayList<GraphqlKeyValue>();
-    private final static long serialVersionUID = -2426497862041146932L;
+    private Map<String, String> variables;
+    private final static long serialVersionUID = -3258910408444668894L;
 
     /**
      * 
@@ -89,7 +82,7 @@ public class GraphqlNode implements Serializable
      *     The description
      */
     @JsonProperty("description")
-    public String getDescription() {
+    public java.lang.String getDescription() {
         return description;
     }
 
@@ -99,7 +92,7 @@ public class GraphqlNode implements Serializable
      *     The description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(java.lang.String description) {
         this.description = description;
     }
 
@@ -109,7 +102,7 @@ public class GraphqlNode implements Serializable
      *     The finishedTime
      */
     @JsonProperty("finishedTime")
-    public double getFinishedTime() {
+    public long getFinishedTime() {
         return finishedTime;
     }
 
@@ -119,7 +112,7 @@ public class GraphqlNode implements Serializable
      *     The finishedTime
      */
     @JsonProperty("finishedTime")
-    public void setFinishedTime(double finishedTime) {
+    public void setFinishedTime(long finishedTime) {
         this.finishedTime = finishedTime;
     }
 
@@ -129,7 +122,7 @@ public class GraphqlNode implements Serializable
      *     The genericInformation
      */
     @JsonProperty("genericInformation")
-    public List<GraphqlKeyValue> getGenericInformation() {
+    public Map<String, String> getGenericInformation() {
         return genericInformation;
     }
 
@@ -139,7 +132,7 @@ public class GraphqlNode implements Serializable
      *     The genericInformation
      */
     @JsonProperty("genericInformation")
-    public void setGenericInformation(List<GraphqlKeyValue> genericInformation) {
+    public void setGenericInformation(Map<String, String> genericInformation) {
         this.genericInformation = genericInformation;
     }
 
@@ -149,7 +142,7 @@ public class GraphqlNode implements Serializable
      *     The id
      */
     @JsonProperty("id")
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -159,7 +152,7 @@ public class GraphqlNode implements Serializable
      *     The id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -169,7 +162,7 @@ public class GraphqlNode implements Serializable
      *     The inErrorTime
      */
     @JsonProperty("inErrorTime")
-    public double getInErrorTime() {
+    public long getInErrorTime() {
         return inErrorTime;
     }
 
@@ -179,7 +172,7 @@ public class GraphqlNode implements Serializable
      *     The inErrorTime
      */
     @JsonProperty("inErrorTime")
-    public void setInErrorTime(double inErrorTime) {
+    public void setInErrorTime(long inErrorTime) {
         this.inErrorTime = inErrorTime;
     }
 
@@ -189,7 +182,7 @@ public class GraphqlNode implements Serializable
      *     The maxNumberOfExecution
      */
     @JsonProperty("maxNumberOfExecution")
-    public double getMaxNumberOfExecution() {
+    public int getMaxNumberOfExecution() {
         return maxNumberOfExecution;
     }
 
@@ -199,7 +192,7 @@ public class GraphqlNode implements Serializable
      *     The maxNumberOfExecution
      */
     @JsonProperty("maxNumberOfExecution")
-    public void setMaxNumberOfExecution(double maxNumberOfExecution) {
+    public void setMaxNumberOfExecution(int maxNumberOfExecution) {
         this.maxNumberOfExecution = maxNumberOfExecution;
     }
 
@@ -209,7 +202,7 @@ public class GraphqlNode implements Serializable
      *     The name
      */
     @JsonProperty("name")
-    public String getName() {
+    public java.lang.String getName() {
         return name;
     }
 
@@ -219,7 +212,7 @@ public class GraphqlNode implements Serializable
      *     The name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(java.lang.String name) {
         this.name = name;
     }
 
@@ -229,7 +222,7 @@ public class GraphqlNode implements Serializable
      *     The onTaskError
      */
     @JsonProperty("onTaskError")
-    public String getOnTaskError() {
+    public java.lang.String getOnTaskError() {
         return onTaskError;
     }
 
@@ -239,7 +232,7 @@ public class GraphqlNode implements Serializable
      *     The onTaskError
      */
     @JsonProperty("onTaskError")
-    public void setOnTaskError(String onTaskError) {
+    public void setOnTaskError(java.lang.String onTaskError) {
         this.onTaskError = onTaskError;
     }
 
@@ -249,7 +242,7 @@ public class GraphqlNode implements Serializable
      *     The startTime
      */
     @JsonProperty("startTime")
-    public double getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
@@ -259,7 +252,7 @@ public class GraphqlNode implements Serializable
      *     The startTime
      */
     @JsonProperty("startTime")
-    public void setStartTime(double startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
@@ -269,7 +262,7 @@ public class GraphqlNode implements Serializable
      *     The status
      */
     @JsonProperty("status")
-    public String getStatus() {
+    public java.lang.String getStatus() {
         return status;
     }
 
@@ -279,7 +272,7 @@ public class GraphqlNode implements Serializable
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(String status) {
+    public void setStatus(java.lang.String status) {
         this.status = status;
     }
 
@@ -289,7 +282,7 @@ public class GraphqlNode implements Serializable
      *     The variables
      */
     @JsonProperty("variables")
-    public List<GraphqlKeyValue> getVariables() {
+    public Map<String, String> getVariables() {
         return variables;
     }
 
@@ -299,12 +292,12 @@ public class GraphqlNode implements Serializable
      *     The variables
      */
     @JsonProperty("variables")
-    public void setVariables(List<GraphqlKeyValue> variables) {
+    public void setVariables(Map<String, String> variables) {
         this.variables = variables;
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
 

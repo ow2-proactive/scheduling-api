@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,14 +13,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "version",
     "viewer"
 })
-public class GraphqlData implements Serializable
+public class Data implements Serializable
 {
 
     /**
      * 
      */
     @JsonProperty("jobs")
-    private GraphqlJobs jobs;
+    private Jobs jobs;
     /**
      * 
      */
@@ -30,8 +30,8 @@ public class GraphqlData implements Serializable
      * 
      */
     @JsonProperty("viewer")
-    private GraphqlViewer viewer;
-    private final static long serialVersionUID = 1786653703949236759L;
+    private Viewer viewer;
+    private final static long serialVersionUID = 3661389819103725238L;
 
     /**
      * 
@@ -39,7 +39,7 @@ public class GraphqlData implements Serializable
      *     The jobs
      */
     @JsonProperty("jobs")
-    public GraphqlJobs getJobs() {
+    public Jobs getJobs() {
         return jobs;
     }
 
@@ -49,7 +49,7 @@ public class GraphqlData implements Serializable
      *     The jobs
      */
     @JsonProperty("jobs")
-    public void setJobs(GraphqlJobs jobs) {
+    public void setJobs(Jobs jobs) {
         this.jobs = jobs;
     }
 
@@ -79,7 +79,7 @@ public class GraphqlData implements Serializable
      *     The viewer
      */
     @JsonProperty("viewer")
-    public GraphqlViewer getViewer() {
+    public Viewer getViewer() {
         return viewer;
     }
 
@@ -89,7 +89,7 @@ public class GraphqlData implements Serializable
      *     The viewer
      */
     @JsonProperty("viewer")
-    public void setViewer(GraphqlViewer viewer) {
+    public void setViewer(Viewer viewer) {
         this.viewer = viewer;
     }
 

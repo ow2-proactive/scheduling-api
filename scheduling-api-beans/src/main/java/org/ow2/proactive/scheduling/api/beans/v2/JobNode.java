@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,8 +24,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "tasks",
     "totalNumberOfTasks"
 })
-public class GraphqlJobNode
-    extends GraphqlNode
+public class JobNode
+    extends Node
     implements Serializable
 {
 
@@ -33,37 +33,37 @@ public class GraphqlJobNode
      * 
      */
     @JsonProperty("dataManagement")
-    private GraphqlDataManagement dataManagement;
+    private DataManagement dataManagement;
     /**
      * 
      */
     @JsonProperty("numberOfFailedTasks")
-    private double numberOfFailedTasks;
+    private int numberOfFailedTasks;
     /**
      * 
      */
     @JsonProperty("numberOfFaultyTasks")
-    private double numberOfFaultyTasks;
+    private int numberOfFaultyTasks;
     /**
      * 
      */
     @JsonProperty("numberOfFinishedTasks")
-    private double numberOfFinishedTasks;
+    private int numberOfFinishedTasks;
     /**
      * 
      */
     @JsonProperty("numberOfInErrorTasks")
-    private double numberOfInErrorTasks;
+    private int numberOfInErrorTasks;
     /**
      * 
      */
     @JsonProperty("numberOfPendingTasks")
-    private double numberOfPendingTasks;
+    private int numberOfPendingTasks;
     /**
      * 
      */
     @JsonProperty("numberOfRunningTasks")
-    private double numberOfRunningTasks;
+    private int numberOfRunningTasks;
     /**
      * 
      */
@@ -83,23 +83,23 @@ public class GraphqlJobNode
      * 
      */
     @JsonProperty("removedTime")
-    private double removedTime;
+    private long removedTime;
     /**
      * 
      */
     @JsonProperty("submittedTime")
-    private double submittedTime;
+    private long submittedTime;
     /**
      * 
      */
     @JsonProperty("tasks")
-    private GraphqlTasks tasks;
+    private Tasks tasks;
     /**
      * 
      */
     @JsonProperty("totalNumberOfTasks")
-    private double totalNumberOfTasks;
-    private final static long serialVersionUID = -6807943921286212691L;
+    private int totalNumberOfTasks;
+    private final static long serialVersionUID = -4206419167070447449L;
 
     /**
      * 
@@ -107,7 +107,7 @@ public class GraphqlJobNode
      *     The dataManagement
      */
     @JsonProperty("dataManagement")
-    public GraphqlDataManagement getDataManagement() {
+    public DataManagement getDataManagement() {
         return dataManagement;
     }
 
@@ -117,7 +117,7 @@ public class GraphqlJobNode
      *     The dataManagement
      */
     @JsonProperty("dataManagement")
-    public void setDataManagement(GraphqlDataManagement dataManagement) {
+    public void setDataManagement(DataManagement dataManagement) {
         this.dataManagement = dataManagement;
     }
 
@@ -127,7 +127,7 @@ public class GraphqlJobNode
      *     The numberOfFailedTasks
      */
     @JsonProperty("numberOfFailedTasks")
-    public double getNumberOfFailedTasks() {
+    public int getNumberOfFailedTasks() {
         return numberOfFailedTasks;
     }
 
@@ -137,7 +137,7 @@ public class GraphqlJobNode
      *     The numberOfFailedTasks
      */
     @JsonProperty("numberOfFailedTasks")
-    public void setNumberOfFailedTasks(double numberOfFailedTasks) {
+    public void setNumberOfFailedTasks(int numberOfFailedTasks) {
         this.numberOfFailedTasks = numberOfFailedTasks;
     }
 
@@ -147,7 +147,7 @@ public class GraphqlJobNode
      *     The numberOfFaultyTasks
      */
     @JsonProperty("numberOfFaultyTasks")
-    public double getNumberOfFaultyTasks() {
+    public int getNumberOfFaultyTasks() {
         return numberOfFaultyTasks;
     }
 
@@ -157,7 +157,7 @@ public class GraphqlJobNode
      *     The numberOfFaultyTasks
      */
     @JsonProperty("numberOfFaultyTasks")
-    public void setNumberOfFaultyTasks(double numberOfFaultyTasks) {
+    public void setNumberOfFaultyTasks(int numberOfFaultyTasks) {
         this.numberOfFaultyTasks = numberOfFaultyTasks;
     }
 
@@ -167,7 +167,7 @@ public class GraphqlJobNode
      *     The numberOfFinishedTasks
      */
     @JsonProperty("numberOfFinishedTasks")
-    public double getNumberOfFinishedTasks() {
+    public int getNumberOfFinishedTasks() {
         return numberOfFinishedTasks;
     }
 
@@ -177,7 +177,7 @@ public class GraphqlJobNode
      *     The numberOfFinishedTasks
      */
     @JsonProperty("numberOfFinishedTasks")
-    public void setNumberOfFinishedTasks(double numberOfFinishedTasks) {
+    public void setNumberOfFinishedTasks(int numberOfFinishedTasks) {
         this.numberOfFinishedTasks = numberOfFinishedTasks;
     }
 
@@ -187,7 +187,7 @@ public class GraphqlJobNode
      *     The numberOfInErrorTasks
      */
     @JsonProperty("numberOfInErrorTasks")
-    public double getNumberOfInErrorTasks() {
+    public int getNumberOfInErrorTasks() {
         return numberOfInErrorTasks;
     }
 
@@ -197,7 +197,7 @@ public class GraphqlJobNode
      *     The numberOfInErrorTasks
      */
     @JsonProperty("numberOfInErrorTasks")
-    public void setNumberOfInErrorTasks(double numberOfInErrorTasks) {
+    public void setNumberOfInErrorTasks(int numberOfInErrorTasks) {
         this.numberOfInErrorTasks = numberOfInErrorTasks;
     }
 
@@ -207,7 +207,7 @@ public class GraphqlJobNode
      *     The numberOfPendingTasks
      */
     @JsonProperty("numberOfPendingTasks")
-    public double getNumberOfPendingTasks() {
+    public int getNumberOfPendingTasks() {
         return numberOfPendingTasks;
     }
 
@@ -217,7 +217,7 @@ public class GraphqlJobNode
      *     The numberOfPendingTasks
      */
     @JsonProperty("numberOfPendingTasks")
-    public void setNumberOfPendingTasks(double numberOfPendingTasks) {
+    public void setNumberOfPendingTasks(int numberOfPendingTasks) {
         this.numberOfPendingTasks = numberOfPendingTasks;
     }
 
@@ -227,7 +227,7 @@ public class GraphqlJobNode
      *     The numberOfRunningTasks
      */
     @JsonProperty("numberOfRunningTasks")
-    public double getNumberOfRunningTasks() {
+    public int getNumberOfRunningTasks() {
         return numberOfRunningTasks;
     }
 
@@ -237,7 +237,7 @@ public class GraphqlJobNode
      *     The numberOfRunningTasks
      */
     @JsonProperty("numberOfRunningTasks")
-    public void setNumberOfRunningTasks(double numberOfRunningTasks) {
+    public void setNumberOfRunningTasks(int numberOfRunningTasks) {
         this.numberOfRunningTasks = numberOfRunningTasks;
     }
 
@@ -307,7 +307,7 @@ public class GraphqlJobNode
      *     The removedTime
      */
     @JsonProperty("removedTime")
-    public double getRemovedTime() {
+    public long getRemovedTime() {
         return removedTime;
     }
 
@@ -317,7 +317,7 @@ public class GraphqlJobNode
      *     The removedTime
      */
     @JsonProperty("removedTime")
-    public void setRemovedTime(double removedTime) {
+    public void setRemovedTime(long removedTime) {
         this.removedTime = removedTime;
     }
 
@@ -327,7 +327,7 @@ public class GraphqlJobNode
      *     The submittedTime
      */
     @JsonProperty("submittedTime")
-    public double getSubmittedTime() {
+    public long getSubmittedTime() {
         return submittedTime;
     }
 
@@ -337,7 +337,7 @@ public class GraphqlJobNode
      *     The submittedTime
      */
     @JsonProperty("submittedTime")
-    public void setSubmittedTime(double submittedTime) {
+    public void setSubmittedTime(long submittedTime) {
         this.submittedTime = submittedTime;
     }
 
@@ -347,7 +347,7 @@ public class GraphqlJobNode
      *     The tasks
      */
     @JsonProperty("tasks")
-    public GraphqlTasks getTasks() {
+    public Tasks getTasks() {
         return tasks;
     }
 
@@ -357,7 +357,7 @@ public class GraphqlJobNode
      *     The tasks
      */
     @JsonProperty("tasks")
-    public void setTasks(GraphqlTasks tasks) {
+    public void setTasks(Tasks tasks) {
         this.tasks = tasks;
     }
 
@@ -367,7 +367,7 @@ public class GraphqlJobNode
      *     The totalNumberOfTasks
      */
     @JsonProperty("totalNumberOfTasks")
-    public double getTotalNumberOfTasks() {
+    public int getTotalNumberOfTasks() {
         return totalNumberOfTasks;
     }
 
@@ -377,7 +377,7 @@ public class GraphqlJobNode
      *     The totalNumberOfTasks
      */
     @JsonProperty("totalNumberOfTasks")
-    public void setTotalNumberOfTasks(double totalNumberOfTasks) {
+    public void setTotalNumberOfTasks(int totalNumberOfTasks) {
         this.totalNumberOfTasks = totalNumberOfTasks;
     }
 

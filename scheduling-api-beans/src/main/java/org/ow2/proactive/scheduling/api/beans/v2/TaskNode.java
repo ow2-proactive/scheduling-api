@@ -1,5 +1,5 @@
 
-package org.ow2.proactive.scheduling.api.beans;
+package org.ow2.proactive.scheduling.api.beans.v2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     "walltime",
     "workingDir"
 })
-public class GraphqlTaskNode
-    extends GraphqlNode
+public class TaskNode
+    extends Node
     implements Serializable
 {
 
@@ -43,7 +43,7 @@ public class GraphqlTaskNode
      * 
      */
     @JsonProperty("executionDuration")
-    private double executionDuration;
+    private long executionDuration;
     /**
      * 
      */
@@ -58,7 +58,7 @@ public class GraphqlTaskNode
      * 
      */
     @JsonProperty("jobId")
-    private double jobId;
+    private long jobId;
     /**
      * 
      */
@@ -68,12 +68,12 @@ public class GraphqlTaskNode
      * 
      */
     @JsonProperty("numberOfExecutionLeft")
-    private double numberOfExecutionLeft;
+    private int numberOfExecutionLeft;
     /**
      * 
      */
     @JsonProperty("numberOfExecutionOnFailureLeft")
-    private double numberOfExecutionOnFailureLeft;
+    private int numberOfExecutionOnFailureLeft;
     /**
      * 
      */
@@ -103,7 +103,7 @@ public class GraphqlTaskNode
      * 
      */
     @JsonProperty("scheduledTime")
-    private double scheduledTime;
+    private long scheduledTime;
     /**
      * 
      */
@@ -113,13 +113,13 @@ public class GraphqlTaskNode
      * 
      */
     @JsonProperty("walltime")
-    private double walltime;
+    private long walltime;
     /**
      * 
      */
     @JsonProperty("workingDir")
     private String workingDir;
-    private final static long serialVersionUID = -1976232379918392788L;
+    private final static long serialVersionUID = -7322629837190278618L;
 
     /**
      * 
@@ -147,7 +147,7 @@ public class GraphqlTaskNode
      *     The executionDuration
      */
     @JsonProperty("executionDuration")
-    public double getExecutionDuration() {
+    public long getExecutionDuration() {
         return executionDuration;
     }
 
@@ -157,7 +157,7 @@ public class GraphqlTaskNode
      *     The executionDuration
      */
     @JsonProperty("executionDuration")
-    public void setExecutionDuration(double executionDuration) {
+    public void setExecutionDuration(long executionDuration) {
         this.executionDuration = executionDuration;
     }
 
@@ -207,7 +207,7 @@ public class GraphqlTaskNode
      *     The jobId
      */
     @JsonProperty("jobId")
-    public double getJobId() {
+    public long getJobId() {
         return jobId;
     }
 
@@ -217,7 +217,7 @@ public class GraphqlTaskNode
      *     The jobId
      */
     @JsonProperty("jobId")
-    public void setJobId(double jobId) {
+    public void setJobId(long jobId) {
         this.jobId = jobId;
     }
 
@@ -247,7 +247,7 @@ public class GraphqlTaskNode
      *     The numberOfExecutionLeft
      */
     @JsonProperty("numberOfExecutionLeft")
-    public double getNumberOfExecutionLeft() {
+    public int getNumberOfExecutionLeft() {
         return numberOfExecutionLeft;
     }
 
@@ -257,7 +257,7 @@ public class GraphqlTaskNode
      *     The numberOfExecutionLeft
      */
     @JsonProperty("numberOfExecutionLeft")
-    public void setNumberOfExecutionLeft(double numberOfExecutionLeft) {
+    public void setNumberOfExecutionLeft(int numberOfExecutionLeft) {
         this.numberOfExecutionLeft = numberOfExecutionLeft;
     }
 
@@ -267,7 +267,7 @@ public class GraphqlTaskNode
      *     The numberOfExecutionOnFailureLeft
      */
     @JsonProperty("numberOfExecutionOnFailureLeft")
-    public double getNumberOfExecutionOnFailureLeft() {
+    public int getNumberOfExecutionOnFailureLeft() {
         return numberOfExecutionOnFailureLeft;
     }
 
@@ -277,7 +277,7 @@ public class GraphqlTaskNode
      *     The numberOfExecutionOnFailureLeft
      */
     @JsonProperty("numberOfExecutionOnFailureLeft")
-    public void setNumberOfExecutionOnFailureLeft(double numberOfExecutionOnFailureLeft) {
+    public void setNumberOfExecutionOnFailureLeft(int numberOfExecutionOnFailureLeft) {
         this.numberOfExecutionOnFailureLeft = numberOfExecutionOnFailureLeft;
     }
 
@@ -387,7 +387,7 @@ public class GraphqlTaskNode
      *     The scheduledTime
      */
     @JsonProperty("scheduledTime")
-    public double getScheduledTime() {
+    public long getScheduledTime() {
         return scheduledTime;
     }
 
@@ -397,7 +397,7 @@ public class GraphqlTaskNode
      *     The scheduledTime
      */
     @JsonProperty("scheduledTime")
-    public void setScheduledTime(double scheduledTime) {
+    public void setScheduledTime(long scheduledTime) {
         this.scheduledTime = scheduledTime;
     }
 
@@ -427,7 +427,7 @@ public class GraphqlTaskNode
      *     The walltime
      */
     @JsonProperty("walltime")
-    public double getWalltime() {
+    public long getWalltime() {
         return walltime;
     }
 
@@ -437,7 +437,7 @@ public class GraphqlTaskNode
      *     The walltime
      */
     @JsonProperty("walltime")
-    public void setWalltime(double walltime) {
+    public void setWalltime(long walltime) {
         this.walltime = walltime;
     }
 
