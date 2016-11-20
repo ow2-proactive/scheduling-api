@@ -30,7 +30,7 @@ jsonSchema2Pojo {
     generateBuilders = false
 
     // Whether to use primitives (long, double, boolean) instead of wrapper types where possible
-    // when generating bean properties (has the side-effect of making those properties non-null).
+    // when generating beans properties (has the side-effect of making those properties non-null).
     usePrimitives = true
 
     // Location of the JSON Schema file(s). This may refer to a single file or a directory of files.

@@ -32,23 +32,9 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
-import java.util.List;
-import java.util.stream.Collectors;
+public interface ApiType {
 
-public class Inputs {
-
-    public static final String buildQueryString(List<? extends ApiType> input) {
-        if (!input.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("(input : [");
-            String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
-                    Collectors.joining(","));
-            sb.append(inputQuery);
-            sb.append("])");
-            return sb.toString();
-        }
-        return "";
-    }
+    String getQueryString();
 }

@@ -32,10 +32,32 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
-public final class Constants {
-    public static final String RETURN = "\n";
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-    public static final String QUOTE = "\"";
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.VARIABLES;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class Variables extends KeyValue {
+
+    public Variables(String queryString) {
+        super(queryString);
+    }
+
+    public static class Builder extends KeyValue.Builder {
+
+        @Override
+        public String getKeyValueBeanName() {
+            return VARIABLES.getKey();
+        }
+
+        @Override
+        public Variables build() {
+            // FIXME, not really implemented yet
+            return new Variables(buildQueryString());
+        }
+    }
 }

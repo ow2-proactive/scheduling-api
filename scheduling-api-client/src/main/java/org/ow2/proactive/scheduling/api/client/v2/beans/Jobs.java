@@ -32,27 +32,27 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.JOB_NAME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FAULTY_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_FINISHED_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_IN_ERROR_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_PENDING_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_RUNNING_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.OWNER;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PRIORITY;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PROJECT_NAME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.REMOVED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SUBMITTED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TOTAL_NUMBER_OF_TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.JOB_NAME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_FAULTY_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_FINISHED_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_IN_ERROR_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_PENDING_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_RUNNING_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.OWNER;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.PRIORITY;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.PROJECT_NAME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.REMOVED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.SUBMITTED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.TOTAL_NUMBER_OF_TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
 public class Jobs implements ApiType {

@@ -32,66 +32,60 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
+import com.google.common.base.Strings;
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.LOGIN;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SESSION_ID;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.QUOTE;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.QUOTE;
 
 @Data
-public class Viewer implements ApiType {
+public class TaskInput implements ApiType {
     private final String queryString;
 
-    public Viewer(String queryString) {
+    private TaskInput(String queryString) {
         this.queryString = queryString;
     }
 
     public static class Builder {
-        private Jobs jobs = null;
-        private boolean login = true;
-        private boolean sessionId = true;
-        private String sessionIdInput;
+        private String id;
+        private String taskName;
+        private String status;
 
         private StringBuilder sb = new StringBuilder();
 
-        public Builder jobs(Jobs jobs) {
-            this.jobs = jobs;
+        public TaskInput.Builder id(String id) {
+            this.id = id;
             return this;
         }
 
-        public Builder excludeLogin() {
-            this.login = false;
+        public TaskInput.Builder taskName(String taskName) {
+            this.taskName = taskName;
             return this;
         }
 
-        public Builder excludeSessionId() {
-            this.sessionId = false;
+        public TaskInput.Builder status(String status) {
+            this.status = status;
             return this;
         }
 
-        public Builder sessionId(String sessionId) {
-            this.sessionIdInput = sessionId;
-            return this;
-        }
-
-        public Viewer build() {
-            sb.append("{").append(RETURN).append("viewer (sessionId : ").append(QUOTE);
-            sb.append(sessionIdInput).append(QUOTE).append("{").append(RETURN);
-            if (login) {
-                sb.append(LOGIN.getKey()).append(RETURN);
+        public TaskInput build() {
+            sb.append("{");
+            if (!Strings.isNullOrEmpty(this.id)) {
+                sb.append(" id : ");
+                sb.append(this.id);
             }
-            if (sessionId) {
-                sb.append(SESSION_ID.getKey()).append(RETURN);
+            if (!Strings.isNullOrEmpty(this.taskName)) {
+                sb.append(" taskName : ").append(QUOTE);
+                sb.append(this.taskName).append(QUOTE);
+                sb.append(" ");
             }
-            if (jobs != null) {
-                sb.append(jobs.getQueryString());
+            if (!Strings.isNullOrEmpty(this.status)) {
+                sb.append(" status : ").append(QUOTE);
+                sb.append(this.status).append(QUOTE);
             }
-            sb.append("}").append(RETURN).append("}");
-
-            return new Viewer(sb.toString());
+            sb.append(" }");
+            return new TaskInput(sb.toString());
         }
     }
 }

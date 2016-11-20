@@ -32,24 +32,24 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.EXECUTION_DURATION;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.EXECUTION_HOST_NAME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.JOB_ID;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_LEFT;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.PROGRESS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.RESTART_MODE;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.SCHEDULED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TAG;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.TASKS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.EXECUTION_DURATION;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.EXECUTION_HOST_NAME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.JOB_ID;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_LEFT;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.PROGRESS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.RESTART_MODE;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.SCHEDULED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.TAG;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.TASKS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
 public class Tasks implements ApiType {

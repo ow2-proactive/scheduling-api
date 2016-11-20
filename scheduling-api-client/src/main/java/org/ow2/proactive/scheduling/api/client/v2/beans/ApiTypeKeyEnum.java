@@ -32,7 +32,7 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 public enum ApiTypeKeyEnum {
     CURSOR("cursor"),

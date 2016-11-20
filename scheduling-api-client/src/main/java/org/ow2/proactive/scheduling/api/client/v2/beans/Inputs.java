@@ -32,31 +32,23 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.GENERIC_INFORMATION;
+public class Inputs {
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class GenericInformation extends KeyValue implements ApiType {
-
-    public GenericInformation(String queryString) {
-        super(queryString);
-    }
-
-    public static class Builder extends KeyValue.Builder {
-
-        @Override
-        public String getKeyValueBeanName() {
-            return GENERIC_INFORMATION.getKey();
+    public static final String buildQueryString(List<? extends ApiType> input) {
+        if (!input.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("(input : [");
+            String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
+                    Collectors.joining(","));
+            sb.append(inputQuery);
+            sb.append("])");
+            return sb.toString();
         }
-
-        @Override
-        public GenericInformation build() {
-            return new GenericInformation(buildQueryString());
-        }
+        return "";
     }
 }

@@ -1,4 +1,4 @@
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import java.util.ArrayList;
 import java.util.List;

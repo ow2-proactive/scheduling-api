@@ -32,16 +32,16 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.KEY;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.VALUE;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.KEY;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.VALUE;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
 public abstract class KeyValue implements ApiType {

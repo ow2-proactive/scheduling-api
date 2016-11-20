@@ -32,60 +32,89 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import com.google.common.base.Strings;
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.QUOTE;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.QUOTE;
 
 @Data
-public class TaskInput implements ApiType {
+public class JobInput implements ApiType {
     private final String queryString;
 
-    private TaskInput(String queryString) {
+    private JobInput(String queryString) {
         this.queryString = queryString;
     }
 
     public static class Builder {
         private String id;
-        private String taskName;
+        private String jobName;
+        private String owner;
+        private String priority;
+        private String projectName;
         private String status;
 
         private StringBuilder sb = new StringBuilder();
 
-        public TaskInput.Builder id(String id) {
+        public JobInput.Builder id(String id) {
             this.id = id;
             return this;
         }
 
-        public TaskInput.Builder taskName(String taskName) {
-            this.taskName = taskName;
+        public JobInput.Builder jobName(String jobName) {
+            this.jobName = jobName;
             return this;
         }
 
-        public TaskInput.Builder status(String status) {
+        public JobInput.Builder owner(String owner) {
+            this.owner = owner;
+            return this;
+        }
+
+        public JobInput.Builder priority(String priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public JobInput.Builder projectName(String projectName) {
+            this.projectName = projectName;
+            return this;
+        }
+
+        public JobInput.Builder status(String status) {
             this.status = status;
             return this;
         }
 
-        public TaskInput build() {
+        public JobInput build() {
             sb.append("{");
             if (!Strings.isNullOrEmpty(this.id)) {
                 sb.append(" id : ");
                 sb.append(this.id);
             }
-            if (!Strings.isNullOrEmpty(this.taskName)) {
-                sb.append(" taskName : ").append(QUOTE);
-                sb.append(this.taskName).append(QUOTE);
-                sb.append(" ");
+            if (!Strings.isNullOrEmpty(this.jobName)) {
+                sb.append(" jobName : ").append(QUOTE);
+                sb.append(this.jobName).append(QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.owner)) {
+                sb.append(" owner : ").append(QUOTE);
+                sb.append(this.owner).append(QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.priority)) {
+                sb.append(" priority : ").append(QUOTE);
+                sb.append(this.priority).append(QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.projectName)) {
+                sb.append(" projectName : ").append(QUOTE);
+                sb.append(this.projectName).append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.status)) {
                 sb.append(" status : ").append(QUOTE);
                 sb.append(this.status).append(QUOTE);
             }
             sb.append(" }");
-            return new TaskInput(sb.toString());
+            return new JobInput(sb.toString());
         }
     }
 }

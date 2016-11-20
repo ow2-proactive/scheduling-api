@@ -32,70 +32,72 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.END_CURSOR;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.HAS_NEXT_PAGE;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.HAS_PREVIOUS_PAGE;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.START_CURSOR;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.DATA_MANAGEMENT;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.GLOBLE_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.INPUT_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.OUTPUT_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.USER_SPACE_URL;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
-public class PageInfo implements ApiType {
+public class DataManagement implements ApiType {
+
     private final String queryString;
 
-    private PageInfo(String queryString) {
+    private DataManagement(String queryString) {
         this.queryString = queryString;
     }
 
     public static class Builder {
 
-        private boolean hasNextPage = true;
-        private boolean hasPreviousPage = true;
-        private boolean startCursor = true;
-        private boolean endCursor = true;
+        private boolean globalSpaceUrl = true;
+        private boolean inputSpaceUrl = true;
+        private boolean outputSpaceUrl = true;
+        private boolean userSpaceUrl = true;
 
         private StringBuilder sb = new StringBuilder();
 
-        public PageInfo.Builder excludeHasNextPage() {
-            this.hasNextPage = false;
+        public Builder excludeGlobalSpaceUrl() {
+            this.globalSpaceUrl = false;
             return this;
         }
 
-        public PageInfo.Builder excludeHasPreviousPage() {
-            this.hasPreviousPage = false;
+        public Builder excludeInputSpaceUrl() {
+            this.inputSpaceUrl = false;
             return this;
         }
 
-        public PageInfo.Builder excludeStartCursor() {
-            this.startCursor = false;
+        public Builder excludeOutputSpaceUrl() {
+            this.outputSpaceUrl = false;
             return this;
         }
 
-        public PageInfo.Builder excludeEndCursor() {
-            this.endCursor = false;
+        public Builder excludeUserSpaceUrl() {
+            this.userSpaceUrl = false;
             return this;
         }
 
-        public PageInfo build() {
-            sb.append(ApiTypeKeyEnum.PAGE_INFO.getKey());
+        public DataManagement build() {
+            sb.append(DATA_MANAGEMENT.getKey());
             sb.append("{").append(RETURN);
-            if (hasNextPage) {
-                sb.append(HAS_NEXT_PAGE.getKey()).append(RETURN);
+            if(globalSpaceUrl) {
+                sb.append(GLOBLE_SPACE_URL.getKey()).append(RETURN);
             }
-            if (hasPreviousPage) {
-                sb.append(HAS_PREVIOUS_PAGE.getKey()).append(RETURN);
+            if(inputSpaceUrl) {
+                sb.append(INPUT_SPACE_URL.getKey()).append(RETURN);
             }
-            if (startCursor) {
-                sb.append(START_CURSOR.getKey()).append(RETURN);
+            if(outputSpaceUrl) {
+                sb.append(OUTPUT_SPACE_URL.getKey()).append(RETURN);
             }
-            if (endCursor) {
-                sb.append(END_CURSOR.getKey()).append(RETURN);
+            if(userSpaceUrl) {
+                sb.append(USER_SPACE_URL.getKey()).append(RETURN);
             }
             sb.append("}").append(RETURN);
-            return new PageInfo(sb.toString());
+            return new DataManagement(sb.toString());
         }
     }
 }

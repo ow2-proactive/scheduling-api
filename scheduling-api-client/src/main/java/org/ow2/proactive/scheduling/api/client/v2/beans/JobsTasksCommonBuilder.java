@@ -32,21 +32,21 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.CURSOR;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.DESCRIPTION;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.FINISHED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.ID;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.IN_ERROR_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.MAX_NUMBER_OF_EXECUTION;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.ON_TASK_ERROR;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.START_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.STATUS;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.CURSOR;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.DESCRIPTION;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.FINISHED_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.ID;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.IN_ERROR_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.MAX_NUMBER_OF_EXECUTION;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.ON_TASK_ERROR;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.START_TIME;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.STATUS;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 public abstract class JobsTasksCommonBuilder {
 

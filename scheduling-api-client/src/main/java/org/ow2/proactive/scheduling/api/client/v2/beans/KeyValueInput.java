@@ -32,32 +32,49 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
+import com.google.common.base.Strings;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.VARIABLES;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.QUOTE;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Variables extends KeyValue {
+public class KeyValueInput implements ApiType {
+    private final String queryString;
 
-    public Variables(String queryString) {
-        super(queryString);
+    private KeyValueInput(String queryString) {
+        this.queryString = queryString;
     }
 
-    public static class Builder extends KeyValue.Builder {
+    public static class Builder {
+        private String key;
+        private String value;
 
-        @Override
-        public String getKeyValueBeanName() {
-            return VARIABLES.getKey();
+        private StringBuilder sb = new StringBuilder();
+
+        public Builder key(String key) {
+            this.key = key;
+            return this;
         }
 
-        @Override
-        public Variables build() {
-            // FIXME, not really implemented yet
-            return new Variables(buildQueryString());
+        public Builder value(String value) {
+            this.value = value;
+            return this;
+        }
+
+        public KeyValueInput build() {
+            sb.append("{");
+            if (!Strings.isNullOrEmpty(this.key)) {
+                sb.append(" key : ").append(QUOTE);
+                sb.append(this.key).append(QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.value)) {
+                sb.append(" value : ").append(QUOTE);
+                sb.append(this.value).append(QUOTE);
+            }
+            sb.append(" }");
+            return new KeyValueInput(sb.toString());
         }
     }
 }

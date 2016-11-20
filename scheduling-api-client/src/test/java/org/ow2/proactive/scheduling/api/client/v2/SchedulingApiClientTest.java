@@ -1,8 +1,8 @@
 package org.ow2.proactive.scheduling.api.client.v2;
 
 import org.ow2.proactive.scheduling.api.beans.v2.SchedulerApiResponse;
-import org.ow2.proactive.scheduling.api.client.v2.bean.Jobs;
-import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
+import org.ow2.proactive.scheduling.api.client.v2.beans.Jobs;
+import org.ow2.proactive.scheduling.api.client.v2.beans.Query;
 import org.junit.Ignore;
 import org.junit.Test;
 

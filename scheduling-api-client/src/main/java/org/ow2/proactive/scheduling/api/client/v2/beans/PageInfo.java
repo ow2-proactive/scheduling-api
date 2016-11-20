@@ -32,72 +32,70 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.client.v2.bean;
+package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.DATA_MANAGEMENT;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.GLOBLE_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.INPUT_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.OUTPUT_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.ApiTypeKeyEnum.USER_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.client.v2.bean.Constants.RETURN;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.END_CURSOR;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.HAS_NEXT_PAGE;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.HAS_PREVIOUS_PAGE;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.START_CURSOR;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
-public class DataManagement implements ApiType {
-
+public class PageInfo implements ApiType {
     private final String queryString;
 
-    private DataManagement(String queryString) {
+    private PageInfo(String queryString) {
         this.queryString = queryString;
     }
 
     public static class Builder {
 
-        private boolean globalSpaceUrl = true;
-        private boolean inputSpaceUrl = true;
-        private boolean outputSpaceUrl = true;
-        private boolean userSpaceUrl = true;
+        private boolean hasNextPage = true;
+        private boolean hasPreviousPage = true;
+        private boolean startCursor = true;
+        private boolean endCursor = true;
 
         private StringBuilder sb = new StringBuilder();
 
-        public Builder excludeGlobalSpaceUrl() {
-            this.globalSpaceUrl = false;
+        public PageInfo.Builder excludeHasNextPage() {
+            this.hasNextPage = false;
             return this;
         }
 
-        public Builder excludeInputSpaceUrl() {
-            this.inputSpaceUrl = false;
+        public PageInfo.Builder excludeHasPreviousPage() {
+            this.hasPreviousPage = false;
             return this;
         }
 
-        public Builder excludeOutputSpaceUrl() {
-            this.outputSpaceUrl = false;
+        public PageInfo.Builder excludeStartCursor() {
+            this.startCursor = false;
             return this;
         }
 
-        public Builder excludeUserSpaceUrl() {
-            this.userSpaceUrl = false;
+        public PageInfo.Builder excludeEndCursor() {
+            this.endCursor = false;
             return this;
         }
 
-        public DataManagement build() {
-            sb.append(DATA_MANAGEMENT.getKey());
+        public PageInfo build() {
+            sb.append(ApiTypeKeyEnum.PAGE_INFO.getKey());
             sb.append("{").append(RETURN);
-            if(globalSpaceUrl) {
-                sb.append(GLOBLE_SPACE_URL.getKey()).append(RETURN);
+            if (hasNextPage) {
+                sb.append(HAS_NEXT_PAGE.getKey()).append(RETURN);
             }
-            if(inputSpaceUrl) {
-                sb.append(INPUT_SPACE_URL.getKey()).append(RETURN);
+            if (hasPreviousPage) {
+                sb.append(HAS_PREVIOUS_PAGE.getKey()).append(RETURN);
             }
-            if(outputSpaceUrl) {
-                sb.append(OUTPUT_SPACE_URL.getKey()).append(RETURN);
+            if (startCursor) {
+                sb.append(START_CURSOR.getKey()).append(RETURN);
             }
-            if(userSpaceUrl) {
-                sb.append(USER_SPACE_URL.getKey()).append(RETURN);
+            if (endCursor) {
+                sb.append(END_CURSOR.getKey()).append(RETURN);
             }
             sb.append("}").append(RETURN);
-            return new DataManagement(sb.toString());
+            return new PageInfo(sb.toString());
         }
     }
 }

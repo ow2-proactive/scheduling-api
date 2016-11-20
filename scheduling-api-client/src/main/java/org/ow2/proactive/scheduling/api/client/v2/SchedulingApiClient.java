@@ -37,7 +37,7 @@ package org.ow2.proactive.scheduling.api.client.v2;
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.beans.v2.SchedulerApiResponse;
-import org.ow2.proactive.scheduling.api.client.v2.bean.Query;
+import org.ow2.proactive.scheduling.api.client.v2.beans.Query;
 import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
 import com.google.common.base.Strings;
 import org.springframework.http.HttpEntity;
