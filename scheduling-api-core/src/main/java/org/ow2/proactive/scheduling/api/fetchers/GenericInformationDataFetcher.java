@@ -37,6 +37,7 @@ package org.ow2.proactive.scheduling.api.fetchers;
 import static org.ow2.proactive.scheduling.api.util.KeyValues.filterKeyValue;
 
 import org.ow2.proactive.scheduling.api.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -47,8 +48,8 @@ public class GenericInformationDataFetcher implements DataFetcher {
     @Override
     public Object get(DataFetchingEnvironment environment) {
         return filterKeyValue(environment,
-                jobCommon -> jobCommon.getGenericInformation(),
-                () -> new GenericInformation());
+                JobTaskCommon::getGenericInformation,
+                GenericInformation::new);
     }
 
 }
