@@ -95,7 +95,7 @@ public class JobInput extends AbstractInput {
                     .build())
             .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
                     .description("Job status")
-                    .type(GraphQLString)
+                    .type(Job.JOB_STATUS_ENUM)
                     .build())
             .build();
 

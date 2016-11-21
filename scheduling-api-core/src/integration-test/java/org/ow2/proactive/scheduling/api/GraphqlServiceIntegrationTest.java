@@ -174,23 +174,103 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(false);
     }
 
+    @Test
+    public void testQueryJobsFilterByIds() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":[{id:3}, {id:5}]) { edges { cursor node { id name } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(2);
+
+        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("3");
+        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("5");
+    }
+
+    @Test
+    public void testQueryJobsFilterByNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":[{jobName:\"job7\"}, {jobName:\"job9\"}]) { edges { cursor node { id name } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(2);
+
+        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("7");
+        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("9");
+    }
+
+    @Test
+    public void testQueryJobsFilterByOwners() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":[{owner:\"" + CONTEXT_LOGIN + "\"}, " +
+                        "{owner:\"owner9\"}]) { edges { cursor node { id owner } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(6);
+
+        assertThat(getField(jobNodes.get(4), "node", "id")).isEqualTo("9");
+    }
+
+    @Test
+    public void testQueryJobsFilterByPriority() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":{status: KILLED}) " +
+                        "{ edges { cursor node { id owner } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+    }
+
+    @Test
+    public void testQueryJobsFilterByProjectNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":[{projectName:\"projectName7\"}, " +
+                        "{projectName:\"projectName9\"}]) { edges { cursor node { id name } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(2);
+
+        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("7");
+        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("9");
+    }
+
+    @Test
+    public void testQueryJobsFilterByStatus() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":{status: KILLED}) " +
+                        "{ edges { cursor node { id owner } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+    }
+
     private void addJobData(int nbJobs) {
         List<JobData> jobData = createJobData(nbJobs);
         jobData.forEach(job -> entityManager.persist(job));
     }
 
     private List<JobData> createJobData(int count) {
-        return IntStream.range(1, count + 1).mapToObj(index -> createJobData("job" + index)).collect(
+        return IntStream.range(1, count + 1).mapToObj(index -> createJobData("job" + index,
+                index % 2 == 0 ? CONTEXT_LOGIN : "owner" + index,
+                index % 2 == 0 ? JobPriority.IDLE : JobPriority.HIGH, "projectName" + index,
+                index % 2 == 0 ? JobStatus.CANCELED : JobStatus.KILLED)).collect(
                 Collectors.toList());
     }
 
-    private JobData createJobData(String name) {
+    private JobData createJobData(String name, String owner, JobPriority priority, String projectName,
+            JobStatus status) {
         JobData jobData = new JobData();
         jobData.setJobName(name);
+        jobData.setOwner(owner);
+        jobData.setPriority(priority);
+        jobData.setProjectName(projectName);
+        jobData.setStatus(status);
         jobData.setOnTaskErrorString(OnTaskError.NONE);
-        jobData.setPriority(JobPriority.HIGH);
-        jobData.setStatus(JobStatus.CANCELED);
-        jobData.setOwner("owner");
 
         return jobData;
     }
@@ -219,6 +299,19 @@ public class GraphqlServiceIntegrationTest {
                 CONTEXT_LOGIN);
         assertThat(getField(queryResult, "data", "viewer", "sessionId")).isEqualTo(
                 CONTEXT_SESSION_ID);
+    }
+
+    @Test
+    public void testQueryViewerJobs() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "{ viewer { jobs { edges { node { id owner } } } } }");
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
     }
 
     private Object getField(Object object, String... fields) {
