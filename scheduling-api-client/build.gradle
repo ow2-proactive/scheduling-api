@@ -1,4 +1,5 @@
 dependencies {
     compile 'org.springframework:spring-web:4.2.5.RELEASE'
     compile project(':scheduling-api-beans')
+    testCompile project(':scheduling-api-beans')
 }

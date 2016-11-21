@@ -12,6 +12,18 @@ buildscript {
     }
 }
 
+ext {
+    generatedSrcDir = "${project.buildDir}/src/generated/java"
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = files("$generatedSrcDir")
+        }
+    }
+}
+
 dependencies {
     compile 'org.springframework:spring-web:4.2.5.RELEASE'
     // Required if generating equals, hashCode, or toString methods
@@ -22,6 +34,15 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
 
 }
+
+clean {
+    sourceSets.generated.java.srcDirs.each {
+        srcDir -> delete srcDir
+    }
+}
+
+compileJava.dependsOn generateJsonSchema2Pojo
+compileJava.source sourceSets.generated.java
 
 // Each configuration is set to the default value
 jsonSchema2Pojo {
@@ -38,9 +59,7 @@ jsonSchema2Pojo {
 
     // Target directory for generated Java source files. The plugin will add this directory to the
     // java source set so the compiler will find and compile the newly generated source files.
-    // targetDirectory = file("${project.buildDir}/generated-sources/js2p")
-    targetDirectory = file("src/main/java")
-
+    targetDirectory = file("$generatedSrcDir")
 
     // Package name used for generated Java classes (for types where a fully qualified name has not
     // been supplied in the schema using the 'javaType' property).
