@@ -41,6 +41,7 @@ import org.ow2.proactive.scheduling.api.fetchers.GenericInformationDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.VariablesDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
+import org.ow2.proactive.scheduling.api.util.Constants;
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
@@ -179,7 +180,7 @@ public class Task extends JobTaskCommon {
             .field(newFieldDefinition().name("genericInformation")
                     .description("Generic information list, empty if there is none.")
                     .type(new GraphQLList(GenericInformation.TYPE))
-                    .argument(newArgument().name("input")
+                    .argument(newArgument().name(Constants.ARGUMENT_NAME_FILTER)
                             .description("Generic information input filter")
                             .type(new GraphQLList(KeyValueInput.TYPE))
                             .build())
@@ -248,7 +249,7 @@ public class Task extends JobTaskCommon {
             .field(newFieldDefinition().name("variables")
                     .description("Variable list, empty if there is none.")
                     .type(new GraphQLList(Variable.TYPE))
-                    .argument(newArgument().name("input")
+                    .argument(newArgument().name(Constants.ARGUMENT_NAME_FILTER)
                             .description("Variables input filter.")
                             .type(new GraphQLList(KeyValueInput.TYPE))
                             .build())

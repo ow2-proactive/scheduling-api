@@ -56,6 +56,7 @@ import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
+import org.ow2.proactive.scheduling.api.util.Constants;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -75,8 +76,9 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
             List<TaskInput> input = ImmutableList.of();
 
-            if (environment.getArgument("input") != null) {
-                List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
+            Object filterArgument = environment.getArgument(Constants.ARGUMENT_NAME_FILTER);
+            if (filterArgument != null) {
+                List<LinkedHashMap<String, Object>> args = (List<LinkedHashMap<String, Object>>) filterArgument;
                 input = args.stream().map(TaskInput::new).collect(Collectors.toList());
             }
 

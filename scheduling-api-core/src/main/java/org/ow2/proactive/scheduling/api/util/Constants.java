@@ -39,6 +39,10 @@ package org.ow2.proactive.scheduling.api.util;
  */
 public class Constants {
 
+    public static final String ARGUMENT_NAME_FILTER = "filter";
+
     public static final int PAGINATION_DEFAULT_SIZE = 50;
+
+    public static final String VERSION_API = "2.0.0-alpha.1";
 
 }

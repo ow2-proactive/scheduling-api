@@ -37,7 +37,6 @@ package org.ow2.proactive.scheduling.api.schema.type;
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
-import org.ow2.proactive.scheduling.api.services.ApplicationContextProvider;
 import org.ow2.proactive.scheduling.api.util.Constants;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
@@ -57,8 +56,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 @Component
 public final class Query {
 
-    public static final String VERSION_API = "2.0.0-alpha.1";
-
     @Autowired
     private UserDataFetcher userDataFetcher;
 
@@ -68,8 +65,8 @@ public final class Query {
                 .field(newFieldDefinition().name("jobs")
                         .description("Jobs list, it will be empty if there is none")
                         .type(JobsConnection.TYPE)
-                        .argument(newArgument().name("input")
-                                .description("Jobs filter input")
+                        .argument(newArgument().name(Constants.ARGUMENT_NAME_FILTER)
+                                .description("Jobs input filter")
                                 .type(new GraphQLList(JobInput.TYPE))
                                 .build())
                         .argument(JobsConnection.getConnectionFieldArguments())
@@ -81,7 +78,7 @@ public final class Query {
                 .field(newFieldDefinition().name("version")
                         .description("Query schema version")
                         .type(GraphQLString)
-                        .dataFetcher(new StaticDataFetcher(VERSION_API)))
+                        .dataFetcher(new StaticDataFetcher(Constants.VERSION_API)))
                 .field(newFieldDefinition().name("viewer")
                         .description("Viewer of the query")
                         .type(User.TYPE)

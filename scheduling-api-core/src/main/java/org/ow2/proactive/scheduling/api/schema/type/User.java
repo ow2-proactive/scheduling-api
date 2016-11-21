@@ -71,7 +71,7 @@ public class User {
             .field(newFieldDefinition().name("jobs")
                     .description("Jobs list, it will be empty if there is none")
                     .type(JobsConnection.TYPE)
-                    .argument(newArgument().name("input")
+                    .argument(newArgument().name(Constants.ARGUMENT_NAME_FILTER)
                             .description("Jobs filter input")
                             .type(new GraphQLList(JobInput.TYPE))
                             .build())

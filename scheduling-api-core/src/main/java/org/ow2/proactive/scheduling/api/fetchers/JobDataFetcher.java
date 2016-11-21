@@ -56,6 +56,7 @@ import org.ow2.proactive.scheduling.api.schema.type.Job;
 import org.ow2.proactive.scheduling.api.schema.type.User;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.AbstractInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import org.ow2.proactive.scheduling.api.util.Constants;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 import graphql.schema.DataFetchingEnvironment;
@@ -78,8 +79,9 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                 filterOnUser(environment, input);
             }
 
-            if (environment.getArgument("input") != null) {
-                List<LinkedHashMap<String, Object>> args = environment.getArgument("input");
+            Object filterArgument = environment.getArgument(Constants.ARGUMENT_NAME_FILTER);
+            if (filterArgument != null) {
+                List<LinkedHashMap<String, Object>> args = (List<LinkedHashMap<String, Object>>) filterArgument;
                 input.addAll(args.stream().map(JobInput::new).collect(Collectors.toList()));
             }
 

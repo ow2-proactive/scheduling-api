@@ -64,9 +64,10 @@ public final class KeyValues {
 
         List<KeyValueInput> input = null;
 
-        if(environment.getArgument("input") != null) {
-            List<LinkedHashMap<String, String>> args = environment.getArgument("input");
-            input = args.stream().map(arg -> new KeyValueInput(arg)).collect(Collectors.toList());
+        Object filterArgument = environment.getArgument(Constants.ARGUMENT_NAME_FILTER);
+        if(filterArgument != null) {
+            List<LinkedHashMap<String, String>> args = (List<LinkedHashMap<String, String>>) filterArgument;
+            input = args.stream().map(KeyValueInput::new).collect(Collectors.toList());
         }
 
         return filterKeyValue(function.apply(object), input, keyValueSupplier);
