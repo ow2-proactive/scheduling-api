@@ -61,7 +61,9 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 import graphql.schema.DataFetchingEnvironment;
 
-
+/**
+ * @author ActiveEon Team
+ */
 public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
     @Override

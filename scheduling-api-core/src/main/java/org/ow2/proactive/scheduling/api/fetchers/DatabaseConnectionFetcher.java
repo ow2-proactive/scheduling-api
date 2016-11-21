@@ -68,6 +68,7 @@ import org.apache.commons.collections.CollectionUtils;
  *
  * @param <E> entity class type
  * @param <T> graphql class type
+ * @author ActiveEon Team
  */
 public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 

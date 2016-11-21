@@ -53,11 +53,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 /**
  * @author ActiveEon Team
  */
-@Component
 public final class Query {
-
-    @Autowired
-    private UserDataFetcher userDataFetcher;
 
     public GraphQLObjectType buildType() {
         return GraphQLObjectType.newObject()
@@ -82,7 +78,7 @@ public final class Query {
                 .field(newFieldDefinition().name("viewer")
                         .description("Viewer of the query")
                         .type(User.TYPE)
-                        .dataFetcher(userDataFetcher))
+                        .dataFetcher(new UserDataFetcher()))
                 .build();
     }
 

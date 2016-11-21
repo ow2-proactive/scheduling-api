@@ -40,8 +40,9 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
 
-
-@Component
+/**
+ * @author ActiveEon Team
+ */
 public class UserDataFetcher implements DataFetcher {
 
     @Override

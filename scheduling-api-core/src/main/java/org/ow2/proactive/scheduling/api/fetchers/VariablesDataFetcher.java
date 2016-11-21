@@ -42,7 +42,9 @@ import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
-
+/**
+ * @author ActiveEon Team
+ */
 public class VariablesDataFetcher implements DataFetcher {
 
     @Override

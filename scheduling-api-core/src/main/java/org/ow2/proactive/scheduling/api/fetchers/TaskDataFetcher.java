@@ -63,7 +63,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import graphql.schema.DataFetchingEnvironment;
 
-
+/**
+ * @author ActiveEon Team
+ */
 public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
     @Override

@@ -68,7 +68,6 @@ public class GraphqlService {
 
     private GraphQL graphql;
 
-    @Autowired
     private Query query;
 
     public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
@@ -76,6 +75,7 @@ public class GraphqlService {
 
     @PostConstruct
     public void init() {
+        query = new Query();
         graphql = new GraphQL(newSchema().query(query.buildType()).build());
     }
 
