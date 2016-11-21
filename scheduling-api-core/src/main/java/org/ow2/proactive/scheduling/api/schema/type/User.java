@@ -36,6 +36,8 @@ package org.ow2.proactive.scheduling.api.schema.type;
 
 import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import org.ow2.proactive.scheduling.api.services.ApplicationContextProvider;
+import org.ow2.proactive.scheduling.api.util.Constants;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
 import lombok.Builder;
@@ -45,7 +47,6 @@ import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
 
 
 /**
@@ -77,7 +78,7 @@ public class User {
                     .argument(JobsConnection.getConnectionFieldArguments())
                     .argument(newArgument()
                             .name("first")
-                            .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                            .type(GraphQLInt).defaultValue(Constants.PAGINATION_DEFAULT_SIZE)
                             .build())
                     .dataFetcher(new JobDataFetcher()))
             .build();

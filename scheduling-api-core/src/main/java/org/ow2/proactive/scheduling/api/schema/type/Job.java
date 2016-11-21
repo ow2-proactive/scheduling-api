@@ -43,6 +43,8 @@ import org.ow2.proactive.scheduling.api.fetchers.VariablesDataFetcher;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
 import org.ow2.proactive.scheduling.api.schema.type.interfaces.JobTaskCommon;
+import org.ow2.proactive.scheduling.api.services.ApplicationContextProvider;
+import org.ow2.proactive.scheduling.api.util.Constants;
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
@@ -57,7 +59,6 @@ import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
 
 
 /**
@@ -216,7 +217,7 @@ public class Job extends JobTaskCommon {
                     .argument(TasksConnection.getConnectionFieldArguments())
                     .argument(newArgument()
                             .name("first")
-                            .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                            .type(GraphQLInt).defaultValue(Constants.PAGINATION_DEFAULT_SIZE)
                             .build())
                     .dataFetcher(new TaskDataFetcher()))
             .field(newFieldDefinition().name("totalNumberOfTasks")

@@ -34,7 +34,11 @@
  */
 package org.ow2.proactive.scheduling.api.util;
 
-public final class Constants {
+/**
+ * @author lpellegr
+ */
+public class Constants {
 
-    public static final int DEFAULT_FIRST_ELEMENTS = 50;
+    public static final int PAGINATION_DEFAULT_SIZE = 50;
+
 }

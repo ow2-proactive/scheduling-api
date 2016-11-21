@@ -34,22 +34,21 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type;
 
+import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
+import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
+import org.ow2.proactive.scheduling.api.services.ApplicationContextProvider;
+import org.ow2.proactive.scheduling.api.util.Constants;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.StaticDataFetcher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.ow2.proactive.scheduling.api.util.Constants.DEFAULT_FIRST_ELEMENTS;
-
-import org.ow2.proactive.scheduling.api.fetchers.JobDataFetcher;
-import org.ow2.proactive.scheduling.api.fetchers.UserDataFetcher;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
-import graphql.schema.GraphQLList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import graphql.schema.GraphQLNonNull;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.StaticDataFetcher;
 
 
 /**
@@ -57,6 +56,8 @@ import graphql.schema.StaticDataFetcher;
  */
 @Component
 public final class Query {
+
+    public static final String VERSION_API = "2.0.0-alpha.1";
 
     @Autowired
     private UserDataFetcher userDataFetcher;
@@ -74,13 +75,13 @@ public final class Query {
                         .argument(JobsConnection.getConnectionFieldArguments())
                         .argument(newArgument()
                                 .name("first")
-                                .type(GraphQLInt).defaultValue(DEFAULT_FIRST_ELEMENTS)
+                                .type(GraphQLInt).defaultValue(Constants.PAGINATION_DEFAULT_SIZE)
                                 .build())
                         .dataFetcher(new JobDataFetcher()))
                 .field(newFieldDefinition().name("version")
                         .description("Query schema version")
                         .type(GraphQLString)
-                        .dataFetcher(new StaticDataFetcher("2.0.0-alpha.1")))
+                        .dataFetcher(new StaticDataFetcher(VERSION_API)))
                 .field(newFieldDefinition().name("viewer")
                         .description("Viewer of the query")
                         .type(User.TYPE)

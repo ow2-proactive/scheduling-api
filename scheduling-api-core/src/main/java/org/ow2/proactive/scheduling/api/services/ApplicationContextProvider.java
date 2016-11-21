@@ -34,7 +34,6 @@
  */
 package org.ow2.proactive.scheduling.api.services;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -47,13 +46,6 @@ import org.springframework.stereotype.Service;
 public class ApplicationContextProvider implements ApplicationContextAware {
 
     private static ApplicationContext context;
-
-    @Value("${api.default.fetcher.element.num}")
-    private static String defaultFetchNumber;
-
-    public static String getDefaultFetchNumber() {
-        return defaultFetchNumber;
-    }
 
     public static ApplicationContext getApplicationContext() {
         return context;
