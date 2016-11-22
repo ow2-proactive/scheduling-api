@@ -1,22 +1,43 @@
 # Scheduling API
+ 
+[![Build Status](http://jenkins.activeeon.com/buildStatus/icon?job=scheduling-api)](http://jenkins.activeeon.com/job/scheduling-api)
+ 
+At this time, the Scheduling API offers a GraphQL endpoint for getting information about a ProActive Scheduler instance.
+  
+**Please note the API is still experimental and may be subject to changes.**
 
-## Query examples
+## Building and deploying
 
-The following examples will have to be transformed into integration tests
-### GET
+You can build a WAR file as follows:
 
 ```
-$ http http://localhost:8080/v2/graphql?query={version}
-$ http http://localhost:8080/v2/graphql?query="{ jobs(first: 3) { edges { cursor node { name }  } } }"
-$ http http://localhost:8080/v2/graphql query=="query q1 {version} query q2 {name}" operationName==q1
-$ http http://localhost:8080/v2/graphql query=="query q1 {version} query q2 {name}" operationName==q2
-$ http http://localhost:8080/v2/graphql query=="query listJobs($count) { jobs(first: $count) { edges { cursor node { name }  } } }" variables=="{count: 3}"
+$ gradle clean build war
 ```
 
-### POST
+The last command produces a WAR file in 
+
 ```
-$ http POST http://localhost:8080/v2/graphql query='{ version }' 
-$ http POST http://localhost:8080/v2/graphql query='{ jobs(first: 3) { edges { cursor node { name id }  } } }' 
-$ echo '{"query": "{ __schema { types { name }}}", "variables": {}}' | http POST localhost:8080/v2/graphql
-$ http POST http://localhost:8080/v2/graphql query='query($count:Int!) { jobs(first: $count) { edges { cursor node { id name } } } }' variables='{"count": 3}'
+build/libs/scheduling-api-X.Y.Z-SNAPSHOT.war
 ```
+
+This Web Application Archive can be deployed in the embedded Jetty container run by an instance of [ProActive Server](https://github.com/ow2-proactive/scheduling) (or your own application server).
+
+The standard produce is to copy or create a symlink to the WAR file in `$PROACTIVE_HOME/dist/war`.
+
+## Usage
+
+Once deployed and running in a ProActive Scheduler instance, a graphical in-browser interface called [GraphiQL](https://github.com/graphql/graphiql) is accessible at:
+
+http://localhost:8080/scheduling-api/v2/
+
+## What is missing for now
+ 
+- Complete Scheduler schema (i.e. returning Task progress, scripts content, etc.)
+  See `JobDataFetcherTest` and `TaskDataFetcherTest`.
+- Schema definition and fetchers for Resource Manager
+- Field arguments refinement based on use cases
+  (i.e. Studio, Scheduler and RM portals)
+- Sorting per field (by adding an `orderBy` argument)
+  See https://github.com/graphql/graphql-relay-js/issues/20#issuecomment-220494222
+- Forwarding of all requests received on `scheduling-api/v1` to `/rest`
+- Mutations (i.e. for submitting workflows, locking nodes, etc.)
