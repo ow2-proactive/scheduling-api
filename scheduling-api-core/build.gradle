@@ -20,7 +20,7 @@ springBoot {
 }
 
 war {
-    baseName = projectName
+    baseName = 'scheduling-api'
     version = version
 }
 
