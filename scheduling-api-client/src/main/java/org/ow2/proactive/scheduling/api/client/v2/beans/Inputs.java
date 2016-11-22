@@ -42,7 +42,7 @@ public class Inputs {
     public static final String buildQueryString(List<? extends ApiType> input) {
         if (!input.isEmpty()) {
             StringBuilder sb = new StringBuilder();
-            sb.append("(input : [");
+            sb.append("(filter : [");
             String inputQuery = input.stream().map(i -> i.getQueryString()).collect(
                     Collectors.joining(","));
             sb.append(inputQuery);
