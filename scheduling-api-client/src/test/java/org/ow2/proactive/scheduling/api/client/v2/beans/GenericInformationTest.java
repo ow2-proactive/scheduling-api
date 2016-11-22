@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class GenericInformationTest {
-    private static final String ALL = "genericInformation(input : [{ key : \"START_AT\" },{ key : \"blabla\" value : \"value\" }]){\nkey\nvalue\n}\n";
+    private static final String ALL = "genericInformation(filter : [{ key : \"START_AT\" },{ key : \"blabla\" value : \"value\" }]){\nkey\nvalue\n}\n";
 
     @Test
     public void getQueryString() throws Exception {
