@@ -264,6 +264,21 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(5);
     }
 
+    @Test
+    public void testQueryJobsFilterWithConjunctionsAndDisjunctions() {
+        addJobData(10);
+
+        String query = "{ jobs(" + Constants.ARGUMENT_NAME_FILTER + ":[{owner:\"" + CONTEXT_LOGIN + "\" " +
+                "priority:IDLE status:CANCELED},{projectName:\"projectName7\" status:KILLED}])" +
+                "{ edges { cursor node { id owner } } } }";
+
+        Map<String, Object> queryResult = executeGraphqlQuery(query);
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        assertThat(jobNodes).hasSize(6);
+    }
+
     private void addJobData(int nbJobs) {
         List<JobData> jobData = createJobData(nbJobs);
         jobData.forEach(job -> entityManager.persist(job));
