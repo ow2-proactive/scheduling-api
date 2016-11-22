@@ -101,6 +101,21 @@ public class GraphqlServiceIntegrationTest {
     }
 
     @Test
+    public void testQueryJobsPaginatedWithVariable() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(
+                "query($count:Int!) { jobs(first: $count) { edges { node { id name } } " +
+                        "pageInfo { hasNextPage hasPreviousPage } } }",
+                ImmutableMap.of("count", 2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        assertThat(jobNodes).hasSize(2);
+        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
+        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+    }
+
+    @Test
     public void testQueryJobsPaginatedFirstArgument() {
         addJobData(10);
 
@@ -323,9 +338,13 @@ public class GraphqlServiceIntegrationTest {
     }
 
     private Map<String, Object> executeGraphqlQuery(String query) {
+        return executeGraphqlQuery(query, ImmutableMap.of());
+    }
+
+    private Map<String, Object> executeGraphqlQuery(String query, Map<String, Object> variables) {
         return graphqlService.executeQuery(query, null,
                 new GraphqlService.GraphqlContext(CONTEXT_SESSION_ID, CONTEXT_LOGIN),
-                ImmutableMap.of());
+                variables);
     }
 
 }
