@@ -45,8 +45,11 @@ function updateURL() {
 function graphQLFetcher(graphQLParams) {
     var location = window.location.origin + window.location.pathname;
 
+    location = location.replace('graphiql/', '');
+    location = location.replace('graphiql', '');
+
     if (!location.endsWith('/')) {
-        location = location + '/';
+        location =  + '/';
     }
 
     return fetch(location + "graphql", {

@@ -48,7 +48,7 @@ public class ApiController {
         return "/home.html";
     }
 
-    @RequestMapping(value = "/v1", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
+    @RequestMapping(value = "/v1/rest", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
             RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
             RequestMethod.TRACE })
     @ResponseBody
@@ -56,7 +56,7 @@ public class ApiController {
         return "TODO: forward to /rest/";
     }
 
-    @RequestMapping(value = "/v2", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/graphiql", method = RequestMethod.GET)
     public String v2() {
         return "/index.html";
     }

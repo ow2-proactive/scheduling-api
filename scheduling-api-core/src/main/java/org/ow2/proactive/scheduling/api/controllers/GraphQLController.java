@@ -63,7 +63,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author ActiveEon Team
  */
 @Controller
-@RequestMapping(value = "/v2/graphql", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/graphql", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GraphQLController {
 
     private static final String DEFAULT_OPERATION_NAME = "operationName";
