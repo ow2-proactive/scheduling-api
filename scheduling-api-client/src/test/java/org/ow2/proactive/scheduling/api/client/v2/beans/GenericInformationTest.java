@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class GenericInformationTest {
     private static final String ALL = "genericInformation(filter : [{ key : \"START_AT\" },{ key : \"blabla\" value : \"value\" }]){\nkey\nvalue\n}\n";

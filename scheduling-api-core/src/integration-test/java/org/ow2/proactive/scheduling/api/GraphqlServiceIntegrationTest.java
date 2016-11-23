@@ -316,8 +316,7 @@ public class GraphqlServiceIntegrationTest {
         String query = "{ version }";
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
-        assertThat(getField(queryResult, "data", "version")).isEqualTo(
-                Constants.VERSION_API);
+        assertThat(getField(queryResult, "data", "version")).isEqualTo(Constants.VERSION_API);
     }
 
     @Test

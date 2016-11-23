@@ -37,8 +37,6 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.GENERIC_INFORMATION;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class GenericInformation extends KeyValue implements ApiType {
@@ -51,7 +49,7 @@ public class GenericInformation extends KeyValue implements ApiType {
 
         @Override
         public String getKeyValueBeanName() {
-            return GENERIC_INFORMATION.getKey();
+            return ApiTypeKeyEnum.GENERIC_INFORMATION.getKey();
         }
 
         @Override

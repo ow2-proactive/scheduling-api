@@ -37,17 +37,6 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.CURSOR;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.DESCRIPTION;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.FINISHED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.ID;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.IN_ERROR_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.MAX_NUMBER_OF_EXECUTION;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.ON_TASK_ERROR;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.START_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.STATUS;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
-
 public abstract class JobsTasksCommonBuilder {
 
     protected boolean cursor = true;
@@ -144,47 +133,47 @@ public abstract class JobsTasksCommonBuilder {
     public void build(Supplier<String> title, List<? extends ApiType> input) {
         sb.append(title.get());
         sb.append(Inputs.buildQueryString(input));
-        sb.append("{").append(RETURN);
+        sb.append("{").append(Constants.RETURN);
         if (pageInfo != null) {
             sb.append(pageInfo.getQueryString());
         }
-        sb.append("edges{").append(RETURN);
+        sb.append("edges{").append(Constants.RETURN);
 
         if (cursor) {
-            sb.append(CURSOR.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.CURSOR.getKey()).append(Constants.RETURN);
         }
 
-        sb.append("node{").append(RETURN);
+        sb.append("node{").append(Constants.RETURN);
 
         if (description) {
-            sb.append(DESCRIPTION.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.DESCRIPTION.getKey()).append(Constants.RETURN);
         }
         if (finishedTime) {
-            sb.append(FINISHED_TIME.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.FINISHED_TIME.getKey()).append(Constants.RETURN);
         }
         if (genericInformation != null) {
-            sb.append(genericInformation.getQueryString()).append(RETURN);
+            sb.append(genericInformation.getQueryString()).append(Constants.RETURN);
         }
         if (id) {
-            sb.append(ID.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.ID.getKey()).append(Constants.RETURN);
         }
         if (inErrorTime) {
-            sb.append(IN_ERROR_TIME.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.IN_ERROR_TIME.getKey()).append(Constants.RETURN);
         }
         if (maxNumberOfExecution) {
-            sb.append(MAX_NUMBER_OF_EXECUTION.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.MAX_NUMBER_OF_EXECUTION.getKey()).append(Constants.RETURN);
         }
         if (name) {
-            sb.append(ApiTypeKeyEnum.NAME.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.NAME.getKey()).append(Constants.RETURN);
         }
         if (onTaskError) {
-            sb.append(ON_TASK_ERROR.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.ON_TASK_ERROR.getKey()).append(Constants.RETURN);
         }
         if (startTime) {
-            sb.append(START_TIME.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.START_TIME.getKey()).append(Constants.RETURN);
         }
         if (status) {
-            sb.append(STATUS.getKey()).append(RETURN);
+            sb.append(ApiTypeKeyEnum.STATUS.getKey()).append(Constants.RETURN);
         }
         if (variables != null) {
             sb.append(variables.getQueryString());

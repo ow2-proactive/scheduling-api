@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
+	<Properties>
+		<Property name="proactive.home">.</Property>
+	</Properties>
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
 		</Console>
-		<RollingFile name="RollingFile" fileName="${web:rootDir}/logs/scheduling-api.log"
-					 filePattern="${web:rootDir}/logs/scheduling-api-%d{yyyy-MM-dd}-%i.log">
+		<RollingFile name="RollingFile" fileName="${proactive.home}/logs/scheduling-api.log"
+					 filePattern="${proactive.home}/logs/scheduling-api-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout>
 				<pattern>%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
 			</PatternLayout>

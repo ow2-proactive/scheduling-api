@@ -3,7 +3,7 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class KeyValueInputTest {
     private static final String ALL = "{ key : \"key\" value : \"value\" }";

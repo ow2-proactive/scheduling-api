@@ -39,16 +39,6 @@ import java.util.List;
 
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.EXECUTION_DURATION;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.EXECUTION_HOST_NAME;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.JOB_ID;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_LEFT;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.PROGRESS;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.RESTART_MODE;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.SCHEDULED_TIME;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.TAG;
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.TASKS;
 import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
@@ -125,35 +115,35 @@ public class Tasks implements ApiType {
         }
 
         public Tasks build() {
-            this.build(()-> TASKS.getKey(), input);
+            this.build(()-> ApiTypeKeyEnum.TASKS.getKey(), input);
 
             if (executionDuration) {
-                sb.append(EXECUTION_DURATION.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.EXECUTION_DURATION.getKey()).append(RETURN);
             }
             if (executionHostName) {
-                sb.append(EXECUTION_HOST_NAME.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.EXECUTION_HOST_NAME.getKey()).append(RETURN);
             }
             if (jobId) {
-                sb.append(JOB_ID.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.JOB_ID.getKey()).append(RETURN);
             }
             if (numberOfExecutionLeft) {
-                sb.append(NUMBER_OF_EXECUTION_LEFT.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_EXECUTION_LEFT.getKey()).append(RETURN);
             }
             if (numberOfExecutionOnFailureLeft) {
-                sb.append(NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getKey()).append(
+                sb.append(ApiTypeKeyEnum.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getKey()).append(
                         RETURN);
             }
             if (progress) {
-                sb.append(PROGRESS.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.PROGRESS.getKey()).append(RETURN);
             }
             if (scheduledTime) {
-                sb.append(SCHEDULED_TIME.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.SCHEDULED_TIME.getKey()).append(RETURN);
             }
             if(restartMode) {
-                sb.append(RESTART_MODE.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.RESTART_MODE.getKey()).append(RETURN);
             }
             if (tag) {
-                sb.append(TAG.getKey()).append(RETURN);
+                sb.append(ApiTypeKeyEnum.TAG.getKey()).append(RETURN);
             }
 
             sb.append("}").append(RETURN).append("}").append(RETURN).append("}").append(

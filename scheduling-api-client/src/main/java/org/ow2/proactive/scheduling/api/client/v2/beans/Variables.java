@@ -37,8 +37,6 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.VARIABLES;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Variables extends KeyValue {
@@ -51,7 +49,7 @@ public class Variables extends KeyValue {
 
         @Override
         public String getKeyValueBeanName() {
-            return VARIABLES.getKey();
+            return ApiTypeKeyEnum.VARIABLES.getKey();
         }
 
         @Override

@@ -44,6 +44,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -63,6 +64,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author ActiveEon Team
  */
 @Controller
+@Log4j2
 @RequestMapping(value = "/v1/graphql", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GraphQLController {
 
@@ -93,7 +95,13 @@ public class GraphQLController {
             @RequestParam(value = DEFAULT_OPERATION_NAME, required = false) String operationName,
             @RequestParam(value = DEFAULT_VARIABLES_KEY, required = false) String variables) throws IOException {
 
+        log.debug("sessionId = {}", sessionId);
+
         String username = authenticationService.authenticate(sessionId);
+
+        log.trace("username = {}", username);
+
+        log.debug("query = {}, operationName = {}, variables = {}", query, operationName, variables);
 
         return graphqlService.executeQuery(query, operationName,
                 new GraphqlService.GraphqlContext(sessionId, username), decodeIntoMap(variables));
@@ -108,11 +116,17 @@ public class GraphQLController {
             @RequestHeader(value = REQUEST_HEADER_NAME_SESSION_ID) String sessionId,
             @RequestBody Map<String, Object> body) throws IOException {
 
+        log.debug("sessionId = {}", sessionId);
+
         String username = authenticationService.authenticate(sessionId);
+
+        log.trace("username = {}", username);
 
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
         Map<String, Object> variables = (Map<String, Object>) body.get(DEFAULT_VARIABLES_KEY);
+
+        log.debug("query = {}, operationName = {}, variables = {}", query, operationName, variables);
 
         return graphqlService.executeQuery(query, operationName,
                 new GraphqlService.GraphqlContext(sessionId, username), variables);
