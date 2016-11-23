@@ -43,6 +43,6 @@ public class Constants {
 
     public static final int PAGINATION_DEFAULT_SIZE = 50;
 
-    public static final String VERSION_API = "2.0.0-alpha.1";
+    public static final String VERSION_API = "1.0.0-alpha.1";
 
 }
