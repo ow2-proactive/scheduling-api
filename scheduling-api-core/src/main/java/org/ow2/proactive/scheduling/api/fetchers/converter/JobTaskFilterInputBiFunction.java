@@ -32,34 +32,35 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.fetchers.converter;
 
-import java.util.Map;
-import java.util.function.Function;
+import graphql.schema.DataFetchingEnvironment;
+import lombok.AllArgsConstructor;
+import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobTaskCommonAbstractInput;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.function.BiFunction;
 
-public final class Inputs {
+@AllArgsConstructor
+public class JobTaskFilterInputBiFunction<T, I extends JobTaskCommonAbstractInput> implements BiFunction<CriteriaBuilder, Root<T>, List<Predicate[]>> {
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
+    protected DataFetchingEnvironment environment;
 
-        Object fieldValue = input.get(fieldName);
+    private JobTaskInputPredicatesConverter<T, I> converter;
 
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
+    @Override
+    public List<Predicate[]> apply(CriteriaBuilder criteriaBuilder, Root<T> root) {
+
+        List<I> input = converter.mapToInput(environment);
+
+        return converter.inputToPredicates(environment, criteriaBuilder, root, input);
+
     }
 
-    public static final <T> T getObject(Map<String, Object> input, String fieldName, Function<Map<String, Object>, T> mapper, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return mapper.apply((Map<String, Object>) fieldValue);
-        } else {
-            return defaultValue;
-        }
-    }
 
 }

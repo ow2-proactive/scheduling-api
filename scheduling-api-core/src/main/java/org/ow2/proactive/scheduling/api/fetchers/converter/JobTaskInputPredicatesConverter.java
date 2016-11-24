@@ -32,34 +32,19 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.fetchers.converter;
 
-import java.util.Map;
-import java.util.function.Function;
+import graphql.schema.DataFetchingEnvironment;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobTaskCommonAbstractInput;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
-public final class Inputs {
+public interface JobTaskInputPredicatesConverter<T, I extends JobTaskCommonAbstractInput> {
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
+    List<I> mapToInput(DataFetchingEnvironment environment);
 
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return (T) fieldValue;
-        } else {
-            return defaultValue;
-        }
-    }
-
-    public static final <T> T getObject(Map<String, Object> input, String fieldName, Function<Map<String, Object>, T> mapper, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return mapper.apply((Map<String, Object>) fieldValue);
-        } else {
-            return defaultValue;
-        }
-    }
-
+    List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder, Root<T> root, List<I> input);
 }

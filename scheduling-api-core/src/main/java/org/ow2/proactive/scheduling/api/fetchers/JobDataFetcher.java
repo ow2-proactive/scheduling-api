@@ -34,32 +34,28 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
+import graphql.schema.DataFetchingEnvironment;
+import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.fetchers.converter.JobInputConverter;
+import org.ow2.proactive.scheduling.api.fetchers.converter.JobTaskFilterInputBiFunction;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.User;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum;
+import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.ow2.proactive.scheduler.common.job.JobPriority;
-import org.ow2.proactive.scheduler.common.job.JobStatus;
-import org.ow2.proactive.scheduler.core.db.JobData;
-import org.ow2.proactive.scheduling.api.fetchers.cursor.JobCursorMapper;
-import org.ow2.proactive.scheduling.api.schema.type.DataManagement;
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.User;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.AbstractInput;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.JobInput;
-import org.ow2.proactive.scheduling.api.util.Constants;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Strings;
-import graphql.schema.DataFetchingEnvironment;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author ActiveEon Team
@@ -71,64 +67,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = (criteriaBuilder, root) -> {
-
-            List<JobInput> input = new ArrayList<>();
-
-            // use the {@code user} parent field to create a new input filter on jobs connection,
-            // so that the job list contains jobs belonging to the user only
-            if (User.TYPE.equals(environment.getParentType())) {
-                filterOnUser(environment, input);
-            }
-
-            Object filterArgument = environment.getArgument(Constants.ARGUMENT_NAME_FILTER);
-            if (filterArgument != null) {
-                List<LinkedHashMap<String, Object>> args = (List<LinkedHashMap<String, Object>>) filterArgument;
-                input.addAll(args.stream().map(JobInput::new).collect(Collectors.toList()));
-            }
-
-            List<Predicate[]> filters = new ArrayList<>();
-
-            if (!input.isEmpty()) {
-                filters = input.stream().map(i -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    long jobId = i.getId();
-                    String jobName = i.getJobName();
-                    String owner = i.getOwner();
-                    String priority = i.getPriority();
-                    String projectName = i.getProjectName();
-                    String status = i.getStatus();
-
-                    if (jobId != -1L) {
-                        predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
-                    }
-                    if (!Strings.isNullOrEmpty(jobName)) {
-                        predicates.add(criteriaBuilder.equal(root.get("jobName"), jobName));
-                    }
-                    if (!Strings.isNullOrEmpty(owner)) {
-                        predicates.add(criteriaBuilder.equal(root.get("owner"), owner));
-                    }
-                    if (!Strings.isNullOrEmpty(priority)) {
-                        predicates.add(criteriaBuilder.equal(root.get("priority"),
-                                JobPriority.valueOf(priority)));
-                    }
-                    if (!Strings.isNullOrEmpty(projectName)) {
-                        predicates.add(criteriaBuilder.equal(root.get("projectName"), projectName));
-                    }
-                    if (!Strings.isNullOrEmpty(status)) {
-                        predicates.add(
-                                criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
-                    }
-
-                    return predicates.toArray(new Predicate[predicates.size()]);
-
-                }).filter(array -> array.length > 0).collect(Collectors.toList());
-
-            }
-
-            return filters;
-        };
+        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment, new JobInputConverter());
 
         return createPaginatedConnection(environment,
                 JobData.class,
@@ -141,8 +80,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     private void filterOnUser(DataFetchingEnvironment environment, List<JobInput> input) {
         User user = (User) environment.getSource();
         LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
-        if(!Strings.isNullOrEmpty(user.getLogin())) {
-            ownerInput.put(AbstractInput.InputFieldNameEnum.OWNER.value(), user.getLogin());
+        if (!Strings.isNullOrEmpty(user.getLogin())) {
+            ownerInput.put(InputFieldNameEnum.OWNER.value(), user.getLogin());
         } else {
             throw new IllegalStateException("Missing login name");
         }

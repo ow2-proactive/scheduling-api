@@ -32,33 +32,35 @@
  *
  *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.ow2.proactive.scheduling.api.util;
+package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
 import java.util.Map;
-import java.util.function.Function;
 
+import org.ow2.proactive.scheduling.api.util.Inputs;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public final class Inputs {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public abstract class JobTaskCommonAbstractInput {
 
-    public static final <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
+    protected long id;
 
-        Object fieldValue = input.get(fieldName);
+    protected String status;
 
-        if (fieldValue != null) {
-            return (T) fieldValue;
+    // TODO custom orderby feature, not implemented yet in data fetcher
+    private String orderBy;
+
+    public JobTaskCommonAbstractInput(Map<String, Object> input) {
+
+        if (input != null) {
+            id = Inputs.getValue(input, InputFieldNameEnum.ID.value(), -1l);
+            status = Inputs.getValue(input, InputFieldNameEnum.STATUS.value(), null);
         } else {
-            return defaultValue;
-        }
-    }
-
-    public static final <T> T getObject(Map<String, Object> input, String fieldName, Function<Map<String, Object>, T> mapper, T defaultValue) {
-
-        Object fieldValue = input.get(fieldName);
-
-        if (fieldValue != null) {
-            return mapper.apply((Map<String, Object>) fieldValue);
-        } else {
-            return defaultValue;
+            id = -1l;
+            status = null;
         }
     }
 

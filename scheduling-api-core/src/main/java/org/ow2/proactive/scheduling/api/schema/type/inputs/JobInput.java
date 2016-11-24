@@ -51,7 +51,7 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
  * @author ActiveEon team
  */
 @Getter
-public class JobInput extends AbstractInput {
+public class JobInput extends JobTaskCommonAbstractInput {
 
     private String jobName;
 
@@ -61,6 +61,8 @@ public class JobInput extends AbstractInput {
 
     private String projectName;
 
+    private SubmittedTimeInput submittedTime;
+
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
@@ -68,6 +70,7 @@ public class JobInput extends AbstractInput {
             owner = Inputs.getValue(input, InputFieldNameEnum.OWNER.value(), null);
             priority = Inputs.getValue(input, InputFieldNameEnum.PRIORITY.value(), null);
             projectName = Inputs.getValue(input, InputFieldNameEnum.PROJECT_NAME.value(), null);
+            submittedTime = Inputs.getObject(input, InputFieldNameEnum.SUBMITTED_TIME.value(), SubmittedTimeInput::new, null);
         }
     }
 
@@ -96,6 +99,10 @@ public class JobInput extends AbstractInput {
             .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
                     .description("Job status")
                     .type(Job.JOB_STATUS_ENUM)
+                    .build())
+            .field(newInputObjectField().name(InputFieldNameEnum.SUBMITTED_TIME.value())
+                    .description("Job submitted time")
+                    .type(SubmittedTimeInput.TYPE)
                     .build())
             .build();
 

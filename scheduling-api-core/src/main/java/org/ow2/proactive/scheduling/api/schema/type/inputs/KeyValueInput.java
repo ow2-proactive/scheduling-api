@@ -53,18 +53,14 @@ import lombok.Getter;
 @Getter
 public class KeyValueInput {
 
-    private static final String KEY_FIELD_NAME = "key";
-
-    private static final String VALUE_FIELD_NAME = "value";
-
     private final String key;
 
     private final String value;
 
     public KeyValueInput(LinkedHashMap<String, String> input) {
         if (input != null) {
-            key = input.get(KEY_FIELD_NAME);
-            value = input.get(VALUE_FIELD_NAME);
+            key = input.get(InputFieldNameEnum.KEY.value());
+            value = input.get(InputFieldNameEnum.VALUE.value());
         } else {
             key = null;
             value = null;

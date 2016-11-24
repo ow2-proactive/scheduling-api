@@ -34,34 +34,27 @@
  */
 package org.ow2.proactive.scheduling.api.fetchers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.Maps;
+import graphql.schema.DataFetchingEnvironment;
+import org.ow2.proactive.scheduler.common.task.RestartMode;
+import org.ow2.proactive.scheduler.core.db.TaskData;
+import org.ow2.proactive.scheduling.api.fetchers.converter.JobTaskFilterInputBiFunction;
+import org.ow2.proactive.scheduling.api.fetchers.converter.TaskInputConverter;
+import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
+import org.ow2.proactive.scheduling.api.schema.type.Job;
+import org.ow2.proactive.scheduling.api.schema.type.Task;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.ow2.proactive.scheduler.common.task.RestartMode;
-import org.ow2.proactive.scheduler.common.task.TaskStatus;
-import org.ow2.proactive.scheduler.core.db.TaskData;
-import org.ow2.proactive.scheduling.api.fetchers.cursor.TaskCursorMapper;
-import org.ow2.proactive.scheduling.api.schema.type.Job;
-import org.ow2.proactive.scheduling.api.schema.type.Task;
-import org.ow2.proactive.scheduling.api.schema.type.inputs.TaskInput;
-import org.ow2.proactive.scheduling.api.util.Constants;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import graphql.schema.DataFetchingEnvironment;
 
 /**
  * @author ActiveEon Team
@@ -74,52 +67,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         Function<Root<TaskData>, Path<? extends Number>> entityId = root -> root.get("id").get("taskId");
 
-        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = (criteriaBuilder, root) -> {
-
-            List<TaskInput> input = ImmutableList.of();
-
-            Object filterArgument = environment.getArgument(Constants.ARGUMENT_NAME_FILTER);
-            if (filterArgument != null) {
-                List<LinkedHashMap<String, Object>> args = (List<LinkedHashMap<String, Object>>) filterArgument;
-                input = args.stream().map(TaskInput::new).collect(Collectors.toList());
-            }
-
-            List<Predicate[]> filters = ImmutableList.of();
-
-            if (!input.isEmpty()) {
-                filters = input.stream().map(i -> {
-                    List<Predicate> predicates = new ArrayList<>();
-
-                    long taskId = i.getId();
-                    String status = i.getStatus();
-                    String taskName = i.getTaskName();
-
-                    predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
-
-                    if (taskId != -1L) {
-                        predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
-                    }
-                    if (!Strings.isNullOrEmpty(status)) {
-                        predicates.add(
-                                criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
-                    }
-                    if (!Strings.isNullOrEmpty(taskName)) {
-                        predicates.add(criteriaBuilder.equal(root.get("taskName"), taskName));
-                    }
-
-                    return predicates.toArray(new Predicate[predicates.size()]);
-
-                }).filter(array -> array.length > 1).collect(Collectors.toList());
-
-            }
-
-            if (filters.isEmpty()) {
-                filters = Collections.singletonList(
-                        new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()) });
-            }
-
-            return filters;
-        };
+        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment, new TaskInputConverter());
 
         return createPaginatedConnection(environment,
                 TaskData.class,

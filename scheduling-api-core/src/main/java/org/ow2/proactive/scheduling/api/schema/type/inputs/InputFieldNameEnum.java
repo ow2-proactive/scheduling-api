@@ -34,53 +34,27 @@
  */
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
-import java.util.Map;
+public enum InputFieldNameEnum {
+    AFTER("after"),
+    BEFORE("before"),
+    ID("id"),
+    KEY("key"),
+    STATUS("status"),
+    TASK_NAME("taskName"),
+    JOB_NAME("jobName"),
+    OWNER("owner"),
+    PRIORITY("priority"),
+    PROJECT_NAME("projectName"),
+    SUBMITTED_TIME("submittedTime"),
+    VALUE("value");
 
-import org.ow2.proactive.scheduling.api.util.Inputs;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+    private String value;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-public abstract class AbstractInput {
-
-    protected long id;
-
-    protected String status;
-
-    // TODO custom orderby feature, not implemented yet in data fetcher
-    private String orderBy;
-
-    public AbstractInput(Map<String, Object> input) {
-
-        if (input != null) {
-            id = Inputs.getValue(input, InputFieldNameEnum.ID.value(), -1l);
-            status = Inputs.getValue(input, InputFieldNameEnum.STATUS.value(), null);
-        } else {
-            id = -1l;
-            status = null;
-        }
+    InputFieldNameEnum(String value) {
+        this.value = value;
     }
 
-    public enum InputFieldNameEnum {
-        ID("id"),
-        STATUS("status"),
-        TASK_NAME("taskName"),
-        JOB_NAME("jobName"),
-        OWNER("owner"),
-        PRIORITY("priority"),
-        PROJECT_NAME("projectName");
-
-        private String value;
-
-        InputFieldNameEnum(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return this.value;
-        }
+    public String value() {
+        return this.value;
     }
 }

@@ -35,53 +35,42 @@
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
 import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.ow2.proactive.scheduling.api.schema.type.Task;
 import org.ow2.proactive.scheduling.api.util.Inputs;
 
 import java.util.Map;
 
 import static graphql.Scalars.GraphQLLong;
-import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 
-
-/**
- * @author ActiveEon team
- */
-@AllArgsConstructor
 @Getter
-public class TaskInput extends JobTaskCommonAbstractInput {
+public class SubmittedTimeInput {
 
-    private static final String TASK_NAME_FIELD_NAME = "name";
+    private final long before;
 
-    private final String taskName;
+    private final long after;
 
-    public TaskInput(Map<String, Object> input) {
-        super(input);
+    public SubmittedTimeInput(Map<String, Object> input) {
         if (input != null) {
-            taskName = Inputs.getValue(input, InputFieldNameEnum.TASK_NAME.value(), null);
+            before = Inputs.getValue(input, InputFieldNameEnum.BEFORE.value(), -1L);
+            after = Inputs.getValue(input, InputFieldNameEnum.AFTER.value(), -1L);
         } else {
-            taskName = null;
+            before = -1L;
+            after = -1L;
         }
+
     }
 
-    public final static GraphQLInputType TYPE = newInputObject().name("TaskInput")
-            .description("Task filter input")
-            .field(newInputObjectField().name(InputFieldNameEnum.ID.value())
-                    .description("Task identifier")
+    public final static GraphQLInputType TYPE = newInputObject().name("SubmittedTimeInput")
+            .description("Submitted time filter input")
+            .field(newInputObjectField().name(InputFieldNameEnum.BEFORE.value())
+                    .description("Jobs having its submitted time before this value")
                     .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
-                    .description("Task status")
-                    .type(Task.TASK_STATUS_ENUM)
-                    .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.TASK_NAME.value())
-                    .description("Task name")
-                    .type(GraphQLString)
+            .field(newInputObjectField().name(InputFieldNameEnum.AFTER.value())
+                    .description("Jobs having its submitted time after this value")
+                    .type(GraphQLLong)
                     .build())
             .build();
-
 }
