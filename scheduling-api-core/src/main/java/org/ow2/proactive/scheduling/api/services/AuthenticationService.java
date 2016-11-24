@@ -38,12 +38,14 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.ow2.proactive.scheduling.api.exceptions.InvalidSessionIdException;
 import org.ow2.proactive.scheduling.api.exceptions.MissingSessionIdException;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -67,14 +69,13 @@ public class AuthenticationService {
     @Value("${pa.scheduling.api.session_cache.max_size}")
     private int sessionCacheMaxSize;
 
+    @Autowired
     private RestTemplate restTemplate;
 
     private LoadingCache<String, String> sessionCache;
 
     @PostConstruct
     protected void init() {
-
-        restTemplate = new RestTemplate();
 
         schedulerLoginFetchUrl = createLoginFetchUrl(schedulerRestUrl);
 

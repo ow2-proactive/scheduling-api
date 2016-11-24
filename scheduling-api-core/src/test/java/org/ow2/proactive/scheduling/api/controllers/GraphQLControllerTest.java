@@ -62,7 +62,7 @@ public class GraphQLControllerTest {
     @Test
     public void testControllerPostMethod() throws Exception {
 
-        mockMvc.perform(post("/v2/graphql").header("sessionid", "sessionId").accept(
+        mockMvc.perform(post("/v1/graphql").header("sessionid", "sessionId").accept(
                 MediaType.APPLICATION_JSON).contentType(
                 MediaType.APPLICATION_JSON).content(query)).andExpect(status().isOk()).andExpect(
                 content().contentType(MediaType.APPLICATION_JSON));
@@ -77,7 +77,7 @@ public class GraphQLControllerTest {
     public void testControllerGetMethod() throws Exception {
 
         mockMvc.perform(
-                get("/v2/graphql").header("sessionid", "sessionId").param("query",
+                get("/v1/graphql").header("sessionid", "sessionId").param("query",
                         "{ jobs{ edges{ node{ id } } } }").accept(
                         MediaType.APPLICATION_JSON).contentType(
                         MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(
