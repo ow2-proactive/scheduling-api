@@ -49,7 +49,7 @@ function graphQLFetcher(graphQLParams) {
     location = location.replace('graphiql', '');
 
     if (!location.endsWith('/')) {
-        location =  + '/';
+        location = location + '/';
     }
 
     return fetch(location + "graphql", {
