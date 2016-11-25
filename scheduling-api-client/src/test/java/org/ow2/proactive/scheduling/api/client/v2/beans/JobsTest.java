@@ -34,52 +34,16 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2.beans;
 
-import lombok.Data;
+import org.junit.Test;
 
-@Data
-public class Viewer implements ApiType {
-    private final String queryString;
+public class JobsTest {
 
-    public Viewer(String queryString) {
-        this.queryString = queryString;
-    }
+    @Test
+    public void getJobsQueryString() {
+        Jobs jobs = new Jobs.Builder().build();
 
-    public static class Builder {
-        private Jobs jobs = null;
-        private boolean login = true;
-        private boolean sessionId = true;
+        System.out.println(jobs.getQueryString());
 
-        private StringBuilder sb = new StringBuilder();
-
-        public Builder jobs(Jobs jobs) {
-            this.jobs = jobs;
-            return this;
-        }
-
-        public Builder excludeLogin() {
-            this.login = false;
-            return this;
-        }
-
-        public Builder excludeSessionId() {
-            this.sessionId = false;
-            return this;
-        }
-
-        public Viewer build() {
-            sb.append("{").append(Constants.RETURN).append("viewer {").append(Constants.RETURN);
-            if (login) {
-                sb.append(ApiTypeKeyEnum.LOGIN.getKey()).append(Constants.RETURN);
-            }
-            if (sessionId) {
-                sb.append(ApiTypeKeyEnum.SESSION_ID.getKey()).append(Constants.RETURN);
-            }
-            if (jobs != null) {
-                sb.append(jobs.getQueryString()).append(Constants.RETURN);
-            }
-            sb.append("}").append(Constants.RETURN).append("}");
-
-            return new Viewer(sb.toString());
-        }
+        // How graphiql vaildate the input query on the fly?
     }
 }

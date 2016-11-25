@@ -34,10 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2.beans;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Data;
 
 import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
@@ -64,6 +64,16 @@ public class Tasks implements ApiType {
         private boolean scheduledTime = true;
         private boolean tag = true;
 
+        public Builder excludeCursor() {
+            super.excludeCursor();
+            return this;
+        }
+
+        public Builder excludeDescription() {
+            super.excludeDescription();
+            return this;
+        }
+
         public Tasks.Builder excludeExecutionDuration() {
             this.description = false;
             return this;
@@ -74,8 +84,33 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        public Builder excludeFinishedTime() {
+            super.excludeFinishedTime();
+            return this;
+        }
+
+        public Builder excludeGenericInformation() {
+            super.excludeGenericInformation();
+            return this;
+        }
+
+        public Builder excludeId() {
+            super.excludeId();
+            return this;
+        }
+
+        public Builder excludeInErrorTime() {
+            super.excludeInErrorTime();
+            return this;
+        }
+
         public Tasks.Builder excludeJobId() {
             this.jobId = false;
+            return this;
+        }
+
+        public Builder excludeMaxNumberOfExecution() {
+            super.excludeMaxNumberOfExecution();
             return this;
         }
 
@@ -94,8 +129,24 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        public Builder excludeOnTaskError() {
+            super.excludeOnTaskError();
+            return this;
+        }
+
+        public Builder excludePageInfo() {
+            super.excludePageInfo();
+            return this;
+        }
+
         public Tasks.Builder excludeProgress() {
             this.progress = false;
+            return this;
+        }
+
+
+        public Tasks.Builder excludeRestartMode() {
+            this.restartMode = false;
             return this;
         }
 
@@ -104,8 +155,13 @@ public class Tasks implements ApiType {
             return this;
         }
 
-        public Tasks.Builder excludeRestartMode() {
-            this.restartMode = false;
+        public Builder excludeStartTime() {
+            super.excludeStartTime();
+            return this;
+        }
+
+        public Builder excludeStatus() {
+            super.excludeStatus();
             return this;
         }
 
@@ -114,8 +170,28 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        public Builder excludeVariables() {
+            super.excludeVariables();
+            return this;
+        }
+
+        public Builder genericInformation(GenericInformation genericInformation) {
+            super.genericInformation(genericInformation);
+            return this;
+        }
+
+        public Builder pageInfo(PageInfo pageInfo) {
+            super.pageInfo(pageInfo);
+            return this;
+        }
+
+        public Builder variables(Variables variables) {
+            super.variables(variables);
+            return this;
+        }
+
         public Tasks build() {
-            this.build(()-> ApiTypeKeyEnum.TASKS.getKey(), input);
+            this.build(() -> ApiTypeKeyEnum.TASKS.getKey(), input);
 
             if (executionDuration) {
                 sb.append(ApiTypeKeyEnum.EXECUTION_DURATION.getKey()).append(RETURN);
@@ -139,7 +215,7 @@ public class Tasks implements ApiType {
             if (scheduledTime) {
                 sb.append(ApiTypeKeyEnum.SCHEDULED_TIME.getKey()).append(RETURN);
             }
-            if(restartMode) {
+            if (restartMode) {
                 sb.append(ApiTypeKeyEnum.RESTART_MODE.getKey()).append(RETURN);
             }
             if (tag) {

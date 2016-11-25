@@ -1,7 +1,7 @@
 {
   "$schema": "http://activeeon.com/api/v2/schema",
   "id": "http://activeeon.com/api/v2",
-  "javaName": "SchedulerApiResponse",
+  "javaName": "SchedulingApiResponse",
   "properties": {
     "data": {
       "id": "http://activeeon.com/api/v2/data",

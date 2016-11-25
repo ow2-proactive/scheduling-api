@@ -34,17 +34,18 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2;
 
-import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.beans.v2.SchedulerApiResponse;
+import com.google.common.base.Strings;
+import lombok.Getter;
+import org.ow2.proactive.scheduling.api.beans.v2.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.client.v2.beans.Query;
 import org.ow2.proactive.scheduling.api.client.v2.exception.SchedulingApiException;
-import com.google.common.base.Strings;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 
 public class SchedulingApiClient {
@@ -53,6 +54,7 @@ public class SchedulingApiClient {
 
     private final String url;
 
+    @Getter
     private final String sessionId;
 
     public SchedulingApiClient(String url, String sessionId) {
@@ -60,7 +62,7 @@ public class SchedulingApiClient {
         this.sessionId = sessionId;
     }
 
-    public SchedulerApiResponse execute(Query query) throws SchedulingApiException {
+    public SchedulingApiResponse execute(Query query) throws SchedulingApiException {
         if (Strings.isNullOrEmpty(url)) {
             throw new SchedulingApiException("API server URL is not initialized");
         }
@@ -73,7 +75,7 @@ public class SchedulingApiClient {
             HttpEntity<Map<String, String>> request = new HttpEntity<>(query.getQueryMap(), headers);
 
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            return restTemplate.postForObject(url, request, SchedulerApiResponse.class);
+            return restTemplate.postForObject(url, request, SchedulingApiResponse.class);
         } catch (Exception e) {
             throw new SchedulingApiException("Exception", e);
         }

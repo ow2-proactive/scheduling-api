@@ -34,10 +34,10 @@
  */
 package org.ow2.proactive.scheduling.api.client.v2.beans;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class Jobs implements ApiType {
@@ -74,13 +74,48 @@ public class Jobs implements ApiType {
             return this;
         }
 
+        public Builder excludeCursor() {
+            super.excludeCursor();
+            return this;
+        }
+
         public Builder excludeDataManagement() {
             this.dataManagement = null;
             return this;
         }
 
+        public Builder excludeDescription() {
+            super.excludeDescription();
+            return this;
+        }
+
+        public Builder excludeFinishedTime() {
+            super.excludeFinishedTime();
+            return this;
+        }
+
+        public Builder excludeGenericInformation() {
+            super.excludeGenericInformation();
+            return this;
+        }
+
+        public Builder excludeId() {
+            super.excludeId();
+            return this;
+        }
+
+        public Builder excludeInErrorTime() {
+            super.excludeInErrorTime();
+            return this;
+        }
+
         public Builder excludeJobName() {
             this.jobName = false;
+            return this;
+        }
+
+        public Builder excludeMaxNumberOfExecution() {
+            super.excludeMaxNumberOfExecution();
             return this;
         }
 
@@ -114,8 +149,18 @@ public class Jobs implements ApiType {
             return this;
         }
 
+        public Builder excludeOnTaskError() {
+            super.excludeOnTaskError();
+            return this;
+        }
+
         public Builder excludeOwner() {
             this.owner = false;
+            return this;
+        }
+
+        public Builder excludePageInfo() {
+            super.excludePageInfo();
             return this;
         }
 
@@ -134,6 +179,21 @@ public class Jobs implements ApiType {
             return this;
         }
 
+        public Builder excludeStartTime() {
+            super.excludeStartTime();
+            return this;
+        }
+
+        public Builder excludeStatus() {
+            super.excludeStatus();
+            return this;
+        }
+
+        public Builder excludeVariables() {
+            super.excludeVariables();
+            return this;
+        }
+
         public Builder excludeSubmittedTime() {
             this.submittedTime = false;
             return this;
@@ -144,13 +204,28 @@ public class Jobs implements ApiType {
             return this;
         }
 
+        public Builder genericInformation(GenericInformation genericInformation) {
+            super.genericInformation(genericInformation);
+            return this;
+        }
+
         public Builder input(List<JobInput> input) {
             this.input = input;
             return this;
         }
 
+        public Builder pageInfo(PageInfo pageInfo) {
+            super.pageInfo(pageInfo);
+            return this;
+        }
+
         public Builder tasks(Tasks tasks) {
             this.tasks = tasks;
+            return this;
+        }
+
+        public Builder variables(Variables variables) {
+            super.variables(variables);
             return this;
         }
 

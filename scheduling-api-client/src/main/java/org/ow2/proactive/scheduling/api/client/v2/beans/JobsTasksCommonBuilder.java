@@ -37,7 +37,7 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class JobsTasksCommonBuilder {
+abstract class JobsTasksCommonBuilder {
 
     protected boolean cursor = true;
     protected boolean description = true;
@@ -55,82 +55,82 @@ public abstract class JobsTasksCommonBuilder {
 
     protected StringBuilder sb = new StringBuilder();
 
-    public JobsTasksCommonBuilder excludeCursor() {
+    protected JobsTasksCommonBuilder excludeCursor() {
         this.cursor = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeDescription() {
+    protected JobsTasksCommonBuilder excludeDescription() {
         this.description = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeFinishedTime() {
+    protected JobsTasksCommonBuilder excludeFinishedTime() {
         this.finishedTime = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeGenericInformation() {
+    protected JobsTasksCommonBuilder excludeGenericInformation() {
         this.genericInformation = null;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeId() {
+    protected JobsTasksCommonBuilder excludeId() {
         this.id = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeInErrorTime() {
+    protected JobsTasksCommonBuilder excludeInErrorTime() {
         this.inErrorTime = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeMaxNumberOfExecution() {
+    protected JobsTasksCommonBuilder excludeMaxNumberOfExecution() {
         this.maxNumberOfExecution = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeOnTaskError() {
+    protected JobsTasksCommonBuilder excludeOnTaskError() {
         this.onTaskError = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludePageInfo() {
+    protected JobsTasksCommonBuilder excludePageInfo() {
         this.pageInfo = null;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeStartTime() {
+    protected JobsTasksCommonBuilder excludeStartTime() {
         this.startTime = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeStatus() {
+    protected JobsTasksCommonBuilder excludeStatus() {
         this.status = false;
         return this;
     }
 
-    public JobsTasksCommonBuilder excludeVariables() {
+    protected JobsTasksCommonBuilder excludeVariables() {
         this.variables = null;
         return this;
     }
 
-    public JobsTasksCommonBuilder genericInformation(GenericInformation genericInformation) {
+    protected JobsTasksCommonBuilder genericInformation(GenericInformation genericInformation) {
         this.genericInformation = genericInformation;
         return this;
     }
 
-    public JobsTasksCommonBuilder pageInfo(PageInfo pageInfo) {
+    protected JobsTasksCommonBuilder pageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
         return this;
     }
 
-    public JobsTasksCommonBuilder variables(Variables variables) {
+    protected JobsTasksCommonBuilder variables(Variables variables) {
         this.variables = variables;
         return this;
     }
 
-    public void build(Supplier<String> title, List<? extends ApiType> input) {
+    protected void build(Supplier<String> title, List<? extends ApiType> input) {
         sb.append(title.get());
         sb.append(Inputs.buildQueryString(input));
         sb.append("{").append(Constants.RETURN);
