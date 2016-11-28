@@ -36,14 +36,60 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class JobsTest {
+    private static final String ALL = "{\njobs( after:\"after\" before:\"before\" first:10 last:10 ){\n" +
+            "pageInfo{\n" +
+            "hasNextPage\n" +
+            "hasPreviousPage\n" +
+            "startCursor\n" +
+            "endCursor\n" +
+            "}\n" +
+            "edges{\n" +
+            "cursor\n" +
+            "node{\n" +
+            "description\n" +
+            "finishedTime\n" +
+            "genericInformation{\n" +
+            "key\n" +
+            "value\n" +
+            "}\n" +
+            "id\n" +
+            "inErrorTime\n" +
+            "maxNumberOfExecution\n" +
+            "name\n" +
+            "onTaskError\n" +
+            "startTime\n" +
+            "status\n" +
+            "dataManagement{\n" +
+            "globalSpaceUrl\n" +
+            "inputSpaceUrl\n" +
+            "outputSpaceUrl\n" +
+            "userSpaceUrl\n" +
+            "}\n" +
+            "numberOfFailedTasks\n" +
+            "numberOfFaultyTasks\n" +
+            "numberOfFinishedTasks\n" +
+            "numberOfInErrorTasks\n" +
+            "numberOfPendingTasks\n" +
+            "numberOfRunningTasks\n" +
+            "owner\n" +
+            "priority\n" +
+            "projectName\n" +
+            "removedTime\n" +
+            "submittedTime\n" +
+            "totalNumberOfTasks\n}\n}\n}\n}";
 
     @Test
     public void getJobsQueryString() {
-        Jobs jobs = new Jobs.Builder().build();
+
+        Jobs jobs = new Jobs.Builder().after("after").before("before").first(10).last(10).excludeVariables().build();
 
         System.out.println(jobs.getQueryString());
 
+        assertThat(jobs.getQueryString(), is(ALL));
         // How graphiql vaildate the input query on the fly?
     }
 }

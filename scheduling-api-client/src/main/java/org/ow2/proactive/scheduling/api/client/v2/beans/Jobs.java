@@ -54,7 +54,6 @@ public class Jobs implements ApiType {
          * query filter input list
          */
         private List<JobInput> input = new ArrayList<>();
-        private boolean jobName = true;
         private boolean numberOfFailedTasks = true;
         private boolean numberOfFaultyTasks = true;
         private boolean numberOfFinishedTasks = true;
@@ -68,6 +67,18 @@ public class Jobs implements ApiType {
         private boolean submittedTime = true;
         private Tasks tasks = null;
         private boolean totalNumberOfTasks = true;
+
+        @Override
+        public Builder after(String after) {
+            super.after(after);
+            return this;
+        }
+
+        @Override
+        public Builder before(String before) {
+            super.before(before);
+            return this;
+        }
 
         public Builder dataManagement(DataManagement dataManagement) {
             this.dataManagement = dataManagement;
@@ -115,14 +126,15 @@ public class Jobs implements ApiType {
             return this;
         }
 
-        public Builder excludeJobName() {
-            this.jobName = false;
+        @Override
+        public Builder excludeMaxNumberOfExecution() {
+            super.excludeMaxNumberOfExecution();
             return this;
         }
 
         @Override
-        public Builder excludeMaxNumberOfExecution() {
-            super.excludeMaxNumberOfExecution();
+        public Builder excludeName() {
+            super.excludeName();
             return this;
         }
 
@@ -217,6 +229,12 @@ public class Jobs implements ApiType {
         }
 
         @Override
+        public Builder first(Integer first) {
+            super.first(first);
+            return this;
+        }
+
+        @Override
         public Builder genericInformation(GenericInformation genericInformation) {
             super.genericInformation(genericInformation);
             return this;
@@ -224,6 +242,12 @@ public class Jobs implements ApiType {
 
         public Builder input(List<JobInput> input) {
             this.input = input;
+            return this;
+        }
+
+        @Override
+        public Builder last(Integer last) {
+            super.last(last);
             return this;
         }
 
@@ -249,10 +273,7 @@ public class Jobs implements ApiType {
             this.build(() -> ApiTypeKeyEnum.JOBS.getKey(), input);
 
             if (dataManagement != null) {
-                sb.append(dataManagement.getQueryString()).append(Constants.RETURN);
-            }
-            if (jobName) {
-                sb.append(ApiTypeKeyEnum.JOB_NAME.getKey()).append(Constants.RETURN);
+                sb.append(dataManagement.getQueryString());
             }
             if (numberOfFailedTasks) {
                 sb.append(ApiTypeKeyEnum.NUMBER_OF_FAILED_TASKS.getKey()).append(Constants.RETURN);

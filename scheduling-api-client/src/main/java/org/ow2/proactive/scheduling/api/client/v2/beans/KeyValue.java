@@ -80,7 +80,7 @@ public abstract class KeyValue implements ApiType {
 
         protected String buildQueryString() {
             sb.append(getKeyValueBeanName());
-            sb.append(Inputs.buildQueryString(input));
+            sb.append(Inputs.buildQueryString(null, null, null, null, input));
             sb.append("{").append(RETURN);
             if (key) {
                 sb.append(KEY.getKey()).append(RETURN);

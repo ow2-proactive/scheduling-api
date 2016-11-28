@@ -49,16 +49,26 @@ public class JobInput implements ApiType {
     }
 
     public static class Builder {
+        private String afterSubmittedTime;
+        private String beforeSubmittedTime;
         private String id;
         private String jobName;
         private String owner;
         private String priority;
         private String projectName;
         private String status;
-        private String beforeSubmittedTime;
-        private String afterSubmittedTime;
 
         private StringBuilder sb = new StringBuilder();
+
+        public JobInput.Builder afterSubmittedTime(String afterSubmittedTime) {
+            this.afterSubmittedTime = afterSubmittedTime;
+            return this;
+        }
+
+        public JobInput.Builder beforeSubmittedTime(String beforeSubmittedTime) {
+            this.beforeSubmittedTime = beforeSubmittedTime;
+            return this;
+        }
 
         public JobInput.Builder id(String id) {
             this.id = id;
@@ -87,16 +97,6 @@ public class JobInput implements ApiType {
 
         public JobInput.Builder status(String status) {
             this.status = status;
-            return this;
-        }
-
-        public JobInput.Builder beforeSubmittedTime(String beforeSubmittedTime) {
-            this.beforeSubmittedTime = beforeSubmittedTime;
-            return this;
-        }
-
-        public JobInput.Builder afterSubmittedTime(String afterSubmittedTime) {
-            this.afterSubmittedTime = afterSubmittedTime;
             return this;
         }
 

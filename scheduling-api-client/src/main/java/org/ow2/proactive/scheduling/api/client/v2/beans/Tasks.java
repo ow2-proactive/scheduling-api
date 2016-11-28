@@ -65,6 +65,18 @@ public class Tasks implements ApiType {
         private boolean tag = true;
 
         @Override
+        public Builder after(String after) {
+            super.after(after);
+            return this;
+        }
+
+        @Override
+        public Builder before(String before) {
+            super.before(before);
+            return this;
+        }
+
+        @Override
         public Builder excludeCursor() {
             super.excludeCursor();
             return this;
@@ -121,8 +133,9 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Tasks.Builder excludeName() {
-            this.name = false;
+            super.excludeName();
             return this;
         }
 
@@ -188,8 +201,19 @@ public class Tasks implements ApiType {
         }
 
         @Override
+        public Builder first(Integer first) {
+            super.first(first);
+            return this;
+        }
+
+        @Override
         public Builder genericInformation(GenericInformation genericInformation) {
             super.genericInformation(genericInformation);
+            return this;
+        }
+
+        public Builder last(Integer last) {
+            super.last(last);
             return this;
         }
 

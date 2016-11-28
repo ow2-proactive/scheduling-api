@@ -39,12 +39,16 @@ import java.util.function.Supplier;
 
 abstract class JobsTasksCommonBuilder {
 
+    protected String after = null;
+    protected String before = null;
     protected boolean cursor = true;
     protected boolean description = true;
     protected boolean finishedTime = true;
+    protected Integer first = null;
     protected GenericInformation genericInformation = new GenericInformation.Builder().build();
     protected boolean id = true;
     protected boolean inErrorTime = true;
+    protected Integer last = null;
     protected boolean maxNumberOfExecution = true;
     protected boolean name = true;
     protected boolean onTaskError = true;
@@ -54,6 +58,16 @@ abstract class JobsTasksCommonBuilder {
     protected Variables variables = new Variables.Builder().build();
 
     protected StringBuilder sb = new StringBuilder();
+
+    public JobsTasksCommonBuilder after(String after) {
+        this.after = after;
+        return this;
+    }
+
+    public JobsTasksCommonBuilder before(String before) {
+        this.before = before;
+        return this;
+    }
 
     protected JobsTasksCommonBuilder excludeCursor() {
         this.cursor = false;
@@ -90,6 +104,11 @@ abstract class JobsTasksCommonBuilder {
         return this;
     }
 
+    protected JobsTasksCommonBuilder excludeName() {
+        this.name = false;
+        return this;
+    }
+
     protected JobsTasksCommonBuilder excludeOnTaskError() {
         this.onTaskError = false;
         return this;
@@ -115,8 +134,18 @@ abstract class JobsTasksCommonBuilder {
         return this;
     }
 
+    public JobsTasksCommonBuilder first(Integer first) {
+        this.first = first;
+        return this;
+    }
+
     protected JobsTasksCommonBuilder genericInformation(GenericInformation genericInformation) {
         this.genericInformation = genericInformation;
+        return this;
+    }
+
+    public JobsTasksCommonBuilder last(Integer last) {
+        this.last = last;
         return this;
     }
 
@@ -132,7 +161,11 @@ abstract class JobsTasksCommonBuilder {
 
     protected void build(Supplier<String> title, List<? extends ApiType> input) {
         sb.append(title.get());
-        sb.append(Inputs.buildQueryString(input));
+        // start input building
+        sb.append(Inputs.buildQueryString(after, before, first, last, input));
+        // end input building
+
+        // start query body building
         sb.append("{").append(Constants.RETURN);
         if (pageInfo != null) {
             sb.append(pageInfo.getQueryString());
@@ -152,7 +185,7 @@ abstract class JobsTasksCommonBuilder {
             sb.append(ApiTypeKeyEnum.FINISHED_TIME.getKey()).append(Constants.RETURN);
         }
         if (genericInformation != null) {
-            sb.append(genericInformation.getQueryString()).append(Constants.RETURN);
+            sb.append(genericInformation.getQueryString());
         }
         if (id) {
             sb.append(ApiTypeKeyEnum.ID.getKey()).append(Constants.RETURN);
