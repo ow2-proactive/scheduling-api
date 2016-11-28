@@ -1,3 +1,7 @@
+plugins {
+    id "org.sonarqube" version "1.2"
+}
+
 allprojects {
 
     apply plugin: 'eclipse'
@@ -43,6 +47,18 @@ allprojects {
                             password: "${System.getProperty('nexusPassword')}")
                 }
             }
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "$project.group:scheduling-api"
+            property "sonar.projectName", "scheduling-api"
+            property "sonar.jdbc.driverClassName", "org.postgresql.Driver"
+            property "sonar.language", "java"
+            property "sonar.sources", "src/main"
+            property 'sonar.jacoco.reportPath', "${buildDir}/jacoco/testDebug.exec"
+            property 'sonar.junit.reportsPath', "${buildDir}/test-results"
         }
     }
 
