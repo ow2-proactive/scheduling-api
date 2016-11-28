@@ -64,11 +64,13 @@ public class Tasks implements ApiType {
         private boolean scheduledTime = true;
         private boolean tag = true;
 
+        @Override
         public Builder excludeCursor() {
             super.excludeCursor();
             return this;
         }
 
+        @Override
         public Builder excludeDescription() {
             super.excludeDescription();
             return this;
@@ -84,21 +86,25 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Builder excludeFinishedTime() {
             super.excludeFinishedTime();
             return this;
         }
 
+        @Override
         public Builder excludeGenericInformation() {
             super.excludeGenericInformation();
             return this;
         }
 
+        @Override
         public Builder excludeId() {
             super.excludeId();
             return this;
         }
 
+        @Override
         public Builder excludeInErrorTime() {
             super.excludeInErrorTime();
             return this;
@@ -109,6 +115,7 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Builder excludeMaxNumberOfExecution() {
             super.excludeMaxNumberOfExecution();
             return this;
@@ -129,11 +136,13 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Builder excludeOnTaskError() {
             super.excludeOnTaskError();
             return this;
         }
 
+        @Override
         public Builder excludePageInfo() {
             super.excludePageInfo();
             return this;
@@ -155,11 +164,13 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Builder excludeStartTime() {
             super.excludeStartTime();
             return this;
         }
 
+        @Override
         public Builder excludeStatus() {
             super.excludeStatus();
             return this;
@@ -170,21 +181,25 @@ public class Tasks implements ApiType {
             return this;
         }
 
+        @Override
         public Builder excludeVariables() {
             super.excludeVariables();
             return this;
         }
 
+        @Override
         public Builder genericInformation(GenericInformation genericInformation) {
             super.genericInformation(genericInformation);
             return this;
         }
 
+        @Override
         public Builder pageInfo(PageInfo pageInfo) {
             super.pageInfo(pageInfo);
             return this;
         }
 
+        @Override
         public Builder variables(Variables variables) {
             super.variables(variables);
             return this;

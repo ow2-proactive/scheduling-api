@@ -83,6 +83,7 @@ public class AuthenticationService {
                 .maximumSize(sessionCacheMaxSize)
                 .expireAfterWrite(sessionCacheExpireAfter, TimeUnit.MILLISECONDS)
                 .build(new CacheLoader<String, String>() {
+                    @Override
                     public String load(String sessionId)
                             throws Exception {
                         return getLoginFromSessionId(sessionId);
