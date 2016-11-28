@@ -37,6 +37,8 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import com.google.common.base.Strings;
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.KEY;
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.VALUE;
 import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.QUOTE;
 
 @Data
@@ -66,11 +68,17 @@ public class KeyValueInput implements ApiType {
         public KeyValueInput build() {
             sb.append("{");
             if (!Strings.isNullOrEmpty(this.key)) {
-                sb.append(" key : ").append(QUOTE);
-                sb.append(this.key).append(QUOTE);
+                sb.append(' ');
+                sb.append(KEY.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.key);
+                sb.append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.value)) {
-                sb.append(" value : ").append(QUOTE);
+                sb.append(' ');
+                sb.append(VALUE.getKey());
+                sb.append(" : ").append(QUOTE);
                 sb.append(this.value).append(QUOTE);
             }
             sb.append(" }");

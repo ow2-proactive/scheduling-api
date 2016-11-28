@@ -62,6 +62,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.NAME;
 import static org.ow2.proactive.scheduling.api.util.Constants.ARGUMENT_NAME_FILTER;
 
 
@@ -162,7 +163,10 @@ public class GraphqlServiceIntegrationTest {
         String cursor = (String) getField(edges.get(0), "cursor");
 
         queryResult = executeGraphqlQuery(
-                "{ jobs(first: 3 after: \"" + cursor + "\") { edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
+                String.format(
+                        "{ jobs(first: 3 after: \"%s\") { edges { node { id name } } " +
+                                "pageInfo { hasNextPage hasPreviousPage } } }",
+                        cursor));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
@@ -184,7 +188,9 @@ public class GraphqlServiceIntegrationTest {
         String cursor = (String) getField(edges.get(0), "cursor");
 
         queryResult = executeGraphqlQuery(
-                "{ jobs(last: 3 before: \"" + cursor + "\") { edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
+                String.format(
+                        "{ jobs(last: 3 before: \"%s\") { edges { node { id name } } " +
+                                "pageInfo { hasNextPage hasPreviousPage } } }", cursor));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
@@ -199,7 +205,8 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":[{id:3}, {id:5}]) { edges { cursor node { id name } } } }");
+                String.format("{ jobs(%s:[{id:3}, {id:5}]) { edges { cursor node { id name } } } }",
+                        ARGUMENT_NAME_FILTER));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
@@ -212,7 +219,10 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":[{jobName:\"job7\"}, {jobName:\"job9\"}]) { edges { cursor node { id name } } } }");
+                String.format(
+                        "{ jobs(%s:[{%s:\"job7\"} {%s:\"job9\"}]) { edges { cursor node { id name } } } }",
+                        ARGUMENT_NAME_FILTER, NAME.value(), NAME.value()));
+
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
@@ -225,8 +235,8 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":[{owner:\"" + CONTEXT_LOGIN + "\"}, " +
-                        "{owner:\"owner9\"}]) { edges { cursor node { id owner } } } }");
+                String.format("{ jobs(%s:[{owner:\"%s\"} {owner:\"owner9\"}]) " +
+                        "{ edges { cursor node { id owner } } } }", ARGUMENT_NAME_FILTER, CONTEXT_LOGIN));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(6);
 
@@ -238,8 +248,8 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":{status: KILLED}) " +
-                        "{ edges { cursor node { id owner } } } }");
+                String.format("{ jobs(%s:{status: KILLED}) " +
+                        "{ edges { cursor node { id owner } } } }", ARGUMENT_NAME_FILTER));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
     }
@@ -249,8 +259,8 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":[{projectName:\"projectName7\"}, " +
-                        "{projectName:\"projectName9\"}]) { edges { cursor node { id name } } } }");
+                String.format("{ jobs(%s:[{projectName:\"projectName7\"}, {projectName:\"projectName9\"}]) " +
+                        "{ edges { cursor node { id name } } } }", ARGUMENT_NAME_FILTER));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
@@ -263,8 +273,8 @@ public class GraphqlServiceIntegrationTest {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(
-                "{ jobs(" + ARGUMENT_NAME_FILTER + ":{status: KILLED}) " +
-                        "{ edges { cursor node { id owner } } } }");
+                String.format("{ jobs(%s:{status: KILLED}) " +
+                        "{ edges { cursor node { id owner } } } }", ARGUMENT_NAME_FILTER));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
     }
@@ -273,9 +283,10 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsFilterWithConjunctionsAndDisjunctions() {
         addJobData(10);
 
-        String query = "{ jobs(" + ARGUMENT_NAME_FILTER + ":[{owner:\"" + CONTEXT_LOGIN + "\" " +
-                "priority:IDLE status:CANCELED},{projectName:\"projectName7\" status:KILLED}])" +
-                "{ edges { cursor node { id owner } } } }";
+        String query = String.format(
+                "{ jobs(%s:[{owner:\"%s\" " +
+                        "priority:IDLE status:CANCELED},{projectName:\"projectName7\" status:KILLED}])" +
+                        "{ edges { cursor node { id owner } } } }", ARGUMENT_NAME_FILTER, CONTEXT_LOGIN);
 
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
@@ -320,8 +331,8 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksPaginatedWithVariable() {
         addJobDataWithTasks(Constants.PAGINATION_DEFAULT_SIZE + 10);
 
-        String query = "query($count:Int!) { jobs { edges { cursor node { id tasks(first: $count) { edges { node { id } } " +
-                "pageInfo { hasNextPage hasPreviousPage } } } } } } }";
+        String query = "query($count:Int!) { jobs { edges { cursor node { id tasks(first: $count) " +
+                "{ edges { node { id } } pageInfo { hasNextPage hasPreviousPage } } } } } } }";
 
         Map<String, Object> queryResult = executeGraphqlQuery(query, ImmutableMap.of("count", 2));
 
@@ -390,8 +401,8 @@ public class GraphqlServiceIntegrationTest {
         Object firstTaskNode = taskNodes.get(0);
         String cursor = (String) getField(firstTaskNode, "cursor");
 
-        query = "{ jobs { edges { cursor node { id tasks(first: 3 after: \"" + cursor
-                + "\") { edges { cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }";
+        query = String.format("{ jobs { edges { cursor node { id tasks(first: 3 after: \"%s\") { edges " +
+                "{ cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }", cursor);
 
         queryResult = executeGraphqlQuery(query);
 
@@ -421,8 +432,8 @@ public class GraphqlServiceIntegrationTest {
         Object firstTaskNode = taskNodes.get(0);
         String cursor = (String) getField(firstTaskNode, "cursor");
 
-        query = "{ jobs { edges { cursor node { id tasks(last: 3 before: \"" + cursor
-                + "\") { edges { cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }";
+        query = String.format("{ jobs { edges { cursor node { id tasks(last: 3 before: \"%s\") { edges { " +
+                "cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }", cursor);
 
         queryResult = executeGraphqlQuery(query);
 
@@ -443,8 +454,9 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksFilterByIds() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(" +
-                ARGUMENT_NAME_FILTER + ":[{id:3} {id:5}]) { edges { node { id } } } } } } }";
+        String query = String.format(
+                "{ jobs { edges { cursor node { id tasks(%s:[{id:3} {id:5}]) " +
+                        "{ edges { node { id } } } } } } }", ARGUMENT_NAME_FILTER);
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
@@ -459,8 +471,10 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksFilterByName() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(" +
-                ARGUMENT_NAME_FILTER + ":[{taskName:\"task4\"} {taskName:\"task6\"}]) { edges { node { id } } } } } } }";
+        String query = String.format(
+                "{ jobs { edges { cursor node { id tasks(%s:[{%s:\"task4\"} {%s:\"task6\"}]) " +
+                        "{ edges { node { id } } } } } } }",
+                ARGUMENT_NAME_FILTER, NAME.value(), NAME.value());
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
@@ -475,8 +489,8 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksFilterByStatus() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(" +
-                ARGUMENT_NAME_FILTER + ":{status:IN_ERROR}) { edges { node { id } } } } } } }";
+        String query = String.format("{ jobs { edges { cursor node { id tasks(%s:{status:IN_ERROR}) " +
+                "{ edges { node { id } } } } } } }", ARGUMENT_NAME_FILTER);
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");

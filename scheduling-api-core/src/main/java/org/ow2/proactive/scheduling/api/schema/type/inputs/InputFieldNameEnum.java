@@ -35,16 +35,16 @@
 package org.ow2.proactive.scheduling.api.schema.type.inputs;
 
 public enum InputFieldNameEnum {
+
     AFTER("after"),
     BEFORE("before"),
     ID("id"),
     KEY("key"),
-    STATUS("status"),
-    TASK_NAME("taskName"),
-    JOB_NAME("jobName"),
+    NAME("name"),
     OWNER("owner"),
     PRIORITY("priority"),
     PROJECT_NAME("projectName"),
+    STATUS("status"),
     SUBMITTED_TIME("submittedTime"),
     VALUE("value");
 

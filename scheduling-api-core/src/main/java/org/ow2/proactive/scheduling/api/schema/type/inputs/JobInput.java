@@ -45,6 +45,13 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.ID;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.NAME;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.OWNER;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.PRIORITY;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.PROJECT_NAME;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.STATUS;
+import static org.ow2.proactive.scheduling.api.schema.type.inputs.InputFieldNameEnum.SUBMITTED_TIME;
 
 
 /**
@@ -66,41 +73,41 @@ public class JobInput extends JobTaskCommonAbstractInput {
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
-            jobName = Inputs.getValue(input, InputFieldNameEnum.JOB_NAME.value(), null);
-            owner = Inputs.getValue(input, InputFieldNameEnum.OWNER.value(), null);
-            priority = Inputs.getValue(input, InputFieldNameEnum.PRIORITY.value(), null);
-            projectName = Inputs.getValue(input, InputFieldNameEnum.PROJECT_NAME.value(), null);
-            submittedTime = Inputs.getObject(input, InputFieldNameEnum.SUBMITTED_TIME.value(), SubmittedTimeInput::new, null);
+            jobName = Inputs.getValue(input, NAME.value(), null);
+            owner = Inputs.getValue(input, OWNER.value(), null);
+            priority = Inputs.getValue(input, PRIORITY.value(), null);
+            projectName = Inputs.getValue(input, PROJECT_NAME.value(), null);
+            submittedTime = Inputs.getObject(input, SUBMITTED_TIME.value(), SubmittedTimeInput::new, null);
         }
     }
 
     public final static GraphQLInputType TYPE = newInputObject().name("JobInput")
             .description("Job filter input")
-            .field(newInputObjectField().name(InputFieldNameEnum.ID.value())
+            .field(newInputObjectField().name(ID.value())
                     .description("Job ID")
                     .type(GraphQLLong)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.JOB_NAME.value())
+            .field(newInputObjectField().name(NAME.value())
                     .description("Job name")
                     .type(GraphQLString)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.OWNER.value())
+            .field(newInputObjectField().name(OWNER.value())
                     .description("Job owner")
                     .type(GraphQLString)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.PRIORITY.value())
+            .field(newInputObjectField().name(PRIORITY.value())
                     .description("Job priority")
                     .type(Job.JOB_PRIORITY_ENUM)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.PROJECT_NAME.value())
+            .field(newInputObjectField().name(PROJECT_NAME.value())
                     .description("Project name which the job belongs to")
                     .type(GraphQLString)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.STATUS.value())
+            .field(newInputObjectField().name(STATUS.value())
                     .description("Job status")
                     .type(Job.JOB_STATUS_ENUM)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.SUBMITTED_TIME.value())
+            .field(newInputObjectField().name(SUBMITTED_TIME.value())
                     .description("Job submitted time")
                     .type(SubmittedTimeInput.TYPE)
                     .build())

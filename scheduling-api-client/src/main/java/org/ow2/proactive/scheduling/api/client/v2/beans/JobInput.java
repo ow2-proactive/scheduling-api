@@ -37,11 +37,13 @@ package org.ow2.proactive.scheduling.api.client.v2.beans;
 import com.google.common.base.Strings;
 import lombok.Data;
 
+import static org.ow2.proactive.scheduling.api.client.v2.beans.ApiTypeKeyEnum.SUBMITTED_TIME;
 import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.QUOTE;
 import static org.ow2.proactive.scheduling.api.client.v2.beans.Constants.RETURN;
 
 @Data
 public class JobInput implements ApiType {
+
     private final String queryString;
 
     private JobInput(String queryString) {
@@ -103,37 +105,62 @@ public class JobInput implements ApiType {
         public JobInput build() {
             sb.append("{");
             if (!Strings.isNullOrEmpty(this.id)) {
-                sb.append(" id : ");
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.ID.getKey());
+                sb.append(" : ");
                 sb.append(this.id);
             }
             if (!Strings.isNullOrEmpty(this.jobName)) {
-                sb.append(" jobName : ").append(QUOTE);
-                sb.append(this.jobName).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.NAME.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.jobName);
+                sb.append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.owner)) {
-                sb.append(" owner : ").append(QUOTE);
-                sb.append(this.owner).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.OWNER.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.owner);
+                sb.append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.priority)) {
-                sb.append(" priority : ").append(QUOTE);
-                sb.append(this.priority).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.PRIORITY.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.priority);
+                sb.append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.projectName)) {
-                sb.append(" projectName : ").append(QUOTE);
-                sb.append(this.projectName).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.PROJECT_NAME.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.projectName);
+                sb.append(QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.status)) {
-                sb.append(" status : ").append(QUOTE);
-                sb.append(this.status).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.STATUS.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.status);
+                sb.append(QUOTE);
             }
-             if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(this.afterSubmittedTime)) {
-                sb.append(" submittedTime : {");
-                if(!Strings.isNullOrEmpty(this.beforeSubmittedTime)) {
+            if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(
+                    this.afterSubmittedTime)) {
+                sb.append(' ');
+                sb.append(SUBMITTED_TIME.getKey());
+                sb.append(" : {");
+                if (!Strings.isNullOrEmpty(this.beforeSubmittedTime)) {
                     sb.append(" before : ").append(this.beforeSubmittedTime);
                 }
-                 if(!Strings.isNullOrEmpty(this.afterSubmittedTime)) {
-                     sb.append(" after : ").append(this.afterSubmittedTime);
-                 }
+                if (!Strings.isNullOrEmpty(this.afterSubmittedTime)) {
+                    sb.append(" after : ").append(this.afterSubmittedTime);
+                }
                 sb.append(" }").append(RETURN);
             }
             sb.append(" }");

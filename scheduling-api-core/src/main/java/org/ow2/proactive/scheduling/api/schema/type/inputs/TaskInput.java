@@ -55,14 +55,12 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 @Getter
 public class TaskInput extends JobTaskCommonAbstractInput {
 
-    private static final String TASK_NAME_FIELD_NAME = "name";
-
     private final String taskName;
 
     public TaskInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
-            taskName = Inputs.getValue(input, InputFieldNameEnum.TASK_NAME.value(), null);
+            taskName = Inputs.getValue(input, InputFieldNameEnum.NAME.value(), null);
         } else {
             taskName = null;
         }
@@ -78,7 +76,7 @@ public class TaskInput extends JobTaskCommonAbstractInput {
                     .description("Task status")
                     .type(Task.TASK_STATUS_ENUM)
                     .build())
-            .field(newInputObjectField().name(InputFieldNameEnum.TASK_NAME.value())
+            .field(newInputObjectField().name(InputFieldNameEnum.NAME.value())
                     .description("Task name")
                     .type(GraphQLString)
                     .build())

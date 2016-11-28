@@ -72,17 +72,27 @@ public class TaskInput implements ApiType {
         public TaskInput build() {
             sb.append("{");
             if (!Strings.isNullOrEmpty(this.id)) {
-                sb.append(" id : ");
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.ID.getKey());
+                sb.append(" : ");
                 sb.append(this.id);
             }
             if (!Strings.isNullOrEmpty(this.taskName)) {
-                sb.append(" taskName : ").append(QUOTE);
-                sb.append(this.taskName).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.NAME.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.taskName);
+                sb.append(QUOTE);
                 sb.append(" ");
             }
             if (!Strings.isNullOrEmpty(this.status)) {
-                sb.append(" status : ").append(QUOTE);
-                sb.append(this.status).append(QUOTE);
+                sb.append(' ');
+                sb.append(ApiTypeKeyEnum.STATUS.getKey());
+                sb.append(" : ");
+                sb.append(QUOTE);
+                sb.append(this.status);
+                sb.append(QUOTE);
             }
             sb.append(" }");
             return new TaskInput(sb.toString());

@@ -35,6 +35,7 @@
 package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 public enum ApiTypeKeyEnum {
+
     CURSOR("cursor"),
     DATA_MANAGEMENT("dataManagement"),
     DESCRIPTION("description"),
@@ -49,12 +50,11 @@ public enum ApiTypeKeyEnum {
     ID("id"),
     INPUT_SPACE_URL("inputSpaceUrl"),
     IN_ERROR_TIME("inErrorTime"),
-    MAX_NUMBER_OF_EXECUTION("maxNumberOfExecution"),
-    JOB_ID("jobId"),
-    JOB_NAME("jobName"),
     JOBS("jobs"),
+    JOB_ID("jobId"),
     KEY("key"),
     LOGIN("login"),
+    MAX_NUMBER_OF_EXECUTION("maxNumberOfExecution"),
     NAME("name"),
     NUMBER_OF_EXECUTION_LEFT("numberOfExecutionLeft"),
     NUMBER_OF_EXECUTION_ON_FAILURE_LEFT("numberOfExecutionOnFailureLeft"),
