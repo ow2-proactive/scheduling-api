@@ -35,7 +35,11 @@
 package org.ow2.proactive.scheduling.api.client.v2.beans;
 
 public final class Constants {
+
     public static final String RETURN = "\n";
 
     public static final String QUOTE = "\"";
+
+    private Constants() {
+    }
 }

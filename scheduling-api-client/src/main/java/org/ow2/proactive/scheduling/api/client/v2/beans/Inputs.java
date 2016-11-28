@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 
 public class Inputs {
 
+    private Inputs() {
+    }
+
     public static final String buildQueryString(List<? extends ApiType> input) {
         if (!input.isEmpty()) {
             StringBuilder sb = new StringBuilder();
