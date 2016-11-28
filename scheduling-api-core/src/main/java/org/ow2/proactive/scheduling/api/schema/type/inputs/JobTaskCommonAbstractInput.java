@@ -50,9 +50,6 @@ public abstract class JobTaskCommonAbstractInput {
 
     protected String status;
 
-    // TODO custom orderby feature, not implemented yet in data fetcher
-    private String orderBy;
-
     public JobTaskCommonAbstractInput(Map<String, Object> input) {
 
         if (input != null) {
