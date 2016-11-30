@@ -1,0 +1,11 @@
+dependencies {
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
+
+    // The scope of this dependency has to be changed to compile
+    // in order to start the application from your IDE
+    providedCompile("org.ow2.proactive:scheduler-server:$version") {
+        exclude module: 'hsqldb'
+    }
+
+    compile project(':scheduling-api-graphql:scheduling-api-graphql-schema')
+}

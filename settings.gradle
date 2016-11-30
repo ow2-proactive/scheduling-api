@@ -1,6 +1,11 @@
 rootProject.name = 'scheduling-api'
 
-include 'scheduling-api-client'
-include 'scheduling-api-core'
-include 'scheduling-api-beans'
+include 'scheduling-api-http'
 
+include 'scheduling-api-graphql'
+include 'scheduling-api-graphql:scheduling-api-graphql-beans'
+include 'scheduling-api-graphql:scheduling-api-graphql-client'
+include 'scheduling-api-graphql:scheduling-api-graphql-common'
+include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
+include 'scheduling-api-graphql:scheduling-api-graphql-schema'
+include 'scheduling-api-graphql:scheduling-api-graphql-services'

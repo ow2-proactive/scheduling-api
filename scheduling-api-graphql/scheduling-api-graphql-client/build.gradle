@@ -1,0 +1,7 @@
+dependencies {
+    compile "com.google.guava:guava:20.0"
+    compile 'org.springframework:spring-web:4.2.5.RELEASE'
+    compile project(':scheduling-api-graphql:scheduling-api-graphql-beans')
+    compile project(":scheduling-api-graphql:scheduling-api-graphql-common")
+    testCompile project(':scheduling-api-graphql:scheduling-api-graphql-beans')
+}
