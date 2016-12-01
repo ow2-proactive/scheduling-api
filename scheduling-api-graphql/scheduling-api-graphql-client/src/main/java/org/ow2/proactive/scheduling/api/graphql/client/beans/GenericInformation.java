@@ -22,15 +22,34 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-rootProject.name = 'scheduling-api'
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class GenericInformation extends KeyValue implements ApiType {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    public GenericInformation(String queryString) {
+        super(queryString);
+    }
+
+    public static class Builder extends KeyValue.Builder {
+
+        @Override
+        public String getKeyValueBeanName() {
+            return Fields.GENERIC_INFORMATION.getName();
+        }
+
+        @Override
+        public GenericInformation build() {
+            return new GenericInformation(buildQueryString());
+        }
+    }
+
+}

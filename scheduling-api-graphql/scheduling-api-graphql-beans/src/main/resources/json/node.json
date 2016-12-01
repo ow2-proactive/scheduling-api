@@ -1,0 +1,66 @@
+{
+  "id": "http://activeeon.com/api/v2/data/edges/node",
+  "properties": {
+    "description": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/description",
+      "required": false,
+      "type": "string"
+    },
+    "finishedTime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/finishedTime",
+      "required": false,
+      "type": "number"
+    },
+    "genericInformation": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/genericInformation",
+      "javaType": "java.util.Map<String,String>",
+      "type": "object"
+    },
+    "id": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/id",
+      "required": false,
+      "type": "number"
+    },
+    "inErrorTime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/inErrorTime",
+      "required": false,
+      "type": "number"
+    },
+    "maxNumberOfExecution": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/maxNumberOfExecution",
+      "required": false,
+      "type": "integer"
+    },
+    "name": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/name",
+      "required": false,
+      "type": "string"
+    },
+    "onTaskError": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/onTaskError",
+      "required": false,
+      "type": "string"
+    },
+    "startTime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/startTime",
+      "required": false,
+      "type": "number"
+    },
+    "status": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/status",
+      "required": false,
+      "type": "string"
+    },
+    "variables": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/variables",
+      "javaType": "java.util.Map<String,String>",
+      "type": "object"
+    }
+  },
+  "required": false,
+  "type": "object"
+}

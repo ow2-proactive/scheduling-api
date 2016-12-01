@@ -22,15 +22,25 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.common;
 
-rootProject.name = 'scheduling-api'
+import com.google.common.base.CaseFormat;
 
-include 'scheduling-api-http'
+/**
+ * Defines the name of the different GraphQL arguments which are used in the API.
+ *
+ * @author ActiveEon Team
+ */
+public enum Arguments {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    AFTER,
+    BEFORE,
+    FILTER,
+    FIRST,
+    LAST;
+
+    public String getName() {
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());
+    }
+
+}

@@ -22,15 +22,22 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
-rootProject.name = 'scheduling-api'
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public class UserDataFetcher implements DataFetcher {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    @Override
+    public Object get(DataFetchingEnvironment environment) {
+        GraphqlContext context = (GraphqlContext) environment.getContext();
+        return User.builder().login(context.getLogin()).sessionId(context.getSessionId()).build();
+    }
+
+}

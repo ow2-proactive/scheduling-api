@@ -22,15 +22,24 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
-rootProject.name = 'scheduling-api'
+import java.util.List;
 
-include 'scheduling-api-http'
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
+import graphql.schema.DataFetchingEnvironment;
+
+/**
+ * @author ActiveEon Team
+ */
+public interface JobTaskInputPredicatesConverter<T, I extends JobTaskCommonAbstractInput> {
+
+    List<I> mapToInput(DataFetchingEnvironment environment);
+
+    List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder,
+            Root<T> root, List<I> input);
+}

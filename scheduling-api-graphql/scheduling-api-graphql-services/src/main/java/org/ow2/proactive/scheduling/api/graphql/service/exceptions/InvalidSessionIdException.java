@@ -22,15 +22,16 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.service.exceptions;
 
-rootProject.name = 'scheduling-api'
+/**
+ * @author ActiveEon Team
+ */
+public class InvalidSessionIdException extends RuntimeException {
 
-include 'scheduling-api-http'
+    public InvalidSessionIdException() {
+        super("The specified session ID is invalid or has expired. " +
+                "You need to authenticate through the ProActive identity service to get a valid session ID.");
+    }
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+}

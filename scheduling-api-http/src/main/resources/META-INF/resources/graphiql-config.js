@@ -23,14 +23,6 @@
  * or a different license than the AGPL.
  */
 
-rootProject.name = 'scheduling-api'
-
-include 'scheduling-api-http'
-
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+(function (f) {
+    var graphql_server_context = '{{graphql_server_context}}'
+});

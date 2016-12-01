@@ -22,15 +22,16 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
 
-rootProject.name = 'scheduling-api'
+/**
+ * @author ActiveEon Team
+ */
+public abstract class IntegerCursorMapper<F> extends AbstractCursorMapper<F, Integer> {
 
-include 'scheduling-api-http'
+    @Override
+    Integer toOffset(String cursor) {
+        return Integer.parseInt(cursor);
+    }
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+}

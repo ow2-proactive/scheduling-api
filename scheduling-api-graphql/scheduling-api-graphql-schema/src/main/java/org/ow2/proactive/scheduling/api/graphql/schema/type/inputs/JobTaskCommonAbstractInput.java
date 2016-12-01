@@ -22,15 +22,38 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-rootProject.name = 'scheduling-api'
+import java.util.Map;
 
-include 'scheduling-api-http'
+import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
+
+/**
+ * @author ActiveEon Team
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public abstract class JobTaskCommonAbstractInput {
+
+    protected long id;
+
+    protected String status;
+
+    public JobTaskCommonAbstractInput(Map<String, Object> input) {
+        if (input != null) {
+            id = Inputs.getValue(input, ID.getName(), -1L);
+            status = Inputs.getValue(input, STATUS.getName(), null);
+        } else {
+            id = -1L;
+            status = null;
+        }
+    }
+
+}

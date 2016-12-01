@@ -22,15 +22,18 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
 
-rootProject.name = 'scheduling-api'
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public class TaskCursorMapper extends IntegerCursorMapper<Task> {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    @Override
+    String toString(Task task) {
+        return Integer.toString((int) task.getId());
+    }
+
+}

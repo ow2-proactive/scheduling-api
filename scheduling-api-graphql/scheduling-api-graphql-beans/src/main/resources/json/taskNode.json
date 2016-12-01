@@ -1,0 +1,109 @@
+{
+  "extends": {
+    "$ref": "node.json"
+  },
+  "id": "http://activeeon.com/api/v2/data/edges/node/task",
+  "properties": {
+    "additionalClasspath": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/additionalClasspath",
+      "items": {
+        "id": "http://activeeon.com/api/v2/data/edges/node/task/additionalClasspath/0",
+        "required": false,
+        "type": "string"
+      },
+      "required": false,
+      "type": "array"
+    },
+    "executionDuration": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/executionDuration",
+      "required": false,
+      "type": "number"
+    },
+    "executionHostName": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/executionHostName",
+      "required": false,
+      "type": "string"
+    },
+    "javaHome": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/javaHome",
+      "required": false,
+      "type": "string"
+    },
+    "jobId": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/jobId",
+      "required": false,
+      "type": "number"
+    },
+    "jvmArguments": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/jvmArguments",
+      "items": {
+        "id": "http://activeeon.com/api/v2/data/edges/node/task/jvmArguments/0",
+        "required": false,
+        "type": "string"
+      },
+      "required": false,
+      "type": "array"
+    },
+    "numberOfExecutionLeft": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/numberOfExecutionLeft",
+      "required": false,
+      "type": "integer"
+    },
+    "numberOfExecutionOnFailureLeft": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/numberOfExecutionOnFailureLeft",
+      "required": false,
+      "type": "integer"
+    },
+    "preciousLogs": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/preciousLogs",
+      "required": false,
+      "type": "boolean"
+    },
+    "preciousResult": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/preciousResult",
+      "required": false,
+      "type": "boolean"
+    },
+    "restartMode": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/restartMode",
+      "required": false,
+      "type": "string"
+    },
+    "resultPreview": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/resultPreview",
+      "required": false,
+      "type": "string"
+    },
+    "runAsMe": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/runAsMe",
+      "required": false,
+      "type": "boolean"
+    },
+    "scheduledTime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/scheduledTime",
+      "required": false,
+      "type": "number"
+    },
+    "tag": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/tag",
+      "required": false,
+      "type": "string"
+    },
+    "walltime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/walltime",
+      "required": false,
+      "type": "number"
+    },
+    "workingDir": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/workingDir",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "required": false,
+  "type": "object"
+}

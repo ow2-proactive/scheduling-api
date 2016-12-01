@@ -22,15 +22,38 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.common;
 
-rootProject.name = 'scheduling-api'
+import com.google.common.base.CaseFormat;
 
-include 'scheduling-api-http'
+/**
+ * Defines the type of the different GraphQL types which are used in the API.
+ *
+ * @author ActiveEon Team
+ */
+public enum Types {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    DATA_MANAGEMENT,
+    GENERIC_INFORMATION,
+    JOB,
+    JOB_INPUT,
+    JOB_PRIORITY,
+    JOB_STATUS,
+    JOB_TASK_COMMON,
+    KEY_VALUE,
+    KEY_VALUE_INPUT,
+    ON_TASK_ERROR,
+    QUERY,
+    RESTART_MODE,
+    SUBMITTED_TIME_INPUT,
+    TASK,
+    TASK_INPUT,
+    TASK_STATUS,
+    USER,
+    VARIABLE;
+
+    public String getName() {
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+    }
+
+}

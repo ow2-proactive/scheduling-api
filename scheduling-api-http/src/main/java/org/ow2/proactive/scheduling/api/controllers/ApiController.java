@@ -22,15 +22,33 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.controllers;
 
-rootProject.name = 'scheduling-api'
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-include 'scheduling-api-http'
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+@Controller
+public class ApiController {
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String root() {
+        return "/home.html";
+    }
+
+    @RequestMapping(value = "/v1/rest", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
+            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
+            RequestMethod.TRACE })
+    @ResponseBody
+    public String v1() {
+        return "TODO: forward to /rest/";
+    }
+
+    @RequestMapping(value = "/v1/graphiql", method = RequestMethod.GET)
+    public String v2() {
+        return "/index.html";
+    }
+
+}

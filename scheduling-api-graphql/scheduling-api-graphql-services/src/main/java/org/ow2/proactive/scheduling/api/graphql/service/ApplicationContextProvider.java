@@ -22,15 +22,28 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.service;
 
-rootProject.name = 'scheduling-api'
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
-include 'scheduling-api-http'
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+/**
+ * @author ActiveEon team
+ */
+@Service
+public class ApplicationContextProvider implements ApplicationContextAware {
+
+    private static ApplicationContext context;
+
+    public static ApplicationContext getApplicationContext() {
+        return context;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) {
+        context = ctx;
+    }
+
+}

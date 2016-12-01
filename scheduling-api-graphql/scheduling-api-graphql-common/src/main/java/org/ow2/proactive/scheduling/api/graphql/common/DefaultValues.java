@@ -22,15 +22,18 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.common;
 
-rootProject.name = 'scheduling-api'
+/**
+ * Defines the default values of the different GraphQL argument which are used in the API.
+ *
+ * @author lpellegr
+ */
+public final class DefaultValues {
 
-include 'scheduling-api-http'
+    public static final int PAGE_SIZE = 50;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    private DefaultValues() {
+    }
+
+}

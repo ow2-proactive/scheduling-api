@@ -22,15 +22,37 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.common;
 
-rootProject.name = 'scheduling-api'
+import java.util.Map;
+import java.util.function.Function;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public final class Inputs {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    public static <T> T getValue(Map<String, Object> input, String fieldName, T defaultValue) {
+
+        Object fieldValue = input.get(fieldName);
+
+        if (fieldValue != null) {
+            return (T) fieldValue;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public static <T> T getObject(Map<String, Object> input, String fieldName,
+            Function<Map<String, Object>, T> mapper, T defaultValue) {
+
+        Object fieldValue = input.get(fieldName);
+
+        if (fieldValue != null) {
+            return mapper.apply((Map<String, Object>) fieldValue);
+        } else {
+            return defaultValue;
+        }
+    }
+
+}

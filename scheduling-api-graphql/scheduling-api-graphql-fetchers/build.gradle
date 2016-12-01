@@ -23,14 +23,14 @@
  * or a different license than the AGPL.
  */
 
-rootProject.name = 'scheduling-api'
+dependencies {
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
 
-include 'scheduling-api-http'
+    // The scope of this dependency has to be changed to compile
+    // in order to start the application from your IDE
+    providedCompile("org.ow2.proactive:scheduler-server:$version") {
+        exclude module: 'hsqldb'
+    }
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    compile project(':scheduling-api-graphql:scheduling-api-graphql-schema')
+}

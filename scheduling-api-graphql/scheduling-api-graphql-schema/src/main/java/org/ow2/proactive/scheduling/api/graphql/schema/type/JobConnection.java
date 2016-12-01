@@ -22,15 +22,37 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-rootProject.name = 'scheduling-api'
+import java.util.List;
 
-include 'scheduling-api-http'
+import com.google.common.collect.ImmutableList;
+import graphql.relay.Relay;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLObjectType;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+
+/**
+ * @author ActiveEon Team
+ */
+public final class JobConnection {
+
+    public final static Relay RELAY = new Relay();
+
+    public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
+        @Override
+        public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
+            return RELAY.connectionType(
+                    "Jobs", JobEdge.TYPE.getInstance(dataFetchers), ImmutableList.of());
+        }
+    };
+
+    public final static List<GraphQLArgument> getConnectionFieldArguments() {
+        return RELAY.getConnectionFieldArguments();
+    }
+
+    private JobConnection() {
+    }
+
+}

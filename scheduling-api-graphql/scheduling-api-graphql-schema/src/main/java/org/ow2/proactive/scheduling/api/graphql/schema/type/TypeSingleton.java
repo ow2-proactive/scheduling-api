@@ -22,15 +22,26 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-rootProject.name = 'scheduling-api'
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLType;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public abstract class TypeSingleton<T extends GraphQLType> {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    protected T type;
+
+    public abstract T buildType(DataFetcher... dataFetchers);
+
+    public synchronized T getInstance(DataFetcher... dataFetchers) {
+        if (type == null) {
+            type = buildType(dataFetchers);
+        }
+
+        return type;
+    }
+
+}

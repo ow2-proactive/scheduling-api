@@ -22,15 +22,35 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
 
-rootProject.name = 'scheduling-api'
+import graphql.relay.Base64;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public abstract class AbstractCursorMapper<F, T> implements CursorMapper<F, T> {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    protected static final String DUMMY_CURSOR_PREFIX = "graphql-cursor";
+
+    @Override
+    public T getOffsetFromCursor(String cursor) {
+
+        if (cursor == null) {
+            return null;
+        }
+
+        String string = Base64.fromBase64(cursor);
+        return toOffset(string.substring(DUMMY_CURSOR_PREFIX.length()));
+    }
+
+    @Override
+    public String createCursor(F field) {
+        return Base64.toBase64(DUMMY_CURSOR_PREFIX + toString(field));
+    }
+
+    abstract String toString(F field);
+
+    abstract T toOffset(String cursor);
+
+}

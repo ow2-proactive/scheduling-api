@@ -22,15 +22,29 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-rootProject.name = 'scheduling-api'
+import com.google.common.collect.ImmutableList;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLObjectType;
 
-include 'scheduling-api-http'
+/**
+ * @author ActiveEon Team
+ */
+public final class TaskEdge {
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    public final static TypeSingleton<GraphQLObjectType> TYPE =
+            new TypeSingleton<GraphQLObjectType>() {
+                @Override
+                public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
+                    return TaskConnection.RELAY.edgeType("Tasks",
+                            Task.TYPE.getInstance(dataFetchers),
+                            null,
+                            ImmutableList.of());
+                }
+            };
+
+    private TaskEdge() {
+    }
+
+}

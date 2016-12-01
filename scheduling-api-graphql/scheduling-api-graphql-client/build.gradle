@@ -23,14 +23,10 @@
  * or a different license than the AGPL.
  */
 
-rootProject.name = 'scheduling-api'
-
-include 'scheduling-api-http'
-
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+dependencies {
+    compile "com.google.guava:guava:20.0"
+    compile 'org.springframework:spring-web:4.2.5.RELEASE'
+    compile project(':scheduling-api-graphql:scheduling-api-graphql-beans')
+    compile project(":scheduling-api-graphql:scheduling-api-graphql-common")
+    testCompile project(':scheduling-api-graphql:scheduling-api-graphql-beans')
+}

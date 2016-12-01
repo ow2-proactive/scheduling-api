@@ -23,14 +23,17 @@
  * or a different license than the AGPL.
  */
 
-rootProject.name = 'scheduling-api'
+package org.ow2.proactive.scheduling.api.graphql.common;
 
-include 'scheduling-api-http'
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+@AllArgsConstructor
+@Getter
+public final class GraphqlContext {
+
+    private final String sessionId;
+
+    private final String login;
+
+}

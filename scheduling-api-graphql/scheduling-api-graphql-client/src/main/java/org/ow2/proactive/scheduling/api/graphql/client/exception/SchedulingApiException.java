@@ -22,15 +22,36 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+package org.ow2.proactive.scheduling.api.graphql.client.exception;
 
-rootProject.name = 'scheduling-api'
+public class SchedulingApiException extends RuntimeException {
 
-include 'scheduling-api-http'
+    private static final long serialVersionUID = 1L;
 
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+    public SchedulingApiException() {
+        super();
+    }
+
+    /**
+     * @param message exceptions message
+     */
+    public SchedulingApiException(String message) {
+        super(message);
+    }
+
+    /**
+     * @param message exceptions message
+     * @param cause   exceptions cause
+     */
+    public SchedulingApiException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * @param cause exceptions cause
+     */
+    public SchedulingApiException(Throwable cause) {
+        super(cause);
+    }
+
+}
