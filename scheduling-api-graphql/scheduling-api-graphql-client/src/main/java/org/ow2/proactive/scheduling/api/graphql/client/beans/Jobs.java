@@ -265,7 +265,6 @@ public class Jobs implements ApiType {
         }
 
         public Jobs build() {
-            sb.append("{").append(Constants.RETURN);
             this.build(Fields.JOBS::getName, input);
 
             if (dataManagement != null) {
@@ -311,8 +310,7 @@ public class Jobs implements ApiType {
                 sb.append(Fields.TOTAL_NUMBER_OF_TASKS.getName()).append(Constants.RETURN);
             }
 
-            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
-                    Constants.RETURN).append("}");
+            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}");
             return new Jobs(sb.toString());
         }
     }

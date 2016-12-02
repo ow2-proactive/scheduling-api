@@ -62,7 +62,7 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append("{").append(Constants.RETURN).append(Fields.VIEWER).append(" {").append(
+            sb.append(Fields.VIEWER).append(" {").append(
                     Constants.RETURN);
             if (login) {
                 sb.append(Fields.LOGIN.getName()).append(Constants.RETURN);
@@ -73,7 +73,7 @@ public class Viewer implements ApiType {
             if (jobs != null) {
                 sb.append(jobs.getQueryString()).append(Constants.RETURN);
             }
-            sb.append("}").append(Constants.RETURN).append("}");
+            sb.append("}");
 
             return new Viewer(sb.toString());
         }

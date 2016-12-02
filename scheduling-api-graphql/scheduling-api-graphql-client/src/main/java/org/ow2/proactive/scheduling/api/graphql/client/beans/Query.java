@@ -70,7 +70,7 @@ public class Query {
         }
 
         public Builder query(String query) {
-            this.query = query;
+            this.query = "{ " + query + " }";
             return this;
         }
 

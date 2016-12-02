@@ -1,10 +1,11 @@
 {
   "id": "http://activeeon.com/api/v2/data/connection",
-  "javaName": "connection",
+  "javaName": "jobConnection",
   "properties": {
     "edges": {
       "id": "http://activeeon.com/api/v2/data/edges",
       "items": {
+        "javaType" : "org.ow2.proactive.scheduling.api.graphql.beans.JobEdge",
         "properties": {
           "cursor": {
             "id": "http://activeeon.com/api/v2/data/edges/cursor",
@@ -12,7 +13,7 @@
             "type": "string"
           },
           "node": {
-            "$ref": "node.json"
+            "$ref": "jobNode.json"
           }
         },
         "required": false,

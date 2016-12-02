@@ -1,6 +1,6 @@
 {
   "extends": {
-    "$ref": "connection.json"
+    "$ref": "jobConnection.json"
   },
   "id": "http://activeeon.com/api/v2/data/jobs",
   "required": false,
