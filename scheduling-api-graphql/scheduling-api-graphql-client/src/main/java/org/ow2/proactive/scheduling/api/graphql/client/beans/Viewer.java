@@ -62,7 +62,7 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append(Fields.VIEWER).append(" {").append(
+            sb.append(Fields.VIEWER.getName()).append(" {").append(
                     Constants.RETURN);
             if (login) {
                 sb.append(Fields.LOGIN.getName()).append(Constants.RETURN);

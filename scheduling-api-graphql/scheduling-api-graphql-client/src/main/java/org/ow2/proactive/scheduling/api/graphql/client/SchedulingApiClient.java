@@ -26,6 +26,7 @@ package org.ow2.proactive.scheduling.api.graphql.client;
 
 import java.util.Map;
 
+import lombok.extern.log4j.Log4j2;
 import org.ow2.proactive.scheduling.api.graphql.beans.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.beans.Query;
 import org.ow2.proactive.scheduling.api.graphql.client.exception.SchedulingApiException;
@@ -37,7 +38,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-
+@Log4j2
 public class SchedulingApiClient {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -61,6 +62,8 @@ public class SchedulingApiClient {
             MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
             headers.add("sessionid", sessionId);
             headers.add("Content-Type", "application/json");
+
+            log.debug("request query : ", query.getQuery());
 
             HttpEntity<Map<String, String>> request = new HttpEntity<>(query.getQueryMap(), headers);
 

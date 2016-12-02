@@ -24,16 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import com.google.common.truth.Truth;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.AFTER;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.*;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.*;
 
 public class JobTest {

@@ -62,9 +62,6 @@ public class GraphqlService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     private GraphQL graphql;
 
     public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
@@ -100,8 +97,7 @@ public class GraphqlService {
 
         if (!executionResult.getErrors().isEmpty()) {
             result.put("errors", executionResult.getErrors());
-// TODO
-//            log.error("Errors: {}", executionResult.getErrors());
+            log.error("Errors: {}", executionResult.getErrors());
         }
 
         result.put("data", executionResult.getData());
