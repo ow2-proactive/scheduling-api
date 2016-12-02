@@ -24,15 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.google.common.collect.ImmutableMap;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
@@ -44,16 +39,20 @@ import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
-import com.google.common.collect.ImmutableMap;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
@@ -532,7 +531,7 @@ public class GraphqlServiceIntegrationTest {
     }
 
     private JobData createJobData(String name, String owner, JobPriority priority, String projectName,
-            JobStatus status) {
+                                  JobStatus status) {
         JobData jobData = new JobData();
         jobData.setJobName(name);
         jobData.setOwner(owner);
@@ -619,7 +618,7 @@ public class GraphqlServiceIntegrationTest {
 
     private Map<String, Object> executeGraphqlQuery(String query, Map<String, Object> variables) {
         return graphqlService.executeQuery(query, null,
-                new GraphqlContext(CONTEXT_SESSION_ID, CONTEXT_LOGIN),
+                new GraphqlContext(CONTEXT_LOGIN, CONTEXT_SESSION_ID),
                 variables);
     }
 
