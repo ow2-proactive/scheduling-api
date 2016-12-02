@@ -28,7 +28,7 @@ The standard procedure is to copy or to create a symlink to the WAR file in `$PR
 
 Once deployed and running in a ProActive Scheduler instance, a graphical in-browser interface called [GraphiQL](https://github.com/graphql/graphiql) is accessible at:
 
-[http://localhost:8080/scheduling-api/v2/](http://localhost:8080/scheduling-api/v2/)
+[http://localhost:8080/scheduling-api/v1/graphiql](http://localhost:8080/scheduling-api/v1/graphiql)
 
 ## What is missing for now
  
