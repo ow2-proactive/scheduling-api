@@ -30,7 +30,6 @@ dependencies {
     compile 'javax.validation:validation-api:1.1.0.CR2'
 
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
-
 }
 
 clean {

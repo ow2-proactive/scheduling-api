@@ -1,4 +1,5 @@
 apply plugin: 'spring-boot'
+apply plugin: 'war'
 
 bootRepackage {
     enabled = true
@@ -75,14 +76,18 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }
 
-    // The scope of this dependency has to be changed to compile
+    // The scope of this dependency has to be changed to runtime
     // in order to start the application from your IDE
-    providedCompile 'org.springframework.boot:spring-boot-starter-tomcat:1.3.3.RELEASE'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat:1.3.3.RELEASE'
 
     compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
     compile 'org.hibernate:hibernate-core:5.1.0.Final'
 
     runtime 'org.hsqldb:hsqldb:r5658-f2e27a7'
+
+    integrationTestCompile("org.ow2.proactive:scheduler-server:$version") {
+        exclude module: 'hsqldb'
+    }
 
     testCompile 'com.google.code.gson:gson:2.6.2'
     testCompile 'com.jayway.restassured:rest-assured:2.9.0'
