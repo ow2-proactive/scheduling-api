@@ -1,0 +1,127 @@
+{
+  "data": {
+    "viewer": {
+      "login": "admin",
+      "sessionId": "1e59989158b9caef527fc4ac0671a8645b9bc41e59989158b9caef528000",
+      "jobs": {
+        "pageInfo": {
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": "Z3JhcGhxbC1jdXJzb3Ix",
+          "endCursor": "Z3JhcGhxbC1jdXJzb3I1NA=="
+        },
+        "edges": [
+          {
+            "cursor": "Z3JhcGhxbC1jdXJzb3Ix",
+            "node": {
+              "description": "No description",
+              "finishedTime": 1480546341166,
+              "genericInformation": [],
+              "id": "1",
+              "inErrorTime": -1,
+              "maxNumberOfExecution": 2,
+              "name": "Untitled workflow 1",
+              "onTaskError": "CONTINUE_JOB_EXECUTION",
+              "startTime": 1480546339633,
+              "status": "FINISHED",
+              "numberOfFailedTasks": 0,
+              "numberOfFaultyTasks": 0,
+              "numberOfFinishedTasks": 1,
+              "numberOfInErrorTasks": 0,
+              "numberOfPendingTasks": 0,
+              "numberOfRunningTasks": 0,
+              "owner": "admin",
+              "priority": "NORMAL",
+              "projectName": "Not Assigned",
+              "submittedTime": 1480546339202,
+              "totalNumberOfTasks": 1
+            }
+          },
+          {
+            "cursor": "Z3JhcGhxbC1jdXJzb3I1Mg==",
+            "node": {
+              "description": "No description",
+              "finishedTime": 1480586291810,
+              "genericInformation": [],
+              "id": "52",
+              "inErrorTime": -1,
+              "maxNumberOfExecution": 2,
+              "name": "Untitled workflow 1",
+              "onTaskError": "CONTINUE_JOB_EXECUTION",
+              "startTime": 1480586290041,
+              "status": "FINISHED",
+              "numberOfFailedTasks": 0,
+              "numberOfFaultyTasks": 0,
+              "numberOfFinishedTasks": 1,
+              "numberOfInErrorTasks": 0,
+              "numberOfPendingTasks": 0,
+              "numberOfRunningTasks": 0,
+              "owner": "admin",
+              "priority": "NORMAL",
+              "projectName": "Not Assigned",
+              "submittedTime": 1480586289680,
+              "totalNumberOfTasks": 1
+            }
+          },
+          {
+            "cursor": "Z3JhcGhxbC1jdXJzb3I1Mw==",
+            "node": {
+              "description": "No description",
+              "finishedTime": 1480586348316,
+              "genericInformation": [],
+              "id": "53",
+              "inErrorTime": -1,
+              "maxNumberOfExecution": 2,
+              "name": "Untitled workflow 1",
+              "onTaskError": "CONTINUE_JOB_EXECUTION",
+              "startTime": 1480586347364,
+              "status": "FINISHED",
+              "numberOfFailedTasks": 0,
+              "numberOfFaultyTasks": 0,
+              "numberOfFinishedTasks": 1,
+              "numberOfInErrorTasks": 0,
+              "numberOfPendingTasks": 0,
+              "numberOfRunningTasks": 0,
+              "owner": "admin",
+              "priority": "NORMAL",
+              "projectName": "Not Assigned",
+              "submittedTime": 1480586346830,
+              "totalNumberOfTasks": 1
+            }
+          },
+          {
+            "cursor": "Z3JhcGhxbC1jdXJzb3I1NA==",
+            "node": {
+              "description": "No description",
+              "finishedTime": -1,
+              "genericInformation": [
+                {
+                  "key": "START_AT",
+                  "value": "2016-12-05T10:00:00+02:00"
+                }
+              ],
+              "id": "54",
+              "inErrorTime": -1,
+              "maxNumberOfExecution": 2,
+              "name": "Untitled workflow 1",
+              "onTaskError": "CONTINUE_JOB_EXECUTION",
+              "startTime": -1,
+              "status": "PENDING",
+              "numberOfFailedTasks": 0,
+              "numberOfFaultyTasks": 0,
+              "numberOfFinishedTasks": 0,
+              "numberOfInErrorTasks": 0,
+              "numberOfPendingTasks": 0,
+              "numberOfRunningTasks": 0,
+              "owner": "admin",
+              "priority": "NORMAL",
+              "projectName": "Not Assigned",
+              "submittedTime": 1480605738409,
+              "totalNumberOfTasks": 1
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -39,10 +39,10 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.*;
 public class JobTest {
 
     private static final String ALL = String.format(
-            "{\n%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){\n%s{\n%s\n%s\n" +
+            "%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){\n%s{\n%s\n%s\n" +
                     "%s\n%s\n}\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
                     "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
-                    "%s\n%s\n%s\n%s\n%s\n}\n}\n}\n}", JOBS.getName(), AFTER.getName(), BEFORE.getName(),
+                    "%s\n%s\n%s\n%s\n%s\n}\n}\n}", JOBS.getName(), AFTER.getName(), BEFORE.getName(),
             FIRST.getName(), LAST.getName(), PAGE_INFO.getName(), HAS_NEXT_PAGE.getName(),
             HAS_PREVIOUS_PAGE.getName(), START_CURSOR.getName(), END_CURSOR.getName(), EDGES.getName(),
             CURSOR.getName(), NODE.getName(), DESCRIPTION.getName(), FINISHED_TIME.getName(),

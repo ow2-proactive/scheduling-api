@@ -3,6 +3,7 @@
     "$ref": "node.json"
   },
   "id": "http://activeeon.com/api/v2/data/edges/node/task",
+  "javaName": "taskNode",
   "properties": {
     "additionalClasspath": {
       "id": "http://activeeon.com/api/v2/data/edges/node/task/additionalClasspath",

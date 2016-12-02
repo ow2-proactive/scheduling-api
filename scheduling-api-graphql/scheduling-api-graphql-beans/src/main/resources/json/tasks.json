@@ -1,6 +1,6 @@
 {
   "extends": {
-    "$ref": "connection.json"
+    "$ref": "taskConnection.json"
   },
   "id": "http://activeeon.com/api/v2/data/tasks",
   "required": false,

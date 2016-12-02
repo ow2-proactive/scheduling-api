@@ -3,6 +3,7 @@
     "$ref": "node.json"
   },
   "id": "http://activeeon.com/api/v2/data/edges/node/job",
+  "javaName": "jobNode",
   "properties": {
     "dataManagement": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/dataManagement",
