@@ -94,7 +94,7 @@ public class GraphQLController {
         log.debug("query={}, operationName={}, variables={}", query, operationName, variables);
 
         return graphqlService.executeQuery(query, operationName,
-                new GraphqlContext(sessionId, username), decodeIntoMap(variables));
+                new GraphqlContext(username, sessionId), decodeIntoMap(variables));
     }
 
     /*
@@ -119,7 +119,7 @@ public class GraphQLController {
         log.debug("query={}, operationName={}, variables={}", query, operationName, variables);
 
         return graphqlService.executeQuery(query, operationName,
-                new GraphqlContext(sessionId, username), variables);
+                new GraphqlContext(username, sessionId), variables);
     }
 
     @RequestMapping(value = "/schema", method = RequestMethod.GET)
