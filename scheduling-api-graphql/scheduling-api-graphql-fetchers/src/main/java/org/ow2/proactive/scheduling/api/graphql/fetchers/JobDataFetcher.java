@@ -77,17 +77,6 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                 new JobCursorMapper());
     }
 
-    private void filterOnUser(DataFetchingEnvironment environment, List<JobInput> input) {
-        User user = (User) environment.getSource();
-        LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
-        if (!Strings.isNullOrEmpty(user.getLogin())) {
-            ownerInput.put(OWNER.getName(), user.getLogin());
-        } else {
-            throw new IllegalStateException("Missing login name");
-        }
-        input.add(new JobInput(ownerInput));
-    }
-
     @Override
     protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
         return taskStream.parallel()
