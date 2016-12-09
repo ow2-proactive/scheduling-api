@@ -24,20 +24,21 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInterfaceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
 
 
 /**
@@ -52,21 +53,21 @@ public abstract class KeyValue {
         @Override
         public GraphQLInterfaceType buildType(DataFetcher... dataFetchers) {
             return GraphQLInterfaceType.newInterface()
-                    .name(Types.KEY_VALUE.getName())
-                    .description("Key value type as a map.")
-                    .field(newFieldDefinition().name(KEY.getName())
-                            .description("Key as the key in a map.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(VALUE.getName())
-                            .description("Value as the value in a map.")
-                            .type(GraphQLString))
-                    .typeResolver(object -> {
-                        if (object instanceof GenericInformation) {
-                            return GenericInformation.TYPE.getInstance();
-                        }
-                        return Variable.TYPE.getInstance();
-                    })
-                    .build();
+                                       .name(Types.KEY_VALUE.getName())
+                                       .description("Key value type as a map.")
+                                       .field(newFieldDefinition().name(KEY.getName())
+                                                                  .description("Key as the key in a map.")
+                                                                  .type(GraphQLString))
+                                       .field(newFieldDefinition().name(VALUE.getName())
+                                                                  .description("Value as the value in a map.")
+                                                                  .type(GraphQLString))
+                                       .typeResolver(object -> {
+                                           if (object instanceof GenericInformation) {
+                                               return GenericInformation.TYPE.getInstance();
+                                           }
+                                           return Variable.TYPE.getInstance();
+                                       })
+                                       .build();
         }
     };
 

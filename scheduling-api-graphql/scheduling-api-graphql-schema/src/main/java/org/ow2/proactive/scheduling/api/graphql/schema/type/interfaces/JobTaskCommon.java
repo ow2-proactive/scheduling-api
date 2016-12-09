@@ -25,23 +25,6 @@
 
 package org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces;
 
-import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.OnTaskError;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInterfaceType;
-import graphql.schema.GraphQLList;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
@@ -57,6 +40,25 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ON_TASK_ERROR;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInterfaceType;
+import graphql.schema.GraphQLList;
+
+import java.util.Map;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.OnTaskError;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
 
 
 /**
@@ -74,54 +76,54 @@ public abstract class JobTaskCommon {
             DataFetcher variableDataFetcher = dataFetchers[1];
 
             return GraphQLInterfaceType.newInterface()
-                    .name(Types.JOB_TASK_COMMON.getName())
-                    .field(newFieldDefinition().name(DESCRIPTION.getName())
-                            .description("Description.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(FINISHED_TIME.getName())
-                            .description("Finished time.")
-                            .type(GraphQLLong))
-                    .field(newFieldDefinition().name(GENERIC_INFORMATION.getName())
-                            .description("Generic information list, empty if there is none.")
-                            .type(new GraphQLList(GenericInformation.TYPE.getInstance()))
-                            .argument(newArgument().name(Arguments.FILTER.getName())
-                                    .description("Generic information input filter")
-                                    .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
-                                    .build())
-                            .dataFetcher(genericInformationDataFetcher))
-                    .field(newFieldDefinition().name(ID.getName())
-                            .description("Unique identifier.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(IN_ERROR_TIME.getName())
-                            .description("In error time.")
-                            .type(GraphQLLong))
-                    .field(newFieldDefinition().name(MAX_NUMBER_OF_EXECUTION.getName())
-                            .description("The maximum number of execution attempts for the Task(s).")
-                            .type(GraphQLInt))
-                    .field(newFieldDefinition().name(NAME.getName())
-                            .description("Name.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(ON_TASK_ERROR.getName())
-                            .description("The behaviour applied on Tasks when an error occurs.")
-                            .type(OnTaskError.TYPE.getInstance()))
-                    .field(newFieldDefinition().name(START_TIME.getName())
-                            .description("Start time.")
-                            .type(GraphQLLong))
-                    .field(newFieldDefinition().name(VARIABLES.getName())
-                            .description("Variable list, empty if there is none.")
-                            .type(new GraphQLList(Variable.TYPE.getInstance()))
-                            .argument(newArgument().name(Arguments.FILTER.getName())
-                                    .description("Variables input filter.")
-                                    .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
-                                    .build())
-                            .dataFetcher(variableDataFetcher))
-                    .typeResolver(obj -> {
-                        if (obj instanceof Job) {
-                            return Job.TYPE.getInstance(dataFetchers);
-                        }
-                        return Task.TYPE.getInstance(dataFetchers);
-                    })
-                    .build();
+                                       .name(Types.JOB_TASK_COMMON.getName())
+                                       .field(newFieldDefinition().name(DESCRIPTION.getName())
+                                                                  .description("Description.")
+                                                                  .type(GraphQLString))
+                                       .field(newFieldDefinition().name(FINISHED_TIME.getName())
+                                                                  .description("Finished time.")
+                                                                  .type(GraphQLLong))
+                                       .field(newFieldDefinition().name(GENERIC_INFORMATION.getName())
+                                                                  .description("Generic information list, empty if there is none.")
+                                                                  .type(new GraphQLList(GenericInformation.TYPE.getInstance()))
+                                                                  .argument(newArgument().name(Arguments.FILTER.getName())
+                                                                                         .description("Generic information input filter")
+                                                                                         .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
+                                                                                         .build())
+                                                                  .dataFetcher(genericInformationDataFetcher))
+                                       .field(newFieldDefinition().name(ID.getName())
+                                                                  .description("Unique identifier.")
+                                                                  .type(GraphQLString))
+                                       .field(newFieldDefinition().name(IN_ERROR_TIME.getName())
+                                                                  .description("In error time.")
+                                                                  .type(GraphQLLong))
+                                       .field(newFieldDefinition().name(MAX_NUMBER_OF_EXECUTION.getName())
+                                                                  .description("The maximum number of execution attempts for the Task(s).")
+                                                                  .type(GraphQLInt))
+                                       .field(newFieldDefinition().name(NAME.getName())
+                                                                  .description("Name.")
+                                                                  .type(GraphQLString))
+                                       .field(newFieldDefinition().name(ON_TASK_ERROR.getName())
+                                                                  .description("The behaviour applied on Tasks when an error occurs.")
+                                                                  .type(OnTaskError.TYPE.getInstance()))
+                                       .field(newFieldDefinition().name(START_TIME.getName())
+                                                                  .description("Start time.")
+                                                                  .type(GraphQLLong))
+                                       .field(newFieldDefinition().name(VARIABLES.getName())
+                                                                  .description("Variable list, empty if there is none.")
+                                                                  .type(new GraphQLList(Variable.TYPE.getInstance()))
+                                                                  .argument(newArgument().name(Arguments.FILTER.getName())
+                                                                                         .description("Variables input filter.")
+                                                                                         .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
+                                                                                         .build())
+                                                                  .dataFetcher(variableDataFetcher))
+                                       .typeResolver(obj -> {
+                                           if (obj instanceof Job) {
+                                               return Job.TYPE.getInstance(dataFetchers);
+                                           }
+                                           return Task.TYPE.getInstance(dataFetchers);
+                                       })
+                                       .build();
         }
     };
 
@@ -145,9 +147,9 @@ public abstract class JobTaskCommon {
 
     private Map<String, String> variables;
 
-    public JobTaskCommon(String description, long finishedTime, Map<String, String> genericInformation,
-            long id, long inErrorTime, int maxNumberOfExecution, String name, String onTaskError,
-            long startTime, Map<String, String> variables) {
+    public JobTaskCommon(String description, long finishedTime, Map<String, String> genericInformation, long id,
+            long inErrorTime, int maxNumberOfExecution, String name, String onTaskError, long startTime,
+            Map<String, String> variables) {
 
         this.description = description;
         this.finishedTime = finishedTime;

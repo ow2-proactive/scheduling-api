@@ -24,6 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
+import com.google.common.base.Strings;
+
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,8 +43,7 @@ import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TaskInput;
-import com.google.common.base.Strings;
-import graphql.schema.DataFetchingEnvironment;
+
 
 /**
  * @author ActiveEon Team
@@ -48,8 +51,8 @@ import graphql.schema.DataFetchingEnvironment;
 public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, TaskInput> {
 
     @Override
-    public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment,
-            CriteriaBuilder criteriaBuilder, Root<TaskData> root, List<TaskInput> input) {
+    public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder,
+            Root<TaskData> root, List<TaskInput> input) {
         Job job = (Job) environment.getSource();
 
         List<Predicate[]> filters = input.stream().map(i -> {
@@ -65,8 +68,7 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
                 predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
             }
             if (!Strings.isNullOrEmpty(status)) {
-                predicates.add(
-                        criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
+                predicates.add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
             }
             if (!Strings.isNullOrEmpty(taskName)) {
                 predicates.add(criteriaBuilder.like(root.get("taskName"), "%" + taskName + "%"));
@@ -77,8 +79,8 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
         }).filter(array -> array.length > 1).collect(Collectors.toList());
 
         if (filters.isEmpty()) {
-            filters = Collections.singletonList(
-                    new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()) });
+            filters = Collections.singletonList(new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"),
+                                                                                        job.getId()) });
         }
 
         return filters;

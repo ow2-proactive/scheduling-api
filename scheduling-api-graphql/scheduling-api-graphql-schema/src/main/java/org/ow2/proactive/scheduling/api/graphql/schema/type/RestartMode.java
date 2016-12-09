@@ -24,11 +24,13 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import static graphql.schema.GraphQLEnumType.newEnum;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
@@ -39,16 +41,16 @@ public final class RestartMode {
         @Override
         public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
             return newEnum().name(Types.RESTART_MODE.getName())
-                    .description(
-                            "The restart mode configured for the Task if an error occurs during its execution.")
-                    .value("ANYWHERE",
-                            "ANYWHERE",
-                            "The task is restarted on any available node " +
-                                    "(possibly the same as the one where the error occurred).")
-                    .value("ELSEWHERE",
-                            "ELSEWHERE",
-                            "The task is restarted on a node that is different " +
-                                    "from the node where the error occurred.").build();
+                            .description("The restart mode configured for the Task if an error occurs during its execution.")
+                            .value("ANYWHERE",
+                                   "ANYWHERE",
+                                   "The task is restarted on any available node " +
+                                               "(possibly the same as the one where the error occurred).")
+                            .value("ELSEWHERE",
+                                   "ELSEWHERE",
+                                   "The task is restarted on a node that is different " +
+                                                "from the node where the error occurred.")
+                            .build();
         }
     };
 

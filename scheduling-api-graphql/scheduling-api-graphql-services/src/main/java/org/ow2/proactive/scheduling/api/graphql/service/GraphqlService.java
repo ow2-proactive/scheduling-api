@@ -24,13 +24,24 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableMap;
+
+import graphql.ExecutionResult;
+import graphql.GraphQL;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLSchema;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
+import lombok.extern.log4j.Log4j2;
 
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.GenericInformationDataFetcher;
@@ -39,15 +50,6 @@ import org.ow2.proactive.scheduling.api.graphql.fetchers.TaskDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.UserDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.VariablesDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.collect.ImmutableMap;
-import graphql.ExecutionResult;
-import graphql.GraphQL;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLSchema;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 
@@ -69,8 +71,8 @@ public class GraphqlService {
 
     @PostConstruct
     public void init() {
-        Supplier<EntityManager> entityManagerSupplier =
-                () -> ApplicationContextProvider.getApplicationContext().getBean(EntityManager.class);
+        Supplier<EntityManager> entityManagerSupplier = () -> ApplicationContextProvider.getApplicationContext()
+                                                                                        .getBean(EntityManager.class);
 
         DataFetcher genericInformationDataFetcher = new GenericInformationDataFetcher();
         DataFetcher jobDataFetcher = new JobDataFetcher(entityManagerSupplier);
@@ -78,14 +80,18 @@ public class GraphqlService {
         DataFetcher userDataFetcher = new UserDataFetcher();
         DataFetcher variableDataFetcher = new VariablesDataFetcher();
 
-        graphql = new GraphQL(
-                GraphQLSchema.newSchema().query(
-                        Query.TYPE.getInstance(genericInformationDataFetcher, jobDataFetcher, taskDataFetcher,
-                                userDataFetcher, variableDataFetcher, userDataFetcher)).build());
+        graphql = new GraphQL(GraphQLSchema.newSchema()
+                                           .query(Query.TYPE.getInstance(genericInformationDataFetcher,
+                                                                         jobDataFetcher,
+                                                                         taskDataFetcher,
+                                                                         userDataFetcher,
+                                                                         variableDataFetcher,
+                                                                         userDataFetcher))
+                                           .build());
     }
 
-    public Map<String, Object> executeQuery(String query, String operationName,
-            GraphqlContext graphqlContext, Map<String, Object> variables) {
+    public Map<String, Object> executeQuery(String query, String operationName, GraphqlContext graphqlContext,
+            Map<String, Object> variables) {
 
         if (variables == null) {
             variables = ImmutableMap.of();

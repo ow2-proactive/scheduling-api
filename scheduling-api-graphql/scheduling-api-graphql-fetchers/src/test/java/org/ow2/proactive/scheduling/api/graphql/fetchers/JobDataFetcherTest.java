@@ -24,11 +24,19 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
+import org.junit.Test;
+import org.mockito.Mockito;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
@@ -36,13 +44,7 @@ import org.ow2.proactive.scheduler.core.db.JobContent;
 import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
-import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import org.junit.Test;
-import org.mockito.Mockito;
 
-import static com.google.common.truth.Truth.assertThat;
 
 /**
  * @author ActiveEon Team
@@ -86,9 +88,8 @@ public class JobDataFetcherTest {
         jobData.setUserSpace("userSpace");
         jobData.setVariables(ImmutableMap.of("vk1", "vv1"));
 
-        Stream<Job> jobStream =
-                new JobDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(
-                        ImmutableList.of(jobData).stream());
+        Stream<Job> jobStream = new JobDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(ImmutableList.of(jobData)
+                                                                                                                     .stream());
 
         Optional<Job> firstElement = jobStream.findFirst();
 
@@ -118,8 +119,8 @@ public class JobDataFetcherTest {
         assertThat(job.getNumberOfPendingTasks()).isEqualTo(jobData.getNumberOfPendingTasks());
         assertThat(job.getNumberOfRunningTasks()).isEqualTo(jobData.getNumberOfRunningTasks());
 
-        assertThat(job.getOnTaskError()).isEqualTo(
-                CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, jobData.getOnTaskErrorString()));
+        assertThat(job.getOnTaskError()).isEqualTo(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                                                             jobData.getOnTaskErrorString()));
 
         assertThat(job.getOwner()).isEqualTo(jobData.getOwner());
         assertThat(job.getPriority()).isEqualTo(jobData.getPriority().name());

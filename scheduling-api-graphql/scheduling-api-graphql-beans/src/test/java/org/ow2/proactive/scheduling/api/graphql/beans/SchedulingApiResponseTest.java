@@ -1,15 +1,17 @@
 package org.ow2.proactive.scheduling.api.graphql.beans;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
+
 
 public class SchedulingApiResponseTest {
 

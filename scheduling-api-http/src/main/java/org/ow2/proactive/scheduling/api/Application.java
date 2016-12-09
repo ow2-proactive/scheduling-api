@@ -50,8 +50,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
-@PropertySources( { @PropertySource(value = "classpath:application.properties"),
-        @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
+@PropertySources({ @PropertySource(value = "classpath:application.properties"),
+                   @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
 @SpringBootApplication(scanBasePackageClasses = { ApiController.class, GraphqlService.class })
 public class Application extends WebMvcConfigurerAdapter {
 
@@ -62,12 +62,12 @@ public class Application extends WebMvcConfigurerAdapter {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.favorPathExtension(false)
-                .favorParameter(true)
-                .parameterName("format")
-                .ignoreAcceptHeader(true)
-                .useJaf(false)
-                .defaultContentType(MediaType.APPLICATION_JSON)
-                .mediaType("json", MediaType.APPLICATION_JSON);
+                  .favorParameter(true)
+                  .parameterName("format")
+                  .ignoreAcceptHeader(true)
+                  .useJaf(false)
+                  .defaultContentType(MediaType.APPLICATION_JSON)
+                  .mediaType("json", MediaType.APPLICATION_JSON);
     }
 
     @Bean
@@ -83,9 +83,7 @@ public class Application extends WebMvcConfigurerAdapter {
 
     private DataSource createMemDataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder
-                .setType(EmbeddedDatabaseType.HSQL)
-                .build();
+        EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.HSQL).build();
 
         return db;
     }

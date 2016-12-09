@@ -24,22 +24,23 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import static graphql.schema.GraphQLEnumType.newEnum;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
  */
 public class JobPriority {
 
-    public final static TypeSingleton<GraphQLEnumType> TYPE =
-            new TypeSingleton<GraphQLEnumType>() {
-                @Override
-                public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
-                    return newEnum().name(Types.JOB_PRIORITY.getName())
+    public final static TypeSingleton<GraphQLEnumType> TYPE = new TypeSingleton<GraphQLEnumType>() {
+        @Override
+        public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
+            return newEnum().name(Types.JOB_PRIORITY.getName())
                             .description("Available job's priorities.")
                             .value("HIGH", "HIGH", "High priority.")
                             .value("HIGHEST", "HIGHEST", "Highest priority.")
@@ -48,8 +49,8 @@ public class JobPriority {
                             .value("LOWEST", "LOWEST", "Lowest priority.")
                             .value("NORMAL", "NORMAL", "Normal priority.")
                             .build();
-                }
-            };
+        }
+    };
 
     private JobPriority() {
     }

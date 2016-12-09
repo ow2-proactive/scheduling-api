@@ -24,17 +24,6 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.JobPriority;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.JobStatus;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInputType;
-import lombok.Getter;
-
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -47,6 +36,19 @@ import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PROJEC
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.SUBMITTED_TIME;
 
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInputType;
+
+import java.util.Map;
+
+import lombok.Getter;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.JobPriority;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.JobStatus;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
+
 
 /**
  * @author ActiveEon team
@@ -58,36 +60,36 @@ public class JobInput extends JobTaskCommonAbstractInput {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.JOB_INPUT.getName())
-                    .description("Job input filter.")
-                    .field(newInputObjectField().name(ID.getName())
-                            .description("Job identifier.")
-                            .type(GraphQLLong)
-                            .build())
-                    .field(newInputObjectField().name(NAME.getName())
-                            .description("Job name.")
-                            .type(GraphQLString)
-                            .build())
-                    .field(newInputObjectField().name(OWNER.getName())
-                            .description("Job owner (i.e. the one who submitted the Job).")
-                            .type(GraphQLString)
-                            .build())
-                    .field(newInputObjectField().name(PRIORITY.getName())
-                            .description("Job priority.")
-                            .type(JobPriority.TYPE.getInstance())
-                            .build())
-                    .field(newInputObjectField().name(PROJECT_NAME.getName())
-                            .description("Project name which the job belongs to.")
-                            .type(GraphQLString)
-                            .build())
-                    .field(newInputObjectField().name(STATUS.getName())
-                            .description("Job status.")
-                            .type(JobStatus.TYPE.getInstance())
-                            .build())
-                    .field(newInputObjectField().name(SUBMITTED_TIME.getName())
-                            .description("Job submitted time.")
-                            .type(SubmittedTimeInput.TYPE.getInstance())
-                            .build())
-                    .build();
+                                   .description("Job input filter.")
+                                   .field(newInputObjectField().name(ID.getName())
+                                                               .description("Job identifier.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(NAME.getName())
+                                                               .description("Job name.")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .field(newInputObjectField().name(OWNER.getName())
+                                                               .description("Job owner (i.e. the one who submitted the Job).")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .field(newInputObjectField().name(PRIORITY.getName())
+                                                               .description("Job priority.")
+                                                               .type(JobPriority.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(PROJECT_NAME.getName())
+                                                               .description("Project name which the job belongs to.")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .field(newInputObjectField().name(STATUS.getName())
+                                                               .description("Job status.")
+                                                               .type(JobStatus.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(SUBMITTED_TIME.getName())
+                                                               .description("Job submitted time.")
+                                                               .type(SubmittedTimeInput.TYPE.getInstance())
+                                                               .build())
+                                   .build();
         }
     };
 

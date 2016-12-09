@@ -29,27 +29,44 @@ import java.util.function.Supplier;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
+
 /**
  * @author ActiveEon Team
  */
 abstract class JobsTasksCommonBuilder {
 
     protected String after = null;
+
     protected String before = null;
+
     protected boolean cursor = true;
+
     protected boolean description = true;
+
     protected boolean finishedTime = true;
+
     protected Integer first = null;
+
     protected GenericInformation genericInformation = new GenericInformation.Builder().build();
+
     protected boolean id = true;
+
     protected boolean inErrorTime = true;
+
     protected Integer last = null;
+
     protected boolean maxNumberOfExecution = true;
+
     protected boolean name = true;
+
     protected boolean onTaskError = true;
+
     protected PageInfo pageInfo = new PageInfo.Builder().build();
+
     protected boolean startTime = true;
+
     protected boolean status = true;
+
     protected Variables variables = new Variables.Builder().build();
 
     protected StringBuilder sb = new StringBuilder();

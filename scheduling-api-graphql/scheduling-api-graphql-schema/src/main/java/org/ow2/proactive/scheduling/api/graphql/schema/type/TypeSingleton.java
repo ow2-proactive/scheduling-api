@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.schema.type;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLType;
 
+
 /**
  * @author ActiveEon Team
  */

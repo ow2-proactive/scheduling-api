@@ -24,13 +24,16 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import com.google.common.base.Strings;
-import lombok.Data;
-
 import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.QUOTE;
 import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.RETURN;
+
+import com.google.common.base.Strings;
+
+import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -47,12 +50,19 @@ public class JobInput implements ApiType {
     public static class Builder {
 
         private String afterSubmittedTime;
+
         private String beforeSubmittedTime;
+
         private String id;
+
         private String jobName;
+
         private String owner;
+
         private String priority;
+
         private String projectName;
+
         private String status;
 
         private StringBuilder sb = new StringBuilder();
@@ -145,18 +155,15 @@ public class JobInput implements ApiType {
                 sb.append(this.status);
                 sb.append(QUOTE);
             }
-            if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(
-                    this.afterSubmittedTime)) {
+            if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(this.afterSubmittedTime)) {
                 sb.append(' ');
                 sb.append(Fields.SUBMITTED_TIME.getName());
                 sb.append(" : {");
                 if (!Strings.isNullOrEmpty(this.beforeSubmittedTime)) {
-                    sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(
-                            this.beforeSubmittedTime);
+                    sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(this.beforeSubmittedTime);
                 }
                 if (!Strings.isNullOrEmpty(this.afterSubmittedTime)) {
-                    sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(
-                            this.afterSubmittedTime);
+                    sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(this.afterSubmittedTime);
                 }
                 sb.append(" }").append(RETURN);
             }

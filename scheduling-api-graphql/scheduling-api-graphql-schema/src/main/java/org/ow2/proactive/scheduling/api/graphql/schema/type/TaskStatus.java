@@ -24,11 +24,13 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import static graphql.schema.GraphQLEnumType.newEnum;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
@@ -39,48 +41,40 @@ public final class TaskStatus {
         @Override
         public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
             return newEnum().name(Types.TASK_STATUS.getName())
-                    .description("Task status list")
-                    .value("ABORTED",
-                            "ABORTED",
-                            "The task has been aborted by an exceptions on an other task while the task is running (job has cancelOnError=true). Can be also in this status if the job is killed while the concerned task was running.")
-                    .value("FAILED",
-                            "FAILED",
-                            "The task is failed (only if max execution time has been reached and the node on which it was started is down).")
-                    .value("FAULTY",
-                            "FAULTY",
-                            "The task has finished execution with error code (!=0) or exceptions.")
-                    .value("FINISHED",
-                            "FINISHED",
-                            "The task has finished execution.")
-                    .value("IN_ERROR",
-                            "IN_ERROR",
-                            "The task is suspended after first error and is waiting for a manual restart action.")
-                    .value("NOT_RESTARTED",
-                            "NOT_RESTARTED",
-                            "The task could not be restarted. It means that the task could not be restarted after an error during the previous execution.")
-                    .value("NOT_STARTED",
-                            "NOT_STARTED",
-                            "The task could not be started. It means that the task could not be started due to one ore more dependency failure.")
-                    .value("PAUSED", "PAUSED", "The task is paused")
-                    .value("PENDING",
-                            "PENDING",
-                            "The task is in the scheduler pending queue.")
-                    .value("RUNNING",
-                            "RUNNING",
-                            "The task is executing.")
-                    .value("SKIPPED",
-                            "SKIPPED",
-                            "The task was not executed: it was the non-selected branch of an IF/ELSE control flow action.")
-                    .value("SUBMITTED",
-                            "SUBMITTED",
-                            "The task has just been submitted by the user.")
-                    .value("WAITING_ON_ERROR",
-                            "WAITING_ON_ERROR",
-                            "The task is waiting for restart after an error (i.e. native code != 0 or exceptions).")
-                    .value("WAITING_ON_FAILURE",
-                            "WAITING_ON_FAILURE",
-                            "The task is waiting for restart after a failure (i.e. node down).")
-                    .build();
+                            .description("Task status list")
+                            .value("ABORTED",
+                                   "ABORTED",
+                                   "The task has been aborted by an exceptions on an other task while the task is running (job has cancelOnError=true). Can be also in this status if the job is killed while the concerned task was running.")
+                            .value("FAILED",
+                                   "FAILED",
+                                   "The task is failed (only if max execution time has been reached and the node on which it was started is down).")
+                            .value("FAULTY",
+                                   "FAULTY",
+                                   "The task has finished execution with error code (!=0) or exceptions.")
+                            .value("FINISHED", "FINISHED", "The task has finished execution.")
+                            .value("IN_ERROR",
+                                   "IN_ERROR",
+                                   "The task is suspended after first error and is waiting for a manual restart action.")
+                            .value("NOT_RESTARTED",
+                                   "NOT_RESTARTED",
+                                   "The task could not be restarted. It means that the task could not be restarted after an error during the previous execution.")
+                            .value("NOT_STARTED",
+                                   "NOT_STARTED",
+                                   "The task could not be started. It means that the task could not be started due to one ore more dependency failure.")
+                            .value("PAUSED", "PAUSED", "The task is paused")
+                            .value("PENDING", "PENDING", "The task is in the scheduler pending queue.")
+                            .value("RUNNING", "RUNNING", "The task is executing.")
+                            .value("SKIPPED",
+                                   "SKIPPED",
+                                   "The task was not executed: it was the non-selected branch of an IF/ELSE control flow action.")
+                            .value("SUBMITTED", "SUBMITTED", "The task has just been submitted by the user.")
+                            .value("WAITING_ON_ERROR",
+                                   "WAITING_ON_ERROR",
+                                   "The task is waiting for restart after an error (i.e. native code != 0 or exceptions).")
+                            .value("WAITING_ON_FAILURE",
+                                   "WAITING_ON_FAILURE",
+                                   "The task is waiting for restart after a failure (i.e. node down).")
+                            .build();
         }
     };
 

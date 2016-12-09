@@ -24,8 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -42,8 +44,11 @@ public class DataManagement implements ApiType {
     public static class Builder {
 
         private boolean globalSpaceUrl = true;
+
         private boolean inputSpaceUrl = true;
+
         private boolean outputSpaceUrl = true;
+
         private boolean userSpaceUrl = true;
 
         private StringBuilder sb = new StringBuilder();

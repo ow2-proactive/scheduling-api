@@ -24,12 +24,20 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
+import org.junit.Test;
+import org.mockito.Mockito;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
@@ -41,13 +49,7 @@ import org.ow2.proactive.scheduler.core.db.SelectorData;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduler.core.db.TaskDataVariable;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
-import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import org.junit.Test;
-import org.mockito.Mockito;
 
-import static com.google.common.truth.Truth.assertThat;
 
 /**
  * @author ActiveEon Team
@@ -64,12 +66,10 @@ public class TaskDataFetcherTest {
         TaskData taskData = new TaskData();
         taskData.setAdditionalClasspath(ImmutableList.of("classpath1", "classpath2", "classpath3"));
         taskData.setCleanScript(new ScriptData()); // currently, not in GraphQL data model
-        taskData.setDataspaceSelectors(
-                ImmutableList.of(new SelectorData())); // currently, not in GraphQL data model
+        taskData.setDataspaceSelectors(ImmutableList.of(new SelectorData())); // currently, not in GraphQL data model
         taskData.setDependentTasks(null); // currently, not in GraphQL data model
         taskData.setDescription("description");
-        taskData.setEnvModifiers(
-                ImmutableList.of(new EnvironmentModifierData())); // currently, not in GraphQL data model
+        taskData.setEnvModifiers(ImmutableList.of(new EnvironmentModifierData())); // currently, not in GraphQL data model
         taskData.setEnvScript(new ScriptData()); // currently, not in GraphQL data model
         taskData.setExecutionDuration(3);
         taskData.setExecutionHostName("hostname");
@@ -83,8 +83,7 @@ public class TaskDataFetcherTest {
         taskData.setIteration(6); // currently, not in GraphQL data model
         taskData.setJavaHome("javaHome");
         taskData.setJobData(new JobData()); // currently, not in GraphQL data model
-        taskData.setJoinedBranches(
-                ImmutableList.of(new TaskData.DBTaskId())); // currently, not in GraphQL data model
+        taskData.setJoinedBranches(ImmutableList.of(new TaskData.DBTaskId())); // currently, not in GraphQL data model
         taskData.setJvmArguments(ImmutableList.of("arg1", "arg2"));
         taskData.setMatchingBlock("matchingBlock"); // currently, not in GraphQL data model
         taskData.setMaxNumberOfExecution(7);
@@ -121,9 +120,8 @@ public class TaskDataFetcherTest {
         taskData.setWallTime(12);
         taskData.setWorkingDir("workingDir");
 
-        Stream<Task> taskStream =
-                new TaskDataFetcher(() -> Mockito.mock(EntityManager.class))
-                        .dataMapping(ImmutableList.of(taskData).stream());
+        Stream<Task> taskStream = new TaskDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(ImmutableList.of(taskData)
+                                                                                                                        .stream());
 
         Optional<Task> firstElement = taskStream.findFirst();
 
@@ -147,14 +145,14 @@ public class TaskDataFetcherTest {
         assertThat(task.getJvmArguments()).isEqualTo(taskData.getJvmArguments());
         assertThat(task.getMaxNumberOfExecution()).isEqualTo(taskData.getMaxNumberOfExecution());
         assertThat(task.getNumberOfExecutionLeft()).isEqualTo(taskData.getNumberOfExecutionLeft());
-        assertThat(task.getNumberOfExecutionOnFailureLeft()).isEqualTo(
-                taskData.getNumberOfExecutionOnFailureLeft());
-        assertThat(task.getOnTaskError()).isEqualTo(
-                CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, taskData.getOnTaskErrorString()));
+        assertThat(task.getNumberOfExecutionOnFailureLeft()).isEqualTo(taskData.getNumberOfExecutionOnFailureLeft());
+        assertThat(task.getOnTaskError()).isEqualTo(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                                                              taskData.getOnTaskErrorString()));
         assertThat(task.isPreciousLogs()).isEqualTo(taskData.isPreciousLogs());
         assertThat(task.isPreciousResult()).isEqualTo(taskData.isPreciousResult());
-        assertThat(task.getRestartMode()).isEqualTo(
-                RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase());
+        assertThat(task.getRestartMode()).isEqualTo(RestartMode.getMode(taskData.getRestartModeId())
+                                                               .getDescription()
+                                                               .toUpperCase());
         assertThat(task.getResultPreview()).isEqualTo(taskData.getResultPreview());
         assertThat(task.isRunAsMe()).isEqualTo(taskData.isRunAsMe());
         assertThat(task.getScheduledTime()).isEqualTo(taskData.getScheduledTime());

@@ -27,8 +27,10 @@ package org.ow2.proactive.scheduling.api.graphql.client.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -45,17 +47,26 @@ public class Tasks implements ApiType {
     public static class Builder extends JobsTasksCommonBuilder {
 
         private boolean executionDuration = true;
+
         private boolean executionHostName = true;
+
         /**
          * query filter input list
          */
         private List<TaskInput> input = new ArrayList<>();
+
         private boolean jobId = true;
+
         private boolean numberOfExecutionLeft = true;
+
         private boolean numberOfExecutionOnFailureLeft = true;
+
         private boolean progress = true;
+
         private boolean restartMode = true;
+
         private boolean scheduledTime = true;
+
         private boolean tag = true;
 
         @Override
@@ -160,7 +171,6 @@ public class Tasks implements ApiType {
             return this;
         }
 
-
         public Tasks.Builder excludeRestartMode() {
             this.restartMode = false;
             return this;
@@ -239,8 +249,7 @@ public class Tasks implements ApiType {
                 sb.append(Fields.NUMBER_OF_EXECUTION_LEFT.getName()).append(Constants.RETURN);
             }
             if (numberOfExecutionOnFailureLeft) {
-                sb.append(Fields.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getName()).append(
-                        Constants.RETURN);
+                sb.append(Fields.NUMBER_OF_EXECUTION_ON_FAILURE_LEFT.getName()).append(Constants.RETURN);
             }
             if (scheduledTime) {
                 sb.append(Fields.SCHEDULED_TIME.getName()).append(Constants.RETURN);
@@ -252,8 +261,12 @@ public class Tasks implements ApiType {
                 sb.append(Fields.TAG.getName()).append(Constants.RETURN);
             }
 
-            sb.append("}").append(Constants.RETURN).append("}").append(Constants.RETURN).append("}").append(
-                    Constants.RETURN);
+            sb.append("}")
+              .append(Constants.RETURN)
+              .append("}")
+              .append(Constants.RETURN)
+              .append("}")
+              .append(Constants.RETURN);
             return new Tasks(sb.toString());
         }
     }

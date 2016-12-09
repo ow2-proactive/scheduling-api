@@ -24,8 +24,11 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import com.google.common.base.CaseFormat;
+
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -44,13 +47,7 @@ import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilter
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Strings;
-import graphql.schema.DataFetchingEnvironment;
 
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
 
 /**
  * @author ActiveEon Team
@@ -66,54 +63,52 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(
-                environment, new JobInputConverter());
+        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment,
+                                                                                                                  new JobInputConverter());
 
         return createPaginatedConnection(environment,
-                JobData.class,
-                entityId,
-                Comparator.comparingLong(JobData::getId),
-                criteria,
-                new JobCursorMapper());
+                                         JobData.class,
+                                         entityId,
+                                         Comparator.comparingLong(JobData::getId),
+                                         criteria,
+                                         new JobCursorMapper());
     }
 
     @Override
     protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
         return taskStream.parallel()
-                .map(jobData -> Job.builder()
-                        .dataManagement(
-                                DataManagement.builder()
-                                        .globalSpaceUrl(jobData.getGlobalSpace())
-                                        .inputSpaceUrl(jobData.getInputSpace())
-                                        .outputSpaceUrl(jobData.getOutputSpace())
-                                        .userSpaceUrl(jobData.getUserSpace()).build()
-                        )
-                        .description(jobData.getDescription())
-                        .finishedTime(jobData.getFinishedTime())
-                        .genericInformation(jobData.getGenericInformation())
-                        .id(jobData.getId())
-                        .inErrorTime(jobData.getInErrorTime())
-                        .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
-                        .name(jobData.getJobName())
-                        .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
-                        .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
-                        .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
-                        .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
-                        .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
-                        .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
-                        .onTaskError(
-                                CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
-                                        jobData.getOnTaskErrorString()))
-                        .owner(jobData.getOwner())
-                        .priority(jobData.getPriority().name())
-                        .projectName(jobData.getProjectName())
-                        .removedTime(jobData.getRemovedTime())
-                        .status(jobData.getStatus().name())
-                        .startTime(jobData.getStartTime())
-                        .submittedTime(jobData.getSubmittedTime())
-                        .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                        .variables(jobData.getVariables())
-                        .build());
+                         .map(jobData -> Job.builder()
+                                            .dataManagement(DataManagement.builder()
+                                                                          .globalSpaceUrl(jobData.getGlobalSpace())
+                                                                          .inputSpaceUrl(jobData.getInputSpace())
+                                                                          .outputSpaceUrl(jobData.getOutputSpace())
+                                                                          .userSpaceUrl(jobData.getUserSpace())
+                                                                          .build())
+                                            .description(jobData.getDescription())
+                                            .finishedTime(jobData.getFinishedTime())
+                                            .genericInformation(jobData.getGenericInformation())
+                                            .id(jobData.getId())
+                                            .inErrorTime(jobData.getInErrorTime())
+                                            .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
+                                            .name(jobData.getJobName())
+                                            .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
+                                            .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
+                                            .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
+                                            .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
+                                            .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
+                                            .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
+                                            .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                                                                   jobData.getOnTaskErrorString()))
+                                            .owner(jobData.getOwner())
+                                            .priority(jobData.getPriority().name())
+                                            .projectName(jobData.getProjectName())
+                                            .removedTime(jobData.getRemovedTime())
+                                            .status(jobData.getStatus().name())
+                                            .startTime(jobData.getStartTime())
+                                            .submittedTime(jobData.getSubmittedTime())
+                                            .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
+                                            .variables(jobData.getVariables())
+                                            .build());
     }
 
 }

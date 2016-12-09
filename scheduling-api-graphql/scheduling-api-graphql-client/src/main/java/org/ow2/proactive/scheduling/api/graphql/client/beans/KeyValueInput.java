@@ -24,11 +24,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.QUOTE;
+
 import com.google.common.base.Strings;
+
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.QUOTE;
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -45,6 +48,7 @@ public class KeyValueInput implements ApiType {
     public static class Builder {
 
         private String key;
+
         private String value;
 
         private StringBuilder sb = new StringBuilder();

@@ -24,8 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -41,7 +43,9 @@ public class Viewer implements ApiType {
 
     public static class Builder {
         private Jobs jobs = null;
+
         private boolean login = true;
+
         private boolean sessionId = true;
 
         private StringBuilder sb = new StringBuilder();
@@ -62,8 +66,7 @@ public class Viewer implements ApiType {
         }
 
         public Viewer build() {
-            sb.append(Fields.VIEWER.getName()).append(" {").append(
-                    Constants.RETURN);
+            sb.append(Fields.VIEWER.getName()).append(" {").append(Constants.RETURN);
             if (login) {
                 sb.append(Fields.LOGIN.getName()).append(Constants.RETURN);
             }

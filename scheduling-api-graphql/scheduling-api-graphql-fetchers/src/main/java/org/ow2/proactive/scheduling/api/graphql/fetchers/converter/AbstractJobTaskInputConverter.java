@@ -24,6 +24,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,14 +35,15 @@ import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
-import graphql.schema.DataFetchingEnvironment;
+
 
 /**
  * @param <T> {@code JobData} or {@code TaskData} scheduler Job, Task entity object
  * @param <I> {@code JobInput} or {@code TaskInput} graphql input type
  * @author ActiveEon team
  */
-public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAbstractInput> implements JobTaskInputPredicatesConverter<T, I> {
+public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAbstractInput>
+        implements JobTaskInputPredicatesConverter<T, I> {
 
     protected void extraInputCheck(DataFetchingEnvironment environment, List<I> input) {
         // nothing to do here by default
@@ -62,6 +65,5 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
         }
         return input;
     }
-
 
 }

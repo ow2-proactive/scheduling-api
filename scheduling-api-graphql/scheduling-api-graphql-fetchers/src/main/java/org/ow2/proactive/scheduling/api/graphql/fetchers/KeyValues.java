@@ -25,11 +25,8 @@
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import com.google.common.base.Strings;
+
 import graphql.schema.DataFetchingEnvironment;
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +34,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
 
 
 /**
@@ -65,7 +67,7 @@ public final class KeyValues {
     }
 
     public static <T extends KeyValue> List<T> filterKeyValue(Map<String, String> keyValueEntries,
-                                                              List<KeyValueInput> input, Supplier<T> keyValueSupplier) {
+            List<KeyValueInput> input, Supplier<T> keyValueSupplier) {
 
         final Function<Map.Entry<String, String>, T> mapper = entry -> {
             T keyValue = keyValueSupplier.get();
