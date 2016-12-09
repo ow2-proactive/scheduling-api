@@ -25,11 +25,12 @@
 
 package org.ow2.proactive.scheduling.api.graphql.client;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.beans.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.beans.Jobs;
 import org.ow2.proactive.scheduling.api.graphql.client.beans.Query;
-import org.junit.Ignore;
-import org.junit.Test;
+
 
 @Ignore
 public class SchedulingApiClientTest {

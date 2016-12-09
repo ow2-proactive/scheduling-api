@@ -24,11 +24,13 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import static graphql.schema.GraphQLEnumType.newEnum;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
@@ -39,29 +41,33 @@ public final class JobStatus {
         @Override
         public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
             return newEnum().name(Types.JOB_STATUS.getName())
-                    .description("Available job's statuses.")
-                    .value("CANCELED", "CANCELED",
-                            "The job has been canceled due to user exceptions and order. " +
-                                    "This status runs when a user exceptions occurs in a task and when the user has asked " +
-                                    "to cancel On exceptions.")
-                    .value("FAILED", "FAILED",
-                            "The job has failed. One or more tasks have failed (due to resources " +
-                                    "failure). There is no more executionOnFailure left for a task.")
-                    .value("FINISHED", "FINISHED", "The job is finished. Every tasks are finished.")
-                    .value("IN_ERROR", "IN_ERROR",
-                            "The job has at least one in-error task and in-error tasks are " +
-                                    "the last, among others which have changed their state (i.e. Job status is depicted " +
-                                    "by the last action).")
-                    .value("KILLED", "KILLED",
-                            "The job has been killed by a user. Nothing can be done anymore on " +
-                                    "this job except reading execution information such as output, time, etc.")
-                    .value("PAUSED", "PAUSED", "The job is paused waiting for user to resume it.")
-                    .value("PENDING", "PENDING", "The job is waiting to be scheduled.")
-                    .value("RUNNING", "RUNNING", "The job is running. Actually at least one of its task " +
-                            "has been scheduled.")
-                    .value("STALLED", "STALLED",
-                            "The job has been launched but no task are currently running.")
-                    .build();
+                            .description("Available job's statuses.")
+                            .value("CANCELED",
+                                   "CANCELED",
+                                   "The job has been canceled due to user exceptions and order. " +
+                                               "This status runs when a user exceptions occurs in a task and when the user has asked " +
+                                               "to cancel On exceptions.")
+                            .value("FAILED",
+                                   "FAILED",
+                                   "The job has failed. One or more tasks have failed (due to resources " +
+                                             "failure). There is no more executionOnFailure left for a task.")
+                            .value("FINISHED", "FINISHED", "The job is finished. Every tasks are finished.")
+                            .value("IN_ERROR",
+                                   "IN_ERROR",
+                                   "The job has at least one in-error task and in-error tasks are " +
+                                               "the last, among others which have changed their state (i.e. Job status is depicted " +
+                                               "by the last action).")
+                            .value("KILLED",
+                                   "KILLED",
+                                   "The job has been killed by a user. Nothing can be done anymore on " +
+                                             "this job except reading execution information such as output, time, etc.")
+                            .value("PAUSED", "PAUSED", "The job is paused waiting for user to resume it.")
+                            .value("PENDING", "PENDING", "The job is waiting to be scheduled.")
+                            .value("RUNNING",
+                                   "RUNNING",
+                                   "The job is running. Actually at least one of its task " + "has been scheduled.")
+                            .value("STALLED", "STALLED", "The job has been launched but no task are currently running.")
+                            .build();
         }
     };
 

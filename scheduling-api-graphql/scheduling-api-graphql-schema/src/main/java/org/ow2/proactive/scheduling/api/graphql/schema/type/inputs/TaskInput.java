@@ -24,17 +24,6 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TaskStatus;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -42,6 +31,19 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInputType;
+
+import java.util.Map;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TaskStatus;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
 
 /**
@@ -55,20 +57,20 @@ public class TaskInput extends JobTaskCommonAbstractInput {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.TASK_INPUT.getName())
-                    .description("Task filter input")
-                    .field(newInputObjectField().name(ID.getName())
-                            .description("Task identifier.")
-                            .type(GraphQLLong)
-                            .build())
-                    .field(newInputObjectField().name(STATUS.getName())
-                            .description("Task status.")
-                            .type(TaskStatus.TYPE.getInstance())
-                            .build())
-                    .field(newInputObjectField().name(NAME.getName())
-                            .description("Task name.")
-                            .type(GraphQLString)
-                            .build())
-                    .build();
+                                   .description("Task filter input")
+                                   .field(newInputObjectField().name(ID.getName())
+                                                               .description("Task identifier.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(STATUS.getName())
+                                                               .description("Task status.")
+                                                               .type(TaskStatus.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NAME.getName())
+                                                               .description("Task name.")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .build();
         }
     };
 

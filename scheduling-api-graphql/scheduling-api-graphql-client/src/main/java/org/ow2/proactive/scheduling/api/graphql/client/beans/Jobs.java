@@ -27,8 +27,10 @@ package org.ow2.proactive.scheduling.api.graphql.client.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -50,18 +52,31 @@ public class Jobs implements ApiType {
          * query filter input list
          */
         private List<JobInput> input = new ArrayList<>();
+
         private boolean numberOfFailedTasks = true;
+
         private boolean numberOfFaultyTasks = true;
+
         private boolean numberOfFinishedTasks = true;
+
         private boolean numberOfInErrorTasks = true;
+
         private boolean numberOfPendingTasks = true;
+
         private boolean numberOfRunningTasks = true;
+
         private boolean owner = true;
+
         private boolean priority = true;
+
         private boolean projectName = true;
+
         private boolean removedTime = true;
+
         private boolean submittedTime = true;
+
         private Tasks tasks = null;
+
         private boolean totalNumberOfTasks = true;
 
         @Override

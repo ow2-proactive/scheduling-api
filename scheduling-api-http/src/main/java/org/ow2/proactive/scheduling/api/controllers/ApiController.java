@@ -39,8 +39,8 @@ public class ApiController {
     }
 
     @RequestMapping(value = "/v1/rest", method = { RequestMethod.DELETE, RequestMethod.GET, RequestMethod.HEAD,
-            RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
-            RequestMethod.TRACE })
+                                                   RequestMethod.OPTIONS, RequestMethod.POST, RequestMethod.PUT,
+                                                   RequestMethod.TRACE })
     @ResponseBody
     public String v1() {
         return "TODO: forward to /rest/";

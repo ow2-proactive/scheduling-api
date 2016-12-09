@@ -24,6 +24,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -31,7 +33,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
-import graphql.schema.DataFetchingEnvironment;
+
 
 /**
  * @author ActiveEon Team

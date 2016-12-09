@@ -27,7 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
+
 
 @AllArgsConstructor
 @Data

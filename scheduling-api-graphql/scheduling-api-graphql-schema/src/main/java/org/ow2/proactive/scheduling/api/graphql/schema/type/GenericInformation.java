@@ -24,16 +24,18 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLObjectType;
-import lombok.AllArgsConstructor;
-
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLObjectType;
+import lombok.AllArgsConstructor;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
+
 
 /**
  * @author ActiveEon Team
@@ -45,16 +47,16 @@ public class GenericInformation extends KeyValue {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
             return GraphQLObjectType.newObject()
-                    .name(Types.GENERIC_INFORMATION.getName())
-                    .description("Generic Information.")
-                    .withInterface(KeyValue.TYPE.getInstance())
-                    .field(newFieldDefinition().name(KEY.getName())
-                            .description("Key as the key in a map.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(VALUE.getName())
-                            .description("Value as the value in a map.")
-                            .type(GraphQLString))
-                    .build();
+                                    .name(Types.GENERIC_INFORMATION.getName())
+                                    .description("Generic Information.")
+                                    .withInterface(KeyValue.TYPE.getInstance())
+                                    .field(newFieldDefinition().name(KEY.getName())
+                                                               .description("Key as the key in a map.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(VALUE.getName())
+                                                               .description("Value as the value in a map.")
+                                                               .type(GraphQLString))
+                                    .build();
         }
     };
 

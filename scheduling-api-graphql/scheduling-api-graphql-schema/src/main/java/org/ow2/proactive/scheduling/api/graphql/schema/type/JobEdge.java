@@ -25,8 +25,10 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
 import com.google.common.collect.ImmutableList;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLObjectType;
+
 
 /**
  * @author ActiveEon Team
@@ -36,8 +38,7 @@ public final class JobEdge {
     public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-            return JobConnection.RELAY.edgeType(
-                    "Jobs", Job.TYPE.getInstance(dataFetchers), null, ImmutableList.of());
+            return JobConnection.RELAY.edgeType("Jobs", Job.TYPE.getInstance(dataFetchers), null, ImmutableList.of());
         }
     };
 

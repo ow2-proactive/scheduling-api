@@ -25,20 +25,19 @@
 
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import com.google.common.truth.Truth;
-import org.junit.Test;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
+import org.junit.Test;
+
 
 public class KeyValueTest {
 
-    private static final String GENERIC_INFO = GENERIC_INFORMATION.getName() + "{\n" + KEY.getName() + "\n" + VALUE.getName() + "\n}\n";
+    private static final String GENERIC_INFO = GENERIC_INFORMATION.getName() + "{\n" + KEY.getName() + "\n" +
+                                               VALUE.getName() + "\n}\n";
 
     private static final String GENERIC_INFO_PARTIAL = GENERIC_INFORMATION.getName() + "{\n" + KEY.getName() + "\n}\n";
 

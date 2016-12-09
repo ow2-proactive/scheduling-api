@@ -24,13 +24,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+
 import graphql.relay.Relay;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLObjectType;
+
+import java.util.List;
 
 
 /**
@@ -43,8 +44,7 @@ public final class JobConnection {
     public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-            return RELAY.connectionType(
-                    "Jobs", JobEdge.TYPE.getInstance(dataFetchers), ImmutableList.of());
+            return RELAY.connectionType("Jobs", JobEdge.TYPE.getInstance(dataFetchers), ImmutableList.of());
         }
     };
 

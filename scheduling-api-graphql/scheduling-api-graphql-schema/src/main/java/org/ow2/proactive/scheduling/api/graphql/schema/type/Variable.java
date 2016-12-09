@@ -24,15 +24,17 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLObjectType;
 import lombok.AllArgsConstructor;
 
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
+
 
 /**
  * @author ActiveEon Team
@@ -44,16 +46,16 @@ public class Variable extends KeyValue {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
             return GraphQLObjectType.newObject()
-                    .name(Types.VARIABLE.getName())
-                    .description("Variables.")
-                    .withInterface(KeyValue.TYPE.getInstance())
-                    .field(newFieldDefinition().name(Fields.KEY.getName())
-                            .description("The key or name of the variable.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(Fields.VALUE.getName())
-                            .description("The value associated to the variable name.")
-                            .type(GraphQLString))
-                    .build();
+                                    .name(Types.VARIABLE.getName())
+                                    .description("Variables.")
+                                    .withInterface(KeyValue.TYPE.getInstance())
+                                    .field(newFieldDefinition().name(Fields.KEY.getName())
+                                                               .description("The key or name of the variable.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(Fields.VALUE.getName())
+                                                               .description("The value associated to the variable name.")
+                                                               .type(GraphQLString))
+                                    .build();
         }
     };
 

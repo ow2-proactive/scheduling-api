@@ -31,7 +31,7 @@ public class InvalidSessionIdException extends RuntimeException {
 
     public InvalidSessionIdException() {
         super("The specified session ID is invalid or has expired. " +
-                "You need to authenticate through the ProActive identity service to get a valid session ID.");
+              "You need to authenticate through the ProActive identity service to get a valid session ID.");
     }
 
 }

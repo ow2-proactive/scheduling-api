@@ -24,6 +24,11 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
+import com.google.common.base.Strings;
+
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLType;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,9 +47,7 @@ import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
-import com.google.common.base.Strings;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLType;
+
 
 /**
  * @author ActiveEon Team
@@ -69,8 +72,8 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
     }
 
     @Override
-    public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment,
-            CriteriaBuilder criteriaBuilder, Root<JobData> root, List<JobInput> input) {
+    public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder,
+            Root<JobData> root, List<JobInput> input) {
 
         return input.stream().map(i -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -99,23 +102,19 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("owner"), owner));
             }
             if (!Strings.isNullOrEmpty(priority)) {
-                predicates.add(criteriaBuilder.equal(root.get("priority"),
-                        JobPriority.valueOf(priority)));
+                predicates.add(criteriaBuilder.equal(root.get("priority"), JobPriority.valueOf(priority)));
             }
             if (!Strings.isNullOrEmpty(projectName)) {
                 predicates.add(criteriaBuilder.equal(root.get("projectName"), projectName));
             }
             if (!Strings.isNullOrEmpty(status)) {
-                predicates.add(
-                        criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
+                predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
             }
             if (beforeSubmittedTime != -1L) {
-                predicates.add(
-                        criteriaBuilder.lessThanOrEqualTo(root.get("submittedTime"), beforeSubmittedTime));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("submittedTime"), beforeSubmittedTime));
             }
             if (afterSubmittedTime != -1L) {
-                predicates.add(
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("submittedTime"), afterSubmittedTime));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("submittedTime"), afterSubmittedTime));
             }
 
             return predicates.toArray(new Predicate[predicates.size()]);

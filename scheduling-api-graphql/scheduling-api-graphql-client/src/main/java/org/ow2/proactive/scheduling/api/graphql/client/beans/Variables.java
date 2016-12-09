@@ -24,9 +24,11 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team

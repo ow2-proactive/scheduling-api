@@ -24,21 +24,23 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import java.util.LinkedHashMap;
-
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInputType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.KEY;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.VALUE;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInputType;
+
+import java.util.LinkedHashMap;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
 
 /**
@@ -52,16 +54,16 @@ public class KeyValueInput {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.KEY_VALUE_INPUT.getName())
-                    .description("KeyValue input filter.")
-                    .field(newInputObjectField().name(Fields.KEY.getName())
-                            .description("Key as the key value of a map.")
-                            .type(GraphQLString)
-                            .build())
-                    .field(newInputObjectField().name(Fields.VALUE.getName())
-                            .description("Value as the value of a map.")
-                            .type(GraphQLString)
-                            .build())
-                    .build();
+                                   .description("KeyValue input filter.")
+                                   .field(newInputObjectField().name(Fields.KEY.getName())
+                                                               .description("Key as the key value of a map.")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .field(newInputObjectField().name(Fields.VALUE.getName())
+                                                               .description("Value as the value of a map.")
+                                                               .type(GraphQLString)
+                                                               .build())
+                                   .build();
         }
     };
 

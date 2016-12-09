@@ -24,18 +24,20 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLObjectType;
-import lombok.Builder;
-import lombok.Getter;
-
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GLOBAL_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.INPUT_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OUTPUT_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLObjectType;
+import lombok.Builder;
+import lombok.Getter;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
@@ -48,29 +50,24 @@ public class DataManagement {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
             return GraphQLObjectType.newObject()
-                    .name(Types.DATA_MANAGEMENT.getName())
-                    .description(
-                            "Represents a Job configuration for managing data. It contains user defined data space " +
-                                    "URLs. Data spaces are used to fetch and push files between the Scheduler and Tasks. " +
-                                    "A data space URL set to `null` means that the space " +
-                                    "started with the Scheduler instance is used.")
-                    .field(newFieldDefinition().name(GLOBAL_SPACE_URL.getName())
-                            .description(
-                                    "The URL of the global space that is shared between all ProActive users.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(INPUT_SPACE_URL.getName())
-                            .description(
-                                    "The URL of a read-only space that is personal to the ProActive user running the Job.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(OUTPUT_SPACE_URL.getName())
-                            .description(
-                                    "The URL of a private space that is personal to the ProActive user running the Job and used to push results.")
-                            .type(GraphQLString))
-                    .field(newFieldDefinition().name(USER_SPACE_URL.getName())
-                            .description(
-                                    "The URL of the user space that is personal to the ProActive user running the Job.")
-                            .type(GraphQLString))
-                    .build();
+                                    .name(Types.DATA_MANAGEMENT.getName())
+                                    .description("Represents a Job configuration for managing data. It contains user defined data space " +
+                                                 "URLs. Data spaces are used to fetch and push files between the Scheduler and Tasks. " +
+                                                 "A data space URL set to `null` means that the space " +
+                                                 "started with the Scheduler instance is used.")
+                                    .field(newFieldDefinition().name(GLOBAL_SPACE_URL.getName())
+                                                               .description("The URL of the global space that is shared between all ProActive users.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(INPUT_SPACE_URL.getName())
+                                                               .description("The URL of a read-only space that is personal to the ProActive user running the Job.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(OUTPUT_SPACE_URL.getName())
+                                                               .description("The URL of a private space that is personal to the ProActive user running the Job and used to push results.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(USER_SPACE_URL.getName())
+                                                               .description("The URL of the user space that is personal to the ProActive user running the Job.")
+                                                               .type(GraphQLString))
+                                    .build();
         }
     };
 

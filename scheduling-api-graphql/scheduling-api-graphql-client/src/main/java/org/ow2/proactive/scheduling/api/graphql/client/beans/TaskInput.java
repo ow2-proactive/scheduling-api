@@ -24,9 +24,12 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import com.google.common.base.Strings;
+
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -43,7 +46,9 @@ public class TaskInput implements ApiType {
     public static class Builder {
 
         private String id;
+
         private String taskName;
+
         private String status;
 
         private StringBuilder sb = new StringBuilder();

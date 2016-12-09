@@ -24,15 +24,6 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.StaticDataFetcher;
-
 import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
@@ -40,6 +31,16 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.JOBS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VERSION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.StaticDataFetcher;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
+import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
 
 
 /**
@@ -58,36 +59,36 @@ public final class Query {
             DataFetcher variableDataFetcher = dataFetchers[4];
 
             return GraphQLObjectType.newObject()
-                    .name(Types.QUERY.getName())
-                    .field(newFieldDefinition().name(JOBS.getName())
-                            .description("Jobs list, it will be empty if there is none.")
-                            .type(JobConnection.TYPE.getInstance(
-                                    genericInformationDataFetcher, taskDataFetcher, variableDataFetcher))
-                            .argument(newArgument().name(Arguments.FILTER.getName())
-                                    .description("Jobs input filter.")
-                                    .type(new GraphQLList(
-                                            JobInput.TYPE.getInstance(
-                                                    genericInformationDataFetcher,
-                                                    taskDataFetcher,
-                                                    variableDataFetcher)))
-                                    .build())
-                            .argument(JobConnection.getConnectionFieldArguments())
-                            .argument(newArgument()
-                                    .name(Arguments.FIRST.getName())
-                                    .type(GraphQLInt).defaultValue(DefaultValues.PAGE_SIZE)
-                                    .build())
-                            .dataFetcher(jobDataFetcher))
-                    .field(newFieldDefinition().name(VERSION.getName())
-                            .description("GraphQL API version.")
-                            .type(GraphQLString)
-                            .dataFetcher(new StaticDataFetcher(VERSION_API)))
-                    .field(newFieldDefinition().name(VIEWER.getName())
-                            .description("Viewer of the query.")
-                            .type(User.TYPE.getInstance(
-                                    genericInformationDataFetcher, jobDataFetcher,
-                                    taskDataFetcher, variableDataFetcher))
-                            .dataFetcher(userDataFetcher))
-                    .build();
+                                    .name(Types.QUERY.getName())
+                                    .field(newFieldDefinition().name(JOBS.getName())
+                                                               .description("Jobs list, it will be empty if there is none.")
+                                                               .type(JobConnection.TYPE.getInstance(genericInformationDataFetcher,
+                                                                                                    taskDataFetcher,
+                                                                                                    variableDataFetcher))
+                                                               .argument(newArgument().name(Arguments.FILTER.getName())
+                                                                                      .description("Jobs input filter.")
+                                                                                      .type(new GraphQLList(JobInput.TYPE.getInstance(genericInformationDataFetcher,
+                                                                                                                                      taskDataFetcher,
+                                                                                                                                      variableDataFetcher)))
+                                                                                      .build())
+                                                               .argument(JobConnection.getConnectionFieldArguments())
+                                                               .argument(newArgument().name(Arguments.FIRST.getName())
+                                                                                      .type(GraphQLInt)
+                                                                                      .defaultValue(DefaultValues.PAGE_SIZE)
+                                                                                      .build())
+                                                               .dataFetcher(jobDataFetcher))
+                                    .field(newFieldDefinition().name(VERSION.getName())
+                                                               .description("GraphQL API version.")
+                                                               .type(GraphQLString)
+                                                               .dataFetcher(new StaticDataFetcher(VERSION_API)))
+                                    .field(newFieldDefinition().name(VIEWER.getName())
+                                                               .description("Viewer of the query.")
+                                                               .type(User.TYPE.getInstance(genericInformationDataFetcher,
+                                                                                           jobDataFetcher,
+                                                                                           taskDataFetcher,
+                                                                                           variableDataFetcher))
+                                                               .dataFetcher(userDataFetcher))
+                                    .build();
         }
     };
 

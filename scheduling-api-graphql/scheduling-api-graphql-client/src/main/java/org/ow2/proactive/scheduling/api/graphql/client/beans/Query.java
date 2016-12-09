@@ -29,6 +29,7 @@ import java.util.Map;
 
 import lombok.Data;
 
+
 /**
  * @author ActiveEon Team
  */
@@ -61,7 +62,9 @@ public class Query {
     public static class Builder {
 
         private String operationName;
+
         private String query;
+
         private String variables;
 
         public Builder operationName(String operationName) {

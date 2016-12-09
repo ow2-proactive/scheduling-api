@@ -24,11 +24,13 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
+import com.google.common.base.Strings;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import com.google.common.base.Strings;
+
 
 /**
  * @author ActiveEon Team
@@ -41,17 +43,21 @@ public class Inputs {
     public static final String buildQueryString(String after, String before, Integer first, Integer last,
             List<? extends ApiType> input) {
 
-        if (!input.isEmpty() || !Strings.isNullOrEmpty(after) || !Strings.isNullOrEmpty(
-                before) || first != null || last != null) {
+        if (!input.isEmpty() || !Strings.isNullOrEmpty(after) || !Strings.isNullOrEmpty(before) || first != null ||
+            last != null) {
             StringBuilder sb = new StringBuilder();
             sb.append("(");
             if (!Strings.isNullOrEmpty(after)) {
-                sb.append(String.format(" %s:", Arguments.AFTER.getName())).append(Constants.QUOTE).append(
-                        after).append(Constants.QUOTE);
+                sb.append(String.format(" %s:", Arguments.AFTER.getName()))
+                  .append(Constants.QUOTE)
+                  .append(after)
+                  .append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(before)) {
-                sb.append(String.format(" %s:", Arguments.BEFORE.getName())).append(Constants.QUOTE).append(
-                        before).append(Constants.QUOTE);
+                sb.append(String.format(" %s:", Arguments.BEFORE.getName()))
+                  .append(Constants.QUOTE)
+                  .append(before)
+                  .append(Constants.QUOTE);
             }
             if (first != null) {
                 sb.append(String.format(" %s:", Arguments.FIRST.getName())).append(first);
@@ -61,8 +67,7 @@ public class Inputs {
             }
             if (!input.isEmpty()) {
                 sb.append(String.format(" %s : [", Arguments.FILTER.getName()));
-                String inputQuery = input.stream().map(ApiType::getQueryString).collect(
-                        Collectors.joining(","));
+                String inputQuery = input.stream().map(ApiType::getQueryString).collect(Collectors.joining(","));
                 sb.append(inputQuery);
                 sb.append("]");
             }

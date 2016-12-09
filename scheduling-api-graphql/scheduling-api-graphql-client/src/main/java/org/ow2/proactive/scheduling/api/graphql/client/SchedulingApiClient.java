@@ -24,19 +24,22 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client;
 
+import com.google.common.base.Strings;
+
 import java.util.Map;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+
 import org.ow2.proactive.scheduling.api.graphql.beans.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.beans.Query;
 import org.ow2.proactive.scheduling.api.graphql.client.exception.SchedulingApiException;
-import com.google.common.base.Strings;
-import lombok.Getter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
 
 @Log4j2
 public class SchedulingApiClient {

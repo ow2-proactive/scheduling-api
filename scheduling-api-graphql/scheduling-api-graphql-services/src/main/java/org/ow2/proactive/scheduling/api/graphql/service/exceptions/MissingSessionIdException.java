@@ -31,7 +31,7 @@ public class MissingSessionIdException extends RuntimeException {
 
     public MissingSessionIdException() {
         super("Missing session ID. " +
-                "You need to authenticate through the ProActive identity service to get a valid session ID.");
+              "You need to authenticate through the ProActive identity service to get a valid session ID.");
     }
 
 }

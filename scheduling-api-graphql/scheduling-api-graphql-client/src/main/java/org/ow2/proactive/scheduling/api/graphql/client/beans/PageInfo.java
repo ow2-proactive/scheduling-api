@@ -24,8 +24,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -42,8 +44,11 @@ public class PageInfo implements ApiType {
     public static class Builder {
 
         private boolean hasNextPage = true;
+
         private boolean hasPreviousPage = true;
+
         private boolean startCursor = true;
+
         private boolean endCursor = true;
 
         private StringBuilder sb = new StringBuilder();

@@ -24,10 +24,12 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
+
 
 /**
  * @author ActiveEon Team

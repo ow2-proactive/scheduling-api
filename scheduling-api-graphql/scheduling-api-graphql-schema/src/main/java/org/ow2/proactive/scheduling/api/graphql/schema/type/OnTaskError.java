@@ -24,11 +24,13 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
+import static graphql.schema.GraphQLEnumType.newEnum;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLEnumType;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
+
 
 /**
  * @author ActiveEon Team
@@ -39,14 +41,15 @@ public class OnTaskError {
         @Override
         public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
             return newEnum().name(Types.ON_TASK_ERROR.getName())
-                    .description("Defines the behaviour that is applied on Tasks when an error occurs.")
-                    .value("CANCEL_JOB", "CANCEL_JOB", "Cancel job after all execution attempts.")
-                    .value("CONTINUE_JOB_EXECUTION", "CONTINUE_JOB_EXECUTION",
-                            "Continue job execution (try all execution attempts).")
-                    .value("NONE", "NONE", "None.")
-                    .value("PAUSE_JOB", "PAUSE_JOB", "Suspend task after first and pause job.")
-                    .value("PAUSE_TASK", "PAUSE_TASK", "Suspend task after first error and continue others.")
-                    .build();
+                            .description("Defines the behaviour that is applied on Tasks when an error occurs.")
+                            .value("CANCEL_JOB", "CANCEL_JOB", "Cancel job after all execution attempts.")
+                            .value("CONTINUE_JOB_EXECUTION",
+                                   "CONTINUE_JOB_EXECUTION",
+                                   "Continue job execution (try all execution attempts).")
+                            .value("NONE", "NONE", "None.")
+                            .value("PAUSE_JOB", "PAUSE_JOB", "Suspend task after first and pause job.")
+                            .value("PAUSE_TASK", "PAUSE_TASK", "Suspend task after first error and continue others.")
+                            .build();
         }
     };
 

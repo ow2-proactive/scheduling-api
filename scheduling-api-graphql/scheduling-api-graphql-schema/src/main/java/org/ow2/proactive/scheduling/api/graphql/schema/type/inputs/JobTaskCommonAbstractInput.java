@@ -24,15 +24,17 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
+
 import java.util.Map;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
+import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+
 
 /**
  * @author ActiveEon Team

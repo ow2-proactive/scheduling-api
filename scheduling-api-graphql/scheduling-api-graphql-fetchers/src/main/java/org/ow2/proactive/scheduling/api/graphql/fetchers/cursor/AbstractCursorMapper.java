@@ -26,6 +26,7 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
 
 import graphql.relay.Base64;
 
+
 /**
  * @author ActiveEon Team
  */

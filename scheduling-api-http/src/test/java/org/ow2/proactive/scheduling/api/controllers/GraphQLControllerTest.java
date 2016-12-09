@@ -25,23 +25,6 @@
 
 package org.ow2.proactive.scheduling.api.controllers;
 
-
-import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
-import org.ow2.proactive.scheduling.api.graphql.service.AuthenticationService;
-import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
-import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,6 +35,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
+import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
+import org.ow2.proactive.scheduling.api.graphql.service.AuthenticationService;
+import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
+
 
 @WebAppConfiguration
 public class GraphQLControllerTest {
@@ -78,9 +79,10 @@ public class GraphQLControllerTest {
 
         when(authenticationService.authenticate(any(String.class))).thenReturn("bobot");
 
-        when(graphqlService.executeQuery(any(String.class), any(String.class),
-                any(GraphqlContext.class), any(Map.class))).thenReturn(ImmutableMap.of());
-
+        when(graphqlService.executeQuery(any(String.class),
+                                         any(String.class),
+                                         any(GraphqlContext.class),
+                                         any(Map.class))).thenReturn(ImmutableMap.of());
 
         mockMvc = standaloneSetup(graphQLController).build();
     }
@@ -88,31 +90,37 @@ public class GraphQLControllerTest {
     @Test
     public void testControllerPostMethod() throws Exception {
 
-        mockMvc.perform(post("/v1/graphql").header("sessionid", "sessionId").accept(
-                MediaType.APPLICATION_JSON).contentType(
-                MediaType.APPLICATION_JSON).content(query)).andExpect(status().isOk()).andExpect(
-                content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(post("/v1/graphql").header("sessionid", "sessionId")
+                                           .accept(MediaType.APPLICATION_JSON)
+                                           .contentType(MediaType.APPLICATION_JSON)
+                                           .content(query))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(authenticationService, times(1)).authenticate(any(String.class));
 
-        verify(graphqlService, times(1)).executeQuery(any(String.class), any(String.class),
-                any(GraphqlContext.class), any(Map.class));
+        verify(graphqlService, times(1)).executeQuery(any(String.class),
+                                                      any(String.class),
+                                                      any(GraphqlContext.class),
+                                                      any(Map.class));
     }
 
     @Test
     public void testControllerGetMethod() throws Exception {
 
-        mockMvc.perform(
-                get("/v1/graphql").header("sessionid", "sessionId").param("query",
-                        "{ jobs{ edges{ node{ id } } } }").accept(
-                        MediaType.APPLICATION_JSON).contentType(
-                        MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(
-                content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/v1/graphql").header("sessionid", "sessionId")
+                                          .param("query", "{ jobs{ edges{ node{ id } } } }")
+                                          .accept(MediaType.APPLICATION_JSON)
+                                          .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(authenticationService, times(1)).authenticate(any(String.class));
 
-        verify(graphqlService, times(1)).executeQuery(any(String.class), any(String.class),
-                any(GraphqlContext.class), any(Map.class));
+        verify(graphqlService, times(1)).executeQuery(any(String.class),
+                                                      any(String.class),
+                                                      any(GraphqlContext.class),
+                                                      any(Map.class));
     }
 
 }

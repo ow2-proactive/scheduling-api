@@ -24,22 +24,24 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.service;
 
+import com.google.common.base.Strings;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.InvalidSessionIdException;
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.MissingSessionIdException;
-import com.google.common.base.Strings;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
 
 /**
  * @author ActiveEon Team
@@ -69,15 +71,14 @@ public class AuthenticationService {
         schedulerLoginFetchUrl = createLoginFetchUrl(schedulerRestUrl);
 
         sessionCache = CacheBuilder.newBuilder()
-                .maximumSize(sessionCacheMaxSize)
-                .expireAfterWrite(sessionCacheExpireAfter, TimeUnit.MILLISECONDS)
-                .build(new CacheLoader<String, String>() {
-                    @Override
-                    public String load(String sessionId)
-                            throws Exception {
-                        return getLoginFromSessionId(sessionId);
-                    }
-                });
+                                   .maximumSize(sessionCacheMaxSize)
+                                   .expireAfterWrite(sessionCacheExpireAfter, TimeUnit.MILLISECONDS)
+                                   .build(new CacheLoader<String, String>() {
+                                       @Override
+                                       public String load(String sessionId) throws Exception {
+                                           return getLoginFromSessionId(sessionId);
+                                       }
+                                   });
     }
 
     private String createLoginFetchUrl(String schedulerRestUrl) {

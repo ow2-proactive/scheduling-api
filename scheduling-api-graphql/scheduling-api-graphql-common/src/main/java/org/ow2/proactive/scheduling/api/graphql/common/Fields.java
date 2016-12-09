@@ -26,6 +26,7 @@ package org.ow2.proactive.scheduling.api.graphql.common;
 
 import com.google.common.base.CaseFormat;
 
+
 /**
  * Defines the name of the different GraphQL fields which are used in the API.
  *

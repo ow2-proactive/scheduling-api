@@ -26,6 +26,7 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
 
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
 
+
 /**
  * @author ActiveEon Team
  */

@@ -24,6 +24,20 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.AFTER;
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
+
+import com.google.common.annotations.VisibleForTesting;
+
+import graphql.relay.Connection;
+import graphql.relay.ConnectionCursor;
+import graphql.relay.Edge;
+import graphql.relay.PageInfo;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,18 +56,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.CursorMapper;
-import com.google.common.annotations.VisibleForTesting;
-import graphql.relay.Connection;
-import graphql.relay.ConnectionCursor;
-import graphql.relay.Edge;
-import graphql.relay.PageInfo;
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.AFTER;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
-import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
 
 
 /**
@@ -90,8 +92,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      */
     protected Connection createPaginatedConnection(DataFetchingEnvironment environment, Class<E> entityClass,
             Function<Root<E>, Path<? extends Number>> entityId, Comparator<E> entityComparator,
-            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria,
-            CursorMapper<T, Integer> cursorMapper) {
+            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper) {
 
         Integer first = environment.getArgument(FIRST.getName());
         Integer last = environment.getArgument(LAST.getName());
@@ -137,13 +138,13 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         Stream<T> data = dataMapping(dataStream);
 
         Connection connection = createRelayConnection(entityManager,
-                entityClass,
-                criteriaBuilder,
-                wherePredicate,
-                cursorMapper,
-                data,
-                first,
-                last);
+                                                      entityClass,
+                                                      criteriaBuilder,
+                                                      wherePredicate,
+                                                      cursorMapper,
+                                                      data,
+                                                      first,
+                                                      last);
 
         return connection;
     }
@@ -163,12 +164,11 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
         // custom filter predicates
         if (!predicates.isEmpty()) {
-            List<Predicate> andPredicates = predicates.stream().map(
-                    array -> criteriaBuilder.and(array)).collect(
-                    Collectors.toList());
+            List<Predicate> andPredicates = predicates.stream()
+                                                      .map(array -> criteriaBuilder.and(array))
+                                                      .collect(Collectors.toList());
 
-            concatenatePredicate.add(
-                    criteriaBuilder.or(andPredicates.toArray(new Predicate[andPredicates.size()])));
+            concatenatePredicate.add(criteriaBuilder.or(andPredicates.toArray(new Predicate[andPredicates.size()])));
         }
 
         if (cursorPredicate != null) {
@@ -179,8 +179,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         List<Predicate> wherePredicate = new ArrayList<>();
 
         if (concatenatePredicate.size() > 1) {
-            wherePredicate.add(criteriaBuilder.and(
-                    concatenatePredicate.toArray(new Predicate[concatenatePredicate.size()])));
+            wherePredicate.add(criteriaBuilder.and(concatenatePredicate.toArray(new Predicate[concatenatePredicate.size()])));
         } else if (concatenatePredicate.size() == 1) {
             wherePredicate.addAll(concatenatePredicate);
         } else {
@@ -225,8 +224,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return maxResults;
     }
 
-    protected Predicate createCursorPredicate(CriteriaBuilder criteriaBuilder,
-            Path<? extends Number> taskIdPath,
+    protected Predicate createCursorPredicate(CriteriaBuilder criteriaBuilder, Path<? extends Number> taskIdPath,
             Integer after, Integer before) {
         // apply cursors to tasks
         Predicate cursorPredicate = null;
@@ -249,8 +247,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     }
 
     protected Connection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
-            CriteriaBuilder criteriaBuilder, Predicate[] predicates,
-            CursorMapper<T, Integer> cursorMapper,
+            CriteriaBuilder criteriaBuilder, Predicate[] predicates, CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
         List<Edge> edges = buildEdges(data, cursorMapper);
@@ -262,8 +259,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
         }
 
-        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityManager, entityClass, criteriaBuilder,
-                predicates);
+        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityManager, entityClass, criteriaBuilder, predicates);
 
         pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last));
         pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first));
@@ -276,14 +272,12 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     }
 
     @VisibleForTesting
-    int getNbEntriesBeforeSlicing(EntityManager entityManager, Class<E> entityClass,
-            CriteriaBuilder criteriaBuilder,
+    int getNbEntriesBeforeSlicing(EntityManager entityManager, Class<E> entityClass, CriteriaBuilder criteriaBuilder,
             Predicate[] predicates) {
 
         CriteriaQuery<Long> counterQuery = criteriaBuilder.createQuery(Long.class);
 
-        CriteriaQuery<Long> select = counterQuery.select(
-                criteriaBuilder.count(counterQuery.from(entityClass)));
+        CriteriaQuery<Long> select = counterQuery.select(criteriaBuilder.count(counterQuery.from(entityClass)));
 
         if (predicates.length > 0) {
             select.where(predicates);
@@ -295,7 +289,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     @VisibleForTesting
     List<Edge> buildEdges(Stream<T> data, CursorMapper<T, Integer> cursorMapper) {
         return data.map(entry -> new Edge(entry, new ConnectionCursor(cursorMapper.createCursor(entry))))
-                .collect(Collectors.toList());
+                   .collect(Collectors.toList());
     }
 
     /**

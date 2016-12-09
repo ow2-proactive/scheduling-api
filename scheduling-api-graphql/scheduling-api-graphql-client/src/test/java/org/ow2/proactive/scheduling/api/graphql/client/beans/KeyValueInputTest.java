@@ -25,13 +25,11 @@
 
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
-import com.google.common.truth.Truth;
-import org.junit.Test;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
+
+import org.junit.Test;
 
 
 public class KeyValueInputTest {

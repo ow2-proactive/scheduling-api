@@ -25,24 +25,25 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
 import com.google.common.collect.ImmutableList;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLObjectType;
+
 
 /**
  * @author ActiveEon Team
  */
 public final class TaskEdge {
 
-    public final static TypeSingleton<GraphQLObjectType> TYPE =
-            new TypeSingleton<GraphQLObjectType>() {
-                @Override
-                public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-                    return TaskConnection.RELAY.edgeType("Tasks",
-                            Task.TYPE.getInstance(dataFetchers),
-                            null,
-                            ImmutableList.of());
-                }
-            };
+    public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
+        @Override
+        public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
+            return TaskConnection.RELAY.edgeType("Tasks",
+                                                 Task.TYPE.getInstance(dataFetchers),
+                                                 null,
+                                                 ImmutableList.of());
+        }
+    };
 
     private TaskEdge() {
     }

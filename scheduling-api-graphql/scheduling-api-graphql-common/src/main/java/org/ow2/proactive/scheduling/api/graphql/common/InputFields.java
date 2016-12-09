@@ -26,6 +26,7 @@ package org.ow2.proactive.scheduling.api.graphql.common;
 
 import com.google.common.base.CaseFormat;
 
+
 /**
  * Defines the name of the different GraphQL input types which are used in the API.
  *
@@ -33,17 +34,7 @@ import com.google.common.base.CaseFormat;
  */
 public enum InputFields {
 
-    AFTER,
-    BEFORE,
-    ID,
-    KEY,
-    NAME,
-    OWNER,
-    PRIORITY,
-    PROJECT_NAME,
-    STATUS,
-    SUBMITTED_TIME,
-    VALUE;
+    AFTER, BEFORE, EXCLUDE_REMOVED, ID, KEY, NAME, OWNER, PRIORITY, PROJECT_NAME, STATUS, SUBMITTED_TIME, VALUE;
 
     public String getName() {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());

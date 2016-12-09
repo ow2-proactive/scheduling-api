@@ -24,13 +24,15 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client.beans;
 
+import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.RETURN;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import lombok.Data;
 
-import static org.ow2.proactive.scheduling.api.graphql.client.beans.Constants.RETURN;
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+
 
 /**
  * @author ActiveEon Team
@@ -47,6 +49,7 @@ public abstract class KeyValue implements ApiType {
     public static abstract class Builder {
 
         private boolean key = true;
+
         private boolean value = true;
 
         private List<KeyValueInput> input = new ArrayList<>();

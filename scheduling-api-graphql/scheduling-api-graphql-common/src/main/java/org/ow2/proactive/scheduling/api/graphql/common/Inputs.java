@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.common;
 import java.util.Map;
 import java.util.function.Function;
 
+
 /**
  * @author ActiveEon Team
  */
@@ -43,8 +44,8 @@ public final class Inputs {
         }
     }
 
-    public static <T> T getObject(Map<String, Object> input, String fieldName,
-            Function<Map<String, Object>, T> mapper, T defaultValue) {
+    public static <T> T getObject(Map<String, Object> input, String fieldName, Function<Map<String, Object>, T> mapper,
+            T defaultValue) {
 
         Object fieldValue = input.get(fieldName);
 

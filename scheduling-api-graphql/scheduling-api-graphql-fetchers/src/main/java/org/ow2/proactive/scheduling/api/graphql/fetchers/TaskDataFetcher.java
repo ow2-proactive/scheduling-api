@@ -24,6 +24,11 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.collect.Maps;
+
+import graphql.schema.DataFetchingEnvironment;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +50,7 @@ import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilter
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.TaskInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
-import com.google.common.base.CaseFormat;
-import com.google.common.collect.Maps;
-import graphql.schema.DataFetchingEnvironment;
+
 
 /**
  * @author ActiveEon Team
@@ -63,15 +66,15 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         Function<Root<TaskData>, Path<? extends Number>> entityId = root -> root.get("id").get("taskId");
 
-        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria =
-                new JobTaskFilterInputBiFunction(environment, new TaskInputConverter());
+        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment,
+                                                                                                                   new TaskInputConverter());
 
         return createPaginatedConnection(environment,
-                TaskData.class,
-                entityId,
-                Comparator.comparingLong(t -> t.getId().getTaskId()),
-                criteria,
-                new TaskCursorMapper());
+                                         TaskData.class,
+                                         entityId,
+                                         Comparator.comparingLong(t -> t.getId().getTaskId()),
+                                         criteria,
+                                         new TaskCursorMapper());
     }
 
     @Override
@@ -83,42 +86,41 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
             TaskData.DBTaskId id = taskData.getId();
 
             return Task.builder()
-                    .additionalClasspath(taskData.getAdditionalClasspath())
-                    .description(taskData.getDescription())
-                    .executionDuration(taskData.getExecutionDuration())
-                    .executionHostname(taskData.getExecutionHostName())
-                    .finishedTime(taskData.getFinishedTime())
-                    .genericInformation(taskData.getGenericInformation())
-                    .id(id.getTaskId())
-                    .inErrorTime(taskData.getInErrorTime())
-                    .javaHome(taskData.getJavaHome())
-                    .jobId(id.getJobId())
-                    .jvmArguments(taskData.getJvmArguments())
-                    .maxNumberOfExecution(taskData.getMaxNumberOfExecution())
-                    .name(taskData.getTaskName())
-                    .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
-                    .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
-                    .onTaskError(
-                            CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
-                                    taskData.getOnTaskErrorString())
-                    )
-                    .preciousLogs(taskData.isPreciousLogs())
-                    .preciousResult(taskData.isPreciousResult())
-                    .restartMode(
-                            RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase())
-                    .resultPreview(taskData.getResultPreview())
-                    .runAsMe(taskData.isRunAsMe())
-                    .scheduledTime(taskData.getScheduledTime())
-                    .startTime(taskData.getStartTime())
-                    .status(taskData.getTaskStatus().name())
-                    .tag(taskData.getTag())
-                    .variables(taskData.getVariables().values().stream().map(
-                            taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
-                                    taskDataVariable.getValue())).collect(
-                            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                    .workingDir(taskData.getWorkingDir())
-                    .walltime(taskData.getWallTime())
-                    .build();
+                       .additionalClasspath(taskData.getAdditionalClasspath())
+                       .description(taskData.getDescription())
+                       .executionDuration(taskData.getExecutionDuration())
+                       .executionHostname(taskData.getExecutionHostName())
+                       .finishedTime(taskData.getFinishedTime())
+                       .genericInformation(taskData.getGenericInformation())
+                       .id(id.getTaskId())
+                       .inErrorTime(taskData.getInErrorTime())
+                       .javaHome(taskData.getJavaHome())
+                       .jobId(id.getJobId())
+                       .jvmArguments(taskData.getJvmArguments())
+                       .maxNumberOfExecution(taskData.getMaxNumberOfExecution())
+                       .name(taskData.getTaskName())
+                       .numberOfExecutionLeft(taskData.getNumberOfExecutionLeft())
+                       .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
+                       .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                                              taskData.getOnTaskErrorString()))
+                       .preciousLogs(taskData.isPreciousLogs())
+                       .preciousResult(taskData.isPreciousResult())
+                       .restartMode(RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase())
+                       .resultPreview(taskData.getResultPreview())
+                       .runAsMe(taskData.isRunAsMe())
+                       .scheduledTime(taskData.getScheduledTime())
+                       .startTime(taskData.getStartTime())
+                       .status(taskData.getTaskStatus().name())
+                       .tag(taskData.getTag())
+                       .variables(taskData.getVariables()
+                                          .values()
+                                          .stream()
+                                          .map(taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
+                                                                                       taskDataVariable.getValue()))
+                                          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                       .workingDir(taskData.getWorkingDir())
+                       .walltime(taskData.getWallTime())
+                       .build();
         });
     }
 
