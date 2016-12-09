@@ -66,8 +66,8 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         Function<Root<TaskData>, Path<? extends Number>> entityId = root -> root.get("id").get("taskId");
 
-        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment,
-                                                                                                                   new TaskInputConverter());
+        BiFunction<CriteriaBuilder, Root<TaskData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(new TaskInputConverter(),
+                                                                                                                   environment);
 
         return createPaginatedConnection(environment,
                                          TaskData.class,
@@ -78,11 +78,11 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
     }
 
     @Override
-    protected Stream<Task> dataMapping(Stream<TaskData> taskStream) {
+    protected Stream<Task> dataMapping(Stream<TaskData> dataStream) {
         // TODO Task progress not accessible from DB. It implies to establish a connection with
         // the SchedulerFrontend active object to get the value that is in the Scheduler memory
 
-        return taskStream.map(taskData -> {
+        return dataStream.map(taskData -> {
             TaskData.DBTaskId id = taskData.getId();
 
             return Task.builder()

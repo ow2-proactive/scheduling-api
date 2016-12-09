@@ -34,7 +34,11 @@ import com.google.common.base.CaseFormat;
  */
 public enum Arguments {
 
-    AFTER, BEFORE, FILTER, FIRST, LAST;
+    AFTER,
+    BEFORE,
+    FILTER,
+    FIRST,
+    LAST;
 
     public String getName() {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());

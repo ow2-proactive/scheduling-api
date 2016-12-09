@@ -91,7 +91,7 @@ public class GraphQLController {
 
         String username = authenticationService.authenticate(sessionId);
 
-        log.trace("username={}", username);
+        log.debug("username={}", username);
         log.debug("query={}, operationName={}, variables={}", query, operationName, variables);
 
         return graphqlService.executeQuery(query,

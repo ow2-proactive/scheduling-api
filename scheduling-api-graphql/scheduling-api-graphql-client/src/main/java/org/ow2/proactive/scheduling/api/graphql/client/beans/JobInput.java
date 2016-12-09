@@ -33,6 +33,7 @@ import lombok.Data;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
+import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 
 
 /**
@@ -52,6 +53,8 @@ public class JobInput implements ApiType {
         private String afterSubmittedTime;
 
         private String beforeSubmittedTime;
+
+        private boolean excludeRemoved = true;
 
         private String id;
 
@@ -74,6 +77,11 @@ public class JobInput implements ApiType {
 
         public JobInput.Builder beforeSubmittedTime(String beforeSubmittedTime) {
             this.beforeSubmittedTime = beforeSubmittedTime;
+            return this;
+        }
+
+        public JobInput.Builder isExcludeRemoved(boolean excludeRemoved) {
+            this.excludeRemoved = excludeRemoved;
             return this;
         }
 
@@ -109,15 +117,21 @@ public class JobInput implements ApiType {
 
         public JobInput build() {
             sb.append("{");
+            if(!excludeRemoved) {
+                sb.append(' ');
+                sb.append(InputFields.EXCLUDE_REMOVED.getName());
+                sb.append(" : ");
+                sb.append(this.excludeRemoved);
+            }
             if (!Strings.isNullOrEmpty(this.id)) {
                 sb.append(' ');
-                sb.append(Fields.ID.getName());
+                sb.append(InputFields.ID.getName());
                 sb.append(" : ");
                 sb.append(this.id);
             }
             if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(' ');
-                sb.append(Fields.NAME.getName());
+                sb.append(InputFields.NAME.getName());
                 sb.append(" : ");
                 sb.append(QUOTE);
                 sb.append(this.jobName);
@@ -125,7 +139,7 @@ public class JobInput implements ApiType {
             }
             if (!Strings.isNullOrEmpty(this.owner)) {
                 sb.append(' ');
-                sb.append(Fields.OWNER.getName());
+                sb.append(InputFields.OWNER.getName());
                 sb.append(" : ");
                 sb.append(QUOTE);
                 sb.append(this.owner);
@@ -133,7 +147,7 @@ public class JobInput implements ApiType {
             }
             if (!Strings.isNullOrEmpty(this.priority)) {
                 sb.append(' ');
-                sb.append(Fields.PRIORITY.getName());
+                sb.append(InputFields.PRIORITY.getName());
                 sb.append(" : ");
                 sb.append(QUOTE);
                 sb.append(this.priority);
@@ -141,7 +155,7 @@ public class JobInput implements ApiType {
             }
             if (!Strings.isNullOrEmpty(this.projectName)) {
                 sb.append(' ');
-                sb.append(Fields.PROJECT_NAME.getName());
+                sb.append(InputFields.PROJECT_NAME.getName());
                 sb.append(" : ");
                 sb.append(QUOTE);
                 sb.append(this.projectName);
@@ -149,7 +163,7 @@ public class JobInput implements ApiType {
             }
             if (!Strings.isNullOrEmpty(this.status)) {
                 sb.append(' ');
-                sb.append(Fields.STATUS.getName());
+                sb.append(InputFields.STATUS.getName());
                 sb.append(" : ");
                 sb.append(QUOTE);
                 sb.append(this.status);
@@ -157,7 +171,7 @@ public class JobInput implements ApiType {
             }
             if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(this.afterSubmittedTime)) {
                 sb.append(' ');
-                sb.append(Fields.SUBMITTED_TIME.getName());
+                sb.append(InputFields.SUBMITTED_TIME.getName());
                 sb.append(" : {");
                 if (!Strings.isNullOrEmpty(this.beforeSubmittedTime)) {
                     sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(this.beforeSubmittedTime);

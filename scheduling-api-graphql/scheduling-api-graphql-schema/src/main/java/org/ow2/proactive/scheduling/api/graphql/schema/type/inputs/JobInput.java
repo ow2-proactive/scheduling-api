@@ -24,10 +24,12 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
+import static graphql.Scalars.GraphQLBoolean;
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
@@ -61,6 +63,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.JOB_INPUT.getName())
                                    .description("Job input filter.")
+                                   .field(newInputObjectField().name(EXCLUDE_REMOVED.getName())
+                                                               .description("Exclude removed job, true by default.")
+                                                               .type(GraphQLBoolean)
+                                                               .build())
                                    .field(newInputObjectField().name(ID.getName())
                                                                .description("Job identifier.")
                                                                .type(GraphQLLong)
@@ -93,6 +99,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
         }
     };
 
+    private boolean excludeRemoved;
+
     private String jobName;
 
     private String owner;
@@ -106,6 +114,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
+            excludeRemoved = Inputs.getValue(input, EXCLUDE_REMOVED.getName(), true);
             jobName = Inputs.getValue(input, NAME.getName(), null);
             owner = Inputs.getValue(input, OWNER.getName(), null);
             priority = Inputs.getValue(input, PRIORITY.getName(), null);

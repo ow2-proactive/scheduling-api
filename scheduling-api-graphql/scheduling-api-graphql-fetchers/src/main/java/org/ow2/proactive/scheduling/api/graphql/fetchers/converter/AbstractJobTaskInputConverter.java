@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
+import org.python.google.common.collect.ImmutableList;
 
 
 /**
@@ -45,8 +46,8 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommon
 public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAbstractInput>
         implements JobTaskInputPredicatesConverter<T, I> {
 
-    protected void extraInputCheck(DataFetchingEnvironment environment, List<I> input) {
-        // nothing to do here by default
+    protected LinkedHashMap<String, Object> extraInputCheck(DataFetchingEnvironment environment) {
+        return new LinkedHashMap<>();
     }
 
     protected abstract Function<Map<String, Object>, I> mapFunction();
@@ -55,14 +56,28 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
     public List<I> mapToInput(DataFetchingEnvironment environment) {
         List<I> input = new ArrayList<>();
 
-        extraInputCheck(environment, input);
+        LinkedHashMap<String, Object> extraInput = extraInputCheck(environment);
 
         Object filterArgument = environment.getArgument(Arguments.FILTER.getName());
+        List<LinkedHashMap<String, Object>> filterInputs;
 
-        if (filterArgument != null) {
-            List<LinkedHashMap<String, Object>> args = (List<LinkedHashMap<String, Object>>) filterArgument;
-            input.addAll(args.stream().map(mapFunction()).collect(Collectors.toList()));
+        if (filterArgument == null) {
+            if (!extraInput.isEmpty()) {
+                filterInputs = ImmutableList.of(extraInput);
+                input.addAll(filterInputs.stream().map(mapFunction()).collect(Collectors.toList()));
+            }
+        } else {
+            filterInputs = (List<LinkedHashMap<String, Object>>) filterArgument;
+            if (extraInput.isEmpty()) {
+                input.addAll(filterInputs.stream().map(mapFunction()).collect(Collectors.toList()));
+            } else {
+                input.addAll(filterInputs.stream().map(arg -> {
+                    arg.putAll(extraInput);
+                    return arg;
+                }).map(mapFunction()).collect(Collectors.toList()));
+            }
         }
+
         return input;
     }
 

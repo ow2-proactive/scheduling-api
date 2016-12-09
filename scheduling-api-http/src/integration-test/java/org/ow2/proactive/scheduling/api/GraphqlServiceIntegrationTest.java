@@ -285,6 +285,34 @@ public class GraphqlServiceIntegrationTest {
     }
 
     @Test
+    public void testQueryJobsFilterByExcludeRemoved() {
+        addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{status: KILLED}) " +
+                                                                            "{ edges { cursor node { id owner } } } }",
+                                                                            FILTER.getName()));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+    }
+
+    @Test
+    public void testQueryJobsFilterByIncludeRemoved() {
+        addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{status: KILLED, excludeRemoved: false}) " +
+                                                                            "{ edges { cursor node { id owner } } } }",
+                                                                            FILTER.getName()));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(6);
+    }
+
+    @Test
     public void testQueryTasks() {
         addJobDataWithTasks(10);
 
@@ -583,11 +611,29 @@ public class GraphqlServiceIntegrationTest {
     @Test
     public void testQueryViewerJobs() {
         addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs { edges { node { id owner } } } } }");
+        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs  { edges { node { id owner } } } } }");
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
+
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
+    }
+
+    @Test
+    public void testQueryViewerIncludeRemovedJobs() {
+        addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
+
+        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs (filter: {excludeRemoved: false, status: KILLED}) { edges { node { id owner } } } } }");
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
 
         jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
     }

@@ -63,8 +63,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(environment,
-                                                                                                                  new JobInputConverter());
+        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(new JobInputConverter(),
+                                                                                                                  environment);
 
         return createPaginatedConnection(environment,
                                          JobData.class,
@@ -75,8 +75,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     }
 
     @Override
-    protected Stream<Job> dataMapping(Stream<JobData> taskStream) {
-        return taskStream.parallel()
+    protected Stream<Job> dataMapping(Stream<JobData> dataStream) {
+        return dataStream.parallel()
                          .map(jobData -> Job.builder()
                                             .dataManagement(DataManagement.builder()
                                                                           .globalSpaceUrl(jobData.getGlobalSpace())
