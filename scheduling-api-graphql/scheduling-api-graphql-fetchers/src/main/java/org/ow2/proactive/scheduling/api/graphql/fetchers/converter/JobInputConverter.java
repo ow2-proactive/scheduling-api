@@ -55,20 +55,22 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
 public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, JobInput> {
 
     @Override
-    protected void extraInputCheck(DataFetchingEnvironment environment, List<JobInput> input) {
+    protected LinkedHashMap<String, Object> extraInputCheck(DataFetchingEnvironment environment) {
         // use the {@code user} parent field to create a new input filter on jobs connection,
         // so that the job list contains jobs belonging to the user only
         GraphQLType parentType = environment.getParentType();
+        LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
+
         if (parentType != null && Types.USER.getName().equals(parentType.getName())) {
             User user = (User) environment.getSource();
-            LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
+
             if (!Strings.isNullOrEmpty(user.getLogin())) {
                 ownerInput.put(InputFields.OWNER.getName(), user.getLogin());
             } else {
                 throw new IllegalStateException("Missing login name");
             }
-            input.add(new JobInput(ownerInput));
         }
+        return ownerInput;
     }
 
     @Override
@@ -78,6 +80,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
         return input.stream().map(i -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            boolean excludeRemoved = i.isExcludeRemoved();
             long jobId = i.getId();
             String jobName = i.getJobName();
             String owner = i.getOwner();
@@ -87,11 +90,9 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             long beforeSubmittedTime = -1;
             long afterSubmittedTime = -1;
 
-            if (i.getSubmittedTime() != null) {
-                beforeSubmittedTime = i.getSubmittedTime().getBefore();
-                afterSubmittedTime = i.getSubmittedTime().getAfter();
+            if (excludeRemoved) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
             }
-
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
@@ -109,6 +110,10 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             }
             if (!Strings.isNullOrEmpty(status)) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
+            }
+            if (i.getSubmittedTime() != null) {
+                beforeSubmittedTime = i.getSubmittedTime().getBefore();
+                afterSubmittedTime = i.getSubmittedTime().getAfter();
             }
             if (beforeSubmittedTime != -1L) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("submittedTime"), beforeSubmittedTime));

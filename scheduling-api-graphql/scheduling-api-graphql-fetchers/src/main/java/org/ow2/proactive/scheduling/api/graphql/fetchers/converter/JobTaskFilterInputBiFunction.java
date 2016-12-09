@@ -45,9 +45,9 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommon
 public class JobTaskFilterInputBiFunction<T, I extends JobTaskCommonAbstractInput>
         implements BiFunction<CriteriaBuilder, Root<T>, List<Predicate[]>> {
 
-    protected DataFetchingEnvironment environment;
-
     private JobTaskInputPredicatesConverter<T, I> converter;
+
+    protected DataFetchingEnvironment environment;
 
     @Override
     public List<Predicate[]> apply(CriteriaBuilder criteriaBuilder, Root<T> root) {

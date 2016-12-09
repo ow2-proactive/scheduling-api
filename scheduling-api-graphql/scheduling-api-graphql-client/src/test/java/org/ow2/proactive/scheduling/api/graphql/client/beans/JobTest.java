@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.client.beans;
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.AFTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
+import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CURSOR;
@@ -67,13 +68,16 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_T
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
+
+import com.google.common.collect.ImmutableList;
 
 import org.junit.Test;
 
 
 public class JobTest {
 
-    private static final String ALL = String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){\n%s{\n%s\n%s\n" +
+    private static final String ALL = String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 %s : [{ %s : false }] ){\n%s{\n%s\n%s\n" +
                                                     "%s\n%s\n}\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s\n}\n}\n}",
@@ -82,6 +86,8 @@ public class JobTest {
                                                     BEFORE.getName(),
                                                     FIRST.getName(),
                                                     LAST.getName(),
+                                                    FILTER.getName(),
+                                                    EXCLUDE_REMOVED.getName(),
                                                     PAGE_INFO.getName(),
                                                     HAS_NEXT_PAGE.getName(),
                                                     HAS_PREVIOUS_PAGE.getName(),
@@ -123,11 +129,18 @@ public class JobTest {
     @Test
     public void getJobsQueryString() {
 
-        Jobs jobs = new Jobs.Builder().after("after").before("before").first(10).last(10).excludeVariables().build();
+        JobInput input = new JobInput.Builder().isExcludeRemoved(false).build();
+
+        Jobs jobs = new Jobs.Builder().after("after")
+                                      .before("before")
+                                      .first(10)
+                                      .last(10)
+                                      .input(ImmutableList.of(input))
+                                      .excludeVariables()
+                                      .build();
 
         System.out.println(jobs.getQueryString());
 
         assertThat(jobs.getQueryString()).isEqualTo(ALL);
-        // How graphiql vaildate the input query on the fly?
     }
 }
