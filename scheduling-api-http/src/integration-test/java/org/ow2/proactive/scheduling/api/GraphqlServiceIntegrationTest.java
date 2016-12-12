@@ -220,6 +220,18 @@ public class GraphqlServiceIntegrationTest {
     }
 
     @Test
+    public void testQueryJobsFilterByContainsNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{%s:\"*ob*\"}]) { edges { cursor node { id name } } } }",
+                                                                            FILTER.getName(),
+                                                                            NAME.getName()));
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(10);
+    }
+
+    @Test
     public void testQueryJobsFilterByOwners() {
         addJobData(10);
 
@@ -499,6 +511,35 @@ public class GraphqlServiceIntegrationTest {
         assertThat(taskNodes).hasSize(2);
         assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("3");
         assertThat(getField(taskNodes.get(1), "node", "id")).isEqualTo("5");
+    }
+
+    @Test
+    public void testQueryTasksFilterByStartWithName() {
+        addJobDataWithTasks(10);
+
+        String query = String.format("{ jobs { edges { cursor node { id tasks(%s:[{%s:\"task*\"}]) " +
+                                     "{ edges { node { id } } } } } } }", FILTER.getName(), NAME.getName());
+        Map<String, Object> queryResult = executeGraphqlQuery(query);
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        List<?> taskNodes = (List<?>) getField(jobNodes.get(0), "node", "tasks", "edges");
+
+        assertThat(taskNodes).hasSize(10);
+    }
+
+    @Test
+    public void testQueryTasksFilterByEndWithName() {
+        addJobDataWithTasks(10);
+
+        String query = String.format("{ jobs { edges { cursor node { id tasks(%s:[{%s:\"*4\"}]) " +
+                                     "{ edges { node { id } } } } } } }", FILTER.getName(), NAME.getName());
+        Map<String, Object> queryResult = executeGraphqlQuery(query);
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        List<?> taskNodes = (List<?>) getField(jobNodes.get(0), "node", "tasks", "edges");
+
+        assertThat(taskNodes).hasSize(1);
+        assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("3");
     }
 
     @Test

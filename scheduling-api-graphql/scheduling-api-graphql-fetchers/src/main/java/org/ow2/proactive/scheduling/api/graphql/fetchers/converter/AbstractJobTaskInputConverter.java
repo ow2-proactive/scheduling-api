@@ -24,6 +24,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
+import com.google.common.collect.ImmutableList;
+
 import graphql.schema.DataFetchingEnvironment;
 
 import java.util.ArrayList;
@@ -31,11 +33,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
-import org.python.google.common.collect.ImmutableList;
 
 
 /**
@@ -79,6 +85,28 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
         }
 
         return input;
+    }
+
+    public static class WildCardInputPredicateBuilder {
+        private static final String START_WITH = ".*\\*$";
+
+        private static final String END_WITH = "^\\*.*";
+
+        private static final String CONTAINS = "^\\*.*\\*$";
+
+        public static <T> Predicate build(CriteriaBuilder criteriaBuilder, Root<T> root, String entityFieldName,
+                String fieldInputValue) {
+            if (Pattern.matches(START_WITH, fieldInputValue)) {
+                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
+            } else if (Pattern.matches(END_WITH, fieldInputValue)) {
+                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
+            } else if (Pattern.matches(CONTAINS, fieldInputValue)) {
+                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
+            }
+
+            return criteriaBuilder.equal(root.get(entityFieldName), fieldInputValue);
+
+        }
     }
 
 }
