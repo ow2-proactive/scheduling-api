@@ -97,16 +97,25 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
             if (!Strings.isNullOrEmpty(jobName)) {
-                predicates.add(criteriaBuilder.like(root.get("jobName"), "%" + jobName + "%"));
+                Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                 root,
+                                                                                 "jobName",
+                                                                                 jobName);
+                predicates.add(jobNamePredicate);
             }
             if (!Strings.isNullOrEmpty(owner)) {
-                predicates.add(criteriaBuilder.equal(root.get("owner"), owner));
+                Predicate ownerPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "owner", owner);
+                predicates.add(ownerPredicate);
             }
             if (!Strings.isNullOrEmpty(priority)) {
                 predicates.add(criteriaBuilder.equal(root.get("priority"), JobPriority.valueOf(priority)));
             }
             if (!Strings.isNullOrEmpty(projectName)) {
-                predicates.add(criteriaBuilder.equal(root.get("projectName"), projectName));
+                Predicate projectNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                     root,
+                                                                                     "projectName",
+                                                                                     projectName);
+                predicates.add(projectNamePredicate);
             }
             if (!Strings.isNullOrEmpty(status)) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));

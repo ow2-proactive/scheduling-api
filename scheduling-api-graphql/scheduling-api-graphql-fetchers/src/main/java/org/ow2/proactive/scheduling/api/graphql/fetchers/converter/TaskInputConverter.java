@@ -71,7 +71,8 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
                 predicates.add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
             }
             if (!Strings.isNullOrEmpty(taskName)) {
-                predicates.add(criteriaBuilder.like(root.get("taskName"), "%" + taskName + "%"));
+                Predicate predicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "taskName", taskName);
+                predicates.add(predicate);
             }
 
             return predicates.toArray(new Predicate[predicates.size()]);
