@@ -45,6 +45,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.INPUT_SPACE
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.IN_ERROR_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.JOBS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LAST_UPDATED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.MAX_NUMBER_OF_EXECUTION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NODE;
@@ -79,7 +80,7 @@ public class JobTest {
 
     private static final String ALL = String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 %s : [{ %s : false }] ){\n%s{\n%s\n%s\n" +
                                                     "%s\n%s\n}\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
-                                                    "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
+                                                    "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s\n}\n}\n}",
                                                     JOBS.getName(),
                                                     AFTER.getName(),
@@ -113,6 +114,7 @@ public class JobTest {
                                                     INPUT_SPACE_URL.getName(),
                                                     OUTPUT_SPACE_URL.getName(),
                                                     USER_SPACE_URL.getName(),
+                                                    LAST_UPDATED_TIME.getName(),
                                                     NUMBER_OF_FAILED_TASKS.getName(),
                                                     NUMBER_OF_FAULTY_TASKS.getName(),
                                                     NUMBER_OF_FINISHED_TASKS.getName(),

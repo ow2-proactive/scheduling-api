@@ -30,43 +30,40 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.AFTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInputType;
-
 import java.util.Map;
-
-import lombok.Data;
-import lombok.Getter;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInputType;
+import lombok.Data;
 
 /**
  * @author ActiveEon Team
+ * @since 15/12/16
  */
 @Data
-public class SubmittedTimeInput extends TimeInput {
+public class LastUpdatedTimeInput extends TimeInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
-            return newInputObject().name(Types.SUBMITTED_TIME_INPUT.getName())
-                                   .description("Submitted time filter input.")
-                                   .field(newInputObjectField().name(BEFORE.getName())
-                                                               .description("Jobs having its submitted time before this value.")
-                                                               .type(GraphQLLong)
-                                                               .build())
-                                   .field(newInputObjectField().name(AFTER.getName())
-                                                               .description("Jobs having its submitted time after this value.")
-                                                               .type(GraphQLLong)
-                                                               .build())
-                                   .build();
+            return newInputObject().name(Types.LAST_UPDATED_TIME_INPUT.getName())
+                    .description("Last updated time filter input.")
+                    .field(newInputObjectField().name(BEFORE.getName())
+                            .description("Jobs having its last updated time before this value.")
+                            .type(GraphQLLong)
+                            .build())
+                    .field(newInputObjectField().name(AFTER.getName())
+                            .description("Jobs having its last updated time after this value.")
+                            .type(GraphQLLong)
+                            .build())
+                    .build();
         }
     };
 
-    public SubmittedTimeInput(Map<String, Object> input) {
+    public LastUpdatedTimeInput(Map<String, Object> input) {
         super(input);
     }
-
 }

@@ -56,6 +56,7 @@ public enum Fields {
     JVM_ARGUMENTS,
     KEY,
     LOGIN,
+    LAST_UPDATED_TIME,
     MAX_NUMBER_OF_EXECUTION,
     NAME,
     NODE,

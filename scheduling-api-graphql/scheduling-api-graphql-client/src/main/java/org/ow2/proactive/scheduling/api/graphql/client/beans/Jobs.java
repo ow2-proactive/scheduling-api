@@ -53,6 +53,8 @@ public class Jobs implements ApiType {
          */
         private List<JobInput> input = new ArrayList<>();
 
+        private boolean lastUpdatedTime = true;
+
         private boolean numberOfFailedTasks = true;
 
         private boolean numberOfFaultyTasks = true;
@@ -134,6 +136,11 @@ public class Jobs implements ApiType {
         @Override
         public Builder excludeInErrorTime() {
             super.excludeInErrorTime();
+            return this;
+        }
+
+        public Builder excludeLastUpdatedTime() {
+            this.lastUpdatedTime = false;
             return this;
         }
 
@@ -284,6 +291,9 @@ public class Jobs implements ApiType {
 
             if (dataManagement != null) {
                 sb.append(dataManagement.getQueryString());
+            }
+            if (lastUpdatedTime) {
+                sb.append(Fields.LAST_UPDATED_TIME.getName()).append(Constants.RETURN);
             }
             if (numberOfFailedTasks) {
                 sb.append(Fields.NUMBER_OF_FAILED_TASKS.getName()).append(Constants.RETURN);

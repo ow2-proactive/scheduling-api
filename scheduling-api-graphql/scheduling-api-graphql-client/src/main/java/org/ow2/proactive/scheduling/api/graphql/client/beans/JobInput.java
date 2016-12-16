@@ -32,7 +32,6 @@ import com.google.common.base.Strings;
 import lombok.Data;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
-import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 
 
@@ -50,7 +49,11 @@ public class JobInput implements ApiType {
 
     public static class Builder {
 
+        private String afterLastUpdatedTime;
+
         private String afterSubmittedTime;
+
+        private String beforeLastUpdatedTime;
 
         private String beforeSubmittedTime;
 
@@ -70,8 +73,18 @@ public class JobInput implements ApiType {
 
         private StringBuilder sb = new StringBuilder();
 
+        public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
+            this.afterLastUpdatedTime = afterLastUpdatedTime;
+            return this;
+        }
+
         public JobInput.Builder afterSubmittedTime(String afterSubmittedTime) {
             this.afterSubmittedTime = afterSubmittedTime;
+            return this;
+        }
+
+        public JobInput.Builder beforeLastUpdatedTime(String beforeLastUpdatedTime) {
+            this.beforeLastUpdatedTime = beforeLastUpdatedTime;
             return this;
         }
 
@@ -117,7 +130,7 @@ public class JobInput implements ApiType {
 
         public JobInput build() {
             sb.append("{");
-            if(!excludeRemoved) {
+            if (!excludeRemoved) {
                 sb.append(' ');
                 sb.append(InputFields.EXCLUDE_REMOVED.getName());
                 sb.append(" : ");
@@ -137,6 +150,9 @@ public class JobInput implements ApiType {
                 sb.append(this.jobName);
                 sb.append(QUOTE);
             }
+
+            timeString(InputFields.LAST_UPDATED_TIME.getName(), this.beforeLastUpdatedTime, this.afterLastUpdatedTime);
+
             if (!Strings.isNullOrEmpty(this.owner)) {
                 sb.append(' ');
                 sb.append(InputFields.OWNER.getName());
@@ -169,20 +185,26 @@ public class JobInput implements ApiType {
                 sb.append(this.status);
                 sb.append(QUOTE);
             }
-            if (!Strings.isNullOrEmpty(this.beforeSubmittedTime) || !Strings.isNullOrEmpty(this.afterSubmittedTime)) {
+
+            timeString(InputFields.SUBMITTED_TIME.getName(), this.beforeSubmittedTime, this.afterSubmittedTime);
+
+            sb.append(" }");
+            return new JobInput(sb.toString());
+        }
+
+        private void timeString(String timeName, String timeBeforeValue, String timeAfterValue) {
+            if (!Strings.isNullOrEmpty(timeBeforeValue) || !Strings.isNullOrEmpty(timeAfterValue)) {
                 sb.append(' ');
-                sb.append(InputFields.SUBMITTED_TIME.getName());
+                sb.append(timeName);
                 sb.append(" : {");
-                if (!Strings.isNullOrEmpty(this.beforeSubmittedTime)) {
-                    sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(this.beforeSubmittedTime);
+                if (!Strings.isNullOrEmpty(timeBeforeValue)) {
+                    sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(timeBeforeValue);
                 }
-                if (!Strings.isNullOrEmpty(this.afterSubmittedTime)) {
-                    sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(this.afterSubmittedTime);
+                if (!Strings.isNullOrEmpty(timeAfterValue)) {
+                    sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(timeAfterValue);
                 }
                 sb.append(" }").append(RETURN);
             }
-            sb.append(" }");
-            return new JobInput(sb.toString());
         }
     }
 

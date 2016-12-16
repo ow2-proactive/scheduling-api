@@ -89,6 +89,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .genericInformation(jobData.getGenericInformation())
                                             .id(jobData.getId())
                                             .inErrorTime(jobData.getInErrorTime())
+                                            .lastUpdatedTime(jobData.getLastUpdatedTime())
                                             .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
                                             .name(jobData.getJobName())
                                             .numberOfFailedTasks(jobData.getNumberOfFailedTasks())

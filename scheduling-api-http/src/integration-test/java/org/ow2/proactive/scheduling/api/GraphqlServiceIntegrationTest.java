@@ -311,6 +311,23 @@ public class GraphqlServiceIntegrationTest {
     }
 
     @Test
+    public void testQueryJobsFilterByLastUpdatedTime() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setLastUpdatedTime(job1.getSubmittedTime());
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setLastUpdatedTime(job2.getSubmittedTime() + 2000);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{lastUpdatedTime: {after: %s}}) " +
+                                                                            "{ edges { cursor node { id owner lastUpdatedTime} } } }",
+                                                                            FILTER.getName(), job2.getSubmittedTime() + 1000));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Test
     public void testQueryJobsFilterByIncludeRemoved() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
@@ -688,6 +705,7 @@ public class GraphqlServiceIntegrationTest {
     }
 
     private Map<String, Object> executeGraphqlQuery(String query) {
+        System.out.println(query);
         return executeGraphqlQuery(query, ImmutableMap.of());
     }
 

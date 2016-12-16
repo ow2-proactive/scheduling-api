@@ -41,6 +41,7 @@ public enum InputFields {
     PROJECT_NAME,
     STATUS,
     SUBMITTED_TIME,
+    LAST_UPDATED_TIME,
     VALUE;
 
     public String getName() {

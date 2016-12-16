@@ -31,6 +31,7 @@ import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LAST_UPDATED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PRIORITY;
@@ -70,6 +71,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                    .field(newInputObjectField().name(ID.getName())
                                                                .description("Job identifier.")
                                                                .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(LAST_UPDATED_TIME.getName())
+                                                               .description("Job last updated time.")
+                                                               .type(LastUpdatedTimeInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(NAME.getName())
                                                                .description("Job name.")
@@ -111,6 +116,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private SubmittedTimeInput submittedTime;
 
+    private LastUpdatedTimeInput lastUpdatedTime;
+
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
@@ -120,6 +127,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             priority = Inputs.getValue(input, PRIORITY.getName(), null);
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
+            lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
         }
     }
 

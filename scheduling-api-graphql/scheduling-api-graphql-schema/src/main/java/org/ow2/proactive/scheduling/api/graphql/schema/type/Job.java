@@ -36,6 +36,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.FINISHED_TI
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.IN_ERROR_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LAST_UPDATED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.MAX_NUMBER_OF_EXECUTION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FAILED_TASKS;
@@ -120,6 +121,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(IN_ERROR_TIME.getName())
                                                                .description("A timestamp that depicts the time at which the Job was marked in-error for the last time.")
                                                                .type(GraphQLLong))
+                                    .field(newFieldDefinition().name(LAST_UPDATED_TIME.getName())
+                                                               .description("Job last updated time.")
+                                                               .type(GraphQLLong))
                                     .field(newFieldDefinition().name(MAX_NUMBER_OF_EXECUTION.getName())
                                                                .description("The maximum number of execution attempts for the Tasks associated to this Job." +
                                                                             " The value may be redefined at the Task level.")
@@ -200,6 +204,8 @@ public class Job extends JobTaskCommon {
 
     private DataManagement dataManagement;
 
+    private long lastUpdatedTime;
+
     private int numberOfFailedTasks;
 
     private int numberOfFaultyTasks;
@@ -230,11 +236,12 @@ public class Job extends JobTaskCommon {
 
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
-            Map<String, String> genericInformation, long id, long inErrorTime, int maxNumberOfExecution, String name,
-            int numberOfFailedTasks, int numberOfFaultyTasks, int numberOfFinishedTasks, int numberOfInErrorTasks,
-            int numberOfPendingTasks, int numberOfRunningTasks, String onTaskError, String owner, String priority,
-            String projectName, long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
-            int totalNumberOfTasks, Map<String, String> variables) {
+            Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
+            int maxNumberOfExecution, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
+            int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
+            String onTaskError, String owner, String priority, String projectName, long removedTime, long startTime,
+            String status, long submittedTime, List<Task> tasks, int totalNumberOfTasks,
+            Map<String, String> variables) {
 
         super(description,
               finishedTime,
@@ -248,6 +255,7 @@ public class Job extends JobTaskCommon {
               variables);
 
         this.dataManagement = dataManagement;
+        this.lastUpdatedTime = lastUpdatedTime;
         this.numberOfFailedTasks = numberOfFailedTasks;
         this.numberOfFaultyTasks = numberOfFaultyTasks;
         this.numberOfFinishedTasks = numberOfFinishedTasks;

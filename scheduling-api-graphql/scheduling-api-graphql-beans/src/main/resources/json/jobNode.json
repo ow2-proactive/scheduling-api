@@ -32,6 +32,12 @@
       "required": false,
       "type": "object"
     },
+    "lastUpdatedTime": {
+      "format": "utc-millisec",
+      "id": "http://activeeon.com/api/v2/data/edges/node/job/lastUpdatedTime",
+      "required": false,
+      "type": "number"
+    },
     "numberOfFailedTasks": {
       "id": "http://activeeon.com/api/v2/data/edges/node/job/numberOfFailedTasks",
       "required": false,

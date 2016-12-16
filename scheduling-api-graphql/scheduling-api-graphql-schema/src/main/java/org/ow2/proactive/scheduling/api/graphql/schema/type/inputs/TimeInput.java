@@ -22,40 +22,36 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.common;
+package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import com.google.common.base.CaseFormat;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.AFTER;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE;
+
+import java.util.Map;
+
+import lombok.Data;
+
+import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
 
 
 /**
- * Defines the type of the different GraphQL types which are used in the API.
- *
  * @author ActiveEon Team
+ * @since 15/12/16
  */
-public enum Types {
+@Data
+public class TimeInput {
 
-    DATA_MANAGEMENT,
-    GENERIC_INFORMATION,
-    JOB,
-    JOB_INPUT,
-    JOB_PRIORITY,
-    JOB_STATUS,
-    JOB_TASK_COMMON,
-    KEY_VALUE,
-    KEY_VALUE_INPUT,
-    LAST_UPDATED_TIME_INPUT,
-    ON_TASK_ERROR,
-    QUERY,
-    RESTART_MODE,
-    SUBMITTED_TIME_INPUT,
-    TASK,
-    TASK_INPUT,
-    TASK_STATUS,
-    USER,
-    VARIABLE;
+    protected final long before;
 
-    public String getName() {
-        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+    protected final long after;
+
+    public TimeInput(Map<String, Object> input) {
+        if (input != null) {
+            before = Inputs.getValue(input, BEFORE.getName(), -1L);
+            after = Inputs.getValue(input, AFTER.getName(), -1L);
+        } else {
+            before = -1L;
+            after = -1L;
+        }
     }
-
 }
