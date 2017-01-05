@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -29,9 +30,9 @@ import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE
 
 import java.util.Map;
 
-import lombok.Data;
-
 import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+
+import lombok.Data;
 
 
 /**

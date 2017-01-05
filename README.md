@@ -1,9 +1,9 @@
 # Scheduling API
- 
+
 [![Build Status](http://jenkins.activeeon.com/buildStatus/icon?job=scheduling-api)](http://jenkins.activeeon.com/job/scheduling-api)
- 
+
 At this time, the Scheduling API offers a GraphQL endpoint for getting information about a ProActive Scheduler instance.
-  
+
 **Please note the API is still experimental and may be subject to changes.**
 
 ## Building and deploying
@@ -14,7 +14,7 @@ You can build a WAR file as follows:
 $ gradle clean build war
 ```
 
-The last command produces a WAR file in 
+The last command produces a WAR file in
 
 ```
 build/libs/scheduling-api-X.Y.Z-SNAPSHOT.war
@@ -31,7 +31,7 @@ Once deployed and running in a ProActive Scheduler instance, a graphical in-brow
 [http://localhost:8080/scheduling-api/v1/graphiql](http://localhost:8080/scheduling-api/v1/graphiql)
 
 ## What is missing for now
- 
+
 - Tests for the Java client
 - Complete Scheduler schema (i.e. returning Task progress, scripts content, etc.)
   See `JobDataFetcherTest` and `TaskDataFetcherTest`.

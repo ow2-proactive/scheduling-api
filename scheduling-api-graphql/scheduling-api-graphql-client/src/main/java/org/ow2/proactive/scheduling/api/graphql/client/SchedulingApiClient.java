@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -24,12 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client;
 
-import com.google.common.base.Strings;
-
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 import org.ow2.proactive.scheduling.api.graphql.beans.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.beans.Query;
@@ -39,6 +35,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.google.common.base.Strings;
+
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 
 @Log4j2

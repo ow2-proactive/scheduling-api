@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -39,6 +40,7 @@ import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInputType;
 import lombok.Data;
 
+
 /**
  * @author ActiveEon Team
  * @since 15/12/16
@@ -50,16 +52,16 @@ public class LastUpdatedTimeInput extends TimeInput {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.LAST_UPDATED_TIME_INPUT.getName())
-                    .description("Last updated time filter input.")
-                    .field(newInputObjectField().name(BEFORE.getName())
-                            .description("Jobs having its last updated time before this value.")
-                            .type(GraphQLLong)
-                            .build())
-                    .field(newInputObjectField().name(AFTER.getName())
-                            .description("Jobs having its last updated time after this value.")
-                            .type(GraphQLLong)
-                            .build())
-                    .build();
+                                   .description("Last updated time filter input.")
+                                   .field(newInputObjectField().name(BEFORE.getName())
+                                                               .description("Jobs having its last updated time before this value.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(AFTER.getName())
+                                                               .description("Jobs having its last updated time after this value.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .build();
         }
     };
 

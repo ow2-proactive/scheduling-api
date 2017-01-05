@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -29,15 +30,6 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
 
-import com.google.common.annotations.VisibleForTesting;
-
-import graphql.relay.Connection;
-import graphql.relay.ConnectionCursor;
-import graphql.relay.Edge;
-import graphql.relay.PageInfo;
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -56,6 +48,15 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.CursorMapper;
+
+import com.google.common.annotations.VisibleForTesting;
+
+import graphql.relay.Connection;
+import graphql.relay.ConnectionCursor;
+import graphql.relay.Edge;
+import graphql.relay.PageInfo;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
 
 /**

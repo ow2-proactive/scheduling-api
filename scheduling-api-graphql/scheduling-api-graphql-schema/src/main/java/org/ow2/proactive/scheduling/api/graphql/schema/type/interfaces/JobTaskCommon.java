@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -22,7 +23,6 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-
 package org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces;
 
 import static graphql.Scalars.GraphQLInt;
@@ -41,14 +41,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ON_TASK_ERR
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLInterfaceType;
-import graphql.schema.GraphQLList;
-
 import java.util.Map;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
@@ -59,6 +52,12 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLInterfaceType;
+import graphql.schema.GraphQLList;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
