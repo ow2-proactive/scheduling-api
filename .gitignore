@@ -11,4 +11,5 @@ src/generated
 .classpath
 .project
 .settings
+gradle/ext/
 

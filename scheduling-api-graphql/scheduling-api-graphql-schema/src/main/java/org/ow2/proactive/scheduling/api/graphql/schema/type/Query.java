@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -32,15 +33,15 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.JOBS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VERSION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
 
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.StaticDataFetcher;
-
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.StaticDataFetcher;
 
 
 /**

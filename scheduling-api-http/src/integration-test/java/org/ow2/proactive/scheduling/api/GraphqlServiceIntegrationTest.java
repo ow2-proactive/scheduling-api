@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -27,8 +28,6 @@ package org.ow2.proactive.scheduling.api;
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
-
-import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
 import java.util.Map;
@@ -59,6 +58,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.ImmutableMap;
 
 
 @ActiveProfiles("test")
@@ -322,7 +323,8 @@ public class GraphqlServiceIntegrationTest {
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{lastUpdatedTime: {after: %s}}) " +
                                                                             "{ edges { cursor node { id owner lastUpdatedTime} } } }",
-                                                                            FILTER.getName(), job2.getSubmittedTime() + 1000));
+                                                                            FILTER.getName(),
+                                                                            job2.getSubmittedTime() + 1000));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
     }

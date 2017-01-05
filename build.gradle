@@ -22,10 +22,30 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://repository.activeeon.com/content/groups/proactive/"
+        }
 
-plugins {
-    id "org.sonarqube" version "1.2"
+    }
+
+    dependencies {
+        classpath "com.diffplug.gradle.spotless:spotless:2.4.0"
+        classpath "org.ow2.proactive:coding-rules:1.0.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2.1"
+    }
+    dependencies {
+        delete "gradle/ext"
+        ant.unjar src: configurations.classpath.find { it.name.startsWith("coding-rules") }, dest: 'gradle/ext'
+    }
 }
+
+apply plugin: 'org.sonarqube'
+apply from: "$rootDir/gradle/ext/coding-format.gradle"
 
 allprojects {
 
@@ -127,4 +147,3 @@ allprojects {
     }
 
 }
-

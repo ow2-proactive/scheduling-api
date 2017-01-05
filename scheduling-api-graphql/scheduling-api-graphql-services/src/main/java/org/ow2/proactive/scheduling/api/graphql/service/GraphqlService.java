@@ -1,9 +1,10 @@
 /*
  * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2016 ActiveEon
+ * Copyright (c) 2007 - 2017 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -24,24 +25,12 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.collect.ImmutableMap;
-
-import graphql.ExecutionResult;
-import graphql.GraphQL;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLSchema;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-
-import lombok.extern.log4j.Log4j2;
 
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.GenericInformationDataFetcher;
@@ -51,6 +40,17 @@ import org.ow2.proactive.scheduling.api.graphql.fetchers.UserDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.VariablesDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableMap;
+
+import graphql.ExecutionResult;
+import graphql.GraphQL;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLSchema;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
