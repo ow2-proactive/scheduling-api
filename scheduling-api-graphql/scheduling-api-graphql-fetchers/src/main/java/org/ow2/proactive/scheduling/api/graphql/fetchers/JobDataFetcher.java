@@ -47,6 +47,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableMap;
 
 import graphql.schema.DataFetchingEnvironment;
 
@@ -110,7 +111,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .startTime(jobData.getStartTime())
                                             .submittedTime(jobData.getSubmittedTime())
                                             .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                                            .variables(jobData.getVariables() == null ? null
+                                            // TODO Currently map the JobVariable object to a simple string (its value). Need to map the whole object later
+                                            .variables(jobData.getVariables() == null ? ImmutableMap.of()
                                                                                       : jobData.getVariables()
                                                                                                .entrySet()
                                                                                                .stream()
