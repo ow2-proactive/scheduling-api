@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
@@ -109,7 +110,13 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .startTime(jobData.getStartTime())
                                             .submittedTime(jobData.getSubmittedTime())
                                             .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                                            .variables(jobData.getVariables())
+                                            .variables(jobData.getVariables() == null ? null
+                                                                                      : jobData.getVariables()
+                                                                                               .entrySet()
+                                                                                               .stream()
+                                                                                               .collect(Collectors.toMap(e -> e.getKey(),
+                                                                                                                         e -> e.getValue()
+                                                                                                                               .getValue())))
                                             .build());
     }
 

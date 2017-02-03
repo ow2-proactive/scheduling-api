@@ -36,6 +36,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
+import org.ow2.proactive.scheduler.common.job.JobVariable;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.core.db.JobContent;
 import org.ow2.proactive.scheduler.core.db.JobData;
@@ -87,7 +88,7 @@ public class JobDataFetcherTest {
         jobData.setToBeRemoved(false); // currently, not in GraphQL data model
         jobData.setTotalNumberOfTasks(13);
         jobData.setUserSpace("userSpace");
-        jobData.setVariables(ImmutableMap.of("vk1", "vv1"));
+        jobData.setVariables(ImmutableMap.of("vk1", new JobVariable("vk1", "vv1")));
 
         Stream<Job> jobStream = new JobDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(ImmutableList.of(jobData)
                                                                                                                      .stream());
@@ -130,7 +131,8 @@ public class JobDataFetcherTest {
         assertThat(job.getStartTime()).isEqualTo(jobData.getStartTime());
         assertThat(job.getSubmittedTime()).isEqualTo(jobData.getSubmittedTime());
         assertThat(job.getTotalNumberOfTasks()).isEqualTo(jobData.getTotalNumberOfTasks());
-        assertThat(job.getVariables()).isEqualTo(jobData.getVariables());
+        assertThat(job.getVariables().size()).isEqualTo(jobData.getVariables().size());
+        assertThat(job.getVariables().get("vk1")).isEqualTo(jobData.getVariables().get("vk1").getValue());
     }
 
 }
