@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
@@ -46,6 +47,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableMap;
 
 import graphql.schema.DataFetchingEnvironment;
 
@@ -109,7 +111,14 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .startTime(jobData.getStartTime())
                                             .submittedTime(jobData.getSubmittedTime())
                                             .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                                            .variables(jobData.getVariables())
+                                            // TODO Currently map the JobVariable object to a simple string (its value). Need to map the whole object later
+                                            .variables(jobData.getVariables() == null ? ImmutableMap.of()
+                                                                                      : jobData.getVariables()
+                                                                                               .entrySet()
+                                                                                               .stream()
+                                                                                               .collect(Collectors.toMap(e -> e.getKey(),
+                                                                                                                         e -> e.getValue()
+                                                                                                                               .getValue())))
                                             .build());
     }
 
