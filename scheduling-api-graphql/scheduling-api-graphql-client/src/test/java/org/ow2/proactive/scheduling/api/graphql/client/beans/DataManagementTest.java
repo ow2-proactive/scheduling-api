@@ -33,6 +33,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OUTPUT_SPAC
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
 
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.DataManagement;
 
 
 public class DataManagementTest {

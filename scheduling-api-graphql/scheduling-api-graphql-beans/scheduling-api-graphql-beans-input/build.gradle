@@ -1,0 +1,3 @@
+dependencies {
+    compile project(":scheduling-api-graphql:scheduling-api-graphql-common")
+}

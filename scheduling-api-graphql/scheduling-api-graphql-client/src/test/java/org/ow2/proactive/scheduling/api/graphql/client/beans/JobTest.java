@@ -73,6 +73,8 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.JobInput;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
 
 import com.google.common.collect.ImmutableList;
 

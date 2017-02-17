@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.KeyValueInput;
 
 
 public class GenericInformationTest {

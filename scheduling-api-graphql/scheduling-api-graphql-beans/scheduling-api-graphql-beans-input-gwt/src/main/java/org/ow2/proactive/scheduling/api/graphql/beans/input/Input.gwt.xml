@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <inherits name="com.google.gwt.user.User" />
+    <!-- The sources to consider will be placed at the same level as this file -->
+    <!-- If not specified, the default value is "client" subfolder -->
+    <source path="" />
+</module>
