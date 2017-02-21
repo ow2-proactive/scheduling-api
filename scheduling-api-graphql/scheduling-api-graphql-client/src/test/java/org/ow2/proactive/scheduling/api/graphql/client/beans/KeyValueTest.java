@@ -32,6 +32,8 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Variables;
 
 
 public class KeyValueTest {

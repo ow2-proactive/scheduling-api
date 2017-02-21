@@ -1,0 +1,6 @@
+jar {
+    from project(':scheduling-api-graphql:scheduling-api-graphql-common').sourceSets.main.output.classesDir
+    // GWT requires Java sources to compile the code to Javascript
+    from sourceSets.main.allSource
+    from project(':scheduling-api-graphql:scheduling-api-graphql-common').sourceSets.main.allSource
+}

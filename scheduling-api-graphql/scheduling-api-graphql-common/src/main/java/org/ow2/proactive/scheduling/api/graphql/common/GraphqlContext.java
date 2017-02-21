@@ -25,15 +25,23 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-
-@AllArgsConstructor
-@Data
 public final class GraphqlContext {
 
     private final String login;
 
     private final String sessionId;
+
+    public GraphqlContext(String login, String sessionId) {
+        this.login = login;
+        this.sessionId = sessionId;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
 }

@@ -1,0 +1,29 @@
+{
+  "id": "http://activeeon.com/api/v2/data/connection",
+  "javaName": "jobConnection",
+  "properties": {
+    "edges": {
+      "id": "http://activeeon.com/api/v2/data/edges",
+      "items": {
+        "javaType" : "org.ow2.proactive.scheduling.api.graphql.beans.output.JobEdge",
+        "properties": {
+          "cursor": {
+            "id": "http://activeeon.com/api/v2/data/edges/cursor",
+            "required": false,
+            "type": "string"
+          },
+          "node": {
+            "$ref": "jobNode.json"
+          }
+        },
+        "required": false,
+        "type": "object"
+      },
+      "required": false,
+      "type": "array"
+    },
+    "pageInfo": {
+      "$ref": "pageInfo.json"
+    }
+  }
+}

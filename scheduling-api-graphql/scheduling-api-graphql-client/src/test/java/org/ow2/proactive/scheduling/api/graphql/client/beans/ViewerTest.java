@@ -73,6 +73,9 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
 
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs.Builder;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Viewer;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
 import lombok.extern.log4j.Log4j2;

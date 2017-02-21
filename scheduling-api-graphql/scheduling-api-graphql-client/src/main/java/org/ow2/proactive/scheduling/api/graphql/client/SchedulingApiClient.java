@@ -27,8 +27,8 @@ package org.ow2.proactive.scheduling.api.graphql.client;
 
 import java.util.Map;
 
-import org.ow2.proactive.scheduling.api.graphql.beans.SchedulingApiResponse;
-import org.ow2.proactive.scheduling.api.graphql.client.beans.Query;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Query;
+import org.ow2.proactive.scheduling.api.graphql.beans.output.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.exception.SchedulingApiException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;

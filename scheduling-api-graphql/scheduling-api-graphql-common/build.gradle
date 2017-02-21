@@ -25,5 +25,4 @@
 
 dependencies {
     compile "com.google.guava:guava:20.0"
-    compile "org.projectlombok:lombok:1.16.10"
 }
