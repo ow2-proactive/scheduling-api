@@ -23,19 +23,17 @@
  * or a different license than the AGPL.
  */
 
-rootProject.name = 'scheduling-api'
+dependencies {
+    compile "com.google.guava:guava:20.0"
+    compile 'org.jboss.resteasy:resteasy-jaxrs:3.0.17.Final'
+    compile 'org.jboss.resteasy:resteasy-multipart-provider:3.0.17.Final'
+    compile("org.ow2.proactive:scheduling-api-graphql-beans-input-gwt:${version}")
+    compile("org.ow2.proactive:scheduling-api-graphql-common-gwt:${version}")
+}
 
-include 'scheduling-api-http'
-
-include 'scheduling-api-graphql'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans:scheduling-api-graphql-beans-input'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans:scheduling-api-graphql-beans-input-gwt'
-include 'scheduling-api-graphql:scheduling-api-graphql-beans:scheduling-api-graphql-beans-output'
-include 'scheduling-api-graphql:scheduling-api-graphql-client'
-include 'scheduling-api-graphql:scheduling-api-graphql-client-gwt'
-include 'scheduling-api-graphql:scheduling-api-graphql-common'
-include 'scheduling-api-graphql:scheduling-api-graphql-common-gwt'
-include 'scheduling-api-graphql:scheduling-api-graphql-fetchers'
-include 'scheduling-api-graphql:scheduling-api-graphql-schema'
-include 'scheduling-api-graphql:scheduling-api-graphql-services'
+jar {
+    from project(':scheduling-api-graphql:scheduling-api-graphql-client-gwt').sourceSets.main.output.classesDir
+    // GWT requires Java sources to compile the code to Javascript
+    from sourceSets.main.allSource
+    from project(':scheduling-api-graphql:scheduling-api-graphql-client-gwt').sourceSets.main.allSource
+}
