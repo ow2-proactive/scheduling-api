@@ -30,3 +30,10 @@ dependencies {
     compile("org.ow2.proactive:scheduling-api-graphql-beans-input-gwt:${version}")
     compile("org.ow2.proactive:scheduling-api-graphql-common-gwt:${version}")
 }
+
+jar {
+    from project(':scheduling-api-graphql:scheduling-api-graphql-client-gwt').sourceSets.main.output.classesDir
+    // GWT requires Java sources to compile the code to Javascript
+    from sourceSets.main.allSource
+    from project(':scheduling-api-graphql:scheduling-api-graphql-client-gwt').sourceSets.main.allSource
+}
