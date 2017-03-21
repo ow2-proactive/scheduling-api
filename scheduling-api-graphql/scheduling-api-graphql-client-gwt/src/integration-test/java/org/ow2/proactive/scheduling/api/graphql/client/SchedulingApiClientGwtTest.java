@@ -52,10 +52,10 @@ public class SchedulingApiClientGwtTest {
 
     @Test
     public void testExecute() {
-        SchedulingApiClientGwt client = new SchedulingApiClientGwt(url, CONTEXT_SESSION_ID, httpClient, threadPool);
+        SchedulingApiClientGwt client = new SchedulingApiClientGwt(url, httpClient, threadPool);
         Jobs jobs = new Jobs.Builder().build();
         Query query = new Query.Builder().query(jobs.getQueryString()).build();
-        Map<String, Object> result = client.execute(query);
+        Map<String, Object> result = client.execute(CONTEXT_SESSION_ID, query);
         System.out.println(result);
     }
 

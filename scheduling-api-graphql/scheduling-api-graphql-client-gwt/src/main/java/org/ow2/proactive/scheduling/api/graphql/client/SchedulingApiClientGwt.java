@@ -43,33 +43,21 @@ import com.google.common.base.Strings;
 
 public class SchedulingApiClientGwt {
 
-    private final String url;
+    private final GraphQLClient graphQLClientProxy;
 
-    private final String sessionId;
-
-    private CloseableHttpClient httpClient;
-
-    private ExecutorService threadPool;
-
-    public SchedulingApiClientGwt(String url, String sessionId, CloseableHttpClient httpClient,
-            ExecutorService threadPool) {
-        this.url = url;
-        this.sessionId = sessionId;
-        this.httpClient = httpClient;
-        this.threadPool = threadPool;
-    }
-
-    public Map<String, Object> execute(Query query, String variables) throws SchedulingApiGwtException {
-
-        if (query == null)
-            return null;
-
+    public SchedulingApiClientGwt(String url, CloseableHttpClient httpClient, ExecutorService threadPool) {
         ResteasyClient client = new ResteasyClientBuilder().asyncExecutor(threadPool)
                                                            .httpEngine(new ApacheHttpClient4Engine(httpClient))
                                                            .build();
         ResteasyWebTarget target = client.target(url);
+        this.graphQLClientProxy = target.proxy(GraphQLClient.class);
+    }
 
-        GraphQLClient graphQLClientProxy = target.proxy(GraphQLClient.class);
+    public Map<String, Object> execute(String sessionId, Query query, String variables)
+            throws SchedulingApiGwtException {
+
+        if (query == null)
+            return null;
 
         try {
             Map<String, Object> queryResult = graphQLClientProxy.graphqlQuery(sessionId, query.getQuery(), variables);
@@ -80,8 +68,8 @@ public class SchedulingApiClientGwt {
         }
     }
 
-    public Map<String, Object> execute(Query query) throws SchedulingApiGwtException {
-        return execute(query, null);
+    public Map<String, Object> execute(String sessionId, Query query) throws SchedulingApiGwtException {
+        return execute(sessionId, query, null);
     }
 
 }
