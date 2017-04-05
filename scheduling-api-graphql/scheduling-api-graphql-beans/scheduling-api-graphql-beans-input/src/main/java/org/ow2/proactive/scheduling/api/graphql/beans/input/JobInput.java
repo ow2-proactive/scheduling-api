@@ -174,9 +174,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(' ');
                 sb.append(InputFields.STATUS.getName());
                 sb.append(" : ");
-                sb.append(Constants.QUOTE);
                 sb.append(this.status);
-                sb.append(Constants.QUOTE);
             }
 
             timeString(InputFields.SUBMITTED_TIME.getName(), this.beforeSubmittedTime, this.afterSubmittedTime);
