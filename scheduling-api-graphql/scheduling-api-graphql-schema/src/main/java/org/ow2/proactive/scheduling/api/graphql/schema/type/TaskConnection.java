@@ -27,8 +27,6 @@ package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 import graphql.relay.Relay;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLArgument;
@@ -38,14 +36,14 @@ import graphql.schema.GraphQLObjectType;
 /**
  * @author ActiveEon Team
  */
-public final class TaskConnection {
+public final class TaskConnection extends AbstractExtendedConnection {
 
     public final static Relay RELAY = new Relay();
 
     public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-            return RELAY.connectionType("Tasks", TaskEdge.TYPE.getInstance(dataFetchers), ImmutableList.of());
+            return RELAY.connectionType("Tasks", TaskEdge.TYPE.getInstance(dataFetchers), extendedFields);
         }
     };
 

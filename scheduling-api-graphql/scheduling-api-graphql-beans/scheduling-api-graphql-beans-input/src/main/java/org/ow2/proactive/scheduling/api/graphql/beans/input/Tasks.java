@@ -189,8 +189,14 @@ public class Tasks extends AbstractApiType {
             return this;
         }
 
-        public Tasks.Builder excludeTag() {
+        public Builder excludeTag() {
             this.tag = false;
+            return this;
+        }
+
+        @Override
+        public Builder excludeTotalCount() {
+            super.excludeTotalCount();
             return this;
         }
 

@@ -25,33 +25,24 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
+import static graphql.Scalars.GraphQLInt;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+
 import java.util.List;
 
-import graphql.relay.Relay;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLObjectType;
+import com.google.common.collect.ImmutableList;
+
+import graphql.schema.GraphQLFieldDefinition;
 
 
 /**
  * @author ActiveEon Team
+ * @since 11/04/2017
  */
-public final class JobConnection extends AbstractExtendedConnection {
+public abstract class AbstractExtendedConnection {
 
-    public final static Relay RELAY = new Relay();
-
-    public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
-        @Override
-        public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-            return RELAY.connectionType("Jobs", JobEdge.TYPE.getInstance(dataFetchers), extendedFields);
-        }
-    };
-
-    public final static List<GraphQLArgument> getConnectionFieldArguments() {
-        return RELAY.getConnectionFieldArguments();
-    }
-
-    private JobConnection() {
-    }
-
+    protected final static List<GraphQLFieldDefinition> extendedFields = ImmutableList.of(newFieldDefinition().name("totalCount")
+                                                                                                              .description("Total number of the items.")
+                                                                                                              .type(GraphQLInt)
+                                                                                                              .build());
 }

@@ -67,6 +67,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_CURSO
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_COUNT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
@@ -74,7 +75,6 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
 
 import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
-import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs.Builder;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Viewer;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
@@ -84,7 +84,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ViewerTest {
     private static final String ALL = String.format("%s {\n%s\n%s\n%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){\n%s{\n%s\n%s\n" +
-                                                    "%s\n%s\n}\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
+                                                    "%s\n%s\n}\n%s\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s\n}\n}\n}\n}",
                                                     VIEWER.getName(),
@@ -100,6 +100,7 @@ public class ViewerTest {
                                                     HAS_PREVIOUS_PAGE.getName(),
                                                     START_CURSOR.getName(),
                                                     END_CURSOR.getName(),
+                                                    TOTAL_COUNT.getName(),
                                                     EDGES.getName(),
                                                     CURSOR.getName(),
                                                     NODE.getName(),
