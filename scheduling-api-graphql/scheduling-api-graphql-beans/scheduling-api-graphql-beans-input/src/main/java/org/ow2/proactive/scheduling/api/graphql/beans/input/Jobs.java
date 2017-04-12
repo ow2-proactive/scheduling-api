@@ -227,6 +227,12 @@ public class Jobs extends AbstractApiType {
         }
 
         @Override
+        public Builder excludeTotalCount() {
+            super.excludeTotalCount();
+            return this;
+        }
+
+        @Override
         public Builder excludeVariables() {
             super.excludeVariables();
             return this;

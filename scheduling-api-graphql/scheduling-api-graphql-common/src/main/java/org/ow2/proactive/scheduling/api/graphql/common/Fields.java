@@ -89,6 +89,7 @@ public enum Fields {
     SUBMITTED_TIME,
     TAG,
     TASKS,
+    TOTAL_COUNT,
     TOTAL_NUMBER_OF_TASKS,
     USER_SPACE_URL,
     VALUE,

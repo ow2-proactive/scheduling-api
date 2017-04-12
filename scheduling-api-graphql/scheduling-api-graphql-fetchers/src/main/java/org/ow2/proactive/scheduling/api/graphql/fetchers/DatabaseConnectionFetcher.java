@@ -47,6 +47,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.scheduling.api.graphql.fetchers.connection.ExtendedConnection;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.CursorMapper;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -91,7 +92,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      * <p>
      * The opaque cursor that is returned to the client makes use of the entity ID internally.
      */
-    protected Connection createPaginatedConnection(DataFetchingEnvironment environment, Class<E> entityClass,
+    protected ExtendedConnection createPaginatedConnection(DataFetchingEnvironment environment, Class<E> entityClass,
             Function<Root<E>, Path<? extends Number>> entityId, Comparator<E> entityComparator,
             BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper) {
 
@@ -138,14 +139,14 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
         Stream<T> data = dataMapping(dataStream);
 
-        Connection connection = createRelayConnection(entityManager,
-                                                      entityClass,
-                                                      criteriaBuilder,
-                                                      wherePredicate,
-                                                      cursorMapper,
-                                                      data,
-                                                      first,
-                                                      last);
+        ExtendedConnection connection = createRelayConnection(entityManager,
+                                                              entityClass,
+                                                              criteriaBuilder,
+                                                              wherePredicate,
+                                                              cursorMapper,
+                                                              data,
+                                                              first,
+                                                              last);
 
         return connection;
     }
@@ -247,7 +248,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return cursorPredicate;
     }
 
-    protected Connection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
+    protected ExtendedConnection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
             CriteriaBuilder criteriaBuilder, Predicate[] predicates, CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
@@ -265,9 +266,10 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last));
         pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first));
 
-        Connection connection = new Connection();
+        ExtendedConnection connection = new ExtendedConnection();
         connection.setEdges(edges);
         connection.setPageInfo(pageInfo);
+        connection.setTotalCount(nbEntriesBeforeSlicing);
 
         return connection;
     }

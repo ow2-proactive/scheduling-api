@@ -23,35 +23,24 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.schema.type;
+package org.ow2.proactive.scheduling.api.graphql.fetchers.connection;
 
-import java.util.List;
-
-import graphql.relay.Relay;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLObjectType;
+import graphql.relay.Connection;
 
 
 /**
  * @author ActiveEon Team
+ * @since 11/04/2017
  */
-public final class JobConnection extends AbstractExtendedConnection {
+public class ExtendedConnection extends Connection {
 
-    public final static Relay RELAY = new Relay();
+    private Integer totalCount;
 
-    public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
-        @Override
-        public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
-            return RELAY.connectionType("Jobs", JobEdge.TYPE.getInstance(dataFetchers), extendedFields);
-        }
-    };
-
-    public final static List<GraphQLArgument> getConnectionFieldArguments() {
-        return RELAY.getConnectionFieldArguments();
+    public Integer getTotalCount() {
+        return totalCount;
     }
 
-    private JobConnection() {
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
-
 }

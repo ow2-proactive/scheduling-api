@@ -24,6 +24,11 @@
     },
     "pageInfo": {
       "$ref": "pageInfo.json"
+    },
+    "totalCount": {
+      "id": "http://activeeon.com/api/v2/data/totalCount",
+      "required": false,
+      "type": "integer"
     }
   }
 }

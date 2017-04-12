@@ -67,6 +67,8 @@ abstract class JobsTasksCommonBuilder {
 
     protected boolean status = true;
 
+    protected boolean totalCount = true;
+
     protected Variables variables = new Variables.Builder().build();
 
     protected StringBuilder sb = new StringBuilder();
@@ -141,6 +143,11 @@ abstract class JobsTasksCommonBuilder {
         return this;
     }
 
+    protected JobsTasksCommonBuilder excludeTotalCount() {
+        this.totalCount = false;
+        return this;
+    }
+
     protected JobsTasksCommonBuilder excludeVariables() {
         this.variables = null;
         return this;
@@ -181,6 +188,9 @@ abstract class JobsTasksCommonBuilder {
         sb.append("{").append(Constants.RETURN);
         if (pageInfo != null) {
             sb.append(pageInfo.getQueryString());
+        }
+        if (totalCount) {
+            sb.append(Fields.TOTAL_COUNT.getName()).append(Constants.RETURN);
         }
         sb.append(Fields.EDGES.getName());
         sb.append('{');

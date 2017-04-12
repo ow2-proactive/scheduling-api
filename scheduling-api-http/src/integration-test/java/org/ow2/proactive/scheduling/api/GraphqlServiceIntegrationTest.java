@@ -99,12 +99,13 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsPaginated() {
         addJobData(DefaultValues.PAGE_SIZE + 10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs { edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
+        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs { totalCount edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
 
         assertThat(jobNodes).hasSize(DefaultValues.PAGE_SIZE);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+        assertThat(getField(queryResult, "data", "jobs", "totalCount")).isEqualTo(DefaultValues.PAGE_SIZE + 10);
     }
 
     @Test

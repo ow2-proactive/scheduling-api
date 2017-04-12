@@ -4,6 +4,7 @@
       "login": "admin",
       "sessionId": "1e59989158b9caef527fc4ac0671a8645b9bc41e59989158b9caef528000",
       "jobs": {
+        "totalCount": 20,
         "pageInfo": {
           "hasNextPage": false,
           "hasPreviousPage": false,
