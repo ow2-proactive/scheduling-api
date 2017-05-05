@@ -25,15 +25,26 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.service;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.InvalidSessionIdException;
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.MissingSessionIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -67,7 +78,7 @@ public class AuthenticationService {
     private LoadingCache<String, String> sessionCache;
 
     @PostConstruct
-    protected void init() {
+    protected void init() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
         schedulerLoginFetchUrl = createLoginFetchUrl(schedulerRestUrl);
 
@@ -80,6 +91,28 @@ public class AuthenticationService {
                                            return getLoginFromSessionId(sessionId);
                                        }
                                    });
+
+        if (schedulerLoginFetchUrl.startsWith("https")) {
+            CloseableHttpClient httpClient = HttpClients.custom()
+                                                        .setSSLHostnameVerifier(new NoopHostnameVerifier())
+                                                        .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null,
+                                                                                                                 new TrustStrategy() {
+                                                                                                                     public boolean
+                                                                                                                             isTrusted(
+                                                                                                                                     X509Certificate[] arg0,
+                                                                                                                                     String arg1)
+                                                                                                                                     throws CertificateException {
+                                                                                                                         return true;
+                                                                                                                     }
+                                                                                                                 })
+                                                                                              .build())
+                                                        .build();
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+            requestFactory.setHttpClient(httpClient);
+
+            restTemplate.setRequestFactory(requestFactory);
+        }
+
     }
 
     private String createLoginFetchUrl(String schedulerRestUrl) {
@@ -100,6 +133,7 @@ public class AuthenticationService {
 
     private String getLoginFromSessionId(String sessionId) {
         try {
+
             String login = restTemplate.getForObject(schedulerLoginFetchUrl + sessionId, String.class);
 
             if (!Strings.isNullOrEmpty(login)) {
