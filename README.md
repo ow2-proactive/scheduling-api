@@ -6,6 +6,19 @@ At this time, the Scheduling API offers a GraphQL endpoint for getting informati
 
 **Please note the API is still experimental and may be subject to changes.**
 
+## Development
+
+Importing the project into your IDE the first time might display some missing classes issues messages, as some of them are auto generated on the first build. You will need to call the `build` task from the `scheduling-api-graphql-beans-output` submodule for the IDE to resolve the missing classes properly. You can use the following command to do so:
+
+```
+gradle clean :scheduling-api-graphql:scheduling-api-graphql-beans:scheduling-api-graphql-beans-output:build
+```
+
+The rest of the project can then be compiled from your IDE or from command-line with the following command:
+```
+gradle clean build
+```
+
 ## Building and deploying
 
 You can build a WAR file as follows:
@@ -17,7 +30,7 @@ $ gradle clean build war
 The last command produces a WAR file in
 
 ```
-build/libs/scheduling-api-X.Y.Z-SNAPSHOT.war
+scheduling-api-http/build/libs/scheduling-api-X.Y.Z-SNAPSHOT.war
 ```
 
 This Web Application Archive can be deployed in the embedded Jetty container run by an instance of [ProActive Server](https://github.com/ow2-proactive/scheduling) (or your own application server).
