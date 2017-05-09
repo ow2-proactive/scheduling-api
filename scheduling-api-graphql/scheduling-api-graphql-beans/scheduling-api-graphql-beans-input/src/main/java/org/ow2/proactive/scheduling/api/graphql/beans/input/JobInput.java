@@ -158,9 +158,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(' ');
                 sb.append(InputFields.PRIORITY.getName());
                 sb.append(" : ");
-                sb.append(Constants.QUOTE);
                 sb.append(this.priority);
-                sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.projectName)) {
                 sb.append(' ');
