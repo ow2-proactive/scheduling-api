@@ -48,6 +48,7 @@ public enum Types {
     ON_TASK_ERROR,
     QUERY,
     RESTART_MODE,
+    ID_COMPARABLE_LONG_INPUT,
     SUBMITTED_TIME_INPUT,
     TASK,
     TASK_INPUT,

@@ -37,8 +37,11 @@ public enum InputFields {
 
     AFTER,
     BEFORE,
+    LOWER_THAN,
+    GREATER_THAN,
     EXCLUDE_REMOVED,
     ID,
+    ID_COMPARABLE,
     KEY,
     NAME,
     OWNER,

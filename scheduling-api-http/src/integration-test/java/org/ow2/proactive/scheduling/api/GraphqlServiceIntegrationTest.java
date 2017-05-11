@@ -39,6 +39,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
@@ -245,6 +246,30 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(6);
 
         assertThat(getField(jobNodes.get(4), "node", "id")).isEqualTo("9");
+    }
+
+    @Test
+    public void testQueryJobsFilterByIdComparable() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        entityManager.persist(job2);
+
+        long min = Math.min(job1.getId(), job2.getId());
+        long max = Math.max(job1.getId(), job2.getId());
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {greaterThan: %d}}) " +
+                                                                            "{ edges { cursor node { id } } } }",
+                                                                            FILTER.getName(),
+                                                                            max));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {lowerThan: %d}}) " +
+                                                        "{ edges { cursor node { id } } } }", FILTER.getName(), min));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
     }
 
     @Test

@@ -42,6 +42,7 @@ import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TimeInput;
 
@@ -96,6 +97,9 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
+
+            longPredicated(i.getIdComparable(), "id", root, criteriaBuilder, predicates);
+
             if (!Strings.isNullOrEmpty(jobName)) {
                 Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
                                                                                  root,
@@ -133,17 +137,34 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
 
     private void timePredicated(TimeInput input, String timeName, Root<JobData> root, CriteriaBuilder criteriaBuilder,
             List<Predicate> predicates) {
-        long before = -1;
-        long after = -1;
+        comparablePredicated(input, i -> i.getBefore(), i -> i.getAfter(), timeName, root, criteriaBuilder, predicates);
+    }
+
+    private void longPredicated(ComparableLongInput input, String longName, Root<JobData> root,
+            CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
+        comparablePredicated(input,
+                             i -> i.getLowerThan(),
+                             i -> i.getGreaterThan(),
+                             longName,
+                             root,
+                             criteriaBuilder,
+                             predicates);
+    }
+
+    private <T> void comparablePredicated(T input, Function<T, Long> getLowerFunction,
+            Function<T, Long> getGreaterFunction, String name, Root<JobData> root, CriteriaBuilder criteriaBuilder,
+            List<Predicate> predicates) {
+        long lowerThan = -1;
+        long greaterThan = -1;
         if (input != null) {
-            before = input.getBefore();
-            after = input.getAfter();
+            lowerThan = getLowerFunction.apply(input);
+            greaterThan = getGreaterFunction.apply(input);
         }
-        if (before != -1L) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(timeName), before));
+        if (lowerThan != -1L) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), lowerThan));
         }
-        if (after != -1L) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(timeName), after));
+        if (greaterThan != -1L) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), greaterThan));
         }
     }
 

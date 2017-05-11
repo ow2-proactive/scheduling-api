@@ -50,6 +50,10 @@ public class JobInput extends AbstractApiType {
 
         private String beforeSubmittedTime;
 
+        private String greaterThanId;
+
+        private String lowerThanId;
+
         private boolean excludeRemoved = true;
 
         private String id;
@@ -83,6 +87,16 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder beforeSubmittedTime(String beforeSubmittedTime) {
             this.beforeSubmittedTime = beforeSubmittedTime;
+            return this;
+        }
+
+        public JobInput.Builder greaterThanId(String greaterThanId) {
+            this.greaterThanId = greaterThanId;
+            return this;
+        }
+
+        public JobInput.Builder lowerThanId(String lowerThanId) {
+            this.lowerThanId = lowerThanId;
             return this;
         }
 
@@ -135,6 +149,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(this.id);
             }
+            longString(InputFields.ID_COMPARABLE.getName(), this.lowerThanId, this.greaterThanId);
             if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(' ');
                 sb.append(InputFields.NAME.getName());
@@ -191,6 +206,21 @@ public class JobInput extends AbstractApiType {
                 }
                 if (!Strings.isNullOrEmpty(timeAfterValue)) {
                     sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(timeAfterValue);
+                }
+                sb.append(" }").append(Constants.RETURN);
+            }
+        }
+
+        private void longString(String longName, String lowerThanValue, String greaterThanValue) {
+            if (!Strings.isNullOrEmpty(lowerThanValue) || !Strings.isNullOrEmpty(greaterThanValue)) {
+                sb.append(' ');
+                sb.append(longName);
+                sb.append(" : {");
+                if (!Strings.isNullOrEmpty(lowerThanValue)) {
+                    sb.append(String.format(" %s : ", Arguments.LOWER_THAN.getName())).append(lowerThanValue);
+                }
+                if (!Strings.isNullOrEmpty(greaterThanValue)) {
+                    sb.append(String.format(" %s : ", Arguments.GREATER_THAN.getName())).append(greaterThanValue);
                 }
                 sb.append(" }").append(Constants.RETURN);
             }
