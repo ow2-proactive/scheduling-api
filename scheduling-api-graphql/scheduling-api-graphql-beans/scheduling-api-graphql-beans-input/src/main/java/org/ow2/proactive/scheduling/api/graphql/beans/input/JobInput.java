@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
+import org.ow2.proactive.scheduling.api.graphql.common.Types;
 
 import com.google.common.base.Strings;
 
@@ -149,7 +150,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(this.id);
             }
-            longString(InputFields.ID_COMPARABLE.getName(), this.lowerThanId, this.greaterThanId);
+            comparableLongString(InputFields.ID_COMPARABLE.getName(), this.lowerThanId, this.greaterThanId);
             if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(' ');
                 sb.append(InputFields.NAME.getName());
@@ -211,16 +212,16 @@ public class JobInput extends AbstractApiType {
             }
         }
 
-        private void longString(String longName, String lowerThanValue, String greaterThanValue) {
+        private void comparableLongString(String longName, String lowerThanValue, String greaterThanValue) {
             if (!Strings.isNullOrEmpty(lowerThanValue) || !Strings.isNullOrEmpty(greaterThanValue)) {
                 sb.append(' ');
                 sb.append(longName);
                 sb.append(" : {");
                 if (!Strings.isNullOrEmpty(lowerThanValue)) {
-                    sb.append(String.format(" %s : ", Arguments.LOWER_THAN.getName())).append(lowerThanValue);
+                    sb.append(String.format(" %s : ", InputFields.LOWER_THAN.getName())).append(lowerThanValue);
                 }
                 if (!Strings.isNullOrEmpty(greaterThanValue)) {
-                    sb.append(String.format(" %s : ", Arguments.GREATER_THAN.getName())).append(greaterThanValue);
+                    sb.append(String.format(" %s : ", InputFields.GREATER_THAN.getName())).append(greaterThanValue);
                 }
                 sb.append(" }").append(Constants.RETURN);
             }

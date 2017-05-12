@@ -39,9 +39,7 @@ public enum Arguments {
     BEFORE,
     FILTER,
     FIRST,
-    LAST,
-    GREATER_THAN,
-    LOWER_THAN;
+    LAST;
 
     public String getName() {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());

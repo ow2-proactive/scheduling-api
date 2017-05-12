@@ -35,21 +35,22 @@ import com.google.common.base.CaseFormat;
  */
 public enum InputFields {
 
+    //Items are ordered following alphabetic order
     AFTER,
     BEFORE,
-    LOWER_THAN,
-    GREATER_THAN,
     EXCLUDE_REMOVED,
+    GREATER_THAN,
     ID,
     ID_COMPARABLE,
     KEY,
+    LAST_UPDATED_TIME,
+    LOWER_THAN,
     NAME,
     OWNER,
     PRIORITY,
     PROJECT_NAME,
     STATUS,
     SUBMITTED_TIME,
-    LAST_UPDATED_TIME,
     VALUE;
 
     public String getName() {

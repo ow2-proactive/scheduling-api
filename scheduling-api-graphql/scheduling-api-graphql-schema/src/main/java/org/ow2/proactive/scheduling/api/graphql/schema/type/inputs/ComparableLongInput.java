@@ -46,13 +46,15 @@ public class ComparableLongInput {
 
     protected final long greaterThan;
 
+    private static final long LONG_DEFAULT_VALUE = -1L;
+
     public ComparableLongInput(Map<String, Object> input) {
         if (input != null) {
-            lowerThan = Inputs.getValue(input, LOWER_THAN.getName(), -1L);
-            greaterThan = Inputs.getValue(input, GREATER_THAN.getName(), -1L);
+            lowerThan = Inputs.getValue(input, LOWER_THAN.getName(), LONG_DEFAULT_VALUE);
+            greaterThan = Inputs.getValue(input, GREATER_THAN.getName(), LONG_DEFAULT_VALUE);
         } else {
-            lowerThan = -1L;
-            greaterThan = -1L;
+            lowerThan = LONG_DEFAULT_VALUE;
+            greaterThan = LONG_DEFAULT_VALUE;
         }
     }
 }

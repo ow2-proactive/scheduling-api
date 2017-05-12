@@ -35,8 +35,10 @@ import com.google.common.base.CaseFormat;
  */
 public enum Types {
 
+    //Items are ordered following alphabetic order
     DATA_MANAGEMENT,
     GENERIC_INFORMATION,
+    ID_COMPARABLE_LONG_INPUT,
     JOB,
     JOB_INPUT,
     JOB_PRIORITY,
@@ -48,7 +50,6 @@ public enum Types {
     ON_TASK_ERROR,
     QUERY,
     RESTART_MODE,
-    ID_COMPARABLE_LONG_INPUT,
     SUBMITTED_TIME_INPUT,
     TASK,
     TASK_INPUT,
