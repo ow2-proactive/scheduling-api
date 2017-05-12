@@ -30,9 +30,9 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID_COMPARABLE;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LAST_UPDATED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
@@ -73,9 +73,9 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Job identifier.")
                                                                .type(GraphQLLong)
                                                                .build())
-                                   .field(newInputObjectField().name(ID_COMPARABLE.getName())
+                                   .field(newInputObjectField().name(COMPARABLE_ID.getName())
                                                                .description("Job identifier.")
-                                                               .type(IdComparableLongInput.TYPE.getInstance())
+                                                               .type(ComparableIdInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(LAST_UPDATED_TIME.getName())
                                                                .description("Job last updated time.")
@@ -119,7 +119,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private String projectName;
 
-    private IdComparableLongInput idComparable;
+    private ComparableIdInput comparableId;
 
     private SubmittedTimeInput submittedTime;
 
@@ -128,7 +128,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
-            idComparable = Inputs.getObject(input, ID_COMPARABLE.getName(), IdComparableLongInput::new, null);
+            comparableId = Inputs.getObject(input, COMPARABLE_ID.getName(), ComparableIdInput::new, null);
             excludeRemoved = Inputs.getValue(input, EXCLUDE_REMOVED.getName(), true);
             jobName = Inputs.getValue(input, NAME.getName(), null);
             owner = Inputs.getValue(input, OWNER.getName(), null);

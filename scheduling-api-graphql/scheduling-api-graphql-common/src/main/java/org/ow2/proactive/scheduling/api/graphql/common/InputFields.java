@@ -38,9 +38,9 @@ public enum InputFields {
     //Items are ordered following alphabetic order
     AFTER,
     BEFORE,
+    COMPARABLE_ID,
     EXCLUDE_REMOVED,
     ID,
-    ID_COMPARABLE,
     KEY,
     LAST_UPDATED_TIME,
     NAME,

@@ -97,7 +97,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
 
-            comparableLongPredicated(i.getIdComparable(), "id", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getComparableId(), "id", root, criteriaBuilder, predicates);
 
             if (!Strings.isNullOrEmpty(jobName)) {
                 Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,

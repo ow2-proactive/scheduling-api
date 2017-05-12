@@ -45,12 +45,12 @@ import lombok.Data;
  * @author ActiveEon Team
  */
 @Data
-public class IdComparableLongInput extends ComparableLongInput {
+public class ComparableIdInput extends ComparableLongInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
-            return newInputObject().name(Types.ID_COMPARABLE_LONG_INPUT.getName())
+            return newInputObject().name(Types.COMPARABLE_ID_INPUT.getName())
                                    .description("ID filter input.")
                                    .field(newInputObjectField().name(BEFORE.getName())
                                                                .description("Jobs having its id lower than this value.")
@@ -64,7 +64,7 @@ public class IdComparableLongInput extends ComparableLongInput {
         }
     };
 
-    public IdComparableLongInput(Map<String, Object> input) {
+    public ComparableIdInput(Map<String, Object> input) {
         super(input);
     }
 

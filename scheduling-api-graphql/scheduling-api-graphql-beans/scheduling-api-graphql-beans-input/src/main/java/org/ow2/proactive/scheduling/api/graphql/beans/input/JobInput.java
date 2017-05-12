@@ -148,7 +148,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(this.id);
             }
-            comparableLongString(InputFields.ID_COMPARABLE.getName(), this.beforeId, this.afterId);
+            comparableLongString(InputFields.COMPARABLE_ID.getName(), this.beforeId, this.afterId);
             if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(' ');
                 sb.append(InputFields.NAME.getName());

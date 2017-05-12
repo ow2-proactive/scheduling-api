@@ -36,9 +36,9 @@ import com.google.common.base.CaseFormat;
 public enum Types {
 
     //Items are ordered following alphabetic order
+    COMPARABLE_ID_INPUT,
     DATA_MANAGEMENT,
     GENERIC_INFORMATION,
-    ID_COMPARABLE_LONG_INPUT,
     JOB,
     JOB_INPUT,
     JOB_PRIORITY,

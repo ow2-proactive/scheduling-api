@@ -249,7 +249,7 @@ public class GraphqlServiceIntegrationTest {
     }
 
     @Test
-    public void testQueryJobsFilterByIdComparable() {
+    public void testQueryJobsFilterByComparableId() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
         entityManager.persist(job1);
 
@@ -259,14 +259,14 @@ public class GraphqlServiceIntegrationTest {
         long min = Math.min(job1.getId(), job2.getId());
         long max = Math.max(job1.getId(), job2.getId());
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {after: %d}}) " +
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{comparableId: {after: %d}}) " +
                                                                             "{ edges { cursor node { id } } } }",
                                                                             FILTER.getName(),
                                                                             max));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
 
-        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {before: %d}}) " +
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{comparableId: {before: %d}}) " +
                                                         "{ edges { cursor node { id } } } }", FILTER.getName(), min));
         jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
