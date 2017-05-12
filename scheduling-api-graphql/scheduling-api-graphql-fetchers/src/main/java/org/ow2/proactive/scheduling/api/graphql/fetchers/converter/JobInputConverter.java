@@ -42,8 +42,8 @@ import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TimeInput;
 
 import com.google.common.base.Strings;
 
@@ -96,6 +96,9 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
+
+            comparableLongPredicated(i.getComparableId(), "id", root, criteriaBuilder, predicates);
+
             if (!Strings.isNullOrEmpty(jobName)) {
                 Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
                                                                                  root,
@@ -104,7 +107,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(jobNamePredicate);
             }
 
-            timePredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
 
             if (!Strings.isNullOrEmpty(owner)) {
                 Predicate ownerPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "owner", owner);
@@ -124,15 +127,15 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
             }
 
-            timePredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
 
             return predicates.toArray(new Predicate[predicates.size()]);
 
         }).filter(array -> array.length > 0).collect(Collectors.toList());
     }
 
-    private void timePredicated(TimeInput input, String timeName, Root<JobData> root, CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
+    private void comparableLongPredicated(ComparableLongInput input, String name, Root<JobData> root,
+            CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
         long before = -1;
         long after = -1;
         if (input != null) {
@@ -140,10 +143,10 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             after = input.getAfter();
         }
         if (before != -1L) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(timeName), before));
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
         }
         if (after != -1L) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(timeName), after));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
         }
     }
 

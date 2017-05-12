@@ -43,29 +43,29 @@ import lombok.Data;
 
 /**
  * @author ActiveEon Team
- * @since 15/12/16
  */
 @Data
-public class LastUpdatedTimeInput extends ComparableLongInput {
+public class ComparableIdInput extends ComparableLongInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
-            return newInputObject().name(Types.LAST_UPDATED_TIME_INPUT.getName())
-                                   .description("Last updated time filter input.")
+            return newInputObject().name(Types.COMPARABLE_ID_INPUT.getName())
+                                   .description("ID filter input.")
                                    .field(newInputObjectField().name(BEFORE.getName())
-                                                               .description("Jobs having its last updated time before this value.")
+                                                               .description("Jobs having its id lower than this value.")
                                                                .type(GraphQLLong)
                                                                .build())
                                    .field(newInputObjectField().name(AFTER.getName())
-                                                               .description("Jobs having its last updated time after this value.")
+                                                               .description("Jobs having its id greater than this value.")
                                                                .type(GraphQLLong)
                                                                .build())
                                    .build();
         }
     };
 
-    public LastUpdatedTimeInput(Map<String, Object> input) {
+    public ComparableIdInput(Map<String, Object> input) {
         super(input);
     }
+
 }

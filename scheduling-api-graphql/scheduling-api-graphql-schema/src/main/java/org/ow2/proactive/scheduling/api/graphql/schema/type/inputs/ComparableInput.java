@@ -40,19 +40,19 @@ import lombok.Data;
  * @since 15/12/16
  */
 @Data
-public class TimeInput {
+public class ComparableInput<T> {
 
-    protected final long before;
+    protected final T before;
 
-    protected final long after;
+    protected final T after;
 
-    public TimeInput(Map<String, Object> input) {
+    public ComparableInput(Map<String, Object> input, T defaultValue) {
         if (input != null) {
-            before = Inputs.getValue(input, BEFORE.getName(), -1L);
-            after = Inputs.getValue(input, AFTER.getName(), -1L);
+            before = Inputs.getValue(input, BEFORE.getName(), defaultValue);
+            after = Inputs.getValue(input, AFTER.getName(), defaultValue);
         } else {
-            before = -1L;
-            after = -1L;
+            before = defaultValue;
+            after = defaultValue;
         }
     }
 }
