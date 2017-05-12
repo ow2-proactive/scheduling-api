@@ -259,14 +259,14 @@ public class GraphqlServiceIntegrationTest {
         long min = Math.min(job1.getId(), job2.getId());
         long max = Math.max(job1.getId(), job2.getId());
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {greaterThan: %d}}) " +
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {after: %d}}) " +
                                                                             "{ edges { cursor node { id } } } }",
                                                                             FILTER.getName(),
                                                                             max));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
 
-        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {lowerThan: %d}}) " +
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{idComparable: {before: %d}}) " +
                                                         "{ edges { cursor node { id } } } }", FILTER.getName(), min));
         jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);

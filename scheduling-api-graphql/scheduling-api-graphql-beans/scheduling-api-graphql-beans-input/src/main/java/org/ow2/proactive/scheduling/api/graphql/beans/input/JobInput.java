@@ -25,9 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
-import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
-import org.ow2.proactive.scheduling.api.graphql.common.Types;
 
 import com.google.common.base.Strings;
 
@@ -51,9 +49,9 @@ public class JobInput extends AbstractApiType {
 
         private String beforeSubmittedTime;
 
-        private String greaterThanId;
+        private String afterId;
 
-        private String lowerThanId;
+        private String beforeId;
 
         private boolean excludeRemoved = true;
 
@@ -91,13 +89,13 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
-        public JobInput.Builder greaterThanId(String greaterThanId) {
-            this.greaterThanId = greaterThanId;
+        public JobInput.Builder afterId(String afterId) {
+            this.afterId = afterId;
             return this;
         }
 
-        public JobInput.Builder lowerThanId(String lowerThanId) {
-            this.lowerThanId = lowerThanId;
+        public JobInput.Builder beforeId(String beforeId) {
+            this.beforeId = beforeId;
             return this;
         }
 
@@ -150,7 +148,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(this.id);
             }
-            comparableLongString(InputFields.ID_COMPARABLE.getName(), this.lowerThanId, this.greaterThanId);
+            comparableLongString(InputFields.ID_COMPARABLE.getName(), this.beforeId, this.afterId);
             if (!Strings.isNullOrEmpty(this.jobName)) {
                 sb.append(' ');
                 sb.append(InputFields.NAME.getName());
@@ -160,7 +158,8 @@ public class JobInput extends AbstractApiType {
                 sb.append(Constants.QUOTE);
             }
 
-            timeString(InputFields.LAST_UPDATED_TIME.getName(), this.beforeLastUpdatedTime, this.afterLastUpdatedTime);
+            comparableLongString(InputFields.LAST_UPDATED_TIME.getName(), this.beforeLastUpdatedTime,
+                    this.afterLastUpdatedTime);
 
             if (!Strings.isNullOrEmpty(this.owner)) {
                 sb.append(' ');
@@ -191,37 +190,23 @@ public class JobInput extends AbstractApiType {
                 sb.append(this.status);
             }
 
-            timeString(InputFields.SUBMITTED_TIME.getName(), this.beforeSubmittedTime, this.afterSubmittedTime);
+            comparableLongString(InputFields.SUBMITTED_TIME.getName(), this.beforeSubmittedTime,
+                    this.afterSubmittedTime);
 
             sb.append(" }");
             return new JobInput(sb.toString());
         }
 
-        private void timeString(String timeName, String timeBeforeValue, String timeAfterValue) {
-            if (!Strings.isNullOrEmpty(timeBeforeValue) || !Strings.isNullOrEmpty(timeAfterValue)) {
-                sb.append(' ');
-                sb.append(timeName);
-                sb.append(" : {");
-                if (!Strings.isNullOrEmpty(timeBeforeValue)) {
-                    sb.append(String.format(" %s : ", Arguments.BEFORE.getName())).append(timeBeforeValue);
-                }
-                if (!Strings.isNullOrEmpty(timeAfterValue)) {
-                    sb.append(String.format(" %s : ", Arguments.AFTER.getName())).append(timeAfterValue);
-                }
-                sb.append(" }").append(Constants.RETURN);
-            }
-        }
-
-        private void comparableLongString(String longName, String lowerThanValue, String greaterThanValue) {
-            if (!Strings.isNullOrEmpty(lowerThanValue) || !Strings.isNullOrEmpty(greaterThanValue)) {
+        private void comparableLongString(String longName, String beforeValue, String afterValue) {
+            if (!Strings.isNullOrEmpty(beforeValue) || !Strings.isNullOrEmpty(afterValue)) {
                 sb.append(' ');
                 sb.append(longName);
                 sb.append(" : {");
-                if (!Strings.isNullOrEmpty(lowerThanValue)) {
-                    sb.append(String.format(" %s : ", InputFields.LOWER_THAN.getName())).append(lowerThanValue);
+                if (!Strings.isNullOrEmpty(beforeValue)) {
+                    sb.append(String.format(" %s : ", InputFields.BEFORE.getName())).append(beforeValue);
                 }
-                if (!Strings.isNullOrEmpty(greaterThanValue)) {
-                    sb.append(String.format(" %s : ", InputFields.GREATER_THAN.getName())).append(greaterThanValue);
+                if (!Strings.isNullOrEmpty(afterValue)) {
+                    sb.append(String.format(" %s : ", InputFields.AFTER.getName())).append(afterValue);
                 }
                 sb.append(" }").append(Constants.RETURN);
             }

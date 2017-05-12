@@ -25,12 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.GREATER_THAN;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LOWER_THAN;
-
 import java.util.Map;
-
-import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
 
 import lombok.Data;
 
@@ -40,21 +35,10 @@ import lombok.Data;
  * @since 15/12/16
  */
 @Data
-public class ComparableLongInput {
-
-    protected final long lowerThan;
-
-    protected final long greaterThan;
-
-    private static final long LONG_DEFAULT_VALUE = -1L;
+public class ComparableLongInput extends ComparableInput<Long> {
+    private static final Long DEFAULT_VALUE = -1L;
 
     public ComparableLongInput(Map<String, Object> input) {
-        if (input != null) {
-            lowerThan = Inputs.getValue(input, LOWER_THAN.getName(), LONG_DEFAULT_VALUE);
-            greaterThan = Inputs.getValue(input, GREATER_THAN.getName(), LONG_DEFAULT_VALUE);
-        } else {
-            lowerThan = LONG_DEFAULT_VALUE;
-            greaterThan = LONG_DEFAULT_VALUE;
-        }
+        super(input, DEFAULT_VALUE);
     }
 }

@@ -44,7 +44,6 @@ import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
-import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TimeInput;
 
 import com.google.common.base.Strings;
 
@@ -98,7 +97,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
 
-            longPredicated(i.getIdComparable(), "id", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getIdComparable(), "id", root, criteriaBuilder, predicates);
 
             if (!Strings.isNullOrEmpty(jobName)) {
                 Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
@@ -108,7 +107,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(jobNamePredicate);
             }
 
-            timePredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
 
             if (!Strings.isNullOrEmpty(owner)) {
                 Predicate ownerPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "owner", owner);
@@ -128,43 +127,26 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
             }
 
-            timePredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
 
             return predicates.toArray(new Predicate[predicates.size()]);
 
         }).filter(array -> array.length > 0).collect(Collectors.toList());
     }
 
-    private void timePredicated(TimeInput input, String timeName, Root<JobData> root, CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        comparablePredicated(input, i -> i.getBefore(), i -> i.getAfter(), timeName, root, criteriaBuilder, predicates);
-    }
-
-    private void longPredicated(ComparableLongInput input, String longName, Root<JobData> root,
+    private void comparableLongPredicated(ComparableLongInput input, String name, Root<JobData> root,
             CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
-        comparablePredicated(input,
-                             i -> i.getLowerThan(),
-                             i -> i.getGreaterThan(),
-                             longName,
-                             root,
-                             criteriaBuilder,
-                             predicates);
-    }
-
-    private <T> void comparablePredicated(T input, Function<T, Long> getLowerFunction,
-            Function<T, Long> getGreaterFunction, String name, Root<JobData> root, CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        long lowerThan = -1;
-        long greaterThan = -1;
+        long before = -1;
+        long after = -1;
         if (input != null) {
-            lowerThan = getLowerFunction.apply(input);
-            greaterThan = getGreaterFunction.apply(input);
+            before = input.getBefore();
+            after = input.getAfter();
         }
-        if (lowerThan != -1L) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), lowerThan));
+        if (before != -1L) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
         }
-        if (greaterThan != -1L) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), greaterThan));
+        if (after != -1L) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
         }
     }
 

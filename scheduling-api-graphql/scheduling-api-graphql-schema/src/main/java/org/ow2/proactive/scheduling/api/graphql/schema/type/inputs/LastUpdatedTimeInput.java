@@ -46,7 +46,7 @@ import lombok.Data;
  * @since 15/12/16
  */
 @Data
-public class LastUpdatedTimeInput extends TimeInput {
+public class LastUpdatedTimeInput extends ComparableLongInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override

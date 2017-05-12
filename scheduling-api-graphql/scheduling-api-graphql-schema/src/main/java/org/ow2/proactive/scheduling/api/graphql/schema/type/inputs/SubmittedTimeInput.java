@@ -46,7 +46,7 @@ import lombok.Getter;
  * @author ActiveEon Team
  */
 @Data
-public class SubmittedTimeInput extends TimeInput {
+public class SubmittedTimeInput extends ComparableLongInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override

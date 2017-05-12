@@ -28,8 +28,8 @@ package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 import static graphql.Scalars.GraphQLLong;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.GREATER_THAN;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LOWER_THAN;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.AFTER;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE;
 
 import java.util.Map;
 
@@ -52,11 +52,11 @@ public class IdComparableLongInput extends ComparableLongInput {
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.ID_COMPARABLE_LONG_INPUT.getName())
                                    .description("ID filter input.")
-                                   .field(newInputObjectField().name(LOWER_THAN.getName())
+                                   .field(newInputObjectField().name(BEFORE.getName())
                                                                .description("Jobs having its id lower than this value.")
                                                                .type(GraphQLLong)
                                                                .build())
-                                   .field(newInputObjectField().name(GREATER_THAN.getName())
+                                   .field(newInputObjectField().name(AFTER.getName())
                                                                .description("Jobs having its id greater than this value.")
                                                                .type(GraphQLLong)
                                                                .build())
