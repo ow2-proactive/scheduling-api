@@ -67,7 +67,7 @@ public class GraphqlService {
 
     @Autowired
     @Qualifier("jobDataFetcher")
-    DataFetcher jobDataFetcher;
+    private DataFetcher jobDataFetcher;
 
     @Autowired
     @Qualifier("taskDataFetcher")
