@@ -29,11 +29,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -42,9 +40,11 @@ import javax.persistence.criteria.Root;
 import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.JobCursorMapper;
+import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
@@ -55,11 +55,9 @@ import graphql.schema.DataFetchingEnvironment;
 /**
  * @author ActiveEon Team
  */
+@Component
+@Transactional(readOnly = true)
 public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
-
-    public JobDataFetcher(Supplier<EntityManager> entityManager) {
-        super(entityManager);
-    }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {

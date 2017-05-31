@@ -23,19 +23,19 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursors;
 
-import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
 
 
 /**
  * @author ActiveEon Team
  */
-public class JobCursorMapper extends IntegerCursorMapper<Job> {
+public class TaskCursorMapper extends IntegerCursorMapper<Task> {
 
     @Override
-    String toString(Job job) {
-        return Integer.toString((int) job.getId());
+    String toString(Task task) {
+        return Integer.toString((int) task.getId());
     }
 
 }

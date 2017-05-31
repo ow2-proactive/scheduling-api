@@ -27,18 +27,13 @@ package org.ow2.proactive.scheduling.api.graphql.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.GenericInformationDataFetcher;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.JobDataFetcher;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.TaskDataFetcher;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.UserDataFetcher;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.VariablesDataFetcher;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,26 +61,34 @@ public class GraphqlService {
 
     private GraphQL graphql;
 
-    public GraphqlService() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
-    }
+    @Autowired
+    @Qualifier("genericInformationDataFetcher")
+    private DataFetcher genericInformationDataFetcher;
+
+    @Autowired
+    @Qualifier("jobDataFetcher")
+    private DataFetcher jobDataFetcher;
+
+    @Autowired
+    @Qualifier("taskDataFetcher")
+    private DataFetcher taskDataFetcher;
+
+    @Autowired
+    @Qualifier("userDataFetcher")
+    private DataFetcher userDataFetcher;
+
+    @Autowired
+    @Qualifier("variablesDataFetcher")
+    private DataFetcher variablesDataFetcher;
 
     @PostConstruct
     public void init() {
-        Supplier<EntityManager> entityManagerSupplier = () -> ApplicationContextProvider.getApplicationContext()
-                                                                                        .getBean(EntityManager.class);
-
-        DataFetcher genericInformationDataFetcher = new GenericInformationDataFetcher();
-        DataFetcher jobDataFetcher = new JobDataFetcher(entityManagerSupplier);
-        DataFetcher taskDataFetcher = new TaskDataFetcher(entityManagerSupplier);
-        DataFetcher userDataFetcher = new UserDataFetcher();
-        DataFetcher variableDataFetcher = new VariablesDataFetcher();
-
         graphql = new GraphQL(GraphQLSchema.newSchema()
                                            .query(Query.TYPE.getInstance(genericInformationDataFetcher,
                                                                          jobDataFetcher,
                                                                          taskDataFetcher,
                                                                          userDataFetcher,
-                                                                         variableDataFetcher,
+                                                                         variablesDataFetcher,
                                                                          userDataFetcher))
                                            .build());
     }

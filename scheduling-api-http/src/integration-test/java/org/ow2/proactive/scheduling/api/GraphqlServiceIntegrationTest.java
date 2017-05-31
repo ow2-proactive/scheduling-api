@@ -38,8 +38,6 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
@@ -55,7 +53,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +64,6 @@ import com.google.common.collect.ImmutableMap;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Transactional
 public class GraphqlServiceIntegrationTest {
 
     private static final String CONTEXT_LOGIN = "bobot";
@@ -80,13 +76,9 @@ public class GraphqlServiceIntegrationTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @After
-    public void tearDown() {
-        entityManager.flush();
-        entityManager.clear();
-    }
-
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobs() {
         addJobData(10);
 
@@ -96,7 +88,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(10);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginated() {
         addJobData(DefaultValues.PAGE_SIZE + 10);
 
@@ -107,9 +101,12 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
         assertThat(getField(queryResult, "data", "jobs", "totalCount")).isEqualTo(DefaultValues.PAGE_SIZE + 10);
+        //        tearDown();
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginatedWithVariable() {
         addJobData(10);
 
@@ -123,7 +120,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginatedFirstArgument() {
         addJobData(10);
 
@@ -131,13 +130,15 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("1");
-        assertThat(getField(jobNodes.get(2), "node", "id")).isEqualTo("3");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job1");
+        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job3");
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginatedLastArgument() {
         addJobData(10);
 
@@ -145,13 +146,15 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("8");
-        assertThat(getField(jobNodes.get(2), "node", "id")).isEqualTo("10");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job8");
+        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job10");
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(true);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(false);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginatedFirstAfterArgument() {
         addJobData(10);
 
@@ -166,13 +169,15 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("2");
-        assertThat(getField(jobNodes.get(2), "node", "id")).isEqualTo("4");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job2");
+        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job4");
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsPaginatedLastBeforeArgument() {
         addJobData(10);
 
@@ -187,26 +192,41 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(3);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("7");
-        assertThat(getField(jobNodes.get(2), "node", "id")).isEqualTo("9");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job7");
+        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job9");
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(true);
         assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(false);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByIds() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{id:3}, {id:5}]) { edges { cursor node { id name } } } }",
-                                                                            FILTER.getName()));
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{%s:\"job7\"} {%s:\"job9\"}]) { edges { cursor node { id name } } } }",
+                                                                            FILTER.getName(),
+                                                                            NAME.getName(),
+                                                                            NAME.getName()));
+
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        String job7id = (String) getField(jobNodes.get(0), "node", "id");
+        String job9id = (String) getField(jobNodes.get(1), "node", "id");
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{id:" + job7id + "}, {id:" + job9id +
+                                                        "}]) { edges { cursor node { id name } } } }",
+                                                        FILTER.getName()));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("3");
-        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("5");
+        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo(job7id);
+        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo(job9id);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByNames() {
         addJobData(10);
 
@@ -218,11 +238,13 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("7");
-        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("9");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job7");
+        assertThat(getField(jobNodes.get(1), "node", "name")).isEqualTo("job9");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByContainsNames() {
         addJobData(10);
 
@@ -234,7 +256,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(10);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByOwners() {
         addJobData(10);
 
@@ -245,10 +269,12 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(6);
 
-        assertThat(getField(jobNodes.get(4), "node", "id")).isEqualTo("9");
+        assertThat(getField(jobNodes.get(4), "node", "owner")).isEqualTo("owner9");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByComparableId() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
         entityManager.persist(job1);
@@ -272,7 +298,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(1);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByPriority() {
         addJobData(10);
 
@@ -283,7 +311,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(5);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByProjectNames() {
         addJobData(10);
 
@@ -293,11 +323,13 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(2);
 
-        assertThat(getField(jobNodes.get(0), "node", "id")).isEqualTo("7");
-        assertThat(getField(jobNodes.get(1), "node", "id")).isEqualTo("9");
+        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job7");
+        assertThat(getField(jobNodes.get(1), "node", "name")).isEqualTo("job9");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByStatus() {
         addJobData(10);
 
@@ -308,7 +340,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(5);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterWithConjunctionsAndDisjunctions() {
         addJobData(10);
 
@@ -323,7 +357,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(6);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByExcludeRemoved() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
@@ -337,7 +373,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(5);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByLastUpdatedTime() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
         job1.setLastUpdatedTime(job1.getSubmittedTime());
@@ -355,7 +393,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(1);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryJobsFilterByIncludeRemoved() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
@@ -369,7 +409,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(6);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasks() {
         addJobDataWithTasks(10);
 
@@ -381,7 +423,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(taskNodes).hasSize(10);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginated() {
         addJobDataWithTasks(DefaultValues.PAGE_SIZE + 10);
 
@@ -400,7 +444,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginatedWithVariable() {
         addJobDataWithTasks(DefaultValues.PAGE_SIZE + 10);
 
@@ -419,7 +465,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginatedFirstArgument() {
         addJobDataWithTasks(10);
 
@@ -440,7 +488,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginatedLastArgument() {
         addJobDataWithTasks(10);
 
@@ -461,7 +511,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(false);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginatedFirstAfterArgument() {
         addJobDataWithTasks(10);
 
@@ -492,7 +544,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksPaginatedLastBeforeArgument() {
         addJobDataWithTasks(10);
 
@@ -523,7 +577,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(false);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksFilterByIds() {
         addJobDataWithTasks(10);
 
@@ -539,7 +595,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(taskNodes.get(1), "node", "id")).isEqualTo("5");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksFilterByName() {
         addJobDataWithTasks(10);
 
@@ -558,7 +616,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(taskNodes.get(1), "node", "id")).isEqualTo("5");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksFilterByStartWithName() {
         addJobDataWithTasks(10);
 
@@ -572,7 +632,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(taskNodes).hasSize(10);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksFilterByEndWithName() {
         addJobDataWithTasks(10);
 
@@ -587,7 +649,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("3");
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryTasksFilterByStatus() {
         addJobDataWithTasks(10);
 
@@ -671,13 +735,17 @@ public class GraphqlServiceIntegrationTest {
         return taskData;
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testInvalidQuery() {
         Map<String, Object> queryResult = executeGraphqlQuery("invalid query");
         assertThat(getField(queryResult, "errors")).isNotNull();
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryVersion() {
         String query = "{ version }";
         Map<String, Object> queryResult = executeGraphqlQuery(query);
@@ -685,7 +753,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(queryResult, "data", "version")).isEqualTo(Query.VERSION_API);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryViewer() {
         String query = "{ viewer { login sessionId  } }";
         Map<String, Object> queryResult = executeGraphqlQuery(query);
@@ -694,7 +764,9 @@ public class GraphqlServiceIntegrationTest {
         assertThat(getField(queryResult, "data", "viewer", "sessionId")).isEqualTo(CONTEXT_SESSION_ID);
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryViewerJobs() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
@@ -709,7 +781,9 @@ public class GraphqlServiceIntegrationTest {
         jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
     }
 
+    @Rollback
     @Test
+    @Transactional
     public void testQueryViewerIncludeRemovedJobs() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);

@@ -35,11 +35,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -48,11 +48,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduling.api.graphql.fetchers.connection.ExtendedConnection;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.CursorMapper;
+import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.CursorMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import graphql.relay.Connection;
 import graphql.relay.ConnectionCursor;
 import graphql.relay.Edge;
 import graphql.relay.PageInfo;
@@ -68,13 +69,12 @@ import graphql.schema.DataFetchingEnvironment;
  * @param <T> graphql class type
  * @author ActiveEon Team
  */
+@Repository
+@Transactional
 public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
-    protected Supplier<EntityManager> entityManager;
-
-    public DatabaseConnectionFetcher(Supplier<EntityManager> entityManager) {
-        this.entityManager = entityManager;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * Maps entity objects to GraphQL schema objects.
@@ -101,8 +101,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
         Integer after = cursorMapper.getOffsetFromCursor(environment.getArgument(AFTER.getName()));
         Integer before = cursorMapper.getOffsetFromCursor(environment.getArgument(BEFORE.getName()));
-
-        EntityManager entityManager = getEntityManager();
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
@@ -189,10 +187,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
 
         return wherePredicate.toArray(new Predicate[wherePredicate.size()]);
-    }
-
-    protected EntityManager getEntityManager() {
-        return entityManager.get();
     }
 
     protected int applySlicing(CriteriaQuery<E> criteriaQuery, CriteriaBuilder criteriaBuilder,
