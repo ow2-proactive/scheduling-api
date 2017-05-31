@@ -23,28 +23,36 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.service;
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursors;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
+import graphql.relay.Base64;
 
 
 /**
- * @author ActiveEon team
+ * @author ActiveEon Team
  */
-@Service
-public class ApplicationContextProvider implements ApplicationContextAware {
+public abstract class AbstractCursorMapper<F, T> implements CursorMapper<F, T> {
 
-    private static ApplicationContext context;
+    protected static final String DUMMY_CURSOR_PREFIX = "graphql-cursor";
 
-    public static ApplicationContext getApplicationContext() {
-        return context;
+    @Override
+    public T getOffsetFromCursor(String cursor) {
+
+        if (cursor == null) {
+            return null;
+        }
+
+        String string = Base64.fromBase64(cursor);
+        return toOffset(string.substring(DUMMY_CURSOR_PREFIX.length()));
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext ctx) {
-        context = ctx;
+    public String createCursor(F field) {
+        return Base64.toBase64(DUMMY_CURSOR_PREFIX + toString(field));
     }
+
+    abstract String toString(F field);
+
+    abstract T toOffset(String cursor);
 
 }

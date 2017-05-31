@@ -27,6 +27,8 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,7 +36,10 @@ import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
@@ -55,7 +60,14 @@ import com.google.common.collect.ImmutableMap;
 /**
  * @author ActiveEon Team
  */
+@RunWith(MockitoJUnitRunner.class)
 public class TaskDataFetcherTest {
+
+    @Mock
+    private EntityManager entityManager;
+
+    @InjectMocks
+    private TaskDataFetcher taskDataFetcher;
 
     @Test
     public void testDataMapping() throws Exception {
@@ -121,8 +133,8 @@ public class TaskDataFetcherTest {
         taskData.setWallTime(12);
         taskData.setWorkingDir("workingDir");
 
-        Stream<Task> taskStream = new TaskDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(ImmutableList.of(taskData)
-                                                                                                                        .stream());
+        List<TaskData> tasks = Collections.singletonList(taskData);
+        Stream<Task> taskStream = taskDataFetcher.dataMapping(tasks.stream());
 
         Optional<Task> firstElement = taskStream.findFirst();
 

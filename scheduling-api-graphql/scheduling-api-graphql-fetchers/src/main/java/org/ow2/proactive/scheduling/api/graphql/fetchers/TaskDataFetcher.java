@@ -30,11 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -44,8 +42,10 @@ import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.TaskInputConverter;
-import org.ow2.proactive.scheduling.api.graphql.fetchers.cursor.TaskCursorMapper;
+import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.TaskCursorMapper;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
@@ -56,11 +56,9 @@ import graphql.schema.DataFetchingEnvironment;
 /**
  * @author ActiveEon Team
  */
+@Component
+@Transactional(readOnly = true)
 public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
-
-    public TaskDataFetcher(Supplier<EntityManager> entityManager) {
-        super(entityManager);
-    }
 
     @Override
     public Object get(DataFetchingEnvironment environment) {

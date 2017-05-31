@@ -23,7 +23,7 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.services;
+package org.ow2.proactive.scheduling.api.graphql.service;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,42 +32,36 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.ow2.proactive.scheduling.api.Application;
-import org.ow2.proactive.scheduling.api.graphql.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 
-@ActiveProfiles("test")
+/**
+ * @author ActiveEon Team
+ * @since 31/05/2017
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@TestPropertySource(locations = "classpath:test.properties")
+@ContextConfiguration(classes = { AuthenticationServiceTestConfig.class }, loader = SpringApplicationContextLoader.class, initializers = ConfigFileApplicationContextInitializer.class)
+@ActiveProfiles("test")
+@PropertySource("classpath:application-test.properties")
 public class AuthenticationServiceTest {
 
-    @Mock
+    @Autowired
     private RestTemplate restTemplate;
 
-    @InjectMocks
     @Autowired
     private AuthenticationService authenticationService;
-
-    @Before
-    public void setup() {
-        initMocks(this);
-    }
 
     @Test
     public void testAuthenticate() throws Exception {

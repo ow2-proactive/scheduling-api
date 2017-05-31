@@ -27,9 +27,8 @@ package org.ow2.proactive.scheduling.api;
 
 import javax.sql.DataSource;
 
-import org.ow2.proactive.scheduling.api.controllers.ApiController;
-import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +40,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -50,10 +50,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author ActiveEon Team
  */
 @Configuration
+@EnableTransactionManagement
+@EnableAutoConfiguration
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
 @PropertySources({ @PropertySource(value = "classpath:application.properties"),
                    @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
-@SpringBootApplication(scanBasePackageClasses = { ApiController.class, GraphqlService.class })
+@SpringBootApplication(scanBasePackages = { "org.ow2.proactive.scheduling.api" })
 public class Application extends WebMvcConfigurerAdapter {
 
     public static void main(String[] args) {

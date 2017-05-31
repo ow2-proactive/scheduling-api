@@ -67,10 +67,10 @@ public class AuthenticationService {
     private String schedulerLoginFetchUrl;
 
     @Value("${pa.scheduling.api.session_cache.expire_after}")
-    private int sessionCacheExpireAfter;
+    private String sessionCacheExpireAfter;
 
     @Value("${pa.scheduling.api.session_cache.max_size}")
-    private int sessionCacheMaxSize;
+    private String sessionCacheMaxSize;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -83,8 +83,8 @@ public class AuthenticationService {
         schedulerLoginFetchUrl = createLoginFetchUrl(schedulerRestUrl);
 
         sessionCache = CacheBuilder.newBuilder()
-                                   .maximumSize(sessionCacheMaxSize)
-                                   .expireAfterWrite(sessionCacheExpireAfter, TimeUnit.MILLISECONDS)
+                                   .maximumSize(Integer.parseInt(sessionCacheMaxSize))
+                                   .expireAfterWrite(Integer.parseInt(sessionCacheExpireAfter), TimeUnit.MILLISECONDS)
                                    .build(new CacheLoader<String, String>() {
                                        @Override
                                        public String load(String sessionId) throws Exception {

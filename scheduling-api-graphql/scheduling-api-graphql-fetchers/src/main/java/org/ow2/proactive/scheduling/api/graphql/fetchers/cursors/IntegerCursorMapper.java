@@ -23,17 +23,16 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.fetchers.cursor;
+package org.ow2.proactive.scheduling.api.graphql.fetchers.cursors;
 
 /**
- * @param <F> the type of the GraphQL field.
- * @param <T> the type of the offset managed by the cursor.
  * @author ActiveEon Team
  */
-public interface CursorMapper<F, T> {
+public abstract class IntegerCursorMapper<F> extends AbstractCursorMapper<F, Integer> {
 
-    T getOffsetFromCursor(String cursor);
-
-    String createCursor(F field);
+    @Override
+    Integer toOffset(String cursor) {
+        return Integer.parseInt(cursor);
+    }
 
 }

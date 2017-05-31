@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
+import org.springframework.stereotype.Component;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -35,6 +36,7 @@ import graphql.schema.DataFetchingEnvironment;
 /**
  * @author ActiveEon Team
  */
+@Component
 public class VariablesDataFetcher implements DataFetcher {
 
     @Override

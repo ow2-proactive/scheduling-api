@@ -27,13 +27,18 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.common.job.JobVariable;
@@ -51,7 +56,14 @@ import com.google.common.collect.ImmutableMap;
 /**
  * @author ActiveEon Team
  */
+@RunWith(MockitoJUnitRunner.class)
 public class JobDataFetcherTest {
+
+    @Mock
+    private EntityManager entityManager;
+
+    @InjectMocks
+    private JobDataFetcher jobDataFetcher;
 
     @Test
     public void testDataMapping() throws Exception {
@@ -90,8 +102,8 @@ public class JobDataFetcherTest {
         jobData.setUserSpace("userSpace");
         jobData.setVariables(ImmutableMap.of("vk1", new JobVariable("vk1", "vv1")));
 
-        Stream<Job> jobStream = new JobDataFetcher(() -> Mockito.mock(EntityManager.class)).dataMapping(ImmutableList.of(jobData)
-                                                                                                                     .stream());
+        List<JobData> jobs = Collections.singletonList(jobData);
+        Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream());
 
         Optional<Job> firstElement = jobStream.findFirst();
 
