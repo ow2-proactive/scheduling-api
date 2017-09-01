@@ -43,9 +43,7 @@ buildscript {
     }
 }
 
-
 apply plugin: 'spring-boot'
-apply plugin: 'war'
 apply plugin: 'org.sonarqube'
 apply from: "$rootDir/gradle/ext/coding-format.gradle"
 
@@ -57,14 +55,8 @@ springBoot {
     mainClass = 'org.ow2.proactive.scheduling.api.Application'
 }
 
-war {
-    baseName = 'scheduling-api'
-    version = version
-}
-
 allprojects {
     apply plugin: 'spring-boot'
-    apply plugin: 'war'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'java'

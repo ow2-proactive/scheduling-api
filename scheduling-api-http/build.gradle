@@ -23,6 +23,13 @@
  * or a different license than the AGPL.
  */
 
+apply plugin: 'war'
+
+war {
+    baseName = 'scheduling-api'
+    version = version
+}
+
 // FIXME: investigate why transitive dependencies of dependencies defined
 // with providedCompile are still included in the WAR file that is generated
 dependencies {
