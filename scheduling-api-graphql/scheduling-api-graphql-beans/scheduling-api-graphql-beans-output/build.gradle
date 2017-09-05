@@ -1,4 +1,5 @@
 apply plugin: 'jsonschema2pojo'
+apply plugin: "io.spring.dependency-management"
 
 buildscript {
     repositories {
@@ -7,6 +8,7 @@ buildscript {
 
     dependencies {
         classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.4.27'
+        classpath "io.spring.gradle:dependency-management-plugin:0.3.0.RELEASE"
     }
 }
 
@@ -19,6 +21,12 @@ sourceSets {
         java {
             srcDirs = files("$generatedSrcDir")
         }
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.ow2.proactive:parent-bom:${version}"
     }
 }
 
