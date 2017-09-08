@@ -24,9 +24,9 @@
  */
 
 dependencies {
-    compile "com.google.guava:guava:20.0"
-    compile 'org.jboss.resteasy:resteasy-jaxrs:3.0.17.Final'
-    compile 'org.jboss.resteasy:resteasy-multipart-provider:3.0.17.Final'
+    compile "com.google.guava:guava"
+    compile 'org.jboss.resteasy:resteasy-jaxrs'
+    compile 'org.jboss.resteasy:resteasy-multipart-provider'
     compile project(':scheduling-api-graphql:scheduling-api-graphql-beans:scheduling-api-graphql-beans-input-gwt')
     compile project(':scheduling-api-graphql:scheduling-api-graphql-common-gwt')
 }

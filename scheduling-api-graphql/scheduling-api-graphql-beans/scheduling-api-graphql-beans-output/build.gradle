@@ -23,11 +23,11 @@ sourceSets {
 }
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind'
     // Required if generating JSR-303 annotations
-    compile 'javax.validation:validation-api:1.1.0.CR2'
+    compile 'javax.validation:validation-api'
     // Required if generating equals, hashCode, or toString methods
-    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.apache.commons:commons-lang3'
 }
 
 clean {
