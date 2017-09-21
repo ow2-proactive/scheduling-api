@@ -27,7 +27,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind'
     compile 'org.springframework:spring-web'
     compile 'org.springframework.boot:spring-boot-starter-log4j2'
-    compile 'org.apache.httpcomponents:httpclient:4.5.3'
+    compile 'org.apache.httpcomponents:httpclient'
     compile project(":scheduling-api-graphql:scheduling-api-graphql-fetchers")
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
