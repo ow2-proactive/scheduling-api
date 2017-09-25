@@ -24,10 +24,10 @@
  */
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
-    compile 'org.springframework:spring-web:4.2.5.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-log4j2:1.3.3.RELEASE'
-    compile 'org.apache.httpcomponents:httpclient:4.5.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile 'org.springframework:spring-web'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile 'org.apache.httpcomponents:httpclient'
     compile project(":scheduling-api-graphql:scheduling-api-graphql-fetchers")
-    testCompile 'org.springframework.boot:spring-boot-starter-test:1.3.3.RELEASE'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
