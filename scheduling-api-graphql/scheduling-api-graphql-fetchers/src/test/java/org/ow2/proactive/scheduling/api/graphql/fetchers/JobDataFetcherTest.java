@@ -45,6 +45,7 @@ import org.ow2.proactive.scheduler.common.job.JobVariable;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.core.db.JobContent;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 
@@ -100,7 +101,12 @@ public class JobDataFetcherTest {
         jobData.setToBeRemoved(false); // currently, not in GraphQL data model
         jobData.setTotalNumberOfTasks(13);
         jobData.setUserSpace("userSpace");
-        jobData.setVariables(ImmutableMap.of("vk1", new JobVariable("vk1", "vv1")));
+
+        JobDataVariable variable1 = new JobDataVariable();
+        variable1.setName("vk1");
+        variable1.setValue("vv1");
+
+        jobData.setVariables(ImmutableMap.of("vk1", variable1));
 
         List<JobData> jobs = Collections.singletonList(jobData);
         Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream());
