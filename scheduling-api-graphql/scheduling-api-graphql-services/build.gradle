@@ -25,6 +25,14 @@
 
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile 'com.fasterxml.jackson.core:jackson-core'
+    compile 'com.fasterxml.jackson.core:jackson-annotations'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-base'
+    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider'
+    compile 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations'
     compile 'org.springframework:spring-web'
     compile 'org.springframework.boot:spring-boot-starter-log4j2'
     compile 'org.apache.httpcomponents:httpclient'
