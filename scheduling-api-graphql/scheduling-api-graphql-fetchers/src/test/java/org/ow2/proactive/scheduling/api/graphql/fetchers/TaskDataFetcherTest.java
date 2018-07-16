@@ -55,6 +55,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.Task;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 
 /**
@@ -82,7 +83,7 @@ public class TaskDataFetcherTest {
         taskData.setDataspaceSelectors(ImmutableList.of(new SelectorData())); // currently, not in GraphQL data model
         taskData.setDependentTasks(null); // currently, not in GraphQL data model
         taskData.setDescription("description");
-        taskData.setEnvModifiers(ImmutableList.of(new EnvironmentModifierData())); // currently, not in GraphQL data model
+        taskData.setEnvModifiers(ImmutableSet.of(new EnvironmentModifierData())); // currently, not in GraphQL data model
         taskData.setEnvScript(new ScriptData()); // currently, not in GraphQL data model
         taskData.setExecutionDuration(3);
         taskData.setExecutionHostName("hostname");
