@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -77,8 +78,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
     @Override
     protected Stream<Job> dataMapping(Stream<JobData> dataStream) {
-        return dataStream.parallel()
-                         .map(jobData -> Job.builder()
+        return dataStream.map(jobData -> Job.builder()
                                             .dataManagement(DataManagement.builder()
                                                                           .globalSpaceUrl(jobData.getGlobalSpace())
                                                                           .inputSpaceUrl(jobData.getInputSpace())
@@ -109,15 +109,26 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .startTime(jobData.getStartTime())
                                             .submittedTime(jobData.getSubmittedTime())
                                             .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                                            // TODO Currently map the JobVariable object to a simple string (its value). Need to map the whole object later
-                                            .variables(jobData.getVariables() == null ? ImmutableMap.of()
-                                                                                      : jobData.getVariables()
-                                                                                               .entrySet()
-                                                                                               .stream()
-                                                                                               .collect(Collectors.toMap(e -> e.getKey(),
-                                                                                                                         e -> e.getValue()
-                                                                                                                               .getValue())))
+                                            // TODO Currently map the JobVariable object to a simple string (its value).
+                                            // Need to map the whole object later
+                                            .variables(getVariables(jobData))
                                             .build());
+    }
+
+    /**
+     * Transform Variables from a JobData into a simple Map.
+     * @param jobData The jobData to retrieve the variables from
+     * @return the Map of all variables in the form key -> value
+     */
+    protected Map<String, String> getVariables(JobData jobData) {
+        if (jobData.getVariables() == null || jobData.getVariables().size() == 0) {
+            return ImmutableMap.of();
+        } else {
+            return jobData.getVariables()
+                          .entrySet()
+                          .stream()
+                          .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue()));
+        }
     }
 
 }
