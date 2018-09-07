@@ -127,6 +127,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
             return jobData.getVariables()
                           .entrySet()
                           .stream()
+                          .filter(e -> e.getKey() != null && e.getValue() != null)
                           .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue()));
         }
     }
