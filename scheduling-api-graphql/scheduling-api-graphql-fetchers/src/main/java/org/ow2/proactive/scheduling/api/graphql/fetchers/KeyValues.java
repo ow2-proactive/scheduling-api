@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.JobTaskCommon;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces.KeyValue;
@@ -50,11 +51,26 @@ public final class KeyValues {
     private KeyValues() {
     }
 
-    public static <T extends KeyValue, I extends List<KeyValueInput>> List<T> filterKeyValue(
-            DataFetchingEnvironment environment, Function<JobTaskCommon, Map<String, String>> function,
-            Supplier<T> keyValueSupplier) {
+    public static <T extends KeyValue> List<T> filterKeyValue(DataFetchingEnvironment environment,
+            Function<JobTaskCommon, Map<String, String>> function, Supplier<T> keyValueSupplier) {
 
         JobTaskCommon object = (JobTaskCommon) environment.getSource();
+
+        List<KeyValueInput> input = null;
+
+        Object filterArgument = environment.getArgument(Arguments.FILTER.getName());
+        if (filterArgument != null) {
+            List<LinkedHashMap<String, String>> args = (List<LinkedHashMap<String, String>>) filterArgument;
+            input = args.stream().map(KeyValueInput::new).collect(Collectors.toList());
+        }
+
+        return filterKeyValue(function.apply(object), input, keyValueSupplier);
+    }
+
+    public static <T extends KeyValue> List<T> filterJobKeyValue(DataFetchingEnvironment environment,
+            Function<Job, Map<String, String>> function, Supplier<T> keyValueSupplier) {
+
+        Job object = (Job) environment.getSource();
 
         List<KeyValueInput> input = null;
 

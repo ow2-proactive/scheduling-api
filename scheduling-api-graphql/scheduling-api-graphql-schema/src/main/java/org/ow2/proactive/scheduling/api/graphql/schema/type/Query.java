@@ -58,6 +58,7 @@ public final class Query {
             DataFetcher taskDataFetcher = dataFetchers[2];
             DataFetcher userDataFetcher = dataFetchers[3];
             DataFetcher variableDataFetcher = dataFetchers[4];
+            DataFetcher resultMapDataFetcher = dataFetchers[5];
 
             return GraphQLObjectType.newObject()
                                     .name(Types.QUERY.getName())
@@ -65,12 +66,14 @@ public final class Query {
                                                                .description("Jobs list, it will be empty if there is none.")
                                                                .type(JobConnection.TYPE.getInstance(genericInformationDataFetcher,
                                                                                                     taskDataFetcher,
-                                                                                                    variableDataFetcher))
+                                                                                                    variableDataFetcher,
+                                                                                                    resultMapDataFetcher))
                                                                .argument(newArgument().name(Arguments.FILTER.getName())
                                                                                       .description("Jobs input filter.")
                                                                                       .type(new GraphQLList(JobInput.TYPE.getInstance(genericInformationDataFetcher,
                                                                                                                                       taskDataFetcher,
-                                                                                                                                      variableDataFetcher)))
+                                                                                                                                      variableDataFetcher,
+                                                                                                                                      resultMapDataFetcher)))
                                                                                       .build())
                                                                .argument(JobConnection.getConnectionFieldArguments())
                                                                .argument(newArgument().name(Arguments.FIRST.getName())
@@ -87,7 +90,8 @@ public final class Query {
                                                                .type(User.TYPE.getInstance(genericInformationDataFetcher,
                                                                                            jobDataFetcher,
                                                                                            taskDataFetcher,
-                                                                                           variableDataFetcher))
+                                                                                           variableDataFetcher,
+                                                                                           resultMapDataFetcher))
                                                                .dataFetcher(userDataFetcher))
                                     .build();
         }

@@ -26,6 +26,7 @@
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -44,6 +45,7 @@ import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilter
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.JobCursorMapper;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.DataManagement;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
+import org.ow2.proactive.utils.ObjectByteConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,6 +114,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             // TODO Currently map the JobVariable object to a simple string (its value).
                                             // Need to map the whole object later
                                             .variables(getVariables(jobData))
+                                            .resultMap(mapOfByteArrayToString(jobData.getResultMap()))
                                             .build());
     }
 
@@ -128,8 +131,24 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                           .entrySet()
                           .stream()
                           .filter(e -> e.getKey() != null && e.getValue() != null)
-                          .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getValue()));
+                          .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getValue()));
         }
+    }
+
+    /**
+     * Transform a map of byte array to map of string.
+     * This is used mainly for transforming resultMap values wich are stored as blobs in the database (byte[]) into Strings. 
+     * @param input
+     * @return
+     */
+    public static Map<String, String> mapOfByteArrayToString(Map<String, byte[]> input) {
+        if (input == null) {
+            return null;
+        }
+
+        Map<String, String> answer = new HashMap<>(input.size());
+        input.forEach((key, value) -> answer.put(key, (String) ObjectByteConverter.byteArrayToObject(value)));
+        return answer;
     }
 
 }

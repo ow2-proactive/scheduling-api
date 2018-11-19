@@ -59,6 +59,25 @@
       "required": false,
       "type": "string"
     },
+    "resultMap": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/resultMap",
+      "items": {
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
     "startTime": {
       "format": "utc-millisec",
       "id": "http://activeeon.com/api/v2/data/edges/node/startTime",

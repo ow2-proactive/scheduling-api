@@ -80,6 +80,7 @@ public enum Fields {
     REMOVED_TIME,
     RESTART_MODE,
     RESULT_PREVIEW,
+    RESULT_MAP,
     RUN_AS_ME,
     SCHEDULED_TIME,
     SESSION_ID,
