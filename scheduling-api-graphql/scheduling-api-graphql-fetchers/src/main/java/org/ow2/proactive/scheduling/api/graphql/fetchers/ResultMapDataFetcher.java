@@ -23,43 +23,25 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.common;
+package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
-import com.google.common.base.CaseFormat;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.ResultMap;
+import org.springframework.stereotype.Component;
+
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 
 
 /**
- * Defines the type of the different GraphQL types which are used in the API.
- *
  * @author ActiveEon Team
  */
-public enum Types {
+@Component
+public class ResultMapDataFetcher implements DataFetcher {
 
-    //Items are ordered following alphabetic order
-    COMPARABLE_ID_INPUT,
-    DATA_MANAGEMENT,
-    GENERIC_INFORMATION,
-    JOB,
-    JOB_INPUT,
-    JOB_PRIORITY,
-    JOB_STATUS,
-    JOB_TASK_COMMON,
-    KEY_VALUE,
-    KEY_VALUE_INPUT,
-    LAST_UPDATED_TIME_INPUT,
-    ON_TASK_ERROR,
-    QUERY,
-    RESTART_MODE,
-    RESULT_MAP,
-    SUBMITTED_TIME_INPUT,
-    TASK,
-    TASK_INPUT,
-    TASK_STATUS,
-    USER,
-    VARIABLE;
-
-    public String getName() {
-        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+    @Override
+    public Object get(DataFetchingEnvironment environment) {
+        return KeyValues.filterJobKeyValue(environment, Job::getResultMap, ResultMap::new);
     }
 
 }

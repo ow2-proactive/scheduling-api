@@ -63,6 +63,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PAGE_INFO;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PRIORITY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PROJECT_NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.REMOVED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.RESULT_MAP;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_CURSOR;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
@@ -85,7 +86,7 @@ public class JobTest {
     private static final String ALL = String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 %s : [{ %s : false }] ){\n%s{\n%s\n%s\n" +
                                                     "%s\n%s\n}\n%s\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
                                                     "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
-                                                    "%s\n%s\n%s\n%s\n%s\n}\n}\n}",
+                                                    "%s\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n}\n}\n}",
                                                     JOBS.getName(),
                                                     AFTER.getName(),
                                                     BEFORE.getName(),
@@ -130,6 +131,9 @@ public class JobTest {
                                                     PRIORITY.getName(),
                                                     PROJECT_NAME.getName(),
                                                     REMOVED_TIME.getName(),
+                                                    RESULT_MAP.getName(),
+                                                    KEY.getName(),
+                                                    VALUE.getName(),
                                                     SUBMITTED_TIME.getName(),
                                                     TOTAL_NUMBER_OF_TASKS.getName());
 

@@ -28,11 +28,13 @@ package org.ow2.proactive.scheduling.api.graphql.client.beans;
 import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.RESULT_MAP;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
 import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.ResultMap;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Variables;
 
 
@@ -46,6 +48,11 @@ public class KeyValueTest {
     private static final String VAR = VARIABLES.getName() + "{\n" + KEY.getName() + "\n" + VALUE.getName() + "\n}\n";
 
     private static final String VAR_PARTIAL = VARIABLES.getName() + "{\n" + KEY.getName() + "\n}\n";
+
+    private static final String RES_MAP = RESULT_MAP.getName() + "{\n" + KEY.getName() + "\n" + VALUE.getName() +
+                                          "\n}\n";
+
+    private static final String RESULT_MAP_PARTIAL = RESULT_MAP.getName() + "{\n" + KEY.getName() + "\n}\n";
 
     @Test
     public void getGenericInformationQueryString() throws Exception {
@@ -69,6 +76,18 @@ public class KeyValueTest {
     public void getVariablesPartialQueryString() throws Exception {
         Variables variables = new Variables.Builder().excludeValue().build();
         assertThat(variables.getQueryString()).isEqualTo(VAR_PARTIAL);
+    }
+
+    @Test
+    public void getResultMapQueryString() throws Exception {
+        ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
+        assertThat(resultMap.getQueryString()).isEqualTo(RES_MAP);
+    }
+
+    @Test
+    public void getResultMapPartialQueryString() throws Exception {
+        ResultMap resultMap = new ResultMap.ResultMapBuilder().excludeValue().build();
+        assertThat(resultMap.getQueryString()).isEqualTo(RESULT_MAP_PARTIAL);
     }
 
 }

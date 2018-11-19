@@ -77,6 +77,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean totalNumberOfTasks = true;
 
+        private ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
+
         @Override
         public Builder after(String after) {
             super.after(after);
@@ -214,6 +216,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeResultMap() {
+            this.resultMap = null;
+            return this;
+        }
+
         @Override
         public Builder excludeStartTime() {
             super.excludeStartTime();
@@ -326,6 +333,9 @@ public class Jobs extends AbstractApiType {
             }
             if (removedTime) {
                 sb.append(Fields.REMOVED_TIME.getName()).append(Constants.RETURN);
+            }
+            if (resultMap != null) {
+                sb.append(resultMap.getQueryString());
             }
             if (submittedTime) {
                 sb.append(Fields.SUBMITTED_TIME.getName()).append(Constants.RETURN);
