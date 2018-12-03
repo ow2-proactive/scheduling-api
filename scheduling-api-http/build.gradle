@@ -57,10 +57,19 @@ dependencies {
     // in order to start the application from your IDE
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-    compile 'org.hibernate:hibernate-entitymanager'
-    compile 'org.hibernate:hibernate-core'
+    compile 'org.hibernate:hibernate-entitymanager:5.1.16.Final'
+    compile 'org.hibernate:hibernate-core:5.1.16.Final'
 
     runtime 'org.hsqldb:hsqldb'
+
+    //support for Oracle DB version 12.1.0.2
+    compile group: 'com.oracle', name: 'ojdbc7', version: '12.1.0.2'
+
+    //support for MySQL DB
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+
+    //support for PostgreSQL DB
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
 
     integrationTestCompile("org.ow2.proactive:scheduler-server:$version") {
         exclude module: 'hsqldb'
