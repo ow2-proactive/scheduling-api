@@ -71,6 +71,9 @@ dependencies {
     //support for PostgreSQL DB
     compile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
 
+    //support for SqlServer DB
+    compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.1.2.jre8-preview'
+
     integrationTestCompile("org.ow2.proactive:scheduler-server:$version") {
         exclude module: 'hsqldb'
     }
