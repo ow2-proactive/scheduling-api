@@ -63,16 +63,16 @@ dependencies {
     runtime 'org.hsqldb:hsqldb'
 
     //support for Oracle DB version 12.1.0.2
-    compile group: 'com.oracle', name: 'ojdbc7', version: '12.1.0.2'
+    testCompile group: 'com.oracle', name: 'ojdbc7', version: '12.1.0.2'
 
     //support for MySQL DB
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+    testCompile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
 
     //support for PostgreSQL DB
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
+    testCompile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
 
     //support for SqlServer DB
-    compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.1.2.jre8-preview'
+    testCompile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.1.2.jre8-preview'
 
     integrationTestCompile("org.ow2.proactive:scheduler-server:$version") {
         exclude module: 'hsqldb'
