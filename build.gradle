@@ -56,8 +56,6 @@ springBoot {
     mainClass = 'org.ow2.proactive.scheduling.api.Application'
 }
 
-project.ext.set("local", "")
-
 allprojects {
     apply plugin: "io.spring.dependency-management"
     apply plugin: 'eclipse'
