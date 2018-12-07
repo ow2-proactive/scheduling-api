@@ -27,9 +27,11 @@ package org.ow2.proactive.scheduling.api;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,9 +39,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -54,9 +53,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableAutoConfiguration
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
 @PropertySources({ @PropertySource(value = "classpath:application.properties"),
+                   @PropertySource(value = "classpath:application-test.properties"),
                    @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true) })
 @SpringBootApplication(scanBasePackages = { "org.ow2.proactive.scheduling.api" })
 public class Application extends WebMvcConfigurerAdapter {
+
+    @Value("${spring.datasource.driverClassName:}")
+    private String dataSourceDriverClassName;
+
+    @Value("${spring.datasource.url:}")
+    private String dataSourceUrl;
+
+    @Value("${spring.datasource.username:}")
+    private String dataSourceUsername;
+
+    @Value("${spring.datasource.password:}")
+    private String dataSourcePassword;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -81,14 +93,16 @@ public class Application extends WebMvcConfigurerAdapter {
     @Bean
     @Profile("test")
     public DataSource testDataSource() {
-        return createMemDataSource();
+        return createDataSource();
     }
 
-    private DataSource createMemDataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.HSQL).build();
+    private DataSource createDataSource() {
 
-        return db;
+        return DataSourceBuilder.create()
+                                .username(dataSourceUsername)
+                                .password(dataSourcePassword)
+                                .url(dataSourceUrl)
+                                .driverClassName(dataSourceDriverClassName)
+                                .build();
     }
-
 }
