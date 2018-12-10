@@ -28,6 +28,7 @@ apply plugin: 'war'
 war {
     baseName = 'scheduling-api'
     version = version
+    rootSpec.exclude("**/application-test.properties")
 }
 
 // FIXME: investigate why transitive dependencies of dependencies defined
