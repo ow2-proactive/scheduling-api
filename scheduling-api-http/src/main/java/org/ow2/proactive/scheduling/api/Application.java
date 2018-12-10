@@ -54,7 +54,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
 @PropertySources({ @PropertySource(value = "classpath:application.properties"),
                    @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true),
-                   @PropertySource(value = "classpath:application-test.properties", ignoreResourceNotFound = true), })
+                   @PropertySource(value = "classpath:application-test.properties", ignoreResourceNotFound = true) })
 @SpringBootApplication(scanBasePackages = { "org.ow2.proactive.scheduling.api" })
 public class Application extends WebMvcConfigurerAdapter {
 
