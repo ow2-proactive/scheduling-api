@@ -51,6 +51,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OWNER;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PRIORITY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PROJECT_NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.REMOVED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.RESULT_MAP;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
@@ -85,13 +86,14 @@ import lombok.ToString;
 @ToString
 public class Job extends JobTaskCommon {
 
-    public final static TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
+    public static final TypeSingleton<GraphQLObjectType> TYPE = new TypeSingleton<GraphQLObjectType>() {
         @Override
         public GraphQLObjectType buildType(DataFetcher... dataFetchers) {
 
             DataFetcher genericInformationDataFetcher = dataFetchers[0];
             DataFetcher taskDataFetcher = dataFetchers[1];
             DataFetcher variableDataFetcher = dataFetchers[2];
+            DataFetcher resultMapDataFetcher = dataFetchers[3];
 
             return GraphQLObjectType.newObject()
                                     .name(Types.JOB.getName())
@@ -164,6 +166,14 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(REMOVED_TIME.getName())
                                                                .description("Job removed time.")
                                                                .type(GraphQLLong))
+                                    .field(newFieldDefinition().name(RESULT_MAP.getName())
+                                                               .description("Results Map. Empty if there is none.")
+                                                               .type(new GraphQLList(ResultMap.TYPE.getInstance()))
+                                                               .argument(newArgument().name(Arguments.FILTER.getName())
+                                                                                      .description("Results Map input filter.")
+                                                                                      .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
+                                                                                      .build())
+                                                               .dataFetcher(resultMapDataFetcher))
                                     .field(newFieldDefinition().name(START_TIME.getName())
                                                                .description("Start time.")
                                                                .type(GraphQLLong))
@@ -174,7 +184,7 @@ public class Job extends JobTaskCommon {
                                                                .description("Job submitted time.")
                                                                .type(GraphQLLong))
                                     .field(newFieldDefinition().name(TASKS.getName())
-                                                               .description("Task list of the job, empty if there is none.")
+                                                               .description("Task list of the job. Empty if there is none.")
                                                                .type(TaskConnection.TYPE.getInstance(genericInformationDataFetcher,
                                                                                                      variableDataFetcher))
                                                                .argument(newArgument().name(Arguments.FILTER.getName())
@@ -191,7 +201,7 @@ public class Job extends JobTaskCommon {
                                                                .description("Total number of Tasks of the Job.")
                                                                .type(GraphQLInt))
                                     .field(newFieldDefinition().name(VARIABLES.getName())
-                                                               .description("Variable list, empty if there is none.")
+                                                               .description("Variable list. Empty if there is none.")
                                                                .type(new GraphQLList(Variable.TYPE.getInstance()))
                                                                .argument(newArgument().name(Arguments.FILTER.getName())
                                                                                       .description("Variables input filter.")
@@ -234,14 +244,16 @@ public class Job extends JobTaskCommon {
 
     private int totalNumberOfTasks;
 
+    private Map<String, String> resultMap;
+
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
             int maxNumberOfExecution, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
             int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
             String onTaskError, String owner, String priority, String projectName, long removedTime, long startTime,
-            String status, long submittedTime, List<Task> tasks, int totalNumberOfTasks,
-            Map<String, String> variables) {
+            String status, long submittedTime, List<Task> tasks, int totalNumberOfTasks, Map<String, String> variables,
+            Map<String, String> resultMap) {
 
         super(description,
               finishedTime,
@@ -270,6 +282,7 @@ public class Job extends JobTaskCommon {
         this.submittedTime = submittedTime;
         this.tasks = tasks;
         this.totalNumberOfTasks = totalNumberOfTasks;
+        this.resultMap = resultMap;
     }
 
 }

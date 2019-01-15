@@ -81,6 +81,10 @@ public class GraphqlService {
     @Qualifier("variablesDataFetcher")
     private DataFetcher variablesDataFetcher;
 
+    @Autowired
+    @Qualifier("resultMapDataFetcher")
+    private DataFetcher resultMapDataFetcher;
+
     @PostConstruct
     public void init() {
         graphql = new GraphQL(GraphQLSchema.newSchema()
@@ -89,6 +93,7 @@ public class GraphqlService {
                                                                          taskDataFetcher,
                                                                          userDataFetcher,
                                                                          variablesDataFetcher,
+                                                                         resultMapDataFetcher,
                                                                          userDataFetcher))
                                            .build());
     }

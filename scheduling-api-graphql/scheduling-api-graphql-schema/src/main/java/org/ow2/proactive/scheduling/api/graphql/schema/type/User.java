@@ -64,6 +64,7 @@ public class User {
             DataFetcher jobDataFetcher = dataFetchers[1];
             DataFetcher taskDataFetcher = dataFetchers[2];
             DataFetcher variableDataFetcher = dataFetchers[3];
+            DataFetcher resultMapDataFetcher = dataFetchers[4];
 
             return GraphQLObjectType.newObject()
                                     .name(Types.USER.getName())
@@ -74,7 +75,8 @@ public class User {
                                                                                       .description("Jobs input filter.")
                                                                                       .type(new GraphQLList(JobInput.TYPE.getInstance(genericInformationDataFetcher,
                                                                                                                                       taskDataFetcher,
-                                                                                                                                      variableDataFetcher)))
+                                                                                                                                      variableDataFetcher,
+                                                                                                                                      resultMapDataFetcher)))
                                                                                       .build())
                                                                .argument(JobConnection.getConnectionFieldArguments())
                                                                .argument(newArgument().name(Arguments.FIRST.getName())

@@ -28,6 +28,7 @@ apply plugin: 'war'
 war {
     baseName = 'scheduling-api'
     version = version
+    rootSpec.exclude("**/application-test.properties")
 }
 
 // FIXME: investigate why transitive dependencies of dependencies defined
@@ -61,6 +62,26 @@ dependencies {
     compile 'org.hibernate:hibernate-core'
 
     runtime 'org.hsqldb:hsqldb'
+
+    /**
+     *    Support for Oracle DB version 12.1.0.2.
+     *    Gradle cannot add Oracle dependencies without having credentials (associated with an Oracle account)
+     *    To use Oracle DB locally,the following steps should be fulfilled
+     *    1. Oracle dependency should be downloaded manually from maven (https://mvnrepository.com/artifact/com.oracle/ojdbc7/12.1.0.2)
+     *    2. The jar must be added in the local maven repository under the path (~/.m2/repository/com/oracle/ojdbc7/12.1.0.2)
+     *    3. Uncomment the Oracle dependency below
+     *    4. When building the project force the use of your local maven repo by adding the option -Plocal
+     */
+    //testCompile group: 'com.oracle', name: 'ojdbc7', version: '12.1.0.2'
+
+    //support for MySQL DB
+    testCompile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+
+    //support for PostgreSQL DB
+    testCompile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'
+
+    //support for SqlServer DB
+    testCompile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.1.2.jre8-preview'
 
     integrationTestCompile("org.ow2.proactive:scheduler-server:$version") {
         exclude module: 'hsqldb'

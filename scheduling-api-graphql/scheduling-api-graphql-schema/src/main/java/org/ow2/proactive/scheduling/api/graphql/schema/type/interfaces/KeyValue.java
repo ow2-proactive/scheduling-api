@@ -32,6 +32,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.ResultMap;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Variable;
 
@@ -65,8 +66,11 @@ public abstract class KeyValue {
                                        .typeResolver(object -> {
                                            if (object instanceof GenericInformation) {
                                                return GenericInformation.TYPE.getInstance();
+                                           } else if (object instanceof ResultMap) {
+                                               return ResultMap.TYPE.getInstance();
+                                           } else {
+                                               return Variable.TYPE.getInstance();
                                            }
-                                           return Variable.TYPE.getInstance();
                                        })
                                        .build();
         }
