@@ -12,4 +12,4 @@ src/generated
 .project
 .settings
 gradle/ext/
-
+*out/
