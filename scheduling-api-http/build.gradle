@@ -58,7 +58,6 @@ dependencies {
     // in order to start the application from your IDE
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-    compile 'org.hibernate:hibernate-entitymanager'
     compile 'org.hibernate:hibernate-core'
 
     runtime 'org.hsqldb:hsqldb'

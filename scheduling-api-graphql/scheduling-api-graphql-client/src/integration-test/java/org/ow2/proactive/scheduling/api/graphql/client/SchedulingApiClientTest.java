@@ -25,26 +25,33 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client;
 
+import java.util.Collections;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.KeyValueInput;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Query;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Variables;
 import org.ow2.proactive.scheduling.api.graphql.beans.output.SchedulingApiResponse;
 
 
 @Ignore
 public class SchedulingApiClientTest {
 
-    private static final String url = "http://localhost:9999/v1/graphql";
+    private static final String url = "http://localhost:8080/scheduling-api/v1/graphql";
 
-    private static final String CONTEXT_LOGIN = "bobot";
+    private static final String CONTEXT_LOGIN = "admin";
 
     private static final String CONTEXT_SESSION_ID = "sessionId";
 
     @Test
     public void testExecute() {
-        SchedulingApiClient client = new SchedulingApiClient(url, "");
-        Jobs jobs = new Jobs.Builder().build();
+        SchedulingApiClient client = new SchedulingApiClient(url,
+                                                             "7b450e0316834ea8c6b7fc2c6b73a5b1b3d81047b450e0316834ea8c6b8000");
+        Jobs jobs = new Jobs.Builder()
+
+                                      .build();
         Query query = new Query.Builder().query(jobs.getQueryString()).build();
         SchedulingApiResponse result = client.execute(query);
         System.out.println(result);

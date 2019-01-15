@@ -96,35 +96,31 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             Function<Root<E>, Path<? extends Number>> entityId, Comparator<E> entityComparator,
             BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper) {
 
+        CriteriaBuilder criteriaBuilderJobs = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> criteriaQueryJobs = criteriaBuilderJobs.createQuery(entityClass);
+        Root<E> entityRootJobs = criteriaQueryJobs.from(entityClass);
+        Path<? extends Number> entityIdPathJobs = entityId.apply(entityRootJobs);
+
         Integer first = environment.getArgument(FIRST.getName());
         Integer last = environment.getArgument(LAST.getName());
-
         Integer after = cursorMapper.getOffsetFromCursor(environment.getArgument(AFTER.getName()));
         Integer before = cursorMapper.getOffsetFromCursor(environment.getArgument(BEFORE.getName()));
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
-        Root<E> entityRoot = criteriaQuery.from(entityClass);
-        Path<? extends Number> entityIdPath = entityId.apply(entityRoot);
+        Predicate cursorPredicateJobs = createCursorPredicate(criteriaBuilderJobs, entityIdPathJobs, after, before);
+        int maxResultsJobs = applySlicing(criteriaQueryJobs, criteriaBuilderJobs, entityIdPathJobs, first, last);
+        CriteriaQuery<E> selectJobs = criteriaQueryJobs.select(entityRootJobs);
+        selectJobs.distinct(true);
 
-        Predicate cursorPredicate = createCursorPredicate(criteriaBuilder, entityIdPath, after, before);
-
-        int maxResults = applySlicing(criteriaQuery, criteriaBuilder, entityIdPath, first, last);
-
-        CriteriaQuery<E> select = criteriaQuery.select(entityRoot);
-
-        List<Predicate[]> predicates = criteria.apply(criteriaBuilder, entityRoot);
-
-        Predicate[] wherePredicate = buildWherePredicate(predicates, cursorPredicate, criteriaBuilder);
-
-        if (wherePredicate.length > 0) {
-            select.where(wherePredicate);
+        List<Predicate[]> predicatesJobs = criteria.apply(criteriaBuilderJobs, entityRootJobs);
+        Predicate[] wherePredicateJobs = buildWherePredicate(predicatesJobs, cursorPredicateJobs, criteriaBuilderJobs);
+        if (wherePredicateJobs.length > 0) {
+            selectJobs.where(wherePredicateJobs);
         }
 
-        TypedQuery<E> query = entityManager.createQuery(select);
+        TypedQuery<E> query = entityManager.createQuery(selectJobs);
 
-        if (maxResults > -1) {
-            query.setMaxResults(maxResults);
+        if (maxResultsJobs > -1) {
+            query.setMaxResults(maxResultsJobs);
         }
 
         Stream<E> dataStream = query.getResultList().stream();
@@ -136,17 +132,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
 
         Stream<T> data = dataMapping(dataStream);
+        return createRelayConnection(entityClass, criteria, cursorMapper, data, first, last);
 
-        ExtendedConnection connection = createRelayConnection(entityManager,
-                                                              entityClass,
-                                                              criteriaBuilder,
-                                                              wherePredicate,
-                                                              cursorMapper,
-                                                              data,
-                                                              first,
-                                                              last);
-
-        return connection;
     }
 
     /**
@@ -242,8 +229,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return cursorPredicate;
     }
 
-    protected ExtendedConnection createRelayConnection(EntityManager entityManager, Class<E> entityClass,
-            CriteriaBuilder criteriaBuilder, Predicate[] predicates, CursorMapper<T, Integer> cursorMapper,
+    protected ExtendedConnection createRelayConnection(Class<E> entityClass,
+            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last) {
 
         List<Edge> edges = buildEdges(data, cursorMapper);
@@ -255,7 +242,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
         }
 
-        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityManager, entityClass, criteriaBuilder, predicates);
+        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityClass, criteria);
 
         pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last));
         pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first));
@@ -269,18 +256,24 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     }
 
     @VisibleForTesting
-    int getNbEntriesBeforeSlicing(EntityManager entityManager, Class<E> entityClass, CriteriaBuilder criteriaBuilder,
-            Predicate[] predicates) {
+    int getNbEntriesBeforeSlicing(Class<E> entityClass,
+            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria) {
 
-        CriteriaQuery<Long> counterQuery = criteriaBuilder.createQuery(Long.class);
+        CriteriaBuilder criteriaBuilderCount = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> criteriaQueryCount = criteriaBuilderCount.createQuery(entityClass);
+        CriteriaQuery<Long> queryCount = criteriaBuilderCount.createQuery(Long.class);
+        Root<E> entityRootCount = queryCount.from(criteriaQueryCount.getResultType());
+        CriteriaQuery<Long> longCriteriaQuery = queryCount.select(criteriaBuilderCount.countDistinct(entityRootCount));
 
-        CriteriaQuery<Long> select = counterQuery.select(criteriaBuilder.count(counterQuery.from(entityClass)));
+        List<Predicate[]> predicatesCount = criteria.apply(criteriaBuilderCount, entityRootCount);
+        Predicate[] wherePredicateCount = buildWherePredicate(predicatesCount, null, criteriaBuilderCount);
 
-        if (predicates.length > 0) {
-            select.where(predicates);
+        if (wherePredicateCount.length > 0) {
+            longCriteriaQuery.where(wherePredicateCount);
         }
 
-        return entityManager.createQuery(counterQuery).getSingleResult().intValue();
+        return entityManager.createQuery(longCriteriaQuery).getSingleResult().intValue();
+
     }
 
     @VisibleForTesting

@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.common;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -52,6 +53,18 @@ public final class Inputs {
 
         if (fieldValue != null) {
             return mapper.apply((Map<String, Object>) fieldValue);
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public static <T> T getListOfObjects(Map<String, Object> input, String fieldName,
+            Function<List<Map<String, Object>>, T> mapper, T defaultValue) {
+
+        Object fieldValue = input.get(fieldName);
+
+        if (fieldValue != null) {
+            return mapper.apply((List<Map<String, Object>>) fieldValue);
         } else {
             return defaultValue;
         }
