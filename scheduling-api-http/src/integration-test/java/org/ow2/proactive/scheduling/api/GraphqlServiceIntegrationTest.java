@@ -29,6 +29,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -46,6 +47,7 @@ import org.ow2.proactive.scheduler.common.task.OnTaskError;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
@@ -671,6 +673,103 @@ public class GraphqlServiceIntegrationTest {
         }
     }
 
+    @Rollback
+    @Test
+    @Transactional
+    public void testInvalidQuery() {
+        Map<String, Object> queryResult = executeGraphqlQuery("invalid query");
+        assertThat(getField(queryResult, "errors")).isNotNull();
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryVersion() {
+        String query = "{ version }";
+        Map<String, Object> queryResult = executeGraphqlQuery(query);
+
+        assertThat(getField(queryResult, "data", "version")).isEqualTo(Query.VERSION_API);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryViewer() {
+        String query = "{ viewer { login sessionId  } }";
+        Map<String, Object> queryResult = executeGraphqlQuery(query);
+
+        assertThat(getField(queryResult, "data", "viewer", "login")).isEqualTo(CONTEXT_LOGIN);
+        assertThat(getField(queryResult, "data", "viewer", "sessionId")).isEqualTo(CONTEXT_SESSION_ID);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryViewerJobs() {
+        addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
+
+        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs  { edges { node { id owner } } } } }");
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryViewerIncludeRemovedJobs() {
+        addJobData(10);
+        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        removedJob.setRemovedTime(14232323);
+        entityManager.persist(removedJob);
+
+        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs (filter: {excludeRemoved: false, status: KILLED}) { edges { node { id owner } } } } }");
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByVariables() {
+        addJobData(1);
+
+        JobData uselessJob = createJobData("Useless Toto Job", "ninipou", JobPriority.NORMAL, "", JobStatus.RUNNING);
+        entityManager.persist(uselessJob);
+        JobData importantJob = createJobData("Important Toto Job", "ninipou", JobPriority.HIGH, "", JobStatus.RUNNING);
+        entityManager.persist(importantJob);
+        Map<String, JobDataVariable> variables = new HashMap<>();
+        JobDataVariable cmdVariable = createJobDataVariable(importantJob, "cmd", "echo hello toto !");
+        variables.put("cmd", cmdVariable);
+        entityManager.persist(cmdVariable);
+        JobDataVariable argTotoVariable = createJobDataVariable(importantJob, "arg", "toto");
+        variables.put("arg", argTotoVariable);
+        entityManager.persist(argTotoVariable);
+        importantJob.setVariables(variables);
+
+        Map<String, Object> queryAllTotoJobsResult = executeGraphqlQuery("{ jobs (filter: [{variables: [{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { name } } } }");
+        assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(2);
+
+        Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: [{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { name } } } }");
+        assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(1);
+    }
+
+    private JobDataVariable createJobDataVariable(JobData jobData, String key, String value) {
+        JobDataVariable jobDataVariable = new JobDataVariable();
+        jobDataVariable.setName(key);
+        jobDataVariable.setValue(value);
+        jobDataVariable.setJobData(jobData);
+        return jobDataVariable;
+    }
+
     private void addJobData(int nbJobs) {
         List<JobData> jobData = createJobData(nbJobs);
         jobData.forEach(job -> entityManager.persist(job));
@@ -733,69 +832,6 @@ public class GraphqlServiceIntegrationTest {
         taskData.setVariables(ImmutableMap.of());
 
         return taskData;
-    }
-
-    @Rollback
-    @Test
-    @Transactional
-    public void testInvalidQuery() {
-        Map<String, Object> queryResult = executeGraphqlQuery("invalid query");
-        assertThat(getField(queryResult, "errors")).isNotNull();
-    }
-
-    @Rollback
-    @Test
-    @Transactional
-    public void testQueryVersion() {
-        String query = "{ version }";
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
-
-        assertThat(getField(queryResult, "data", "version")).isEqualTo(Query.VERSION_API);
-    }
-
-    @Rollback
-    @Test
-    @Transactional
-    public void testQueryViewer() {
-        String query = "{ viewer { login sessionId  } }";
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
-
-        assertThat(getField(queryResult, "data", "viewer", "login")).isEqualTo(CONTEXT_LOGIN);
-        assertThat(getField(queryResult, "data", "viewer", "sessionId")).isEqualTo(CONTEXT_SESSION_ID);
-    }
-
-    @Rollback
-    @Test
-    @Transactional
-    public void testQueryViewerJobs() {
-        addJobData(10);
-        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
-        removedJob.setRemovedTime(14232323);
-        entityManager.persist(removedJob);
-
-        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs  { edges { node { id owner } } } } }");
-
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
-        assertThat(jobNodes).hasSize(5);
-
-        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
-    }
-
-    @Rollback
-    @Test
-    @Transactional
-    public void testQueryViewerIncludeRemovedJobs() {
-        addJobData(10);
-        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
-        removedJob.setRemovedTime(14232323);
-        entityManager.persist(removedJob);
-
-        Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs (filter: {excludeRemoved: false, status: KILLED}) { edges { node { id owner } } } } }");
-
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
-        assertThat(jobNodes).hasSize(1);
-
-        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
     }
 
     private Object getField(Object object, String... fields) {
