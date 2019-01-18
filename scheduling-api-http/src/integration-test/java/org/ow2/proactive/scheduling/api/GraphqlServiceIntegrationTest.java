@@ -755,11 +755,21 @@ public class GraphqlServiceIntegrationTest {
         entityManager.persist(argTotoVariable);
         importantJob.setVariables(variables);
 
-        Map<String, Object> queryAllTotoJobsResult = executeGraphqlQuery("{ jobs (filter: [{variables: [{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { name } } } }");
+        Map<String, Object> queryAllTotoJobsResult = executeGraphqlQuery("{ jobs (filter: [{variables: " +
+                                                                         "[{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { name } } } }");
         assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(2);
 
-        Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: [{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { name } } } }");
+        Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: " +
+                                                                          "[{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { name } } } }");
         assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(1);
+
+        Map<String, Object> queryImportantJobResultWithStricterFilter = executeGraphqlQuery("{ jobs (filter: " +
+                                                                                            "{variables: [{key: \"cmd\", value: \"%\"}, {key: \"arg\", value: \"toto\"}]}) " +
+                                                                                            "{ totalCount edges { node { name } } } }");
+        assertThat((Integer) getField(queryImportantJobResultWithStricterFilter,
+                                      "data",
+                                      "jobs",
+                                      "totalCount")).isEqualTo(1);
     }
 
     private JobDataVariable createJobDataVariable(JobData jobData, String key, String value) {
