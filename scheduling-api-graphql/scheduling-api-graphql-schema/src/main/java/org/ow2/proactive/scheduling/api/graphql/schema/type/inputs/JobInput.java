@@ -30,6 +30,7 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
@@ -51,6 +52,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
 import lombok.Getter;
 
 
@@ -105,6 +107,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Job submitted time.")
                                                                .type(SubmittedTimeInput.TYPE.getInstance())
                                                                .build())
+                                   .field(newInputObjectField().name(VARIABLES.getName())
+                                                               .description("workflow variables")
+                                                               .type(new GraphQLList(KeyValueInput.TYPE.getInstance())))
+
                                    .build();
         }
     };
@@ -125,6 +131,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private LastUpdatedTimeInput lastUpdatedTime;
 
+    private VariablesInput withVariables;
+
     public JobInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
@@ -136,6 +144,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
             lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
+            withVariables = Inputs.getListOfObjects(input, VARIABLES.getName(), VariablesInput::new, null);
         }
     }
 

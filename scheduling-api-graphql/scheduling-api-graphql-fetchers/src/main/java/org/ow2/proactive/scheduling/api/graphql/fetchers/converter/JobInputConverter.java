@@ -26,6 +26,7 @@
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +34,22 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.VariablesInput;
 
 import com.google.common.base.Strings;
 
@@ -89,6 +95,15 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             String priority = i.getPriority();
             String projectName = i.getProjectName();
             String status = i.getStatus();
+            VariablesInput variablesInput = i.getWithVariables();
+
+            if (variablesInput != null) {
+                variablesInput.getVariables().forEach(variable -> {
+                    MapJoin<JobData, String, JobDataVariable> joinMap = root.joinMap("variables", JoinType.LEFT);
+                    predicates.add(criteriaBuilder.like(joinMap.get("name"), variable.get("key")));
+                    predicates.add(criteriaBuilder.like(joinMap.get("value"), variable.get("value")));
+                });
+            }
 
             if (excludeRemoved) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
