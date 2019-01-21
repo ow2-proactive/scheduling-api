@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 
 import com.google.common.base.Strings;
@@ -168,7 +169,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(InputFields.NAME.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.jobName);
+                sb.append(StringEscapeUtils.escapeJson(this.jobName));
                 sb.append(Constants.QUOTE);
             }
 
@@ -181,7 +182,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(InputFields.OWNER.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.owner);
+                sb.append(StringEscapeUtils.escapeJson(this.owner));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.priority)) {
@@ -195,7 +196,7 @@ public class JobInput extends AbstractApiType {
                 sb.append(InputFields.PROJECT_NAME.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.projectName);
+                sb.append(StringEscapeUtils.escapeJson(this.projectName));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.variableName) || !Strings.isNullOrEmpty(this.variableValue)) {
