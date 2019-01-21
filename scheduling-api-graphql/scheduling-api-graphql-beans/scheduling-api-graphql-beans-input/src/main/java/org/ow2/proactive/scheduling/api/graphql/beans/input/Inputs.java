@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 
 import com.google.common.base.Strings;
@@ -52,7 +53,7 @@ public class Inputs {
                   .append(Arguments.AFTER.getName())
                   .append(':')
                   .append(Constants.QUOTE)
-                  .append(after)
+                  .append(StringEscapeUtils.escapeJson(after))
                   .append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(before)) {
@@ -60,7 +61,7 @@ public class Inputs {
                   .append(Arguments.BEFORE.getName())
                   .append(':')
                   .append(Constants.QUOTE)
-                  .append(before)
+                  .append(StringEscapeUtils.escapeJson(before))
                   .append(Constants.QUOTE);
             }
             if (first != null) {
