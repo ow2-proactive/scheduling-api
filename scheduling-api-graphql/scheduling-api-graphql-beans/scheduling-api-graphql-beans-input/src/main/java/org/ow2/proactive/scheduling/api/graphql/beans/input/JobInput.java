@@ -67,6 +67,10 @@ public class JobInput extends AbstractApiType {
 
         private String status;
 
+        private String variableName;
+
+        private String variableValue;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -116,6 +120,16 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder owner(String owner) {
             this.owner = owner;
+            return this;
+        }
+
+        public JobInput.Builder variableName(String variableName) {
+            this.variableName = variableName;
+            return this;
+        }
+
+        public JobInput.Builder variableValue(String variableValue) {
+            this.variableValue = variableValue;
             return this;
         }
 
@@ -183,6 +197,11 @@ public class JobInput extends AbstractApiType {
                 sb.append(Constants.QUOTE);
                 sb.append(this.projectName);
                 sb.append(Constants.QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.variableName) || !Strings.isNullOrEmpty(this.variableValue)) {
+                sb.append(' ');
+                sb.append("variables: ");
+                sb.append(new KeyValueInput.Builder().key(variableName).value(variableValue).build().getQueryString());
             }
             if (!Strings.isNullOrEmpty(this.status)) {
                 sb.append(' ');
