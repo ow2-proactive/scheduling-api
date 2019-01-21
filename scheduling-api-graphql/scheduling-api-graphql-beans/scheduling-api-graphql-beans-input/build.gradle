@@ -1,3 +1,4 @@
 dependencies {
     compile project(":scheduling-api-graphql:scheduling-api-graphql-common")
+    compile 'org.apache.commons:commons-lang3:3.4'
 }

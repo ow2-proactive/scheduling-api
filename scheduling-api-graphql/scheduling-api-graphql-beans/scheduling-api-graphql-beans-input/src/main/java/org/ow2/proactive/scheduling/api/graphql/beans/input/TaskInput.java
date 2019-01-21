@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
 import com.google.common.base.Strings;
@@ -77,7 +78,7 @@ public class TaskInput extends AbstractApiType {
                 sb.append(Fields.NAME.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.taskName);
+                sb.append(StringEscapeUtils.escapeJson(this.taskName));
                 sb.append(Constants.QUOTE);
                 sb.append(" ");
             }
@@ -86,7 +87,7 @@ public class TaskInput extends AbstractApiType {
                 sb.append(Fields.STATUS.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.status);
+                sb.append(StringEscapeUtils.escapeJson(this.status));
                 sb.append(Constants.QUOTE);
             }
             sb.append(" }");

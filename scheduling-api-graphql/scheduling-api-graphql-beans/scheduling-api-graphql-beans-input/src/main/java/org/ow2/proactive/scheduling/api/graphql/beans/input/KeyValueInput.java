@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
 import com.google.common.base.Strings;
@@ -64,14 +65,14 @@ public class KeyValueInput extends AbstractApiType {
                 sb.append(Fields.KEY.getName());
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
-                sb.append(this.key);
+                sb.append(StringEscapeUtils.escapeJson(this.key));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.value)) {
                 sb.append(' ');
                 sb.append(Fields.VALUE.getName());
                 sb.append(" : ").append(Constants.QUOTE);
-                sb.append(this.value).append(Constants.QUOTE);
+                sb.append(StringEscapeUtils.escapeJson(this.value)).append(Constants.QUOTE);
             }
             sb.append(" }");
             return new KeyValueInput(sb.toString());
