@@ -100,8 +100,12 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (variablesInput != null) {
                 variablesInput.getVariables().forEach(variable -> {
                     MapJoin<JobData, String, JobDataVariable> joinMap = root.joinMap("variables", JoinType.LEFT);
-                    predicates.add(criteriaBuilder.like(joinMap.get("name"), variable.get("key")));
-                    predicates.add(criteriaBuilder.like(joinMap.get("value"), variable.get("value")));
+                    if (variable.containsKey("key")) {
+                        predicates.add(criteriaBuilder.like(joinMap.get("name"), variable.get("key")));
+                    }
+                    if (variable.containsKey("value")) {
+                        predicates.add(criteriaBuilder.like(joinMap.get("value"), variable.get("value")));
+                    }
                 });
             }
 

@@ -759,6 +759,10 @@ public class GraphqlServiceIntegrationTest {
                                                                          "[{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { name } } } }");
         assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(2);
 
+        Map<String, Object> queryImportantJobResultByKey = executeGraphqlQuery("{ jobs (filter: [{variables: " +
+                                                                               "[{key: \"cmd\"}]}]) { totalCount edges { node { name } } } }");
+        assertThat((Integer) getField(queryImportantJobResultByKey, "data", "jobs", "totalCount")).isEqualTo(1);
+
         Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: " +
                                                                           "[{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { name } } } }");
         assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(1);
