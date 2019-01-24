@@ -25,12 +25,21 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Query;
 import org.ow2.proactive.scheduling.api.graphql.beans.output.SchedulingApiResponse;
 import org.ow2.proactive.scheduling.api.graphql.client.exception.SchedulingApiException;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -45,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SchedulingApiClient {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     private final String url;
 
@@ -55,6 +64,19 @@ public class SchedulingApiClient {
     public SchedulingApiClient(String url, String sessionId) {
         this.url = url;
         this.sessionId = sessionId;
+        try (CloseableHttpClient httpClient = HttpClients.custom()
+                                                         .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null,
+                                                                                                                  (certificate,
+                                                                                                                          authType) -> true)
+                                                                                               .build())
+                                                         .setSSLHostnameVerifier(new NoopHostnameVerifier())
+                                                         .setConnectionManagerShared(true)
+                                                         .build()) {
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+            restTemplate = new RestTemplate(requestFactory);
+        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException e) {
+            throw new IllegalStateException("Unable to set rest template for https request", e);
+        }
     }
 
     public SchedulingApiResponse execute(Query query) throws SchedulingApiException {
