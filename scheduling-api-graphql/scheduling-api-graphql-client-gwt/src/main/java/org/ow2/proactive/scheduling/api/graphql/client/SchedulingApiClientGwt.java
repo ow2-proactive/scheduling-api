@@ -38,8 +38,6 @@ import org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient4Engine;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Query;
 import org.ow2.proactive.scheduling.api.graphql.client.exception.SchedulingApiGwtException;
 
-import com.google.common.base.Strings;
-
 
 public class SchedulingApiClientGwt {
 

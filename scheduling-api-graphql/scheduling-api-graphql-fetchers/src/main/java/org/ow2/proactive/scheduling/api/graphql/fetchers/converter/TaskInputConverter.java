@@ -40,15 +40,18 @@ import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TaskInput;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TaskStatusInput;
 
 import com.google.common.base.Strings;
 
 import graphql.schema.DataFetchingEnvironment;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
  * @author ActiveEon Team
  */
+@Log4j2
 public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, TaskInput> {
 
     @Override
@@ -60,7 +63,7 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
             List<Predicate> predicates = new ArrayList<>();
 
             long taskId = i.getId();
-            String status = i.getStatus();
+            TaskStatusInput status = i.getTaskStatus();
             String taskName = i.getTaskName();
 
             predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
@@ -68,8 +71,12 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
             if (taskId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
             }
-            if (!Strings.isNullOrEmpty(status)) {
-                predicates.add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.valueOf(status)));
+            if (status != null && status.getStatus() != null && status.getStatus().size() > 0) {
+                List<TaskStatus> taskStatuses = status.getStatus()
+                                                      .stream()
+                                                      .map(TaskStatus::valueOf)
+                                                      .collect(Collectors.toList());
+                predicates.add(root.get("taskStatus").in(taskStatuses));
             }
             if (!Strings.isNullOrEmpty(taskName)) {
                 Predicate predicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "taskName", taskName);
@@ -87,6 +94,57 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
 
         return filters;
 
+    }
+
+    private TaskStatus stringToTaskStatus(String stringTaskStatus) {
+        TaskStatus taskStatus = null;
+        switch (stringTaskStatus) {
+            case "SUBMITTED":
+                taskStatus = TaskStatus.SUBMITTED;
+                break;
+            case "PENDING":
+                taskStatus = TaskStatus.PENDING;
+                break;
+            case "PAUSED":
+                taskStatus = TaskStatus.PAUSED;
+                break;
+            case "RUNNING":
+                taskStatus = TaskStatus.RUNNING;
+                break;
+            case "WAITING_ON_ERROR":
+                taskStatus = TaskStatus.WAITING_ON_ERROR;
+                break;
+            case "WAITING_ON_FAILURE":
+                taskStatus = TaskStatus.WAITING_ON_FAILURE;
+                break;
+            case "FAILED":
+                taskStatus = TaskStatus.FAILED;
+                break;
+            case "NOT_STARTED":
+                taskStatus = TaskStatus.NOT_STARTED;
+                break;
+            case "NOT_RESTARTED":
+                taskStatus = TaskStatus.NOT_RESTARTED;
+                break;
+            case "ABORTED":
+                taskStatus = TaskStatus.ABORTED;
+                break;
+            case "FAULTY":
+                taskStatus = TaskStatus.FAULTY;
+                break;
+            case "FINISHED":
+                taskStatus = TaskStatus.FINISHED;
+                break;
+            case "SKIPPED":
+                taskStatus = TaskStatus.SKIPPED;
+                break;
+            case "IN_ERROR":
+                taskStatus = TaskStatus.IN_ERROR;
+                break;
+            default:
+                log.error("Unkown task status: " + stringTaskStatus);
+        }
+        return taskStatus;
     }
 
     @Override
