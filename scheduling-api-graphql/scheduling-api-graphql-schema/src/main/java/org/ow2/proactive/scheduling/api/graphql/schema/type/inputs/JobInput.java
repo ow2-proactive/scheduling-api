@@ -39,7 +39,6 @@ import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PRIORITY;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PROJECT_NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.SUBMITTED_TIME;
 
 import java.util.Map;
@@ -99,9 +98,9 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Project name which the job belongs to.")
                                                                .type(GraphQLString)
                                                                .build())
-                                   .field(newInputObjectField().name(STATUS.getName())
+                                   .field(newInputObjectField().name("status")
                                                                .description("Job status.")
-                                                               .type(JobStatus.TYPE.getInstance())
+                                                               .type(new GraphQLList(JobStatus.TYPE.getInstance()))
                                                                .build())
                                    .field(newInputObjectField().name(SUBMITTED_TIME.getName())
                                                                .description("Job submitted time.")

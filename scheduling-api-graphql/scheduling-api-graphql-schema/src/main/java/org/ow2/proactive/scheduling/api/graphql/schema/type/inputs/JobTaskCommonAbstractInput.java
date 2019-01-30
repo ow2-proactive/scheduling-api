@@ -26,10 +26,10 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
 
 import java.util.Map;
 
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
 
 import lombok.AllArgsConstructor;
@@ -47,15 +47,15 @@ public abstract class JobTaskCommonAbstractInput {
 
     protected long id;
 
-    protected String status;
+    protected JobStatusInput jobStatus;
 
     public JobTaskCommonAbstractInput(Map<String, Object> input) {
         if (input != null) {
             id = Inputs.getValue(input, ID.getName(), -1L);
-            status = Inputs.getValue(input, STATUS.getName(), null);
+            jobStatus = new JobStatusInput(Inputs.getValue(input, Fields.STATUS.getName(), null));
         } else {
             id = -1L;
-            status = null;
+            jobStatus = null;
         }
     }
 

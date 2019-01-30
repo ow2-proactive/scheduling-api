@@ -26,7 +26,6 @@
 package org.ow2.proactive.scheduling.api.graphql.fetchers.converter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Predicate;
@@ -49,6 +47,7 @@ import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobStatusInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.VariablesInput;
 
 import com.google.common.base.Strings;
@@ -94,7 +93,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             String owner = i.getOwner();
             String priority = i.getPriority();
             String projectName = i.getProjectName();
-            String status = i.getStatus();
+            JobStatusInput status = i.getJobStatus();
             VariablesInput variablesInput = i.getWithVariables();
 
             if (variablesInput != null) {
@@ -142,8 +141,12 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                      projectName);
                 predicates.add(projectNamePredicate);
             }
-            if (!Strings.isNullOrEmpty(status)) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), JobStatus.valueOf(status)));
+            if (status != null && status.getStatus() != null && status.getStatus().size() > 0) {
+                List<JobStatus> jobStatuses = status.getStatus()
+                                                    .stream()
+                                                    .map(JobStatus::valueOf)
+                                                    .collect(Collectors.toList());
+                predicates.add(root.get("status").in(jobStatuses));
             }
 
             comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
@@ -151,6 +154,42 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             return predicates.toArray(new Predicate[predicates.size()]);
 
         }).filter(array -> array.length > 0).collect(Collectors.toList());
+    }
+
+    private JobStatus stringToJobStatus(String stringJobStatus) {
+        JobStatus jobStatus = null;
+        switch (stringJobStatus) {
+            case "CANCELED":
+                jobStatus = JobStatus.CANCELED;
+                break;
+            case "FAILED":
+                jobStatus = JobStatus.FAILED;
+                break;
+            case "FINISHED":
+                jobStatus = JobStatus.FINISHED;
+                break;
+            case "IN_ERROR":
+                jobStatus = JobStatus.IN_ERROR;
+                break;
+            case "KILLED":
+                jobStatus = JobStatus.KILLED;
+                break;
+            case "PAUSED":
+                jobStatus = JobStatus.PAUSED;
+                break;
+            case "PENDING":
+                jobStatus = JobStatus.PENDING;
+                break;
+            case "RUNNING":
+                jobStatus = JobStatus.RUNNING;
+                break;
+            case "STALLED":
+                jobStatus = JobStatus.STALLED;
+                break;
+            default:
+
+        }
+        return jobStatus;
     }
 
     private void comparableLongPredicated(ComparableLongInput input, String name, Root<JobData> root,
