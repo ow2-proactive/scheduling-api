@@ -25,6 +25,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 
@@ -62,6 +64,11 @@ public class TaskInput extends AbstractApiType {
 
         public TaskInput.Builder status(String status) {
             this.status = status;
+            return this;
+        }
+
+        public TaskInput.Builder status(List<String> status) {
+            this.status = status.toString();
             return this;
         }
 

@@ -31,10 +31,10 @@ import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.STATUS;
 
 import java.util.Map;
 
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.TaskStatus;
@@ -42,6 +42,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -62,9 +63,9 @@ public class TaskInput extends JobTaskCommonAbstractInput {
                                                                .description("Task identifier.")
                                                                .type(GraphQLLong)
                                                                .build())
-                                   .field(newInputObjectField().name(STATUS.getName())
+                                   .field(newInputObjectField().name(Fields.STATUS.getName())
                                                                .description("Task status.")
-                                                               .type(TaskStatus.TYPE.getInstance())
+                                                               .type(new GraphQLList(TaskStatus.TYPE.getInstance()))
                                                                .build())
                                    .field(newInputObjectField().name(NAME.getName())
                                                                .description("Task name.")
@@ -76,12 +77,16 @@ public class TaskInput extends JobTaskCommonAbstractInput {
 
     private final String taskName;
 
+    private final TaskStatusInput taskStatus;
+
     public TaskInput(Map<String, Object> input) {
         super(input);
         if (input != null) {
             taskName = Inputs.getValue(input, NAME.getName(), null);
+            taskStatus = new TaskStatusInput(Inputs.getValue(input, Fields.STATUS.getName(), null));
         } else {
             taskName = null;
+            taskStatus = null;
         }
     }
 

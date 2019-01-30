@@ -25,10 +25,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.client;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.JobInput;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.KeyValueInput;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Query;
@@ -47,11 +51,10 @@ public class SchedulingApiClientTest {
 
     @Test
     public void testExecute() {
-        SchedulingApiClient client = new SchedulingApiClient(url,
-                                                             "7b450e0316834ea8c6b7fc2c6b73a5b1b3d81047b450e0316834ea8c6b8000");
-        Jobs jobs = new Jobs.Builder()
-
-                                      .build();
+        SchedulingApiClient client = new SchedulingApiClient(url, CONTEXT_SESSION_ID);
+        List<JobInput> inputs = new ArrayList<>();
+        inputs.add(new JobInput.Builder().status(Arrays.asList("PENDING", "KILLED", "FINISHED")).build());
+        Jobs jobs = new Jobs.Builder().input(inputs).build();
         Query query = new Query.Builder().query(jobs.getQueryString()).build();
         SchedulingApiResponse result = client.execute(query);
         System.out.println(result);

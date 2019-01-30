@@ -47,7 +47,8 @@ public enum InputFields {
     OWNER,
     PRIORITY,
     PROJECT_NAME,
-    STATUS,
+    JOB_STATUS,
+    TASK_STATUS,
     SUBMITTED_TIME,
     VALUE;
 
