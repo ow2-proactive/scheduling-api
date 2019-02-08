@@ -74,6 +74,7 @@ public class SchedulingApiClient {
                                                          .build()) {
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
             restTemplate = new RestTemplate(requestFactory);
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException e) {
             throw new IllegalStateException("Unable to set rest template for https request", e);
         }
@@ -89,11 +90,11 @@ public class SchedulingApiClient {
             headers.add("sessionid", sessionId);
             headers.add("Content-Type", "application/json");
 
+            headers.forEach((k, v) -> log.debug("Request header : " + k + ", value : " + v));
             log.debug("request query : ", query.getQuery());
 
             HttpEntity<Map<String, String>> request = new HttpEntity<>(query.getQueryMap(), headers);
 
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             return restTemplate.postForObject(url, request, SchedulingApiResponse.class);
         } catch (Exception e) {
             throw new SchedulingApiException("Exception", e);
