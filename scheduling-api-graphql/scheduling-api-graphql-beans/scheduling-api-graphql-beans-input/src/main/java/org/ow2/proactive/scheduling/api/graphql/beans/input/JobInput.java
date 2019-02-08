@@ -25,7 +25,10 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.beans.input;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.ow2.proactive.scheduling.api.graphql.common.Fields;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 
 import com.google.common.base.Strings;
@@ -149,6 +152,11 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder status(List<String> status) {
+            this.status = status.toString();
+            return this;
+        }
+
         public JobInput build() {
             sb.append("{");
             if (!excludeRemoved) {
@@ -206,7 +214,7 @@ public class JobInput extends AbstractApiType {
             }
             if (!Strings.isNullOrEmpty(this.status)) {
                 sb.append(' ');
-                sb.append(InputFields.STATUS.getName());
+                sb.append(Fields.STATUS.getName());
                 sb.append(" : ");
                 sb.append(this.status);
             }
