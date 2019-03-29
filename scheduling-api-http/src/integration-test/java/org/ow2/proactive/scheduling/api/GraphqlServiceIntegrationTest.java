@@ -251,12 +251,12 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsFilterByNotEqualNames() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!fakeJob0\"}) { edges { cursor node { id name } } } }",
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!job5\"}) { edges { cursor node { id name } } } }",
                                                                             FILTER.getName(),
                                                                             NAME.getName()));
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(10);
+        assertThat(jobNodes).hasSize(9);
     }
 
     @Rollback
@@ -279,12 +279,12 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsFilterByNotContainNames() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!*ob*\"}) { edges { cursor node { id name } } } }",
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!*ob7*\"}) { edges { cursor node { id name } } } }",
                                                                             FILTER.getName(),
                                                                             NAME.getName()));
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(0);
+        assertThat(jobNodes).hasSize(9);
     }
 
     @Rollback
