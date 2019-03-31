@@ -132,7 +132,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
 
         Stream<T> data = dataMapping(dataStream);
-        return createRelayConnection(entityClass, criteria, cursorMapper, data, first, last);
+        return createRelayConnection(entityClass, criteria, cursorMapper, data, first, last, entityId, after, before);
 
     }
 
@@ -231,7 +231,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     protected ExtendedConnection createRelayConnection(Class<E> entityClass,
             BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper,
-            Stream<T> data, Integer first, Integer last) {
+            Stream<T> data, Integer first, Integer last, Function<Root<E>, Path<? extends Number>> entityId,
+            Integer after, Integer before) {
 
         List<Edge> edges = buildEdges(data, cursorMapper);
 
@@ -242,10 +243,10 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
         }
 
-        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityClass, criteria);
+        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityClass, criteria, entityId, after, before);
 
-        pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last));
-        pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first));
+        pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last, after));
+        pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first, before));
 
         ExtendedConnection connection = new ExtendedConnection();
         connection.setEdges(edges);
@@ -257,7 +258,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     @VisibleForTesting
     int getNbEntriesBeforeSlicing(Class<E> entityClass,
-            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria) {
+            BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria,
+            Function<Root<E>, Path<? extends Number>> entityId, Integer after, Integer before) {
 
         CriteriaBuilder criteriaBuilderCount = entityManager.getCriteriaBuilder();
         CriteriaQuery<E> criteriaQueryCount = criteriaBuilderCount.createQuery(entityClass);
@@ -265,8 +267,12 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         Root<E> entityRootCount = queryCount.from(criteriaQueryCount.getResultType());
         CriteriaQuery<Long> longCriteriaQuery = queryCount.select(criteriaBuilderCount.countDistinct(entityRootCount));
 
+        Path<? extends Number> entityIdPath = entityId.apply(entityRootCount);
+
+        Predicate cursorPredicate = createCursorPredicate(criteriaBuilderCount, entityIdPath, after, before);
+
         List<Predicate[]> predicatesCount = criteria.apply(criteriaBuilderCount, entityRootCount);
-        Predicate[] wherePredicateCount = buildWherePredicate(predicatesCount, null, criteriaBuilderCount);
+        Predicate[] wherePredicateCount = buildWherePredicate(predicatesCount, cursorPredicate, criteriaBuilderCount);
 
         if (wherePredicateCount.length > 0) {
             longCriteriaQuery.where(wherePredicateCount);
@@ -287,13 +293,18 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      *
      * @param nbEntriesBeforeSlicing The number of entries before slicing.
      * @param last                   the number of last entries requested.
+     * @param after                  a cursor set (or not)
      * @return {@code true} if entries have been sliced and another page is available, {@code false}
      * otherwise.
      */
-    protected boolean hasPreviousPage(int nbEntriesBeforeSlicing, Integer last) {
+    protected boolean hasPreviousPage(int nbEntriesBeforeSlicing, Integer last, Integer after) {
 
-        if (last == null) {
+        if (last == null && after == null) {
             return false;
+        }
+
+        if (after != null) {
+            return true;
         }
 
         if (nbEntriesBeforeSlicing > last) {
@@ -308,13 +319,18 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      *
      * @param nbEntriesBeforeSlicing The number of entries before slicing.
      * @param first                  the number of first entries requested.
+     * @param before                 a cursor set (or not)
      * @return {@code true} if entries have been sliced and another page is available, {@code false}
      * otherwise.
      */
-    protected boolean hasNextPage(int nbEntriesBeforeSlicing, Integer first) {
+    protected boolean hasNextPage(int nbEntriesBeforeSlicing, Integer first, Integer before) {
 
-        if (first == null) {
+        if (first == null && before == null) {
             return false;
+        }
+
+        if (before != null) {
+            return true;
         }
 
         if (nbEntriesBeforeSlicing > first) {
