@@ -29,6 +29,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,10 +102,9 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
 
         assertThat(jobNodes).hasSize(DefaultValues.PAGE_SIZE);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+        assertJobsHasPreviousPageIs(queryResult, false);
+        assertJobsHasNextPageIs(queryResult, true);
         assertThat(getField(queryResult, "data", "jobs", "totalCount")).isEqualTo(DefaultValues.PAGE_SIZE + 10);
-        //        tearDown();
     }
 
     @Rollback
@@ -119,8 +119,8 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
 
         assertThat(jobNodes).hasSize(2);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+        assertJobsHasPreviousPageIs(queryResult, false);
+        assertJobsHasNextPageIs(queryResult, true);
     }
 
     @Rollback
@@ -129,14 +129,9 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsPaginatedFirstArgument() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs(first: 3) { edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(3);
+        Map<String, Object> queryResult = executeJobQueryWithPagination(3, null, null, null);
 
-        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job1");
-        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job3");
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+        checkJobsAndGetCursor(queryResult, 3, ImmutableMap.of(0, "job1", 2, "job3"), 2, false, true);
     }
 
     @Rollback
@@ -145,14 +140,9 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsPaginatedLastArgument() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs(last: 3) { edges { node { id name } } pageInfo { hasNextPage hasPreviousPage } } }");
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(3);
+        Map<String, Object> queryResult = executeJobQueryWithPagination(null, 3, null, null);
 
-        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job8");
-        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job10");
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(true);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(false);
+        checkJobsAndGetCursor(queryResult, 3, ImmutableMap.of(0, "job8", 2, "job10"), 0, true, false);
     }
 
     @Rollback
@@ -161,21 +151,16 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsPaginatedFirstAfterArgument() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs(first: 1) { edges { cursor node { id name } } } }");
+        Map<String, Object> queryResult = executeJobQueryWithPagination(1, null, null, null);
 
-        List<Object> edges = (List<Object>) getField(queryResult, "data", "jobs", "edges");
+        String cursor = checkJobsAndGetCursor(queryResult, 1, Collections.emptyMap(), 0, false, true);
 
-        String cursor = (String) getField(edges.get(0), "cursor");
+        queryResult = executeJobQueryWithPagination(3, null, cursor, null);
 
-        queryResult = executeGraphqlQuery(String.format("{ jobs(first: 3 after: \"%s\") { edges { node { id name } } " +
-                                                        "pageInfo { hasNextPage hasPreviousPage } } }", cursor));
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(3);
+        cursor = checkJobsAndGetCursor(queryResult, 3, ImmutableMap.of(0, "job2", 2, "job4"), 2, true, true);
 
-        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job2");
-        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job4");
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(true);
+        queryResult = executeJobQueryWithPagination(6, null, cursor, null);
+        checkJobsAndGetCursor(queryResult, 6, ImmutableMap.of(0, "job5", 5, "job10"), 5, true, false);
     }
 
     @Rollback
@@ -184,21 +169,16 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsPaginatedLastBeforeArgument() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs(last: 1) { edges { cursor node { id name } } } }");
+        Map<String, Object> queryResult = executeJobQueryWithPagination(null, 1, null, null);
 
-        List<Object> edges = (List<Object>) getField(queryResult, "data", "jobs", "edges");
+        String cursor = checkJobsAndGetCursor(queryResult, 1, Collections.emptyMap(), 0, true, false);
 
-        String cursor = (String) getField(edges.get(0), "cursor");
+        queryResult = executeJobQueryWithPagination(null, 3, null, cursor);
 
-        queryResult = executeGraphqlQuery(String.format("{ jobs(last: 3 before: \"%s\") { edges { node { id name } } " +
-                                                        "pageInfo { hasNextPage hasPreviousPage } } }", cursor));
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        assertThat(jobNodes).hasSize(3);
+        cursor = checkJobsAndGetCursor(queryResult, 3, ImmutableMap.of(0, "job7", 2, "job9"), 0, true, true);
 
-        assertThat(getField(jobNodes.get(0), "node", "name")).isEqualTo("job7");
-        assertThat(getField(jobNodes.get(2), "node", "name")).isEqualTo("job9");
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(true);
-        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(false);
+        queryResult = executeJobQueryWithPagination(null, 6, null, cursor);
+        checkJobsAndGetCursor(queryResult, 6, ImmutableMap.of(0, "job1", 5, "job6"), 0, false, true);
     }
 
     @Rollback
@@ -583,21 +563,9 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksPaginatedFirstArgument() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(first: 3) { edges { node { id } } " +
-                       "pageInfo { hasNextPage hasPreviousPage } } } } } } }";
+        Map<String, Object> queryResult = executeJobQueryWithTasksPagination(3, null, null, null);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
-
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-
-        Object firstJobNode = jobNodes.get(0);
-        List<?> taskNodes = (List<?>) getField(firstJobNode, "node", "tasks", "edges");
-
-        assertThat(taskNodes).hasSize(3);
-        assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("0");
-        assertThat(getField(taskNodes.get(2), "node", "id")).isEqualTo("2");
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
+        checkTasksAndGetCursor(queryResult, 3, ImmutableMap.of(0, "0", 2, "2"), 0, 2, false, true);
     }
 
     @Rollback
@@ -606,21 +574,9 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksPaginatedLastArgument() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(last: 3) { edges { node { id } } " +
-                       "pageInfo { hasNextPage hasPreviousPage } } } } } } }";
+        Map<String, Object> queryResult = executeJobQueryWithTasksPagination(null, 3, null, null);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
-
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-
-        Object firstJobNode = jobNodes.get(0);
-        List<?> taskNodes = (List<?>) getField(firstJobNode, "node", "tasks", "edges");
-
-        assertThat(taskNodes).hasSize(3);
-        assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("7");
-        assertThat(getField(taskNodes.get(2), "node", "id")).isEqualTo("9");
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasPreviousPage")).isEqualTo(true);
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(false);
+        checkTasksAndGetCursor(queryResult, 3, ImmutableMap.of(0, "7", 2, "9"), 0, 0, true, false);
     }
 
     @Rollback
@@ -629,31 +585,17 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksPaginatedFirstAfterArgument() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(first: 1) { edges { cursor node { id } } } } } } }";
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
+        Map<String, Object> queryResult = executeJobQueryWithTasksPagination(1, null, null, null);
 
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        List<?> taskNodes = (List<?>) getField(jobNodes.get(0), "node", "tasks", "edges");
+        String cursor = checkTasksAndGetCursor(queryResult, 1, Collections.emptyMap(), 0, 0, false, true);
 
-        Object firstTaskNode = taskNodes.get(0);
-        String cursor = (String) getField(firstTaskNode, "cursor");
+        queryResult = executeJobQueryWithTasksPagination(3, null, cursor, null);
 
-        query = String.format("{ jobs { edges { cursor node { id tasks(first: 3 after: \"%s\") { edges " +
-                              "{ cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }", cursor);
+        cursor = checkTasksAndGetCursor(queryResult, 3, ImmutableMap.of(0, "1", 2, "3"), 0, 2, true, true);
 
-        queryResult = executeGraphqlQuery(query);
+        queryResult = executeJobQueryWithTasksPagination(6, null, cursor, null);
 
-        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-
-        Object firstJobNode = jobNodes.get(0);
-        taskNodes = (List<?>) getField(firstJobNode, "node", "tasks", "edges");
-
-        assertThat(taskNodes).hasSize(3);
-
-        assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("1");
-        assertThat(getField(taskNodes.get(2), "node", "id")).isEqualTo("3");
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasPreviousPage")).isEqualTo(false);
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(true);
+        checkTasksAndGetCursor(queryResult, 6, ImmutableMap.of(0, "4", 5, "9"), 0, 5, true, false);
     }
 
     @Rollback
@@ -662,31 +604,17 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryTasksPaginatedLastBeforeArgument() {
         addJobDataWithTasks(10);
 
-        String query = "{ jobs { edges { cursor node { id tasks(last: 1) { edges { cursor node { id } } } } } } }";
-        Map<String, Object> queryResult = executeGraphqlQuery(query);
+        Map<String, Object> queryResult = executeJobQueryWithTasksPagination(null, 1, null, null);
 
-        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-        List<?> taskNodes = (List<?>) getField(jobNodes.get(0), "node", "tasks", "edges");
+        String cursor = checkTasksAndGetCursor(queryResult, 1, Collections.emptyMap(), 0, 0, true, false);
 
-        Object firstTaskNode = taskNodes.get(0);
-        String cursor = (String) getField(firstTaskNode, "cursor");
+        queryResult = executeJobQueryWithTasksPagination(null, 3, null, cursor);
 
-        query = String.format("{ jobs { edges { cursor node { id tasks(last: 3 before: \"%s\") { edges { " +
-                              "cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }", cursor);
+        cursor = checkTasksAndGetCursor(queryResult, 3, ImmutableMap.of(0, "6", 2, "8"), 0, 0, true, true);
 
-        queryResult = executeGraphqlQuery(query);
+        queryResult = executeJobQueryWithTasksPagination(null, 6, null, cursor);
 
-        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
-
-        Object firstJobNode = jobNodes.get(0);
-        taskNodes = (List<?>) getField(firstJobNode, "node", "tasks", "edges");
-
-        assertThat(taskNodes).hasSize(3);
-
-        assertThat(getField(taskNodes.get(0), "node", "id")).isEqualTo("6");
-        assertThat(getField(taskNodes.get(2), "node", "id")).isEqualTo("8");
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasPreviousPage")).isEqualTo(true);
-        assertThat(getField(firstJobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(false);
+        checkTasksAndGetCursor(queryResult, 6, ImmutableMap.of(0, "0", 5, "5"), 0, 0, false, true);
     }
 
     @Rollback
@@ -976,6 +904,78 @@ public class GraphqlServiceIntegrationTest {
                                            null,
                                            new GraphqlContext(CONTEXT_LOGIN, CONTEXT_SESSION_ID),
                                            variables);
+    }
+
+    private Map<String, Object> executeJobQueryWithPagination(Integer first, Integer last, String after,
+            String before) {
+        return executeGraphqlQuery(String.format("{ jobs(" + (first != null ? " first: " + first : "") +
+                                                 (last != null ? " last: " + last : "") +
+                                                 (after != null ? " after: \"" + after + "\"" : "") +
+                                                 (before != null ? " before: \"" + before + "\"" : "") +
+                                                 " ) { edges { cursor node { id name } } " +
+                                                 "pageInfo { hasNextPage hasPreviousPage } } }"));
+    }
+
+    private Map<String, Object> executeJobQueryWithTasksPagination(Integer first, Integer last, String after,
+            String before) {
+        return executeGraphqlQuery(String.format("{ jobs { edges { cursor node { id tasks(" +
+                                                 (first != null ? " first: " + first : "") +
+                                                 (last != null ? " last: " + last : "") +
+                                                 (after != null ? " after: \"" + after + "\"" : "") +
+                                                 (before != null ? " before: \"" + before + "\"" : "") +
+                                                 " ) { edges { cursor node { id name } } pageInfo { hasNextPage hasPreviousPage } } } } } }"));
+    }
+
+    private String checkJobsAndGetCursor(Map<String, Object> queryResult, int expectedSize,
+            Map<Integer, String> expectedJobNames, int cursorIndex, boolean hasPrevious, boolean hasNext) {
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(expectedSize);
+        expectedJobNames.entrySet()
+                        .stream()
+                        .forEach(indexName -> assertNameInListEqual(jobNodes,
+                                                                    indexName.getKey(),
+                                                                    indexName.getValue()));
+        assertJobsHasPreviousPageIs(queryResult, hasPrevious);
+        assertJobsHasNextPageIs(queryResult, hasNext);
+        return (String) getField(jobNodes.get(cursorIndex), "cursor");
+    }
+
+    private String checkTasksAndGetCursor(Map<String, Object> queryResult, int expectedSize,
+            Map<Integer, String> expectedTasksIds, int jobIndex, int cursorIndex, boolean hasPrevious,
+            boolean hasNext) {
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        Object jobNode = jobNodes.get(jobIndex);
+        List<?> taskNodes = (List<?>) getField(jobNode, "node", "tasks", "edges");
+
+        assertThat(taskNodes).hasSize(expectedSize);
+
+        expectedTasksIds.entrySet()
+                        .stream()
+                        .forEach(indexName -> assertIdInListEqual(taskNodes, indexName.getKey(), indexName.getValue()));
+
+        assertThat(getField(jobNode, "node", "tasks", "pageInfo", "hasPreviousPage")).isEqualTo(hasPrevious);
+        assertThat(getField(jobNode, "node", "tasks", "pageInfo", "hasNextPage")).isEqualTo(hasNext);
+
+        Object firstTaskNode = taskNodes.get(cursorIndex);
+        return (String) getField(firstTaskNode, "cursor");
+    }
+
+    private void assertNameInListEqual(List<?> jobNodes, int index, String name) {
+        assertThat(getField(jobNodes.get(index), "node", "name")).isEqualTo(name);
+    }
+
+    private void assertIdInListEqual(List<?> jobNodes, int index, String name) {
+        assertThat(getField(jobNodes.get(index), "node", "id")).isEqualTo(name);
+    }
+
+    private void assertJobsHasPreviousPageIs(Map<String, Object> queryResult, boolean expected) {
+        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasPreviousPage")).isEqualTo(expected);
+    }
+
+    private void assertJobsHasNextPageIs(Map<String, Object> queryResult, boolean expected) {
+        assertThat(getField(queryResult, "data", "jobs", "pageInfo", "hasNextPage")).isEqualTo(expected);
     }
 
 }
