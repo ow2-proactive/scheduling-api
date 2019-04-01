@@ -40,6 +40,7 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
@@ -209,7 +210,7 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
-    public void testQueryJobsFilterByNames() {
+    public void testQueryJobsFilterByEqualNames() {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{%s:\"job7\"} {%s:\"job9\"}]) { edges { cursor node { id name } } } }",
@@ -227,10 +228,24 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
-    public void testQueryJobsFilterByContainsNames() {
+    public void testQueryJobsFilterByNotEqualNames() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{%s:\"*ob*\"}]) { edges { cursor node { id name } } } }",
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!job5\"}) { edges { cursor node { id name } } } }",
+                                                                            FILTER.getName(),
+                                                                            NAME.getName()));
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(9);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByContainNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"*ob*\"}) { edges { cursor node { id name } } } }",
                                                                             FILTER.getName(),
                                                                             NAME.getName()));
 
@@ -241,7 +256,21 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
-    public void testQueryJobsFilterByOwners() {
+    public void testQueryJobsFilterByNotContainNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!*ob7*\"}) { edges { cursor node { id name } } } }",
+                                                                            FILTER.getName(),
+                                                                            NAME.getName()));
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(9);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByEqualOwners() {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{owner:\"%s\"} {owner:\"owner9\"}]) " +
@@ -252,6 +281,48 @@ public class GraphqlServiceIntegrationTest {
         assertThat(jobNodes).hasSize(6);
 
         assertThat(getField(jobNodes.get(4), "node", "owner")).isEqualTo("owner9");
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNotEqualOwners() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{owner:\"!bobot\"}) " +
+                                                                            "{ edges { cursor node { id owner } } } }",
+                                                                            FILTER.getName(),
+                                                                            CONTEXT_LOGIN));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByContainOwners() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{owner:\"*ow*\"} {owner:\"*ner*\"}]) " +
+                                                                            "{ edges { cursor node { id owner } } } }",
+                                                                            FILTER.getName(),
+                                                                            CONTEXT_LOGIN));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNotContainOwners() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{owner:\"!*owner*\"}) " +
+                                                                            "{ edges { cursor node { id owner } } } }",
+                                                                            FILTER.getName(),
+                                                                            CONTEXT_LOGIN));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
     }
 
     @Rollback
@@ -286,7 +357,7 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsFilterByPriority() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{status: KILLED}) " +
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{priority:IDLE}) " +
                                                                             "{ edges { cursor node { id owner } } } }",
                                                                             FILTER.getName()));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
@@ -296,7 +367,7 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
-    public void testQueryJobsFilterByProjectNames() {
+    public void testQueryJobsFilterByEqualProjectNames() {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{projectName:\"projectName7\"}, {projectName:\"projectName9\"}]) " +
@@ -312,7 +383,46 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
-    public void testQueryJobsFilterByStatus() {
+    public void testQueryJobsFilterByNotEqualProjectNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{projectName:\"!fakeProjectName0\"}, {projectName:\"!fakeProjectName1\"}]) " +
+                                                                            "{ edges { cursor node { id name } } } }",
+                                                                            FILTER.getName()));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(10);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByContainProjectNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{projectName:\"*project*\"}, {projectName:\"*Name*\"}]) " +
+                                                                            "{ edges { cursor node { id name } } } }",
+                                                                            FILTER.getName()));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(10);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNotContainProjectNames() {
+        addJobData(10);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{projectName:\"!*project*\"}, {projectName:\"!*Name*\"}]) " +
+                                                                            "{ edges { cursor node { id name } } } }",
+                                                                            FILTER.getName()));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(0);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByEqualStatus() {
         addJobData(10);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{status: KILLED}) " +

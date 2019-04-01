@@ -52,6 +52,10 @@ public class AbstractJobTaskInputConverterTest {
 
     private static final String CONTAINS = "%name%";
 
+    private static final String NOT_CONTAIN = "!%name%";
+
+    private static final String NOT_EQUAL = "!name";
+
     private static final String NONE = "name";
 
     private CriteriaBuilder criteriaBuilder = mock(CriteriaBuilder.class);
@@ -66,6 +70,10 @@ public class AbstractJobTaskInputConverterTest {
 
     private Predicate contains = mock(Predicate.class);
 
+    private Predicate notContain = mock(Predicate.class);
+
+    private Predicate notEqual = mock(Predicate.class);
+
     private Predicate none = mock(Predicate.class);
 
     @Before
@@ -74,33 +82,64 @@ public class AbstractJobTaskInputConverterTest {
         when(criteriaBuilder.like(any(Path.class), matches(START_WITH))).thenReturn(startWith);
         when(criteriaBuilder.like(any(Path.class), matches(END_WITH))).thenReturn(endWith);
         when(criteriaBuilder.like(any(Path.class), matches(CONTAINS))).thenReturn(contains);
+        when(criteriaBuilder.notLike(any(Path.class),
+                                     matches(NOT_CONTAIN.replaceFirst("!*", "*").replace("*",
+                                                                                         "%")))).thenReturn(notContain);
+        when(criteriaBuilder.notEqual(any(Path.class), matches(NOT_EQUAL.replaceFirst("!", "")))).thenReturn(notEqual);
         when(criteriaBuilder.equal(any(Path.class), matches(NONE))).thenReturn(none);
     }
 
     @Test
-    public void testWildCardInputPredicateBuilder() {
+    public void testStartWithPredicateBuilder() {
         Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
                                                                                                 root,
                                                                                                 "name",
                                                                                                 "name*");
         assertThat(predicate).isEqualTo(startWith);
+    }
 
-        predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
-                                                                                      root,
-                                                                                      "name",
-                                                                                      "*name");
+    @Test
+    public void testEndWithPredicateBuilder() {
+        Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                root,
+                                                                                                "name",
+                                                                                                "*name");
         assertThat(predicate).isEqualTo(endWith);
+    }
 
-        predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
-                                                                                      root,
-                                                                                      "name",
-                                                                                      "*name*");
+    @Test
+    public void testContainsPredicateBuilder() {
+        Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                root,
+                                                                                                "name",
+                                                                                                "*name*");
         assertThat(predicate).isEqualTo(contains);
+    }
 
-        predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
-                                                                                      root,
-                                                                                      "name",
-                                                                                      "name");
+    @Test
+    public void testNotContainPredicateBuilder() {
+        Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                root,
+                                                                                                "name",
+                                                                                                "!*name*");
+        assertThat(predicate).isEqualTo(notContain);
+    }
+
+    @Test
+    public void testNotEqualPredicateBuilder() {
+        Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                root,
+                                                                                                "name",
+                                                                                                "!name");
+        assertThat(predicate).isEqualTo(notEqual);
+    }
+
+    @Test
+    public void testNonePredicateBuilder() {
+        Predicate predicate = AbstractJobTaskInputConverter.WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                root,
+                                                                                                "name",
+                                                                                                "name");
         assertThat(predicate).isEqualTo(none);
 
     }

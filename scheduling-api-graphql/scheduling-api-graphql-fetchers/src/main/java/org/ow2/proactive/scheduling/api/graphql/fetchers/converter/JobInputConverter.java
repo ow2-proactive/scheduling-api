@@ -111,12 +111,13 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (excludeRemoved) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
             }
+            // Job ID based predicates
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
-
             comparableLongPredicated(i.getComparableId(), "id", root, criteriaBuilder, predicates);
 
+            // Job name based predicate
             if (!Strings.isNullOrEmpty(jobName)) {
                 Predicate jobNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
                                                                                  root,
@@ -125,15 +126,21 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(jobNamePredicate);
             }
 
+            // Job last updated time based predicate
             comparableLongPredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
 
+            // Job owner based predicate
             if (!Strings.isNullOrEmpty(owner)) {
                 Predicate ownerPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "owner", owner);
                 predicates.add(ownerPredicate);
             }
+
+            // Job priority based predicate
             if (!Strings.isNullOrEmpty(priority)) {
                 predicates.add(criteriaBuilder.equal(root.get("priority"), JobPriority.valueOf(priority)));
             }
+
+            // Job project name based predicate
             if (!Strings.isNullOrEmpty(projectName)) {
                 Predicate projectNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
                                                                                      root,
@@ -141,6 +148,8 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                      projectName);
                 predicates.add(projectNamePredicate);
             }
+
+            // Job status based predicate
             if (status != null && status.getStatus() != null && status.getStatus().size() > 0) {
                 List<JobStatus> jobStatuses = status.getStatus()
                                                     .stream()
@@ -149,6 +158,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 predicates.add(root.get("status").in(jobStatuses));
             }
 
+            // Job submitted time based predicate
             comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
 
             return predicates.toArray(new Predicate[predicates.size()]);

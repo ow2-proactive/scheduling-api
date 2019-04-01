@@ -95,16 +95,24 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
 
         private static final String CONTAINS = "^\\*.*\\*$";
 
+        private static final String NOT_CONTAIN = "^\\!\\*.*\\*$";
+
+        private static final String NOT_EQUAL = "^\\!.*";
+
         public static <T> Predicate build(CriteriaBuilder criteriaBuilder, Root<T> root, String entityFieldName,
                 String fieldInputValue) {
-            if (Pattern.matches(START_WITH, fieldInputValue)) {
+            if (Pattern.matches(NOT_CONTAIN, fieldInputValue)) {
+                return criteriaBuilder.notLike(root.get(entityFieldName),
+                                               fieldInputValue.replaceFirst("!*", "*").replace("*", "%"));
+            } else if (Pattern.matches(CONTAINS, fieldInputValue)) {
+                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
+            } else if (Pattern.matches(START_WITH, fieldInputValue)) {
                 return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
             } else if (Pattern.matches(END_WITH, fieldInputValue)) {
                 return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
-            } else if (Pattern.matches(CONTAINS, fieldInputValue)) {
-                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
+            } else if (Pattern.matches(NOT_EQUAL, fieldInputValue)) {
+                return criteriaBuilder.notEqual(root.get(entityFieldName), fieldInputValue.replaceFirst("!", ""));
             }
-
             return criteriaBuilder.equal(root.get(entityFieldName), fieldInputValue);
 
         }
