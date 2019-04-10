@@ -147,7 +147,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
         }
 
         Map<String, String> answer = new HashMap<>(input.size());
-        input.forEach((key, value) -> answer.put(key, (String) ObjectByteConverter.byteArrayToObject(value)));
+        input.forEach((key, value) -> answer.put(key, ObjectByteConverter.byteArrayToObject(value).toString()));
         return answer;
     }
 
