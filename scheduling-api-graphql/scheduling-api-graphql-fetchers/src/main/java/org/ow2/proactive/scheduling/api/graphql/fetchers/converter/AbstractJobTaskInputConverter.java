@@ -33,9 +33,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
@@ -101,19 +99,21 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
 
         public static <T> Predicate build(CriteriaBuilder criteriaBuilder, Root<T> root, String entityFieldName,
                 String fieldInputValue) {
-            if (Pattern.matches(NOT_CONTAIN, fieldInputValue)) {
-                return criteriaBuilder.notLike(root.get(entityFieldName),
-                                               fieldInputValue.replaceFirst("!*", "*").replace("*", "%"));
-            } else if (Pattern.matches(CONTAINS, fieldInputValue)) {
-                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
-            } else if (Pattern.matches(START_WITH, fieldInputValue)) {
-                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
-            } else if (Pattern.matches(END_WITH, fieldInputValue)) {
-                return criteriaBuilder.like(root.get(entityFieldName), fieldInputValue.replace("*", "%"));
-            } else if (Pattern.matches(NOT_EQUAL, fieldInputValue)) {
-                return criteriaBuilder.notEqual(root.get(entityFieldName), fieldInputValue.replaceFirst("!", ""));
+            Expression<String> expressionToCheck = criteriaBuilder.lower(root.get(entityFieldName));
+            String filterValue = fieldInputValue.toLowerCase();
+            if (Pattern.matches(NOT_CONTAIN, filterValue)) {
+                return criteriaBuilder.notLike(expressionToCheck,
+                                               filterValue.replaceFirst("!*", "*").replace("*", "%"));
+            } else if (Pattern.matches(CONTAINS, filterValue)) {
+                return criteriaBuilder.like(expressionToCheck, filterValue.replace("*", "%"));
+            } else if (Pattern.matches(START_WITH, filterValue)) {
+                return criteriaBuilder.like(expressionToCheck, filterValue.replace("*", "%"));
+            } else if (Pattern.matches(END_WITH, filterValue)) {
+                return criteriaBuilder.like(expressionToCheck, filterValue.replace("*", "%"));
+            } else if (Pattern.matches(NOT_EQUAL, filterValue)) {
+                return criteriaBuilder.notEqual(expressionToCheck, filterValue.replaceFirst("!", ""));
             }
-            return criteriaBuilder.equal(root.get(entityFieldName), fieldInputValue);
+            return criteriaBuilder.equal(expressionToCheck, filterValue);
 
         }
     }
