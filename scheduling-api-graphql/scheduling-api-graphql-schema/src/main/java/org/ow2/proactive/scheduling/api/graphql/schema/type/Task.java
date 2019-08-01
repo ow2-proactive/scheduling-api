@@ -36,6 +36,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DESCRIPTION
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.EXECUTION_DURATION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.EXECUTION_HOST_NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.FINISHED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.FORK;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.IN_ERROR_TIME;
@@ -160,8 +161,11 @@ public class Task extends JobTaskCommon {
                                     .field(newFieldDefinition().name(RESTART_MODE.getName())
                                                                .type(RestartMode.TYPE.getInstance()))
                                     .field(newFieldDefinition().name(RESULT_PREVIEW.getName()).type(GraphQLString))
+                                    .field(newFieldDefinition().name(FORK.getName())
+                                                               .description("If `true`, it means the task is executed in a forked JVM; if `false`, it means the task is executed in the node's JVM")
+                                                               .type(GraphQLBoolean))
                                     .field(newFieldDefinition().name(RUN_AS_ME.getName())
-                                                               .description("If `true`, if means that the Task script or command is executed with " +
+                                                               .description("If `true`, it means that the task script or command is executed with " +
                                                                             "the system account associated to the current Job owner value.")
                                                                .type(GraphQLBoolean))
                                     .field(newFieldDefinition().name(SCHEDULED_TIME.getName())
@@ -218,6 +222,8 @@ public class Task extends JobTaskCommon {
 
     private String resultPreview;
 
+    private boolean fork;
+
     private boolean runAsMe;
 
     private long scheduledTime = -1;
@@ -235,7 +241,7 @@ public class Task extends JobTaskCommon {
             long finishedTime, long id, long inErrorTime, Map<String, String> genericInformation, String javaHome,
             long jobId, List<String> jvmArguments, int maxNumberOfExecution, String name, int numberOfExecutionLeft,
             int numberOfExecutionOnFailureLeft, String onTaskError, boolean preciousLogs, boolean preciousResult,
-            String restartMode, String resultPreview, boolean runAsMe, long scheduledTime, long startTime,
+            String restartMode, String resultPreview, boolean fork, boolean runAsMe, long scheduledTime, long startTime,
             String status, String tag, Map<String, String> variables, long walltime, String workingDir) {
 
         super(description,
@@ -261,6 +267,7 @@ public class Task extends JobTaskCommon {
         this.preciousResult = preciousResult;
         this.restartMode = restartMode;
         this.resultPreview = resultPreview;
+        this.fork = fork;
         this.runAsMe = runAsMe;
         this.scheduledTime = scheduledTime;
         this.status = status;

@@ -880,7 +880,7 @@ public class GraphqlServiceIntegrationTest {
         taskData.setRestartModeId(RestartMode.ANYWHERE.getIndex());
         taskData.setTaskName(name);
         taskData.setTaskStatus(id % 2 == 0 ? TaskStatus.SUBMITTED : TaskStatus.IN_ERROR);
-        taskData.setTaskType("taskType");
+        taskData.setTaskType("FORKED_SCRIPT_TASK");
         taskData.setVariables(ImmutableMap.of());
 
         return taskData;

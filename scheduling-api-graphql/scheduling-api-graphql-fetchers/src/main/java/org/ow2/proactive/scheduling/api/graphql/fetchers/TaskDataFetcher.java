@@ -106,6 +106,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                        .preciousResult(taskData.isPreciousResult())
                        .restartMode(RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase())
                        .resultPreview(taskData.getResultPreview())
+                       .fork(taskData.isForkTask())
                        .runAsMe(taskData.isRunAsMe())
                        .scheduledTime(taskData.getScheduledTime())
                        .startTime(taskData.getStartTime())

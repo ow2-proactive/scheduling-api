@@ -77,6 +77,11 @@
       "required": false,
       "type": "string"
     },
+    "fork": {
+      "id": "http://activeeon.com/api/v2/data/edges/node/task/fork",
+      "required": false,
+      "type": "boolean"
+    },
     "runAsMe": {
       "id": "http://activeeon.com/api/v2/data/edges/node/task/runAsMe",
       "required": false,

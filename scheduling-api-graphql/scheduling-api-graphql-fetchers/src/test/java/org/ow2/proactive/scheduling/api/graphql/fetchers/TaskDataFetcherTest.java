@@ -120,7 +120,7 @@ public class TaskDataFetcherTest {
         taskData.setTag("tag");
         taskData.setTaskName("taskName");
         taskData.setTaskStatus(TaskStatus.SUBMITTED);
-        taskData.setTaskType("taskType"); // currently, not in GraphQL data model
+        taskData.setTaskType("FORKED_SCRIPT_TASK"); // currently, not in GraphQL data model, but it decides whether task is fork
         taskData.setTopologyDescriptor("topologyDescriptor"); // currently, not in GraphQL data model
         taskData.setTopologyDescriptorThreshold(11); // currently, not in GraphQL data model
 
@@ -168,6 +168,7 @@ public class TaskDataFetcherTest {
                                                                .getDescription()
                                                                .toUpperCase());
         assertThat(task.getResultPreview()).isEqualTo(taskData.getResultPreview());
+        assertThat(task.isFork()).isEqualTo(true);
         assertThat(task.isRunAsMe()).isEqualTo(taskData.isRunAsMe());
         assertThat(task.getScheduledTime()).isEqualTo(taskData.getScheduledTime());
         assertThat(task.getStartTime()).isEqualTo(taskData.getStartTime());
