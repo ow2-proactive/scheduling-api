@@ -2,6 +2,7 @@ import com.github.jk1.license.render.*
 
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven {
             url "http://repository.activeeon.com/content/groups/proactive/"
@@ -79,7 +80,7 @@ allprojects {
         if (project.hasProperty('local')) {
             mavenLocal()
         }
-
+        mavenCentral()
         jcenter()
 
         maven { url 'http://repository.activeeon.com/content/groups/proactive/' }
