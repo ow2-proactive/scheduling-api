@@ -115,8 +115,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .type(SubmittedTimeInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(START_TIME.getName())
-                                                               .description("Job started time.")
-                                                               .type(StartedTimeInput.TYPE.getInstance())
+                                                               .description("Job start time.")
+                                                               .type(StartTimeInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(FINISHED_TIME.getName())
                                                                .description("Job finished time.")
@@ -170,7 +170,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private LastUpdatedTimeInput lastUpdatedTime;
 
-    private StartedTimeInput startedTime;
+    private StartTimeInput startedTime;
 
     private FinishedTimeInput finishedTime;
 
@@ -199,7 +199,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
             lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
-            startedTime = Inputs.getObject(input, START_TIME.getName(), StartedTimeInput::new, null);
+            startedTime = Inputs.getObject(input, START_TIME.getName(), StartTimeInput::new, null);
             finishedTime = Inputs.getObject(input, FINISHED_TIME.getName(), FinishedTimeInput::new, null);
             withVariables = Inputs.getListOfObjects(input, VARIABLES.getName(), VariablesInput::new, null);
             numberOfPendingTasks = Inputs.getObject(input,

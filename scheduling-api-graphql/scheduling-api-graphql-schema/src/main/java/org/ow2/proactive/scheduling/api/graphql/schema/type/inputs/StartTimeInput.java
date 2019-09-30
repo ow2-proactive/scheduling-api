@@ -45,26 +45,26 @@ import lombok.Data;
  * @author ActiveEon Team
  */
 @Data
-public class StartedTimeInput extends ComparableLongInput {
+public class StartTimeInput extends ComparableLongInput {
 
     public final static TypeSingleton<GraphQLInputType> TYPE = new TypeSingleton<GraphQLInputType>() {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.START_TIME_INPUT.getName())
-                                   .description("Started time filter input.")
+                                   .description("Start time filter input.")
                                    .field(newInputObjectField().name(BEFORE.getName())
-                                                               .description("Jobs having its started time before this value.")
+                                                               .description("Jobs having its start time before this value.")
                                                                .type(GraphQLLong)
                                                                .build())
                                    .field(newInputObjectField().name(AFTER.getName())
-                                                               .description("Jobs having its started time after this value.")
+                                                               .description("Jobs having its start time after this value.")
                                                                .type(GraphQLLong)
                                                                .build())
                                    .build();
         }
     };
 
-    public StartedTimeInput(Map<String, Object> input) {
+    public StartTimeInput(Map<String, Object> input) {
         super(input);
     }
 
