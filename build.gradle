@@ -1,33 +1,15 @@
-/*
- * ProActive Parallel Suite(TM):
- * The Java(TM) library for Parallel, Distributed,
- * Multi-Core Computing for Enterprise Grids & Clouds
- *
- * Copyright (c) 2016 ActiveEon
- * Contact: contact@activeeon.com
- *
- * This library is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation: version 3 of
- * the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * If needed, contact us to obtain a release under GPL Version 2 or 3
- * or a different license than the AGPL.
- */
+import com.github.jk1.license.render.*
+
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
         maven {
             url "http://repository.activeeon.com/content/groups/proactive/"
         }
+        maven {
+              url "https://plugins.gradle.org/m2/"
+    }
     }
 
     dependencies {
@@ -35,8 +17,9 @@ buildscript {
         classpath "com.diffplug.gradle.spotless:spotless:2.4.0"
         classpath "org.ow2.proactive:coding-rules:1.0.0"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1"
-        classpath "io.spring.gradle:dependency-management-plugin:0.3.0.RELEASE"
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:0.4.27'
+        classpath 'com.github.jk1:gradle-license-report:1.7'
     }
     dependencies {
         delete "gradle/ext"
@@ -46,6 +29,8 @@ buildscript {
 
 apply plugin: 'spring-boot'
 apply plugin: 'org.sonarqube'
+apply plugin: 'com.github.jk1.dependency-license-report'
+
 apply from: "$rootDir/gradle/ext/coding-format.gradle"
 
 bootRepackage {
@@ -54,6 +39,11 @@ bootRepackage {
 
 springBoot {
     mainClass = 'org.ow2.proactive.scheduling.api.Application'
+}
+
+licenseReport {
+    configurations = ['runtime']
+    renderers = [new InventoryHtmlReportRenderer()]
 }
 
 allprojects {
@@ -90,7 +80,7 @@ allprojects {
         if (project.hasProperty('local')) {
             mavenLocal()
         }
-
+        mavenCentral()
         jcenter()
 
         maven { url 'http://repository.activeeon.com/content/groups/proactive/' }

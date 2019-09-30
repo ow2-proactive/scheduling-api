@@ -81,6 +81,7 @@ public enum Fields {
     RESTART_MODE,
     RESULT_PREVIEW,
     RESULT_MAP,
+    FORK,
     RUN_AS_ME,
     SCHEDULED_TIME,
     SESSION_ID,
