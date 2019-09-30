@@ -49,7 +49,7 @@ public class JobInput extends AbstractApiType {
 
         private String afterSubmittedTime;
 
-        private String afterStartedTime;
+        private String afterStartTime;
 
         private String afterFinishedTime;
 
@@ -57,7 +57,7 @@ public class JobInput extends AbstractApiType {
 
         private String beforeSubmittedTime;
 
-        private String beforeStartedTime;
+        private String beforeStartTime;
 
         private String beforeFinishedTime;
 
@@ -119,8 +119,8 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
-        public JobInput.Builder afterStartedTime(String afterStartedTime) {
-            this.afterStartedTime = afterStartedTime;
+        public JobInput.Builder afterStartTime(String afterStartTime) {
+            this.afterStartTime = afterStartTime;
             return this;
         }
 
@@ -139,8 +139,8 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
-        public JobInput.Builder beforeStartedTime(String beforeStartedTime) {
-            this.beforeStartedTime = beforeStartedTime;
+        public JobInput.Builder beforeStartTime(String beforeStartTime) {
+            this.beforeStartTime = beforeStartTime;
             return this;
         }
 
@@ -335,7 +335,7 @@ public class JobInput extends AbstractApiType {
                                  this.beforeSubmittedTime,
                                  this.afterSubmittedTime);
 
-            comparableLongString(InputFields.START_TIME.getName(), this.beforeStartedTime, this.afterStartedTime);
+            comparableLongString(InputFields.START_TIME.getName(), this.beforeStartTime, this.afterStartTime);
 
             comparableLongString(InputFields.FINISHED_TIME.getName(), this.beforeFinishedTime, this.afterFinishedTime);
 
