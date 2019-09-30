@@ -23,51 +23,22 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  */
-package org.ow2.proactive.scheduling.api.graphql.common;
+package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import com.google.common.base.CaseFormat;
+import java.util.Map;
+
+import lombok.Data;
 
 
 /**
- * Defines the type of the different GraphQL types which are used in the API.
- *
  * @author ActiveEon Team
+ * @since 15/12/16
  */
-public enum Types {
+@Data
+public class ComparableIntegerInput extends ComparableInput<Integer> {
+    private static final Integer DEFAULT_VALUE = -1;
 
-    //Items are ordered following alphabetic order
-    COMPARABLE_ID_INPUT,
-    COMPARABLE_NUMBER_OF_PENDING_TASKS_INPUT,
-    COMPARABLE_NUMBER_OF_RUNNING_TASKS_INPUT,
-    COMPARABLE_NUMBER_OF_FINISHED_TASKS_INPUT,
-    COMPARABLE_NUMBER_OF_FAULTY_TASKS_INPUT,
-    COMPARABLE_NUMBER_OF_FAILED_TASKS_INPUT,
-    COMPARABLE_NUMBER_OF_IN_ERROR_TASKS_INPUT,
-    DATA_MANAGEMENT,
-    GENERIC_INFORMATION,
-    JOB,
-    JOB_INPUT,
-    JOB_PRIORITY,
-    JOB_STATUS,
-    JOB_TASK_COMMON,
-    KEY_VALUE,
-    KEY_VALUE_INPUT,
-    LAST_UPDATED_TIME_INPUT,
-    ON_TASK_ERROR,
-    QUERY,
-    RESTART_MODE,
-    RESULT_MAP,
-    SUBMITTED_TIME_INPUT,
-    FINISHED_TIME_INPUT,
-    START_TIME_INPUT,
-    TASK,
-    TASK_INPUT,
-    TASK_STATUS,
-    USER,
-    VARIABLE;
-
-    public String getName() {
-        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name());
+    public ComparableIntegerInput(Map<String, Object> input) {
+        super(input, DEFAULT_VALUE);
     }
-
 }
