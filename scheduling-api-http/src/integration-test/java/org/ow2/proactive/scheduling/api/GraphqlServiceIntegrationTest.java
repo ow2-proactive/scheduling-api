@@ -354,6 +354,168 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
+    public void testQueryJobsFilterByNumberOfPendingTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfPendingTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfPendingTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfPendingTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfPendingTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfPendingTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfPendingTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNumberOfRunningTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfRunningTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfRunningTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfRunningTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfRunningTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfRunningTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfRunningTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNumberOfFinishedTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfFinishedTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfFinishedTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFinishedTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfFinishedTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFinishedTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfFinishedTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNumberOfFaultyTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfFaultyTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfFaultyTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFaultyTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfFaultyTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFaultyTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfFaultyTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNumberOfFailedTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfFailedTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfFailedTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFailedTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfFailedTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfFailedTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfFailedTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByNumberOfInErrorTasks() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job1.setNumberOfInErrorTasks(2);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job2", "bobot", JobPriority.HIGH, "test", JobStatus.STALLED);
+        job2.setNumberOfInErrorTasks(1);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfInErrorTasks: {after: %d}}) " +
+                                                                            "{ edges { cursor node { numberOfInErrorTasks } } } }",
+                                                                            FILTER.getName(),
+                                                                            2));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{numberOfInErrorTasks: {before: %d}}) " +
+                                                        "{ edges { cursor node { numberOfInErrorTasks } } } }",
+                                                        FILTER.getName(),
+                                                        1));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
     public void testQueryJobsFilterByPriority() {
         addJobData(10);
 
@@ -479,6 +641,46 @@ public class GraphqlServiceIntegrationTest {
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{lastUpdatedTime: {after: %s}}) " +
                                                                             "{ edges { cursor node { id owner lastUpdatedTime} } } }",
+                                                                            FILTER.getName(),
+                                                                            job2.getSubmittedTime() + 1000));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByStartTime() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setStartTime(job1.getSubmittedTime() + 10);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setStartTime(job2.getSubmittedTime() + 2000);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{startTime: {after: %s}}) " +
+                                                                            "{ edges { cursor node { id owner startTime} } } }",
+                                                                            FILTER.getName(),
+                                                                            job2.getSubmittedTime() + 1000));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByFinishedTime() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setFinishedTime(job1.getSubmittedTime() + 10);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setFinishedTime(job2.getSubmittedTime() + 2000);
+        entityManager.persist(job2);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{finishedTime: {after: %s}}) " +
+                                                                            "{ edges { cursor node { id owner finishedTime} } } }",
                                                                             FILTER.getName(),
                                                                             job2.getSubmittedTime() + 1000));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");

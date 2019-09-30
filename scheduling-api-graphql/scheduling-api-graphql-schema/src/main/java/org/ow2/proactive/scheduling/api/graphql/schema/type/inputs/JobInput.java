@@ -33,12 +33,20 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.FINISHED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LAST_UPDATED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FAILED_TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FAULTY_TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FINISHED_TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_IN_ERROR_TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_PENDING_TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_RUNNING_TASKS;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PRIORITY;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PROJECT_NAME;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.SUBMITTED_TIME;
 
 import java.util.Map;
@@ -106,6 +114,38 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Job submitted time.")
                                                                .type(SubmittedTimeInput.TYPE.getInstance())
                                                                .build())
+                                   .field(newInputObjectField().name(START_TIME.getName())
+                                                               .description("Job started time.")
+                                                               .type(StartedTimeInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(FINISHED_TIME.getName())
+                                                               .description("Job finished time.")
+                                                               .type(FinishedTimeInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_PENDING_TASKS.getName())
+                                                               .description("Number of pending tasks.")
+                                                               .type(ComparableNumberOfPendingTasksInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_RUNNING_TASKS.getName())
+                                                               .description("Number of running tasks.")
+                                                               .type(ComparableNumberOfRunningTasksInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_FINISHED_TASKS.getName())
+                                                               .description("Number of finished tasks.")
+                                                               .type(ComparableNumberOfFinishedTasksInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_FAULTY_TASKS.getName())
+                                                               .description("Number of faulty tasks.")
+                                                               .type(ComparableNumberOfFaultyTasksInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_FAILED_TASKS.getName())
+                                                               .description("Number of failed tasks.")
+                                                               .type(ComparableNumberOfFailedTasksInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_IN_ERROR_TASKS.getName())
+                                                               .description("Number of in-error tasks.")
+                                                               .type(ComparableNumberOfInErrorTasksInput.TYPE.getInstance())
+                                                               .build())
                                    .field(newInputObjectField().name(VARIABLES.getName())
                                                                .description("workflow variables")
                                                                .type(new GraphQLList(KeyValueInput.TYPE.getInstance())))
@@ -130,7 +170,23 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private LastUpdatedTimeInput lastUpdatedTime;
 
+    private StartedTimeInput startedTime;
+
+    private FinishedTimeInput finishedTime;
+
     private VariablesInput withVariables;
+
+    private ComparableNumberOfPendingTasksInput numberOfPendingTasks;
+
+    private ComparableNumberOfRunningTasksInput numberOfRunningTasks;
+
+    private ComparableNumberOfFinishedTasksInput numberOfFinishedTasks;
+
+    private ComparableNumberOfFaultyTasksInput numberOfFaultyTasks;
+
+    private ComparableNumberOfFailedTasksInput numberOfFailedTasks;
+
+    private ComparableNumberOfInErrorTasksInput numberOfInErrorTasks;
 
     public JobInput(Map<String, Object> input) {
         super(input);
@@ -143,7 +199,33 @@ public class JobInput extends JobTaskCommonAbstractInput {
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
             lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
+            startedTime = Inputs.getObject(input, START_TIME.getName(), StartedTimeInput::new, null);
+            finishedTime = Inputs.getObject(input, FINISHED_TIME.getName(), FinishedTimeInput::new, null);
             withVariables = Inputs.getListOfObjects(input, VARIABLES.getName(), VariablesInput::new, null);
+            numberOfPendingTasks = Inputs.getObject(input,
+                                                    NUMBER_OF_PENDING_TASKS.getName(),
+                                                    ComparableNumberOfPendingTasksInput::new,
+                                                    null);
+            numberOfRunningTasks = Inputs.getObject(input,
+                                                    NUMBER_OF_RUNNING_TASKS.getName(),
+                                                    ComparableNumberOfRunningTasksInput::new,
+                                                    null);
+            numberOfFinishedTasks = Inputs.getObject(input,
+                                                     NUMBER_OF_FINISHED_TASKS.getName(),
+                                                     ComparableNumberOfFinishedTasksInput::new,
+                                                     null);
+            numberOfFaultyTasks = Inputs.getObject(input,
+                                                   NUMBER_OF_FAULTY_TASKS.getName(),
+                                                   ComparableNumberOfFaultyTasksInput::new,
+                                                   null);
+            numberOfFailedTasks = Inputs.getObject(input,
+                                                   NUMBER_OF_FAILED_TASKS.getName(),
+                                                   ComparableNumberOfFailedTasksInput::new,
+                                                   null);
+            numberOfInErrorTasks = Inputs.getObject(input,
+                                                    NUMBER_OF_IN_ERROR_TASKS.getName(),
+                                                    ComparableNumberOfInErrorTasksInput::new,
+                                                    null);
         }
     }
 
