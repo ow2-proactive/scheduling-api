@@ -49,9 +49,17 @@ public class JobInput extends AbstractApiType {
 
         private String afterSubmittedTime;
 
+        private String afterStartedTime;
+
+        private String afterFinishedTime;
+
         private String beforeLastUpdatedTime;
 
         private String beforeSubmittedTime;
+
+        private String beforeStartedTime;
+
+        private String beforeFinishedTime;
 
         private String afterId;
 
@@ -75,6 +83,30 @@ public class JobInput extends AbstractApiType {
 
         private String variableValue;
 
+        private String afterNumberOfPendingTasks;
+
+        private String beforeNumberOfPendingTasks;
+
+        private String afterNumberOfRunningTasks;
+
+        private String beforeNumberOfRunningTasks;
+
+        private String afterNumberOfFinishedTasks;
+
+        private String beforeNumberOfFinishedTasks;
+
+        private String afterNumberOfFaultyTasks;
+
+        private String beforeNumberOfFaultyTasks;
+
+        private String afterNumberOfFailedTasks;
+
+        private String beforeNumberOfFailedTasks;
+
+        private String afterNumberOfInErrorTasks;
+
+        private String beforeNumberOfInErrorTasks;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -84,6 +116,16 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder afterSubmittedTime(String afterSubmittedTime) {
             this.afterSubmittedTime = afterSubmittedTime;
+            return this;
+        }
+
+        public JobInput.Builder afterStartedTime(String afterStartedTime) {
+            this.afterStartedTime = afterStartedTime;
+            return this;
+        }
+
+        public JobInput.Builder afterFinishedTime(String afterFinishedTime) {
+            this.afterFinishedTime = afterFinishedTime;
             return this;
         }
 
@@ -97,6 +139,16 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder beforeStartedTime(String beforeStartedTime) {
+            this.beforeStartedTime = beforeStartedTime;
+            return this;
+        }
+
+        public JobInput.Builder beforeFinishedTime(String beforeFinishedTime) {
+            this.beforeFinishedTime = beforeFinishedTime;
+            return this;
+        }
+
         public JobInput.Builder afterId(String afterId) {
             this.afterId = afterId;
             return this;
@@ -104,6 +156,66 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder beforeId(String beforeId) {
             this.beforeId = beforeId;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfPendingTasks(String afterNumberOfPendingTasks) {
+            this.afterNumberOfPendingTasks = afterNumberOfPendingTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfPendingTasks(String beforeNumberOfPendingTasks) {
+            this.beforeNumberOfPendingTasks = beforeNumberOfPendingTasks;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfRunningTasks(String afterNumberOfRunningTasks) {
+            this.afterNumberOfRunningTasks = afterNumberOfRunningTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfRunningTasks(String beforeNumberOfRunningTasks) {
+            this.beforeNumberOfRunningTasks = beforeNumberOfRunningTasks;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfFinishedTasks(String afterNumberOfFinishedTasks) {
+            this.afterNumberOfFinishedTasks = afterNumberOfFinishedTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfFinishedTasks(String beforeNumberOfFinishedTasks) {
+            this.beforeNumberOfFinishedTasks = beforeNumberOfFinishedTasks;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfFaultyTasks(String afterNumberOfFaultyTasks) {
+            this.afterNumberOfFaultyTasks = afterNumberOfFaultyTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfFaultyTasks(String beforeNumberOfFaultyTasks) {
+            this.beforeNumberOfFaultyTasks = beforeNumberOfFaultyTasks;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfFailedTasks(String afterNumberOfFailedTasks) {
+            this.afterNumberOfFailedTasks = afterNumberOfFailedTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfFailedTasks(String beforeNumberOfFailedTasks) {
+            this.beforeNumberOfFailedTasks = beforeNumberOfFailedTasks;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfInErrorTasks(String afterNumberOfInErrorTasks) {
+            this.afterNumberOfInErrorTasks = afterNumberOfInErrorTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfInErrorTasks(String beforeNumberOfInErrorTasks) {
+            this.beforeNumberOfInErrorTasks = beforeNumberOfInErrorTasks;
             return this;
         }
 
@@ -222,6 +334,34 @@ public class JobInput extends AbstractApiType {
             comparableLongString(InputFields.SUBMITTED_TIME.getName(),
                                  this.beforeSubmittedTime,
                                  this.afterSubmittedTime);
+
+            comparableLongString(InputFields.START_TIME.getName(), this.beforeStartedTime, this.afterStartedTime);
+
+            comparableLongString(InputFields.FINISHED_TIME.getName(), this.beforeFinishedTime, this.afterFinishedTime);
+
+            comparableLongString(InputFields.NUMBER_OF_PENDING_TASKS.getName(),
+                                 this.beforeNumberOfPendingTasks,
+                                 this.afterNumberOfPendingTasks);
+
+            comparableLongString(InputFields.NUMBER_OF_RUNNING_TASKS.getName(),
+                                 this.beforeNumberOfRunningTasks,
+                                 this.afterNumberOfRunningTasks);
+
+            comparableLongString(InputFields.NUMBER_OF_FINISHED_TASKS.getName(),
+                                 this.beforeNumberOfFinishedTasks,
+                                 this.afterNumberOfFinishedTasks);
+
+            comparableLongString(InputFields.NUMBER_OF_FAULTY_TASKS.getName(),
+                                 this.beforeNumberOfFaultyTasks,
+                                 this.afterNumberOfFaultyTasks);
+
+            comparableLongString(InputFields.NUMBER_OF_FAILED_TASKS.getName(),
+                                 this.beforeNumberOfFailedTasks,
+                                 this.afterNumberOfFailedTasks);
+
+            comparableLongString(InputFields.NUMBER_OF_IN_ERROR_TASKS.getName(),
+                                 this.beforeNumberOfInErrorTasks,
+                                 this.afterNumberOfInErrorTasks);
 
             sb.append(" }");
             return new JobInput(sb.toString());

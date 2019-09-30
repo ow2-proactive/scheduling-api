@@ -45,6 +45,7 @@ import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
+import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableIntegerInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableLongInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobStatusInput;
@@ -161,6 +162,44 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             // Job submitted time based predicate
             comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
 
+            // Job start time based predicate
+            comparableLongPredicated(i.getStartedTime(), "startTime", root, criteriaBuilder, predicates);
+
+            // Job start time based predicate
+            comparableLongPredicated(i.getFinishedTime(), "finishedTime", root, criteriaBuilder, predicates);
+
+            // Number of pending/running/etc task predicate
+            comparableIntegerPredicated(i.getNumberOfPendingTasks(),
+                                        "numberOfPendingTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+            comparableIntegerPredicated(i.getNumberOfRunningTasks(),
+                                        "numberOfRunningTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+            comparableIntegerPredicated(i.getNumberOfFinishedTasks(),
+                                        "numberOfFinishedTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+            comparableIntegerPredicated(i.getNumberOfFaultyTasks(),
+                                        "numberOfFaultyTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+            comparableIntegerPredicated(i.getNumberOfFailedTasks(),
+                                        "numberOfFailedTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+            comparableIntegerPredicated(i.getNumberOfInErrorTasks(),
+                                        "numberOfInErrorTasks",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
+
             return predicates.toArray(new Predicate[predicates.size()]);
 
         }).filter(array -> array.length > 0).collect(Collectors.toList());
@@ -214,6 +253,22 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
         }
         if (after != -1L) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
+        }
+    }
+
+    private void comparableIntegerPredicated(ComparableIntegerInput input, String name, Root<JobData> root,
+            CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
+        int before = -1;
+        int after = -1;
+        if (input != null) {
+            before = input.getBefore();
+            after = input.getAfter();
+        }
+        if (before != -1) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
+        }
+        if (after != -1) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
         }
     }
