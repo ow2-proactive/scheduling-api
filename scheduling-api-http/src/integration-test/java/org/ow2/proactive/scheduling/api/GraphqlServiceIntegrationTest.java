@@ -630,20 +630,63 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
+    public void testQueryJobsFilterBySubmittedTime() {
+        JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setSubmittedTime(100);
+        entityManager.persist(job1);
+
+        JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setSubmittedTime(2000);
+        entityManager.persist(job2);
+
+        JobData job3 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        entityManager.persist(job3);
+
+        Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{submittedTime: {after: %s}}) " +
+                                                                            "{ edges { cursor node { id owner submittedTime} } } }",
+                                                                            FILTER.getName(),
+                                                                            1000));
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{submittedTime: {before: %s}}) " +
+                                                        "{ edges { cursor node { id owner submittedTime} } } }",
+                                                        FILTER.getName(),
+                                                        1000));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
     public void testQueryJobsFilterByLastUpdatedTime() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setSubmittedTime(100);
         job1.setLastUpdatedTime(job1.getSubmittedTime());
         entityManager.persist(job1);
 
         JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setSubmittedTime(100);
         job2.setLastUpdatedTime(job2.getSubmittedTime() + 2000);
         entityManager.persist(job2);
+
+        JobData job3 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job3.setSubmittedTime(100);
+        entityManager.persist(job3);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{lastUpdatedTime: {after: %s}}) " +
                                                                             "{ edges { cursor node { id owner lastUpdatedTime} } } }",
                                                                             FILTER.getName(),
                                                                             job2.getSubmittedTime() + 1000));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{lastUpdatedTime: {before: %s}}) " +
+                                                        "{ edges { cursor node { id owner lastUpdatedTime} } } }",
+                                                        FILTER.getName(),
+                                                        job2.getSubmittedTime() + 1000));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
     }
 
@@ -652,18 +695,31 @@ public class GraphqlServiceIntegrationTest {
     @Transactional
     public void testQueryJobsFilterByStartTime() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setSubmittedTime(100);
         job1.setStartTime(job1.getSubmittedTime() + 10);
         entityManager.persist(job1);
 
         JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setSubmittedTime(100);
         job2.setStartTime(job2.getSubmittedTime() + 2000);
         entityManager.persist(job2);
+
+        JobData job3 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job3.setSubmittedTime(100);
+        entityManager.persist(job3);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{startTime: {after: %s}}) " +
                                                                             "{ edges { cursor node { id owner startTime} } } }",
                                                                             FILTER.getName(),
                                                                             job2.getSubmittedTime() + 1000));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{startTime: {before: %s}}) " +
+                                                        "{ edges { cursor node { id owner startTime} } } }",
+                                                        FILTER.getName(),
+                                                        job2.getSubmittedTime() + 1000));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
     }
 
@@ -672,18 +728,31 @@ public class GraphqlServiceIntegrationTest {
     @Transactional
     public void testQueryJobsFilterByFinishedTime() {
         JobData job1 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job1.setSubmittedTime(100);
         job1.setFinishedTime(job1.getSubmittedTime() + 10);
         entityManager.persist(job1);
 
         JobData job2 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job2.setSubmittedTime(100);
         job2.setFinishedTime(job2.getSubmittedTime() + 2000);
         entityManager.persist(job2);
+
+        JobData job3 = createJobData("job1", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
+        job3.setSubmittedTime(100);
+        entityManager.persist(job3);
 
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{finishedTime: {after: %s}}) " +
                                                                             "{ edges { cursor node { id owner finishedTime} } } }",
                                                                             FILTER.getName(),
                                                                             job2.getSubmittedTime() + 1000));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(1);
+
+        queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{finishedTime: {before: %s}}) " +
+                                                        "{ edges { cursor node { id owner finishedTime} } } }",
+                                                        FILTER.getName(),
+                                                        job2.getSubmittedTime() + 1000));
+        jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
     }
 
