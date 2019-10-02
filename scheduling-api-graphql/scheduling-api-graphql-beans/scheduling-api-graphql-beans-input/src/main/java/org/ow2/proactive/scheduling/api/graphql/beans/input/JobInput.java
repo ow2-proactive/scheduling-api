@@ -293,10 +293,6 @@ public class JobInput extends AbstractApiType {
                 sb.append(Constants.QUOTE);
             }
 
-            comparableLongString(InputFields.LAST_UPDATED_TIME.getName(),
-                                 this.beforeLastUpdatedTime,
-                                 this.afterLastUpdatedTime);
-
             if (!Strings.isNullOrEmpty(this.owner)) {
                 sb.append(' ');
                 sb.append(InputFields.OWNER.getName());
@@ -334,6 +330,10 @@ public class JobInput extends AbstractApiType {
             comparableLongString(InputFields.SUBMITTED_TIME.getName(),
                                  this.beforeSubmittedTime,
                                  this.afterSubmittedTime);
+
+            comparableLongString(InputFields.LAST_UPDATED_TIME.getName(),
+                                 this.beforeLastUpdatedTime,
+                                 this.afterLastUpdatedTime);
 
             comparableLongString(InputFields.START_TIME.getName(), this.beforeStartTime, this.afterStartTime);
 
