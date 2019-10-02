@@ -116,7 +116,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
             }
-            comparableLongPredicated(i.getComparableId(), "id", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getComparableId(), "id", root, criteriaBuilder, predicates, false);
 
             // Job name based predicate
             if (!Strings.isNullOrEmpty(jobName)) {
@@ -126,9 +126,6 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                  jobName);
                 predicates.add(jobNamePredicate);
             }
-
-            // Job last updated time based predicate
-            comparableLongPredicated(i.getLastUpdatedTime(), "lastUpdatedTime", root, criteriaBuilder, predicates);
 
             // Job owner based predicate
             if (!Strings.isNullOrEmpty(owner)) {
@@ -160,13 +157,21 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             }
 
             // Job submitted time based predicate
-            comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getSubmittedTime(), "submittedTime", root, criteriaBuilder, predicates, true);
+
+            // Job last updated time based predicate
+            comparableLongPredicated(i.getLastUpdatedTime(),
+                                     "lastUpdatedTime",
+                                     root,
+                                     criteriaBuilder,
+                                     predicates,
+                                     true);
 
             // Job start time based predicate
-            comparableLongPredicated(i.getStartedTime(), "startTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getStartedTime(), "startTime", root, criteriaBuilder, predicates, true);
 
             // Job start time based predicate
-            comparableLongPredicated(i.getFinishedTime(), "finishedTime", root, criteriaBuilder, predicates);
+            comparableLongPredicated(i.getFinishedTime(), "finishedTime", root, criteriaBuilder, predicates, true);
 
             // Number of pending/running/etc task predicate
             comparableIntegerPredicated(i.getNumberOfPendingTasks(),
@@ -242,7 +247,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
     }
 
     private void comparableLongPredicated(ComparableLongInput input, String name, Root<JobData> root,
-            CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
+            CriteriaBuilder criteriaBuilder, List<Predicate> predicates, boolean filterZeroLess) {
         long before = -1;
         long after = -1;
         if (input != null) {
@@ -251,6 +256,9 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
         }
         if (before != -1L) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
+            if (filterZeroLess && after == -1L) {
+                predicates.add(criteriaBuilder.greaterThan(root.get(name), 0L));
+            }
         }
         if (after != -1L) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
