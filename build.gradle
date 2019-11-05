@@ -52,6 +52,7 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'maven'
+    apply plugin: 'project-report'
 
     group = 'org.ow2.proactive'
 
