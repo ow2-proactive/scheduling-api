@@ -104,6 +104,7 @@ public class TaskDataFetcherTest {
         taskData.setNumberOfExecutionLeft(8);
         taskData.setNumberOfExecutionOnFailureLeft(9);
         taskData.setOnTaskErrorString(OnTaskError.NONE);
+        taskData.setRetryDelay(5000L);
         taskData.setParallelEnvNodesNumber(10); // currently, not in GraphQL data model
         taskData.setPostScript(new ScriptData()); // currently, not in GraphQL data model
         taskData.setPreciousLogs(true);

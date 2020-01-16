@@ -251,9 +251,9 @@ public class Job extends JobTaskCommon {
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
             int maxNumberOfExecution, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
             int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
-            String onTaskError, String owner, String priority, String projectName, long removedTime, long startTime,
-            String status, long submittedTime, List<Task> tasks, int totalNumberOfTasks, Map<String, String> variables,
-            Map<String, String> resultMap) {
+            String onTaskError, Long taskRetryDelay, String owner, String priority, String projectName,
+            long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
+            int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap) {
 
         super(description,
               finishedTime,
@@ -263,6 +263,7 @@ public class Job extends JobTaskCommon {
               maxNumberOfExecution,
               name,
               onTaskError,
+              taskRetryDelay,
               startTime,
               variables);
 

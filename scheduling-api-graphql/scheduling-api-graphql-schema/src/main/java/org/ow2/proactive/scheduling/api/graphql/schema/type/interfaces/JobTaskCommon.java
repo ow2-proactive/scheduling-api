@@ -39,6 +39,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.MAX_NUMBER_
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ON_TASK_ERROR;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
 import java.util.Map;
@@ -105,6 +106,9 @@ public abstract class JobTaskCommon {
                                        .field(newFieldDefinition().name(ON_TASK_ERROR.getName())
                                                                   .description("The behaviour applied on Tasks when an error occurs.")
                                                                   .type(OnTaskError.TYPE.getInstance()))
+                                       .field(newFieldDefinition().name(TASK_RETRY_DELAY.getName())
+                                                                  .description("The time (in milliseconds) to wait before restarting the task if an error occurred.")
+                                                                  .type(GraphQLLong))
                                        .field(newFieldDefinition().name(START_TIME.getName())
                                                                   .description("Start time.")
                                                                   .type(GraphQLLong))
@@ -142,13 +146,15 @@ public abstract class JobTaskCommon {
 
     private String onTaskError;
 
+    private Long taskRetryDelay;
+
     private long startTime = -1;
 
     private Map<String, String> variables;
 
     public JobTaskCommon(String description, long finishedTime, Map<String, String> genericInformation, long id,
-            long inErrorTime, int maxNumberOfExecution, String name, String onTaskError, long startTime,
-            Map<String, String> variables) {
+            long inErrorTime, int maxNumberOfExecution, String name, String onTaskError, Long taskRetryDelay,
+            long startTime, Map<String, String> variables) {
 
         this.description = description;
         this.finishedTime = finishedTime;
@@ -158,6 +164,7 @@ public abstract class JobTaskCommon {
         this.maxNumberOfExecution = maxNumberOfExecution;
         this.name = name;
         this.onTaskError = onTaskError;
+        this.taskRetryDelay = taskRetryDelay;
         this.startTime = startTime;
         this.variables = variables;
     }

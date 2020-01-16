@@ -157,6 +157,12 @@ public class Tasks extends AbstractApiType {
         }
 
         @Override
+        public Builder excludeTaskRetryDelay() {
+            super.excludeTaskRetryDelay();
+            return this;
+        }
+
+        @Override
         public Builder excludePageInfo() {
             super.excludePageInfo();
             return this;

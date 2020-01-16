@@ -68,12 +68,14 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_CURSO
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_COUNT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
 
+import org.apache.commons.lang3.text.StrBuilder;
 import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Viewer;
@@ -84,61 +86,66 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ViewerTest {
-    private static final String ALL = String.format("%s {\n%s\n%s\n%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){\n%s{\n%s\n%s\n" +
-                                                    "%s\n%s\n}\n%s\n%s{\n%s\n%s{\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n%s\n" +
-                                                    "%s\n%s\n%s\n%s\n%s{\n%s\n%s\n%s\n%s\n}\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" +
-                                                    "%s\n%s\n%s\n%s{\n%s\n%s\n}\n%s\n%s\n}\n}\n}\n}",
-                                                    VIEWER.getName(),
-                                                    LOGIN.getName(),
-                                                    SESSION_ID.getName(),
-                                                    JOBS.getName(),
-                                                    AFTER.getName(),
-                                                    BEFORE.getName(),
-                                                    FIRST.getName(),
-                                                    LAST.getName(),
-                                                    PAGE_INFO.getName(),
-                                                    HAS_NEXT_PAGE.getName(),
-                                                    HAS_PREVIOUS_PAGE.getName(),
-                                                    START_CURSOR.getName(),
-                                                    END_CURSOR.getName(),
-                                                    TOTAL_COUNT.getName(),
-                                                    EDGES.getName(),
-                                                    CURSOR.getName(),
-                                                    NODE.getName(),
-                                                    DESCRIPTION.getName(),
-                                                    FINISHED_TIME.getName(),
-                                                    GENERIC_INFORMATION.getName(),
-                                                    KEY.getName(),
-                                                    VALUE.getName(),
-                                                    Fields.ID.getName(),
-                                                    IN_ERROR_TIME.getName(),
-
-                                                    MAX_NUMBER_OF_EXECUTION.getName(),
-                                                    NAME.getName(),
-                                                    ON_TASK_ERROR.getName(),
-                                                    START_TIME.getName(),
-                                                    STATUS.getName(),
-                                                    DATA_MANAGEMENT.getName(),
-                                                    GLOBAL_SPACE_URL.getName(),
-                                                    INPUT_SPACE_URL.getName(),
-                                                    OUTPUT_SPACE_URL.getName(),
-                                                    USER_SPACE_URL.getName(),
-                                                    LAST_UPDATED_TIME.getName(),
-                                                    NUMBER_OF_FAILED_TASKS.getName(),
-                                                    NUMBER_OF_FAULTY_TASKS.getName(),
-                                                    NUMBER_OF_FINISHED_TASKS.getName(),
-                                                    NUMBER_OF_IN_ERROR_TASKS.getName(),
-                                                    NUMBER_OF_PENDING_TASKS.getName(),
-                                                    NUMBER_OF_RUNNING_TASKS.getName(),
-                                                    OWNER.getName(),
-                                                    PRIORITY.getName(),
-                                                    PROJECT_NAME.getName(),
-                                                    REMOVED_TIME.getName(),
-                                                    RESULT_MAP.getName(),
-                                                    KEY.getName(),
-                                                    VALUE.getName(),
-                                                    SUBMITTED_TIME.getName(),
-                                                    TOTAL_NUMBER_OF_TASKS.getName());
+    private static final StrBuilder ALL = new StrBuilder().appendln(VIEWER.getName() + " {")
+                                                          .appendln(LOGIN.getName())
+                                                          .appendln(SESSION_ID.getName())
+                                                          .appendln(String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){",
+                                                                                  JOBS.getName(),
+                                                                                  AFTER.getName(),
+                                                                                  BEFORE.getName(),
+                                                                                  FIRST.getName(),
+                                                                                  LAST.getName()))
+                                                          .appendln(PAGE_INFO.getName() + "{")
+                                                          .appendln(HAS_NEXT_PAGE.getName())
+                                                          .appendln(HAS_PREVIOUS_PAGE.getName())
+                                                          .appendln(START_CURSOR.getName())
+                                                          .appendln(END_CURSOR.getName())
+                                                          .appendln("}")
+                                                          .appendln(TOTAL_COUNT.getName())
+                                                          .appendln(EDGES.getName() + "{")
+                                                          .appendln(CURSOR.getName())
+                                                          .appendln(NODE.getName() + "{")
+                                                          .appendln(DESCRIPTION.getName())
+                                                          .appendln(FINISHED_TIME.getName())
+                                                          .appendln(GENERIC_INFORMATION.getName() + "{")
+                                                          .appendln(KEY.getName())
+                                                          .appendln(VALUE.getName())
+                                                          .appendln("}")
+                                                          .appendln(Fields.ID.getName())
+                                                          .appendln(IN_ERROR_TIME.getName())
+                                                          .appendln(MAX_NUMBER_OF_EXECUTION.getName())
+                                                          .appendln(NAME.getName())
+                                                          .appendln(ON_TASK_ERROR.getName())
+                                                          .appendln(TASK_RETRY_DELAY.getName())
+                                                          .appendln(START_TIME.getName())
+                                                          .appendln(STATUS.getName())
+                                                          .appendln(DATA_MANAGEMENT.getName() + "{")
+                                                          .appendln(GLOBAL_SPACE_URL.getName())
+                                                          .appendln(INPUT_SPACE_URL.getName())
+                                                          .appendln(OUTPUT_SPACE_URL.getName())
+                                                          .appendln(USER_SPACE_URL.getName())
+                                                          .appendln("}")
+                                                          .appendln(LAST_UPDATED_TIME.getName())
+                                                          .appendln(NUMBER_OF_FAILED_TASKS.getName())
+                                                          .appendln(NUMBER_OF_FAULTY_TASKS.getName())
+                                                          .appendln(NUMBER_OF_FINISHED_TASKS.getName())
+                                                          .appendln(NUMBER_OF_IN_ERROR_TASKS.getName())
+                                                          .appendln(NUMBER_OF_PENDING_TASKS.getName())
+                                                          .appendln(NUMBER_OF_RUNNING_TASKS.getName())
+                                                          .appendln(OWNER.getName())
+                                                          .appendln(PRIORITY.getName())
+                                                          .appendln(PROJECT_NAME.getName())
+                                                          .appendln(REMOVED_TIME.getName())
+                                                          .appendln(RESULT_MAP.getName() + "{")
+                                                          .appendln(KEY.getName())
+                                                          .appendln(VALUE.getName())
+                                                          .appendln("}")
+                                                          .appendln(SUBMITTED_TIME.getName())
+                                                          .appendln(TOTAL_NUMBER_OF_TASKS.getName())
+                                                          .appendln("}")
+                                                          .appendln("}")
+                                                          .appendln("}")
+                                                          .append("}");
 
     @Test
     public void getViewerQueryString() {
@@ -147,11 +154,11 @@ public class ViewerTest {
 
         Viewer viewer = new Viewer.Builder().jobs(jobs).build();
 
-        System.out.println(viewer.getQueryString());
+        System.out.println("viewer query string: \n" + viewer.getQueryString());
 
-        System.out.println(ALL);
+        System.out.println("expected: \n" + ALL);
 
-        assertThat(viewer.getQueryString()).isEqualTo(ALL);
+        assertThat(viewer.getQueryString()).isEqualTo(ALL.toString());
     }
 
 }

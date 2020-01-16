@@ -240,9 +240,10 @@ public class Task extends JobTaskCommon {
     public Task(List<String> additionalClasspath, String description, long executionDuration, String executionHostname,
             long finishedTime, long id, long inErrorTime, Map<String, String> genericInformation, String javaHome,
             long jobId, List<String> jvmArguments, int maxNumberOfExecution, String name, int numberOfExecutionLeft,
-            int numberOfExecutionOnFailureLeft, String onTaskError, boolean preciousLogs, boolean preciousResult,
-            String restartMode, String resultPreview, boolean fork, boolean runAsMe, long scheduledTime, long startTime,
-            String status, String tag, Map<String, String> variables, long walltime, String workingDir) {
+            int numberOfExecutionOnFailureLeft, String onTaskError, Long taskRetryDelay, boolean preciousLogs,
+            boolean preciousResult, String restartMode, String resultPreview, boolean fork, boolean runAsMe,
+            long scheduledTime, long startTime, String status, String tag, Map<String, String> variables, long walltime,
+            String workingDir) {
 
         super(description,
               finishedTime,
@@ -252,6 +253,7 @@ public class Task extends JobTaskCommon {
               maxNumberOfExecution,
               name,
               onTaskError,
+              taskRetryDelay,
               startTime,
               variables);
 

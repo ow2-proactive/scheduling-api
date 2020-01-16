@@ -102,6 +102,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                        .numberOfExecutionOnFailureLeft(taskData.getNumberOfExecutionOnFailureLeft())
                        .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
                                                               taskData.getOnTaskErrorString()))
+                       .taskRetryDelay(taskData.getRetryDelay())
                        .preciousLogs(taskData.isPreciousLogs())
                        .preciousResult(taskData.isPreciousResult())
                        .restartMode(RestartMode.getMode(taskData.getRestartModeId()).getDescription().toUpperCase())
