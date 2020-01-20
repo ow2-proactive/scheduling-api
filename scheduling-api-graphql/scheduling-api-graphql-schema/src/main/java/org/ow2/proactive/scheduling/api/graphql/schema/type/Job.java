@@ -56,6 +56,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASKS;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 
@@ -154,6 +155,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(ON_TASK_ERROR.getName())
                                                                .description("The behaviour applied on Tasks when an error occurs.")
                                                                .type(OnTaskError.TYPE.getInstance()))
+                                    .field(newFieldDefinition().name(TASK_RETRY_DELAY.getName())
+                                                               .description("The time (in milliseconds) to wait before restarting the task if an error occurred.")
+                                                               .type(GraphQLLong))
                                     .field(newFieldDefinition().name(OWNER.getName())
                                                                .description("Job's owner.")
                                                                .type(GraphQLString))

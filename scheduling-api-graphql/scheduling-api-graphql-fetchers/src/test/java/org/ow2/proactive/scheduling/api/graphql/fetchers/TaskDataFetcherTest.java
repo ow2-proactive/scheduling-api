@@ -163,6 +163,7 @@ public class TaskDataFetcherTest {
         assertThat(task.getNumberOfExecutionOnFailureLeft()).isEqualTo(taskData.getNumberOfExecutionOnFailureLeft());
         assertThat(task.getOnTaskError()).isEqualTo(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
                                                                               taskData.getOnTaskErrorString()));
+        assertThat(task.getTaskRetryDelay()).isEqualTo(taskData.getRetryDelay());
         assertThat(task.isPreciousLogs()).isEqualTo(taskData.isPreciousLogs());
         assertThat(task.isPreciousResult()).isEqualTo(taskData.isPreciousResult());
         assertThat(task.getRestartMode()).isEqualTo(RestartMode.getMode(taskData.getRestartModeId())
