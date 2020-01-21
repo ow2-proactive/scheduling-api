@@ -104,6 +104,7 @@ public class TaskDataFetcherTest {
         taskData.setNumberOfExecutionLeft(8);
         taskData.setNumberOfExecutionOnFailureLeft(9);
         taskData.setOnTaskErrorString(OnTaskError.NONE);
+        taskData.setRetryDelay(5000L);
         taskData.setParallelEnvNodesNumber(10); // currently, not in GraphQL data model
         taskData.setPostScript(new ScriptData()); // currently, not in GraphQL data model
         taskData.setPreciousLogs(true);
@@ -162,6 +163,7 @@ public class TaskDataFetcherTest {
         assertThat(task.getNumberOfExecutionOnFailureLeft()).isEqualTo(taskData.getNumberOfExecutionOnFailureLeft());
         assertThat(task.getOnTaskError()).isEqualTo(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
                                                                               taskData.getOnTaskErrorString()));
+        assertThat(task.getTaskRetryDelay()).isEqualTo(taskData.getRetryDelay());
         assertThat(task.isPreciousLogs()).isEqualTo(taskData.isPreciousLogs());
         assertThat(task.isPreciousResult()).isEqualTo(taskData.isPreciousResult());
         assertThat(task.getRestartMode()).isEqualTo(RestartMode.getMode(taskData.getRestartModeId())

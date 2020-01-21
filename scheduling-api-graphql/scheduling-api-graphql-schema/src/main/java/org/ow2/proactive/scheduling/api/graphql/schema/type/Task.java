@@ -57,6 +57,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SCHEDULED_T
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TAG;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.WALLTIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.WORKING_DIR;
@@ -151,6 +152,9 @@ public class Task extends JobTaskCommon {
                                     .field(newFieldDefinition().name(ON_TASK_ERROR.getName())
                                                                .description("The behaviour applied on Tasks when an error occurs.")
                                                                .type(OnTaskError.TYPE.getInstance()))
+                                    .field(newFieldDefinition().name(TASK_RETRY_DELAY.getName())
+                                                               .description("The time (in milliseconds) to wait before restarting the task if an error occurred.")
+                                                               .type(GraphQLLong))
                                     .field(newFieldDefinition().name(PRECIOUS_LOGS.getName())
                                                                .description("If the value is `true`, then it means that full task logs are kept.")
                                                                .type(GraphQLString))
@@ -240,9 +244,10 @@ public class Task extends JobTaskCommon {
     public Task(List<String> additionalClasspath, String description, long executionDuration, String executionHostname,
             long finishedTime, long id, long inErrorTime, Map<String, String> genericInformation, String javaHome,
             long jobId, List<String> jvmArguments, int maxNumberOfExecution, String name, int numberOfExecutionLeft,
-            int numberOfExecutionOnFailureLeft, String onTaskError, boolean preciousLogs, boolean preciousResult,
-            String restartMode, String resultPreview, boolean fork, boolean runAsMe, long scheduledTime, long startTime,
-            String status, String tag, Map<String, String> variables, long walltime, String workingDir) {
+            int numberOfExecutionOnFailureLeft, String onTaskError, Long taskRetryDelay, boolean preciousLogs,
+            boolean preciousResult, String restartMode, String resultPreview, boolean fork, boolean runAsMe,
+            long scheduledTime, long startTime, String status, String tag, Map<String, String> variables, long walltime,
+            String workingDir) {
 
         super(description,
               finishedTime,
@@ -252,6 +257,7 @@ public class Task extends JobTaskCommon {
               maxNumberOfExecution,
               name,
               onTaskError,
+              taskRetryDelay,
               startTime,
               variables);
 
