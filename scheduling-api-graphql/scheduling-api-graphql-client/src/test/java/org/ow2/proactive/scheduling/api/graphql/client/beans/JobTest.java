@@ -75,8 +75,10 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
 
-import org.apache.commons.lang3.text.StrBuilder;
+import java.util.StringJoiner;
+
 import org.junit.Test;
+import org.ow2.proactive.scheduling.api.graphql.beans.input.Constants;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.JobInput;
 import org.ow2.proactive.scheduling.api.graphql.beans.input.Jobs;
 
@@ -85,64 +87,64 @@ import com.google.common.collect.ImmutableList;
 
 public class JobTest {
 
-    private static final StrBuilder ALL = new StrBuilder().appendln(String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 %s : [{ %s : false }] ){",
-                                                                                  JOBS.getName(),
-                                                                                  AFTER.getName(),
-                                                                                  BEFORE.getName(),
-                                                                                  FIRST.getName(),
-                                                                                  LAST.getName(),
-                                                                                  FILTER.getName(),
-                                                                                  EXCLUDE_REMOVED.getName()))
-                                                          .appendln(PAGE_INFO.getName() + "{")
-                                                          .appendln(HAS_NEXT_PAGE.getName())
-                                                          .appendln(HAS_PREVIOUS_PAGE.getName())
-                                                          .appendln(START_CURSOR.getName())
-                                                          .appendln(END_CURSOR.getName())
-                                                          .appendln("}")
-                                                          .appendln(TOTAL_COUNT.getName())
-                                                          .appendln(EDGES.getName() + "{")
-                                                          .appendln(CURSOR.getName())
-                                                          .appendln(NODE.getName() + "{")
-                                                          .appendln(DESCRIPTION.getName())
-                                                          .appendln(FINISHED_TIME.getName())
-                                                          .appendln(GENERIC_INFORMATION.getName() + "{")
-                                                          .appendln(KEY.getName())
-                                                          .appendln(VALUE.getName())
-                                                          .appendln("}")
-                                                          .appendln(ID.getName())
-                                                          .appendln(IN_ERROR_TIME.getName())
-                                                          .appendln(MAX_NUMBER_OF_EXECUTION.getName())
-                                                          .appendln(NAME.getName())
-                                                          .appendln(ON_TASK_ERROR.getName())
-                                                          .appendln(TASK_RETRY_DELAY.getName())
-                                                          .appendln(START_TIME.getName())
-                                                          .appendln(STATUS.getName())
-                                                          .appendln(DATA_MANAGEMENT.getName() + "{")
-                                                          .appendln(GLOBAL_SPACE_URL.getName())
-                                                          .appendln(INPUT_SPACE_URL.getName())
-                                                          .appendln(OUTPUT_SPACE_URL.getName())
-                                                          .appendln(USER_SPACE_URL.getName())
-                                                          .appendln("}")
-                                                          .appendln(LAST_UPDATED_TIME.getName())
-                                                          .appendln(NUMBER_OF_FAILED_TASKS.getName())
-                                                          .appendln(NUMBER_OF_FAULTY_TASKS.getName())
-                                                          .appendln(NUMBER_OF_FINISHED_TASKS.getName())
-                                                          .appendln(NUMBER_OF_IN_ERROR_TASKS.getName())
-                                                          .appendln(NUMBER_OF_PENDING_TASKS.getName())
-                                                          .appendln(NUMBER_OF_RUNNING_TASKS.getName())
-                                                          .appendln(OWNER.getName())
-                                                          .appendln(PRIORITY.getName())
-                                                          .appendln(PROJECT_NAME.getName())
-                                                          .appendln(REMOVED_TIME.getName())
-                                                          .appendln(RESULT_MAP.getName() + "{")
-                                                          .appendln(KEY.getName())
-                                                          .appendln(VALUE.getName())
-                                                          .appendln("}")
-                                                          .appendln(SUBMITTED_TIME.getName())
-                                                          .appendln(TOTAL_NUMBER_OF_TASKS.getName())
-                                                          .appendln("}")
-                                                          .appendln("}")
-                                                          .append("}");
+    private static final StringJoiner ALL = new StringJoiner(Constants.RETURN).add(String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 %s : [{ %s : false }] ){",
+                                                                                                 JOBS.getName(),
+                                                                                                 AFTER.getName(),
+                                                                                                 BEFORE.getName(),
+                                                                                                 FIRST.getName(),
+                                                                                                 LAST.getName(),
+                                                                                                 FILTER.getName(),
+                                                                                                 EXCLUDE_REMOVED.getName()))
+                                                                              .add(PAGE_INFO.getName() + "{")
+                                                                              .add(HAS_NEXT_PAGE.getName())
+                                                                              .add(HAS_PREVIOUS_PAGE.getName())
+                                                                              .add(START_CURSOR.getName())
+                                                                              .add(END_CURSOR.getName())
+                                                                              .add("}")
+                                                                              .add(TOTAL_COUNT.getName())
+                                                                              .add(EDGES.getName() + "{")
+                                                                              .add(CURSOR.getName())
+                                                                              .add(NODE.getName() + "{")
+                                                                              .add(DESCRIPTION.getName())
+                                                                              .add(FINISHED_TIME.getName())
+                                                                              .add(GENERIC_INFORMATION.getName() + "{")
+                                                                              .add(KEY.getName())
+                                                                              .add(VALUE.getName())
+                                                                              .add("}")
+                                                                              .add(ID.getName())
+                                                                              .add(IN_ERROR_TIME.getName())
+                                                                              .add(MAX_NUMBER_OF_EXECUTION.getName())
+                                                                              .add(NAME.getName())
+                                                                              .add(ON_TASK_ERROR.getName())
+                                                                              .add(TASK_RETRY_DELAY.getName())
+                                                                              .add(START_TIME.getName())
+                                                                              .add(STATUS.getName())
+                                                                              .add(DATA_MANAGEMENT.getName() + "{")
+                                                                              .add(GLOBAL_SPACE_URL.getName())
+                                                                              .add(INPUT_SPACE_URL.getName())
+                                                                              .add(OUTPUT_SPACE_URL.getName())
+                                                                              .add(USER_SPACE_URL.getName())
+                                                                              .add("}")
+                                                                              .add(LAST_UPDATED_TIME.getName())
+                                                                              .add(NUMBER_OF_FAILED_TASKS.getName())
+                                                                              .add(NUMBER_OF_FAULTY_TASKS.getName())
+                                                                              .add(NUMBER_OF_FINISHED_TASKS.getName())
+                                                                              .add(NUMBER_OF_IN_ERROR_TASKS.getName())
+                                                                              .add(NUMBER_OF_PENDING_TASKS.getName())
+                                                                              .add(NUMBER_OF_RUNNING_TASKS.getName())
+                                                                              .add(OWNER.getName())
+                                                                              .add(PRIORITY.getName())
+                                                                              .add(PROJECT_NAME.getName())
+                                                                              .add(REMOVED_TIME.getName())
+                                                                              .add(RESULT_MAP.getName() + "{")
+                                                                              .add(KEY.getName())
+                                                                              .add(VALUE.getName())
+                                                                              .add("}")
+                                                                              .add(SUBMITTED_TIME.getName())
+                                                                              .add(TOTAL_NUMBER_OF_TASKS.getName())
+                                                                              .add("}")
+                                                                              .add("}")
+                                                                              .add("}");
 
     @Test
     public void getJobsQueryString() {
