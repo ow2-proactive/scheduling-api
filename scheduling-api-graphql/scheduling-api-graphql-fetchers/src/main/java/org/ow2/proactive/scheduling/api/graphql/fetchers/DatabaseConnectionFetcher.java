@@ -109,7 +109,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         Predicate cursorPredicateJobs = createCursorPredicate(criteriaBuilderJobs, entityIdPathJobs, after, before);
         int maxResultsJobs = applySlicing(criteriaQueryJobs, criteriaBuilderJobs, entityIdPathJobs, first, last);
         CriteriaQuery<E> selectJobs = criteriaQueryJobs.select(entityRootJobs);
-        selectJobs.distinct(true);
 
         List<Predicate[]> predicatesJobs = criteria.apply(criteriaBuilderJobs, entityRootJobs);
         Predicate[] wherePredicateJobs = buildWherePredicate(predicatesJobs, cursorPredicateJobs, criteriaBuilderJobs);

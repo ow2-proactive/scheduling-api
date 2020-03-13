@@ -1065,20 +1065,24 @@ public class GraphqlServiceIntegrationTest {
         importantJob.setVariables(variables);
 
         Map<String, Object> queryAllTotoJobsResult = executeGraphqlQuery("{ jobs (filter: [{variables: " +
-                                                                         "[{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { name } } } }");
+                                                                         "[{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { id name variables {key value} } } } }");
+        System.out.println(queryAllTotoJobsResult);
         assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(2);
 
         Map<String, Object> queryImportantJobResultByKey = executeGraphqlQuery("{ jobs (filter: [{variables: " +
-                                                                               "[{key: \"cmd\"}]}]) { totalCount edges { node { name } } } }");
+                                                                               "[{key: \"cmd\"}]}]) { totalCount edges { node { id name variables {key value} } } } }");
+        System.out.println(queryImportantJobResultByKey);
         assertThat((Integer) getField(queryImportantJobResultByKey, "data", "jobs", "totalCount")).isEqualTo(1);
 
         Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: " +
-                                                                          "[{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { name } } } }");
+                                                                          "[{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { id name variables {key value} } } } }");
+        System.out.println(queryImportantJobResult);
         assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(1);
 
         Map<String, Object> queryImportantJobResultWithStricterFilter = executeGraphqlQuery("{ jobs (filter: " +
-                                                                                            "{variables: [{key: \"cmd\", value: \"%\"}, {key: \"arg\", value: \"toto\"}]}) " +
-                                                                                            "{ totalCount edges { node { name } } } }");
+                                                                                            "{variables: [{key: \"cmd\", value: \"echo hello%\"}, {key: \"arg\", value: \"toto\"}]}) " +
+                                                                                            "{ totalCount edges { node { id name variables {key value} } } } }");
+        System.out.println(queryImportantJobResultWithStricterFilter);
         assertThat((Integer) getField(queryImportantJobResultWithStricterFilter,
                                       "data",
                                       "jobs",
