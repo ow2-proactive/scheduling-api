@@ -103,6 +103,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                             .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
                                             .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
                                                                                    jobData.getOnTaskErrorString()))
+                                            .taskRetryDelay(jobData.getTaskRetryDelay())
                                             .owner(jobData.getOwner())
                                             .priority(jobData.getPriority().name())
                                             .projectName(jobData.getProjectName())

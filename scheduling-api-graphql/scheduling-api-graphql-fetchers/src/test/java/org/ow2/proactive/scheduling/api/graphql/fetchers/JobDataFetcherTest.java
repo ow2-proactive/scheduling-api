@@ -88,6 +88,7 @@ public class JobDataFetcherTest {
         jobData.setNumberOfPendingTasks(8);
         jobData.setNumberOfRunningTasks(9);
         jobData.setOnTaskErrorString(OnTaskError.NONE);
+        jobData.setTaskRetryDelay(5000L);
         jobData.setOutputSpace("outputSpace");
         jobData.setOwner("owner");
         jobData.setPriority(JobPriority.LOW);
@@ -140,7 +141,7 @@ public class JobDataFetcherTest {
 
         assertThat(job.getOnTaskError()).isEqualTo(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
                                                                              jobData.getOnTaskErrorString()));
-
+        assertThat(job.getTaskRetryDelay()).isEqualTo(jobData.getTaskRetryDelay());
         assertThat(job.getOwner()).isEqualTo(jobData.getOwner());
         assertThat(job.getPriority()).isEqualTo(jobData.getPriority().name());
         assertThat(job.getProjectName()).isEqualTo(jobData.getProjectName());

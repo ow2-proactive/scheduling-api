@@ -190,6 +190,12 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        @Override
+        public Builder excludeTaskRetryDelay() {
+            super.excludeTaskRetryDelay();
+            return this;
+        }
+
         public Builder excludeOwner() {
             this.owner = false;
             return this;

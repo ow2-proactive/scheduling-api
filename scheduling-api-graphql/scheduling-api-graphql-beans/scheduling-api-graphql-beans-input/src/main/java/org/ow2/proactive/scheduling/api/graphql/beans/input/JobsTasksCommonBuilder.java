@@ -61,6 +61,8 @@ abstract class JobsTasksCommonBuilder {
 
     protected boolean onTaskError = true;
 
+    protected boolean taskRetryDelay = true;
+
     protected PageInfo pageInfo = new PageInfo.Builder().build();
 
     protected boolean startTime = true;
@@ -125,6 +127,11 @@ abstract class JobsTasksCommonBuilder {
 
     protected JobsTasksCommonBuilder excludeOnTaskError() {
         this.onTaskError = false;
+        return this;
+    }
+
+    protected JobsTasksCommonBuilder excludeTaskRetryDelay() {
+        this.taskRetryDelay = false;
         return this;
     }
 
@@ -227,6 +234,9 @@ abstract class JobsTasksCommonBuilder {
         }
         if (onTaskError) {
             sb.append(Fields.ON_TASK_ERROR.getName()).append(Constants.RETURN);
+        }
+        if (taskRetryDelay) {
+            sb.append(Fields.TASK_RETRY_DELAY.getName()).append(Constants.RETURN);
         }
         if (startTime) {
             sb.append(Fields.START_TIME.getName()).append(Constants.RETURN);
