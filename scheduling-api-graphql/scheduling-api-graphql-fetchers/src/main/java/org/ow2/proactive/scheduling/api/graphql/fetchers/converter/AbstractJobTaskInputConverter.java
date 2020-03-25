@@ -33,8 +33,12 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 
+import org.hibernate.Session;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.JobTaskCommonAbstractInput;
 
@@ -50,6 +54,12 @@ import graphql.schema.DataFetchingEnvironment;
  */
 public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAbstractInput>
         implements JobTaskInputPredicatesConverter<T, I> {
+
+    protected EntityManager entityManager;
+
+    public AbstractJobTaskInputConverter(EntityManager manager) {
+        this.entityManager = manager;
+    }
 
     protected LinkedHashMap<String, Object> extraInputCheck(DataFetchingEnvironment environment) {
         return new LinkedHashMap<>();
@@ -84,6 +94,12 @@ public abstract class AbstractJobTaskInputConverter<T, I extends JobTaskCommonAb
         }
 
         return input;
+    }
+
+    protected Dialect getDialect() {
+        Session session = (Session) entityManager.getDelegate();
+        SessionFactoryImpl sessionFactory = (SessionFactoryImpl) session.getSessionFactory();
+        return sessionFactory.getJdbcServices().getDialect();
     }
 
     public static class WildCardInputPredicateBuilder {

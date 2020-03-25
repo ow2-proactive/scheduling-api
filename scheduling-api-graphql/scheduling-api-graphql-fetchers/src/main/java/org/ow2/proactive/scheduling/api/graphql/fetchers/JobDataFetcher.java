@@ -67,7 +67,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
-        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(new JobInputConverter(),
+        BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(new JobInputConverter(entityManager),
                                                                                                                   environment);
 
         return createPaginatedConnection(environment,

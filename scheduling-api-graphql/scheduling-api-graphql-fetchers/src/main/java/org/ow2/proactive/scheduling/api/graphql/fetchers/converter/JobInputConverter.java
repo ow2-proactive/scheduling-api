@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.MapJoin;
@@ -61,6 +62,10 @@ import graphql.schema.GraphQLType;
  * @author ActiveEon Team
  */
 public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, JobInput> {
+
+    public JobInputConverter(EntityManager entityManager) {
+        super(entityManager);
+    }
 
     @Override
     protected LinkedHashMap<String, Object> extraInputCheck(DataFetchingEnvironment environment) {
@@ -104,7 +109,11 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                         predicates.add(criteriaBuilder.like(joinMap.get("name"), variable.get("key")));
                     }
                     if (variable.containsKey("value")) {
-                        predicates.add(criteriaBuilder.like(joinMap.get("value"), variable.get("value")));
+                        if (getDialect().toString().contains("PostgreSQL")) {
+                            addVariableValuePredicateForPostgreSQL(criteriaBuilder, predicates, variable, joinMap);
+                        } else {
+                            predicates.add(criteriaBuilder.like(joinMap.get("value"), variable.get("value")));
+                        }
                     }
                 });
             }
@@ -208,6 +217,18 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             return predicates.toArray(new Predicate[predicates.size()]);
 
         }).filter(array -> array.length > 0).collect(Collectors.toList());
+    }
+
+    private void addVariableValuePredicateForPostgreSQL(CriteriaBuilder criteriaBuilder, List<Predicate> predicates,
+            Map<String, String> variable, MapJoin<JobData, String, JobDataVariable> joinMap) {
+        predicates.add(criteriaBuilder.like(criteriaBuilder.function("convert_from",
+                                                                     String.class,
+                                                                     (criteriaBuilder.function("lo_get",
+                                                                                               Object.class,
+                                                                                               joinMap.get("value")
+                                                                                                      .as(Long.class))),
+                                                                     criteriaBuilder.literal("UTF8")),
+                                            variable.get("value")));
     }
 
     private JobStatus stringToJobStatus(String stringJobStatus) {

@@ -74,7 +74,7 @@ import graphql.schema.DataFetchingEnvironment;
 public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     /**
      * Maps entity objects to GraphQL schema objects.

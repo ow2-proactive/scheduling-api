@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -53,6 +54,10 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, TaskInput> {
+
+    public TaskInputConverter(EntityManager manager) {
+        super(manager);
+    }
 
     @Override
     public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder,
