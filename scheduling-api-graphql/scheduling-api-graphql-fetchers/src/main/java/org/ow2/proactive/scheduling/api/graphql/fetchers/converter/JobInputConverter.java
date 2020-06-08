@@ -118,6 +118,12 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                 });
             }
 
+            // This line makes sure that the first where clause contains the job id.
+            // As the job id is used in the ORDER BY clause, we hint HSQLDB to use the job id as index.
+            // Without this, HSQLDB would use the index of the removedTime column which does not improve the performance of ORDER BY
+            // Index usage in queries is DB-dependant, and this "hack" applies only to HSQLDB
+            predicates.add(criteriaBuilder.greaterThan(root.get("id"), 0L));
+
             if (excludeRemoved) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
             }
