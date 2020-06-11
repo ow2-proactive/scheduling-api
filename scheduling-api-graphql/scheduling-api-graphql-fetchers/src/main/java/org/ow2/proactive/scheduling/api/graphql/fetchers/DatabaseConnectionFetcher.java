@@ -70,7 +70,7 @@ import graphql.schema.DataFetchingEnvironment;
  * @author ActiveEon Team
  */
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     @PersistenceContext
