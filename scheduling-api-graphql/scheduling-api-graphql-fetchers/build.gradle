@@ -27,7 +27,9 @@ dependencies {
     compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api"
     compile 'org.springframework.boot:spring-boot-starter-log4j2'
 
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
+        exclude module: 'org.apache.tomcat'
+    }
 
     compile 'org.hibernate:hibernate-entitymanager'
     compile 'org.hibernate:hibernate-core'
@@ -41,4 +43,7 @@ dependencies {
     testCompile("org.ow2.proactive:scheduler-server:$version") {
         exclude module: 'hsqldb'
     }
+
+    //hikari version is freezed to 5.1.0 until spring is upgraded to 4.3.0 and +
+    testRuntime("org.hibernate:hibernate-hikaricp:5.1.0.Final")
 }
