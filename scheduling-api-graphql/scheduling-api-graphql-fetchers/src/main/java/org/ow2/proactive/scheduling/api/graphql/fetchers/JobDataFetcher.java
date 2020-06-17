@@ -139,7 +139,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
 
     /**
      * Transform a map of byte array to map of string.
-     * This is used mainly for transforming resultMap values wich are stored as blobs in the database (byte[]) into Strings. 
+     * This is used mainly for transforming resultMap values which are stored as blobs in the database (byte[]) into Strings.
      * @param input
      * @return
      */
@@ -149,7 +149,15 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
         }
 
         Map<String, String> answer = new HashMap<>(input.size());
-        input.forEach((key, value) -> answer.put(key, ObjectByteConverter.byteArrayToObject(value).toString()));
+        input.forEach((key, value) -> {
+            answer.put(key, "");
+            if (value != null) {
+                Object obj = ObjectByteConverter.byteArrayToObject(value);
+                if (obj != null) {
+                    answer.put(key, obj.toString());
+                }
+            }
+        });
         return answer;
     }
 
