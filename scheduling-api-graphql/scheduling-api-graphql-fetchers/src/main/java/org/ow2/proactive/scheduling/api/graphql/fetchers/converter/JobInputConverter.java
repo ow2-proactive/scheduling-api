@@ -93,7 +93,8 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
         return input.stream().map(i -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            boolean excludeRemoved = i.isExcludeRemoved();
+            // remove_time support has been discontinued, thus the following setting is ignored
+            // boolean excludeRemoved = i.isExcludeRemoved();
             long jobId = i.getId();
             String jobName = i.getJobName();
             String owner = i.getOwner();
@@ -124,9 +125,10 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             // Index usage in queries is DB-dependant, and this "hack" applies only to HSQLDB
             predicates.add(criteriaBuilder.greaterThan(root.get("id"), 0L));
 
-            if (excludeRemoved) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
-            }
+            // remove_time support has been discontinued, thus the following setting is ignored
+            // if (excludeRemoved) {
+            //    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("removedTime"), 0L));
+            // }
             // Job ID based predicates
             if (jobId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id"), jobId));
