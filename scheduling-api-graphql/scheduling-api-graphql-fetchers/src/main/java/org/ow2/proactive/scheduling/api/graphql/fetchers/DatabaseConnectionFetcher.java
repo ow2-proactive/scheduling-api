@@ -264,7 +264,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         CriteriaQuery<E> criteriaQueryCount = criteriaBuilderCount.createQuery(entityClass);
         CriteriaQuery<Long> queryCount = criteriaBuilderCount.createQuery(Long.class);
         Root<E> entityRootCount = queryCount.from(criteriaQueryCount.getResultType());
-        CriteriaQuery<Long> longCriteriaQuery = queryCount.select(criteriaBuilderCount.countDistinct(entityRootCount));
+        // previous countDistinct was removed in favor of count in order to increase performance
+        CriteriaQuery<Long> longCriteriaQuery = queryCount.select(criteriaBuilderCount.count(entityRootCount));
 
         Path<? extends Number> entityIdPath = entityId.apply(entityRootCount);
 
