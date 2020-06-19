@@ -41,6 +41,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
@@ -614,6 +615,7 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
+    @Ignore("Exclude removed support has been disabled")
     public void testQueryJobsFilterByExcludeRemoved() {
         addJobData(10);
         JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
@@ -1016,9 +1018,6 @@ public class GraphqlServiceIntegrationTest {
     @Transactional
     public void testQueryViewerJobs() {
         addJobData(10);
-        JobData removedJob = createJobData("removed", "bobot", JobPriority.HIGH, "test", JobStatus.KILLED);
-        removedJob.setRemovedTime(14232323);
-        entityManager.persist(removedJob);
 
         Map<String, Object> queryResult = executeGraphqlQuery("{ viewer { jobs  { edges { node { id owner } } } } }");
 
@@ -1051,34 +1050,63 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobsFilterByVariables() {
         addJobData(1);
 
-        JobData uselessJob = createJobData("Useless Toto Job", "ninipou", JobPriority.NORMAL, "", JobStatus.RUNNING);
-        entityManager.persist(uselessJob);
-        JobData importantJob = createJobData("Important Toto Job", "ninipou", JobPriority.HIGH, "", JobStatus.RUNNING);
-        entityManager.persist(importantJob);
-        Map<String, JobDataVariable> variables = new HashMap<>();
-        JobDataVariable cmdVariable = createJobDataVariable(importantJob, "cmd", "echo hello toto !");
-        variables.put("cmd", cmdVariable);
-        entityManager.persist(cmdVariable);
-        JobDataVariable argTotoVariable = createJobDataVariable(importantJob, "arg", "toto");
-        variables.put("arg", argTotoVariable);
+        // Jobs which should not be matched
+        // Job with null variable list
+        JobData uselessJob1 = createJobData("Useless Toto 1", "ninipou", JobPriority.NORMAL, "", JobStatus.RUNNING);
+        entityManager.persist(uselessJob1);
+        // Job with a different variable
+        JobData uselessJob2 = createJobData("Useless Toto 2", "ninipou", JobPriority.NORMAL, "", JobStatus.RUNNING);
+        entityManager.persist(uselessJob2);
+        Map<String, JobDataVariable> notMatchingVariables = new HashMap<>();
+        JobDataVariable notMatchingVariable = createJobDataVariable(uselessJob2, "notMatching", "goodbye toto");
+        notMatchingVariables.put("notMatching", notMatchingVariable);
+        entityManager.persist(notMatchingVariable);
+        uselessJob2.setVariables(notMatchingVariables);
+        // Job with empty variable list
+        JobData uselessJob3 = createJobData("Useless Toto 3", "ninipou", JobPriority.NORMAL, "", JobStatus.RUNNING);
+        entityManager.persist(uselessJob3);
+        Map<String, JobDataVariable> emptyVariables = new HashMap<>();
+        uselessJob3.setVariables(emptyVariables);
+
+        // Jobs which should be matched
+        JobData importantJob1 = createJobData("Important Job 1", "ninipou", JobPriority.HIGH, "", JobStatus.RUNNING);
+        entityManager.persist(importantJob1);
+        Map<String, JobDataVariable> variables1 = new HashMap<>();
+        JobDataVariable cmdVariable1 = createJobDataVariable(importantJob1, "cmd", "echo hello toto 1 !");
+        variables1.put("cmd", cmdVariable1);
+        entityManager.persist(cmdVariable1);
+        JobDataVariable argTotoVariable = createJobDataVariable(importantJob1, "arg", "toto");
+        variables1.put("arg", argTotoVariable);
         entityManager.persist(argTotoVariable);
-        importantJob.setVariables(variables);
+        importantJob1.setVariables(variables1);
 
+        JobData importantJob2 = createJobData("Important Job 2", "ninipou", JobPriority.HIGH, "", JobStatus.RUNNING);
+        entityManager.persist(importantJob2);
+        Map<String, JobDataVariable> variables2 = new HashMap<>();
+        JobDataVariable cmdVariable2 = createJobDataVariable(importantJob2, "cmd", "echo hello toto 2 !");
+        variables2.put("cmd", cmdVariable2);
+        entityManager.persist(cmdVariable2);
+        importantJob2.setVariables(variables2);
+
+        // Should match all jobs as the composite filter matches either the job name or the variables
         Map<String, Object> queryAllTotoJobsResult = executeGraphqlQuery("{ jobs (filter: [{variables: " +
-                                                                         "[{key: \"cmd\", value: \"%\"}]} {name: \"*Job\"}]) { totalCount edges { node { id name variables {key value} } } } }");
+                                                                         "[{key: \"cmd\", value: \"%\"}]} {name: \"Useless*\"}]) { totalCount edges { node { id name variables {key value} } } } }");
         System.out.println(queryAllTotoJobsResult);
-        assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(2);
+        assertThat((Integer) getField(queryAllTotoJobsResult, "data", "jobs", "totalCount")).isEqualTo(5);
 
+        // Should match "Important Job 1" and "Important Job 2"
         Map<String, Object> queryImportantJobResultByKey = executeGraphqlQuery("{ jobs (filter: [{variables: " +
                                                                                "[{key: \"cmd\"}]}]) { totalCount edges { node { id name variables {key value} } } } }");
         System.out.println(queryImportantJobResultByKey);
-        assertThat((Integer) getField(queryImportantJobResultByKey, "data", "jobs", "totalCount")).isEqualTo(1);
+        assertThat((Integer) getField(queryImportantJobResultByKey, "data", "jobs", "totalCount")).isEqualTo(2);
 
+        // Should match "Important Job 1" and "Important Job 2"
         Map<String, Object> queryImportantJobResult = executeGraphqlQuery("{ jobs (filter: {variables: " +
                                                                           "[{key: \"cmd\", value: \"%\"}]}) { totalCount edges { node { id name variables {key value} } } } }");
         System.out.println(queryImportantJobResult);
-        assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(1);
+        assertThat((Integer) getField(queryImportantJobResult, "data", "jobs", "totalCount")).isEqualTo(2);
 
+        // Should match "Important Job 1" only
         Map<String, Object> queryImportantJobResultWithStricterFilter = executeGraphqlQuery("{ jobs (filter: " +
                                                                                             "{variables: [{key: \"cmd\", value: \"echo hello%\"}, {key: \"arg\", value: \"toto\"}]}) " +
                                                                                             "{ totalCount edges { node { id name variables {key value} } } } }");
