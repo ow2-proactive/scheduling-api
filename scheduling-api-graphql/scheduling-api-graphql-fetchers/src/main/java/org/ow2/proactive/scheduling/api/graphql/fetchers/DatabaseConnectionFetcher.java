@@ -131,7 +131,16 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
 
         Stream<T> data = dataMapping(dataStream);
-        return createRelayConnection(entityClass, criteria, cursorMapper, data, first, last, entityId, after, before);
+        return createRelayConnection(entityRootJobs,
+                                     entityClass,
+                                     criteria,
+                                     cursorMapper,
+                                     data,
+                                     first,
+                                     last,
+                                     entityId,
+                                     after,
+                                     before);
 
     }
 
@@ -228,7 +237,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         return cursorPredicate;
     }
 
-    protected ExtendedConnection createRelayConnection(Class<E> entityClass,
+    protected ExtendedConnection createRelayConnection(Root<E> entityRootJobs, Class<E> entityClass,
             BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria, CursorMapper<T, Integer> cursorMapper,
             Stream<T> data, Integer first, Integer last, Function<Root<E>, Path<? extends Number>> entityId,
             Integer after, Integer before) {
@@ -242,7 +251,12 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
         }
 
-        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityClass, criteria, entityId, after, before);
+        int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityRootJobs,
+                                                               entityClass,
+                                                               criteria,
+                                                               entityId,
+                                                               after,
+                                                               before);
 
         pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last, after));
         pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first, before));
@@ -256,7 +270,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     }
 
     @VisibleForTesting
-    int getNbEntriesBeforeSlicing(Class<E> entityClass,
+    int getNbEntriesBeforeSlicing(Root<E> entityRootJobs, Class<E> entityClass,
             BiFunction<CriteriaBuilder, Root<E>, List<Predicate[]>> criteria,
             Function<Root<E>, Path<? extends Number>> entityId, Integer after, Integer before) {
 
@@ -264,8 +278,13 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         CriteriaQuery<E> criteriaQueryCount = criteriaBuilderCount.createQuery(entityClass);
         CriteriaQuery<Long> queryCount = criteriaBuilderCount.createQuery(Long.class);
         Root<E> entityRootCount = queryCount.from(criteriaQueryCount.getResultType());
-        // previous countDistinct was removed in favor of count in order to increase performance
-        CriteriaQuery<Long> longCriteriaQuery = queryCount.select(criteriaBuilderCount.count(entityRootCount));
+        // Apply countDistinct when the query operates on join tables
+        CriteriaQuery<Long> longCriteriaQuery;
+        if (entityRootJobs.getJoins().size() > 0) {
+            longCriteriaQuery = queryCount.select(criteriaBuilderCount.countDistinct(entityRootCount));
+        } else {
+            longCriteriaQuery = queryCount.select(criteriaBuilderCount.count(entityRootCount));
+        }
 
         Path<? extends Number> entityIdPath = entityId.apply(entityRootCount);
 

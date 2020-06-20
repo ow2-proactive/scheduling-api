@@ -1115,6 +1115,14 @@ public class GraphqlServiceIntegrationTest {
                                       "data",
                                       "jobs",
                                       "totalCount")).isEqualTo(1);
+
+        // Should match all five jobs, and only 5 (no duplicates) !
+        Map<String, Object> queryJobResultWithUnionFilter = executeGraphqlQuery("{ jobs (filter: " +
+                                                                                "[{variables: {key: \"arg\", value: \"toto\"}}, {variables: {key: \"cmd\", value: \"echo hello toto 2 !\"}}, " +
+                                                                                "{name: \"Useless*\"}])" +
+                                                                                "{ totalCount edges { node { id name variables {key value} } } } }");
+        System.out.println(queryJobResultWithUnionFilter);
+        assertThat((Integer) getField(queryJobResultWithUnionFilter, "data", "jobs", "totalCount")).isEqualTo(5);
     }
 
     private JobDataVariable createJobDataVariable(JobData jobData, String key, String value) {
