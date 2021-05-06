@@ -45,5 +45,7 @@ dependencies {
     }
 
     //hikari version is freezed to 5.1.0 until spring is upgraded to 4.3.0 and +
-    testRuntime("org.hibernate:hibernate-hikaricp:5.1.0.Final")
+    runtime("org.hibernate:hibernate-hikaricp:5.1.0.Final") {
+        exclude group: 'org.javassist', module: 'javassist'
+    }
 }
