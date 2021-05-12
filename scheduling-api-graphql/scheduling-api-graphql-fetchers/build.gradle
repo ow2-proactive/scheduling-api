@@ -44,8 +44,8 @@ dependencies {
         exclude module: 'hsqldb'
     }
 
-    //hikari version is freezed to 5.1.0 until spring is upgraded to 4.3.0 and +
-    runtime("org.hibernate:hibernate-hikaricp:5.1.0.Final") {
+    // custom hibernate-hikaricp version to use HikariCP 4.0
+    runtime('org.hibernate:hibernate-hikaricp:5.1.0.PA') {
         exclude group: 'org.javassist', module: 'javassist'
     }
 }
