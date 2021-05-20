@@ -45,7 +45,7 @@ dependencies {
     }
 
     // custom hibernate-hikaricp version to use HikariCP 4.0
-    runtime('org.hibernate:hibernate-hikaricp:5.1.0.PA') {
+    runtime('org.hibernate:hibernate-hikaricp') {
         exclude group: 'org.javassist', module: 'javassist'
     }
 }
