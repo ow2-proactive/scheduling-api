@@ -242,6 +242,9 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             Stream<T> data, Integer first, Integer last, Function<Root<E>, Path<? extends Number>> entityId,
             Integer after, Integer before) {
 
+        if (last != null) {
+            first = null;
+        }
         List<Edge> edges = buildEdges(data, cursorMapper);
 
         PageInfo pageInfo = new PageInfo();
