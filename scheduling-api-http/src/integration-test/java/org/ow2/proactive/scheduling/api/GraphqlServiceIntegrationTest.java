@@ -127,6 +127,21 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
+    public void testQueryJobsPaginatedLastArgumentWith100Jobs() {
+        addJobData(100);
+
+        Map<String, Object> queryResult = executeJobQueryWithPagination(null, 20, null, null);
+
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        assertThat(jobNodes).hasSize(20);
+        assertJobsHasPreviousPageIs(queryResult, true);
+        assertJobsHasNextPageIs(queryResult, false);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
     public void testQueryJobsPaginatedFirstArgument() {
         addJobData(10);
 
