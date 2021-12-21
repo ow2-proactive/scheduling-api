@@ -38,4 +38,9 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient'
     compile project(":scheduling-api-graphql:scheduling-api-graphql-fetchers")
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile "org.apache.logging.log4j:log4j-web:2.4.1"
+    testCompile "org.apache.logging.log4j:log4j-api:2.4.1"
+    testCompile "org.apache.logging.log4j:log4j-core:2.4.1"
+    testCompile "org.apache.logging.log4j:log4j-slf4j-impl:2.4.1"
+
 }
