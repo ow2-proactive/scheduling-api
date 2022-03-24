@@ -27,6 +27,7 @@ package org.ow2.proactive.scheduling.api;
 
 import javax.sql.DataSource;
 
+import org.ow2.proactive.scheduling.api.util.EntityScanRoot;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -55,6 +56,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 @EnableAutoConfiguration
 @EnableEncryptableProperties
 @EntityScan(basePackages = "org.ow2.proactive.scheduler.core.db")
+@EntityScanRoot("classpath*:scheduler-server*.jar")
 @PropertySources({ @PropertySource(value = "classpath:application.properties"),
                    @PropertySource(value = "file:${proactive.home}/config/scheduling-api/application.properties", ignoreResourceNotFound = true),
                    @PropertySource(value = "classpath:application-test.properties", ignoreResourceNotFound = true) })
