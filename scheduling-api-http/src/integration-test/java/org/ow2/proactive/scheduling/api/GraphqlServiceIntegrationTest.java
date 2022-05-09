@@ -40,10 +40,10 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
@@ -71,7 +71,11 @@ import com.google.common.collect.ImmutableMap;
 @SpringApplicationConfiguration(classes = Application.class)
 public class GraphqlServiceIntegrationTest {
 
-    private static final String CONTEXT_LOGIN = "bobot";
+    private static final UserData CONTEXT_USER_DATA = new UserData();
+
+    static {
+        CONTEXT_USER_DATA.setUserName("bobot");
+    }
 
     private static final String CONTEXT_SESSION_ID = "sessionId";
 
@@ -292,7 +296,7 @@ public class GraphqlServiceIntegrationTest {
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{owner:\"%s\"} {owner:\"owner9\"}]) " +
                                                                             "{ edges { cursor node { id owner } } } }",
                                                                             FILTER.getName(),
-                                                                            CONTEXT_LOGIN));
+                                                                            CONTEXT_USER_DATA.getUserName()));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(6);
 
@@ -308,7 +312,7 @@ public class GraphqlServiceIntegrationTest {
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{owner:\"!bobot\"}) " +
                                                                             "{ edges { cursor node { id owner } } } }",
                                                                             FILTER.getName(),
-                                                                            CONTEXT_LOGIN));
+                                                                            CONTEXT_USER_DATA.getUserName()));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
     }
@@ -322,7 +326,7 @@ public class GraphqlServiceIntegrationTest {
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:[{owner:\"*ow*\"} {owner:\"*ner*\"}]) " +
                                                                             "{ edges { cursor node { id owner } } } }",
                                                                             FILTER.getName(),
-                                                                            CONTEXT_LOGIN));
+                                                                            CONTEXT_USER_DATA.getUserName()));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
     }
@@ -336,7 +340,7 @@ public class GraphqlServiceIntegrationTest {
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{owner:\"!*owner*\"}) " +
                                                                             "{ edges { cursor node { id owner } } } }",
                                                                             FILTER.getName(),
-                                                                            CONTEXT_LOGIN));
+                                                                            CONTEXT_USER_DATA.getUserName()));
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
     }
@@ -618,7 +622,9 @@ public class GraphqlServiceIntegrationTest {
 
         String query = String.format("{ jobs(%s:[{owner:\"%s\" " +
                                      "priority:IDLE status:CANCELED},{projectName:\"projectName7\" status:KILLED}])" +
-                                     "{ edges { cursor node { id owner } } } }", FILTER.getName(), CONTEXT_LOGIN);
+                                     "{ edges { cursor node { id owner } } } }",
+                                     FILTER.getName(),
+                                     CONTEXT_USER_DATA.getUserName());
 
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
@@ -1024,7 +1030,7 @@ public class GraphqlServiceIntegrationTest {
         String query = "{ viewer { login sessionId  } }";
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
-        assertThat(getField(queryResult, "data", "viewer", "login")).isEqualTo(CONTEXT_LOGIN);
+        assertThat(getField(queryResult, "data", "viewer", "login")).isEqualTo(CONTEXT_USER_DATA.getUserName());
         assertThat(getField(queryResult, "data", "viewer", "sessionId")).isEqualTo(CONTEXT_SESSION_ID);
     }
 
@@ -1039,7 +1045,9 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
         assertThat(jobNodes).hasSize(5);
 
-        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode,
+                                                        "node",
+                                                        "owner")).isEqualTo(CONTEXT_USER_DATA.getUserName()));
     }
 
     @Rollback
@@ -1056,7 +1064,9 @@ public class GraphqlServiceIntegrationTest {
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "viewer", "jobs", "edges");
         assertThat(jobNodes).hasSize(1);
 
-        jobNodes.forEach(jobNode -> assertThat(getField(jobNode, "node", "owner")).isEqualTo(CONTEXT_LOGIN));
+        jobNodes.forEach(jobNode -> assertThat(getField(jobNode,
+                                                        "node",
+                                                        "owner")).isEqualTo(CONTEXT_USER_DATA.getUserName()));
     }
 
     @Rollback
@@ -1155,7 +1165,7 @@ public class GraphqlServiceIntegrationTest {
 
     private void addJobDataWithTasks(int nbTasks) {
         JobData jobData = createJobData("job" + UUID.randomUUID().toString(),
-                                        CONTEXT_LOGIN,
+                                        CONTEXT_USER_DATA.getUserName(),
                                         JobPriority.HIGH,
                                         "projectName",
                                         JobStatus.RUNNING);
@@ -1168,7 +1178,8 @@ public class GraphqlServiceIntegrationTest {
     private List<JobData> createJobData(int count) {
         return IntStream.range(1, count + 1)
                         .mapToObj(index -> createJobData("job" + index,
-                                                         index % 2 == 0 ? CONTEXT_LOGIN : "owner" + index,
+                                                         index % 2 == 0 ? CONTEXT_USER_DATA.getUserName()
+                                                                        : "owner" + index,
                                                          index % 2 == 0 ? JobPriority.IDLE : JobPriority.HIGH,
                                                          "projectName" + index,
                                                          index % 2 == 0 ? JobStatus.CANCELED : JobStatus.KILLED))
@@ -1228,7 +1239,7 @@ public class GraphqlServiceIntegrationTest {
     private Map<String, Object> executeGraphqlQuery(String query, Map<String, Object> variables) {
         return graphqlService.executeQuery(query,
                                            null,
-                                           new GraphqlContext(CONTEXT_LOGIN, CONTEXT_SESSION_ID),
+                                           new GraphqlContext(CONTEXT_USER_DATA, CONTEXT_SESSION_ID),
                                            variables);
     }
 

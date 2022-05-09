@@ -45,6 +45,7 @@ public enum InputFields {
     LAST_UPDATED_TIME,
     NAME,
     OWNER,
+    TENANT,
     PRIORITY,
     PROJECT_NAME,
     JOB_STATUS,

@@ -26,5 +26,6 @@
 dependencies {
     compile "com.graphql-java:graphql-java"
     compile "org.projectlombok:lombok"
+    compileOnly "org.ow2.proactive:common-api:$version"
     compile project(":scheduling-api-graphql:scheduling-api-graphql-common")
 }

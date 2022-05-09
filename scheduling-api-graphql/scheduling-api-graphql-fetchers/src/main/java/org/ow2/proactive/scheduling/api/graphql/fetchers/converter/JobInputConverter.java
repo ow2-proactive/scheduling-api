@@ -39,10 +39,12 @@ import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduler.core.db.JobDataVariable;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
@@ -98,6 +100,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             long jobId = i.getId();
             String jobName = i.getJobName();
             String owner = i.getOwner();
+            String tenant = i.getTenant();
             String priority = i.getPriority();
             String projectName = i.getProjectName();
             JobStatusInput status = i.getJobStatus();
@@ -148,6 +151,30 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             if (!Strings.isNullOrEmpty(owner)) {
                 Predicate ownerPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder, root, "owner", owner);
                 predicates.add(ownerPredicate);
+            }
+
+            // Tenant predicate, can be either set explicitly or defined automatically in the scheduler configuration
+            GraphqlContext graphqlContext = (GraphqlContext) environment.getContext();
+            UserData userData = graphqlContext.getUserData();
+            boolean isExplicitTenantFilter = !Strings.isNullOrEmpty(tenant);
+
+            if (userData.isFilterByTenant() && !userData.isAllTenantPermission()) {
+                tenant = userData.getTenant();
+            }
+
+            if (isExplicitTenantFilter) {
+                Predicate tenantPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                root,
+                                                                                "tenant",
+                                                                                tenant);
+                predicates.add(tenantPredicate);
+            } else if (!Strings.isNullOrEmpty(tenant)) {
+                Predicate tenantPredicate = criteriaBuilder.or(WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                                   root,
+                                                                                                   "tenant",
+                                                                                                   tenant),
+                                                               criteriaBuilder.isNull(root.get("tenant")));
+                predicates.add(tenantPredicate);
             }
 
             // Job priority based predicate

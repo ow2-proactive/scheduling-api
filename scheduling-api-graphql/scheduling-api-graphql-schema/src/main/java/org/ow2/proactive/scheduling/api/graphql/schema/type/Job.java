@@ -31,34 +31,7 @@ import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DATA_MANAGEMENT;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DESCRIPTION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.FINISHED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.IN_ERROR_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LAST_UPDATED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.MAX_NUMBER_OF_EXECUTION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FAILED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FAULTY_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FINISHED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_IN_ERROR_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_PENDING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_RUNNING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ON_TASK_ERROR;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OWNER;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PRIORITY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PROJECT_NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.REMOVED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.RESULT_MAP;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.*;
 
 import java.util.List;
 import java.util.Map;
@@ -161,6 +134,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(OWNER.getName())
                                                                .description("Job's owner.")
                                                                .type(GraphQLString))
+                                    .field(newFieldDefinition().name(TENANT.getName())
+                                                               .description("Job's owner tenant.")
+                                                               .type(GraphQLString))
                                     .field(newFieldDefinition().name(PRIORITY.getName())
                                                                .description("Job priority.")
                                                                .type(JobPriority.TYPE.getInstance()))
@@ -234,6 +210,8 @@ public class Job extends JobTaskCommon {
 
     private String owner;
 
+    private String tenant;
+
     private String priority;
 
     private String projectName;
@@ -255,7 +233,7 @@ public class Job extends JobTaskCommon {
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
             int maxNumberOfExecution, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
             int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
-            String onTaskError, Long taskRetryDelay, String owner, String priority, String projectName,
+            String onTaskError, Long taskRetryDelay, String owner, String tenant, String priority, String projectName,
             long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
             int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap) {
 
@@ -280,6 +258,7 @@ public class Job extends JobTaskCommon {
         this.numberOfPendingTasks = numberOfPendingTasks;
         this.numberOfRunningTasks = numberOfRunningTasks;
         this.owner = owner;
+        this.tenant = tenant;
         this.priority = priority;
         this.projectName = projectName;
         this.removedTime = removedTime;
