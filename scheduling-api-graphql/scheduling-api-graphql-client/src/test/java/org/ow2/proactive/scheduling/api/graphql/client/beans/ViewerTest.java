@@ -30,50 +30,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.AFTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.BEFORE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FIRST;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.LAST;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CURSOR;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DATA_MANAGEMENT;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DESCRIPTION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.EDGES;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.END_CURSOR;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.FINISHED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GENERIC_INFORMATION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.GLOBAL_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.HAS_NEXT_PAGE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.HAS_PREVIOUS_PAGE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.INPUT_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.IN_ERROR_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.JOBS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.KEY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LAST_UPDATED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LOGIN;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.MAX_NUMBER_OF_EXECUTION;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NODE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FAILED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FAULTY_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_FINISHED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_IN_ERROR_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_PENDING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_RUNNING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.ON_TASK_ERROR;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OUTPUT_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.OWNER;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PAGE_INFO;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PRIORITY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PROJECT_NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.REMOVED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.RESULT_MAP;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SESSION_ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_CURSOR;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.START_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMITTED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TASK_RETRY_DELAY;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_COUNT;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TOTAL_NUMBER_OF_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.USER_SPACE_URL;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VALUE;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VIEWER;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.*;
 
 import java.util.StringJoiner;
 
@@ -90,6 +47,10 @@ import lombok.extern.log4j.Log4j2;
 public class ViewerTest {
     private static final StringJoiner ALL = new StringJoiner(Constants.RETURN).add(VIEWER.getName() + " {")
                                                                               .add(LOGIN.getName())
+                                                                              .add(GROUPS.getName())
+                                                                              .add(TENANT.getName())
+                                                                              .add(FILTER_BY_TENANT.getName())
+                                                                              .add(ALL_TENANT_PERMISSION.getName())
                                                                               .add(SESSION_ID.getName())
                                                                               .add(String.format("%s( %s:\"after\" %s:\"before\" %s:10 %s:10 ){",
                                                                                                  JOBS.getName(),
@@ -135,6 +96,7 @@ public class ViewerTest {
                                                                               .add(NUMBER_OF_PENDING_TASKS.getName())
                                                                               .add(NUMBER_OF_RUNNING_TASKS.getName())
                                                                               .add(OWNER.getName())
+                                                                              .add(TENANT.getName())
                                                                               .add(PRIORITY.getName())
                                                                               .add(PROJECT_NAME.getName())
                                                                               .add(REMOVED_TIME.getName())

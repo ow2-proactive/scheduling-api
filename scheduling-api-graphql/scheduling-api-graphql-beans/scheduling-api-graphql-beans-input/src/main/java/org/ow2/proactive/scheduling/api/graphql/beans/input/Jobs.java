@@ -65,6 +65,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean owner = true;
 
+        private boolean tenant = true;
+
         private boolean priority = true;
 
         private boolean projectName = true;
@@ -201,6 +203,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeTenant() {
+            this.tenant = false;
+            return this;
+        }
+
         @Override
         public Builder excludePageInfo() {
             super.excludePageInfo();
@@ -330,6 +337,9 @@ public class Jobs extends AbstractApiType {
             }
             if (owner) {
                 sb.append(Fields.OWNER.getName()).append(Constants.RETURN);
+            }
+            if (tenant) {
+                sb.append(Fields.TENANT.getName()).append(Constants.RETURN);
             }
             if (priority) {
                 sb.append(Fields.PRIORITY.getName()).append(Constants.RETURN);

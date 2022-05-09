@@ -25,6 +25,9 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import java.util.stream.Collectors;
+
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.springframework.stereotype.Component;
@@ -42,7 +45,16 @@ public class UserDataFetcher implements DataFetcher {
     @Override
     public Object get(DataFetchingEnvironment environment) {
         GraphqlContext context = (GraphqlContext) environment.getContext();
-        return User.builder().login(context.getLogin()).sessionId(context.getSessionId()).build();
+        UserData userData = context.getUserData();
+        return User.builder()
+                   .login(userData.getUserName())
+                   .groups(userData.getGroups() != null ? userData.getGroups().stream().collect(Collectors.toList())
+                                                        : null)
+                   .tenant(userData.getTenant())
+                   .filterByTenant(userData.isFilterByTenant())
+                   .allTenantPermission(userData.isAllTenantPermission())
+                   .sessionId(context.getSessionId())
+                   .build();
     }
 
 }

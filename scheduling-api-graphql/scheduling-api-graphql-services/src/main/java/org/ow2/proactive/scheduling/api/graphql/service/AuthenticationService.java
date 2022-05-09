@@ -39,6 +39,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.InvalidSessionIdException;
 import org.ow2.proactive.scheduling.api.graphql.service.exceptions.MissingSessionIdException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class AuthenticationService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private LoadingCache<String, String> sessionCache;
+    private LoadingCache<String, UserData> sessionCache;
 
     @PostConstruct
     protected void init() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
@@ -85,10 +86,10 @@ public class AuthenticationService {
         sessionCache = CacheBuilder.newBuilder()
                                    .maximumSize(Integer.parseInt(sessionCacheMaxSize))
                                    .expireAfterWrite(Integer.parseInt(sessionCacheExpireAfter), TimeUnit.MILLISECONDS)
-                                   .build(new CacheLoader<String, String>() {
+                                   .build(new CacheLoader<String, UserData>() {
                                        @Override
-                                       public String load(String sessionId) throws Exception {
-                                           return getLoginFromSessionId(sessionId);
+                                       public UserData load(String sessionId) throws Exception {
+                                           return getUserDataFromSessionId(sessionId);
                                        }
                                    });
 
@@ -122,22 +123,23 @@ public class AuthenticationService {
             result += '/';
         }
 
-        result += "scheduler/logins/sessionid/";
+        result += "scheduler/logins/sessionid/%s/userdata";
 
         return result;
     }
 
-    public String authenticate(String sessionId) throws InvalidSessionIdException {
+    public UserData authenticate(String sessionId) throws InvalidSessionIdException {
         return sessionCache.getUnchecked(sessionId);
     }
 
-    private String getLoginFromSessionId(String sessionId) {
+    private UserData getUserDataFromSessionId(String sessionId) {
         try {
 
-            String login = restTemplate.getForObject(schedulerLoginFetchUrl + sessionId, String.class);
+            UserData userData = restTemplate.getForObject(String.format(schedulerLoginFetchUrl, sessionId),
+                                                          UserData.class);
 
-            if (!Strings.isNullOrEmpty(login)) {
-                return login;
+            if (userData != null) {
+                return userData;
             }
 
             throw new MissingSessionIdException();

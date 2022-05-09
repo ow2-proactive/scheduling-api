@@ -73,6 +73,8 @@ public class JobInput extends AbstractApiType {
 
         private String owner;
 
+        private String tenant;
+
         private String priority;
 
         private String projectName;
@@ -239,6 +241,11 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder tenant(String tenant) {
+            this.tenant = tenant;
+            return this;
+        }
+
         public JobInput.Builder variableName(String variableName) {
             this.variableName = variableName;
             return this;
@@ -299,6 +306,14 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
                 sb.append(StringEscapeUtils.escapeJson(this.owner));
+                sb.append(Constants.QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.tenant)) {
+                sb.append(' ');
+                sb.append(InputFields.TENANT.getName());
+                sb.append(" : ");
+                sb.append(Constants.QUOTE);
+                sb.append(StringEscapeUtils.escapeJson(this.tenant));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.priority)) {

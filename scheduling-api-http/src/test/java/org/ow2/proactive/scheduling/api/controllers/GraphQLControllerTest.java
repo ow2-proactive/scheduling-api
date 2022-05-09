@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.service.AuthenticationService;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
@@ -56,6 +57,12 @@ import com.google.common.collect.ImmutableMap;
 
 @WebAppConfiguration
 public class GraphQLControllerTest {
+
+    private static final UserData CONTEXT_USER_DATA = new UserData();
+
+    static {
+        CONTEXT_USER_DATA.setUserName("bobot");
+    }
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -77,7 +84,7 @@ public class GraphQLControllerTest {
     public void setup() {
         initMocks(this);
 
-        when(authenticationService.authenticate(any(String.class))).thenReturn("bobot");
+        when(authenticationService.authenticate(any(String.class))).thenReturn(CONTEXT_USER_DATA);
 
         when(graphqlService.executeQuery(any(String.class),
                                          any(String.class),

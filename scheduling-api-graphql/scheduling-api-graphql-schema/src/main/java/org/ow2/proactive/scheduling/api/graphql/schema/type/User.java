@@ -25,14 +25,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import static graphql.Scalars.GraphQLInt;
-import static graphql.Scalars.GraphQLString;
+import static graphql.Scalars.*;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.JOBS;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.LOGIN;
-import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SESSION_ID;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.*;
 
+import java.util.List;
+
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduling.api.graphql.common.Arguments;
 import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
@@ -53,6 +53,14 @@ import lombok.Getter;
 public class User {
 
     private final String login;
+
+    private final List<String> groups;
+
+    private final String tenant;
+
+    private final boolean filterByTenant;
+
+    private final boolean allTenantPermission;
 
     private final String sessionId;
 
@@ -87,6 +95,18 @@ public class User {
                                     .field(newFieldDefinition().name(LOGIN.getName())
                                                                .description("Login name of the viewer.")
                                                                .type(GraphQLString))
+                                    .field(newFieldDefinition().name(GROUPS.getName())
+                                                               .description("Groups of the viewer.")
+                                                               .type(new GraphQLList(GraphQLString)))
+                                    .field(newFieldDefinition().name(TENANT.getName())
+                                                               .description("Tenant of the viewer.")
+                                                               .type(GraphQLString))
+                                    .field(newFieldDefinition().name(FILTER_BY_TENANT.getName())
+                                                               .description("Is filter by tenant enabled.")
+                                                               .type(GraphQLBoolean))
+                                    .field(newFieldDefinition().name(ALL_TENANT_PERMISSION.getName())
+                                                               .description("Does viewer have all tenant permission.")
+                                                               .type(GraphQLBoolean))
                                     .field(newFieldDefinition().name(SESSION_ID.getName())
                                                                .description("Session ID of the viewer.")
                                                                .type(GraphQLString))

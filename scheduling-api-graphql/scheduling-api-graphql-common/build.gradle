@@ -25,4 +25,5 @@
 
 dependencies {
     compile "com.google.guava:guava"
+    compileOnly "org.ow2.proactive:common-api:$version"
 }

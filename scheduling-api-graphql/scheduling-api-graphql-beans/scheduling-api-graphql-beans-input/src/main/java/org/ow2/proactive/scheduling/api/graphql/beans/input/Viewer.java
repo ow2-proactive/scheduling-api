@@ -42,6 +42,14 @@ public class Viewer extends AbstractApiType {
 
         private boolean login = true;
 
+        private boolean groups = true;
+
+        private boolean tenant = true;
+
+        private boolean filterByTenant = true;
+
+        private boolean allTenantPermission = true;
+
         private boolean sessionId = true;
 
         private StringBuilder sb = new StringBuilder();
@@ -56,6 +64,26 @@ public class Viewer extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeGroups() {
+            this.groups = false;
+            return this;
+        }
+
+        public Builder excludeTenant() {
+            this.tenant = false;
+            return this;
+        }
+
+        public Builder excludeFilterByTenant() {
+            this.filterByTenant = false;
+            return this;
+        }
+
+        public Builder excludeAllTenantPermission() {
+            this.allTenantPermission = false;
+            return this;
+        }
+
         public Builder excludeSessionId() {
             this.sessionId = false;
             return this;
@@ -65,6 +93,18 @@ public class Viewer extends AbstractApiType {
             sb.append(Fields.VIEWER.getName()).append(" {").append(Constants.RETURN);
             if (login) {
                 sb.append(Fields.LOGIN.getName()).append(Constants.RETURN);
+            }
+            if (groups) {
+                sb.append(Fields.GROUPS.getName()).append(Constants.RETURN);
+            }
+            if (tenant) {
+                sb.append(Fields.TENANT.getName()).append(Constants.RETURN);
+            }
+            if (filterByTenant) {
+                sb.append(Fields.FILTER_BY_TENANT.getName()).append(Constants.RETURN);
+            }
+            if (allTenantPermission) {
+                sb.append(Fields.ALL_TENANT_PERMISSION.getName()).append(Constants.RETURN);
             }
             if (sessionId) {
                 sb.append(Fields.SESSION_ID.getName()).append(Constants.RETURN);

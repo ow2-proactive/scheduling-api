@@ -35,6 +35,8 @@ war {
 // with providedCompile are still included in the WAR file that is generated
 dependencies {
 
+    compileOnly "org.ow2.proactive:common-api:$version"
+
     compile project(':scheduling-api-graphql:scheduling-api-graphql-services')
 
     // Note: all providedCompile dependencies need to be changed to compile dependencies while running the
@@ -84,6 +86,8 @@ dependencies {
 
     //support for MySQL DB
     testCompile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+
+    testCompile "org.ow2.proactive:common-api:$version"
 
     //support for PostgreSQL DB
     testCompile group: 'org.postgresql', name: 'postgresql', version: '42.0.0'

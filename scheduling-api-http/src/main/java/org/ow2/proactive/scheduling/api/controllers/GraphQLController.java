@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.service.AuthenticationService;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
@@ -90,14 +91,14 @@ public class GraphQLController {
 
         log.debug("sessionId={}", sessionId);
 
-        String username = authenticationService.authenticate(sessionId);
+        UserData userData = authenticationService.authenticate(sessionId);
 
-        log.debug("username={}", username);
+        log.debug("username={}", userData.getUserName());
         log.debug("query={}, operationName={}, variables={}", query, operationName, variables);
 
         return graphqlService.executeQuery(query,
                                            operationName,
-                                           new GraphqlContext(username, sessionId),
+                                           new GraphqlContext(userData, sessionId),
                                            decodeIntoMap(variables));
     }
 
@@ -111,9 +112,9 @@ public class GraphQLController {
 
         log.debug("sessionId={}", sessionId);
 
-        String username = authenticationService.authenticate(sessionId);
+        UserData userData = authenticationService.authenticate(sessionId);
 
-        log.trace("username={}", username);
+        log.trace("username={}", userData.getUserName());
 
         String query = (String) body.get(DEFAULT_QUERY_KEY);
         String operationName = (String) body.get(DEFAULT_OPERATION_NAME);
@@ -121,7 +122,7 @@ public class GraphQLController {
 
         log.debug("query={}, operationName={}, variables={}", query, operationName, variables);
 
-        return graphqlService.executeQuery(query, operationName, new GraphqlContext(username, sessionId), variables);
+        return graphqlService.executeQuery(query, operationName, new GraphqlContext(userData, sessionId), variables);
     }
 
     @RequestMapping(value = "/schema", method = RequestMethod.GET)

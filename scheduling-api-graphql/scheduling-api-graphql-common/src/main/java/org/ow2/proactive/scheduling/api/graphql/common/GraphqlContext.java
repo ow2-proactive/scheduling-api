@@ -25,19 +25,22 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.common;
 
+import org.ow2.proactive.authentication.UserData;
+
+
 public final class GraphqlContext {
 
-    private final String login;
+    private final UserData userData;
 
     private final String sessionId;
 
-    public GraphqlContext(String login, String sessionId) {
-        this.login = login;
+    public GraphqlContext(UserData userData, String sessionId) {
+        this.userData = userData;
         this.sessionId = sessionId;
     }
 
-    public String getLogin() {
-        return login;
+    public UserData getUserData() {
+        return userData;
     }
 
     public String getSessionId() {

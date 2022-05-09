@@ -30,6 +30,7 @@ import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TENANT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
@@ -98,6 +99,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Job owner (i.e. the one who submitted the Job).")
                                                                .type(GraphQLString)
                                                                .build())
+                                   .field(newInputObjectField().name(TENANT.getName())
+                                                               .description("Job owner tenant (i.e. the tenant to which the job owner belongs).")
+                                                               .type(GraphQLString)
+                                                               .build())
                                    .field(newInputObjectField().name(PRIORITY.getName())
                                                                .description("Job priority.")
                                                                .type(JobPriority.TYPE.getInstance())
@@ -160,6 +165,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private String owner;
 
+    private String tenant;
+
     private String priority;
 
     private String projectName;
@@ -195,6 +202,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             excludeRemoved = Inputs.getValue(input, EXCLUDE_REMOVED.getName(), true);
             jobName = Inputs.getValue(input, NAME.getName(), null);
             owner = Inputs.getValue(input, OWNER.getName(), null);
+            tenant = Inputs.getValue(input, TENANT.getName(), null);
             priority = Inputs.getValue(input, PRIORITY.getName(), null);
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);

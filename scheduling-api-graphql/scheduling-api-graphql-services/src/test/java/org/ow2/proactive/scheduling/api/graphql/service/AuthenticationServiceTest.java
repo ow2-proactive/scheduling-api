@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ow2.proactive.authentication.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.ConfigFileApplicationContextInitializer;
 import org.springframework.boot.test.SpringApplicationContextLoader;
@@ -57,6 +58,12 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:application-test.properties")
 public class AuthenticationServiceTest {
 
+    private static final UserData CONTEXT_USER_DATA = new UserData();
+
+    static {
+        CONTEXT_USER_DATA.setUserName("bobot");
+    }
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -65,18 +72,18 @@ public class AuthenticationServiceTest {
 
     @Test
     public void testAuthenticate() throws Exception {
-        when(restTemplate.getForObject(any(String.class), eq(String.class))).thenReturn("bobot");
+        when(restTemplate.getForObject(any(String.class), eq(UserData.class))).thenReturn(CONTEXT_USER_DATA);
         authenticationService.authenticate("sessionId");
         // first time, call resttemplate to get the login name
-        verify(restTemplate, times(1)).getForObject(any(String.class), eq(String.class));
+        verify(restTemplate, times(1)).getForObject(any(String.class), eq(UserData.class));
         authenticationService.authenticate("sessionId");
         // second time, should not call resttemplate to get the login name again
-        verify(restTemplate, times(1)).getForObject(any(String.class), eq(String.class));
+        verify(restTemplate, times(1)).getForObject(any(String.class), eq(UserData.class));
     }
 
     @Test
     public void testAuthenticateMissingSessionId() {
-        when(restTemplate.getForObject(any(String.class), eq(String.class))).thenReturn("");
+        when(restTemplate.getForObject(any(String.class), eq(UserData.class))).thenReturn(null);
         try {
             authenticationService.authenticate("sessionId");
         } catch (Exception e) {
@@ -87,7 +94,7 @@ public class AuthenticationServiceTest {
     @Test
     public void testAuthenticateInvalidSessionId() {
         HttpClientErrorException e = new HttpClientErrorException(HttpStatus.NOT_FOUND);
-        when(restTemplate.getForObject(any(String.class), eq(String.class))).thenThrow(e);
+        when(restTemplate.getForObject(any(String.class), eq(UserData.class))).thenThrow(e);
         try {
             authenticationService.authenticate("sessionId");
         } catch (Exception ex) {

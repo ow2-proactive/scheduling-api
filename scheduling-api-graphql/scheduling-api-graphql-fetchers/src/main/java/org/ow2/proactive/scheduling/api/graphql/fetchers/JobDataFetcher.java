@@ -105,6 +105,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                                                                                    jobData.getOnTaskErrorString()))
                                             .taskRetryDelay(jobData.getTaskRetryDelay())
                                             .owner(jobData.getOwner())
+                                            .tenant(jobData.getTenant())
                                             .priority(jobData.getPriority().name())
                                             .projectName(jobData.getProjectName())
                                             .removedTime(jobData.getRemovedTime())
