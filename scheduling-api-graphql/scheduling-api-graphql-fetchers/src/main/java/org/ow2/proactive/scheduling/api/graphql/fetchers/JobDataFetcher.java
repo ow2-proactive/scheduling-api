@@ -65,6 +65,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     @Override
     public Object get(DataFetchingEnvironment environment) {
 
+        initDialectCheck();
+
         Function<Root<JobData>, Path<? extends Number>> entityId = root -> root.get("id");
 
         BiFunction<CriteriaBuilder, Root<JobData>, List<Predicate[]>> criteria = new JobTaskFilterInputBiFunction(new JobInputConverter(entityManager),

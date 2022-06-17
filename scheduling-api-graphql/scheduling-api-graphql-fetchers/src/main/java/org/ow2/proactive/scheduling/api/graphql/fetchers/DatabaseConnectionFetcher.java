@@ -76,6 +76,8 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
     @PersistenceContext
     protected EntityManager entityManager;
 
+    public static Boolean IS_HSQLDB = null;
+
     /**
      * Maps entity objects to GraphQL schema objects.
      *
@@ -83,6 +85,16 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      * @return a stream of GraphQL schema objects.
      */
     protected abstract Stream<T> dataMapping(Stream<E> input);
+
+    protected synchronized void initDialectCheck() {
+        if (IS_HSQLDB == null) {
+            DatabaseConnectionFetcher.IS_HSQLDB = "org.hibernate.dialect.HSQLDialect".equals(entityManager.getEntityManagerFactory()
+                                                                                                          .getProperties()
+                                                                                                          .getOrDefault("hibernate.dialect",
+                                                                                                                        "")
+                                                                                                          .toString());
+        }
+    }
 
     /**
      * Adaptation of the algorithm defined in the GraphQL specification.
