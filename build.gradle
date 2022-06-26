@@ -83,6 +83,7 @@ allprojects {
         mavenCentral()
 
         maven { url 'http://repository.activeeon.com/content/groups/proactive/' }
+        maven { url "https://repo.jenkins-ci.org/releases/" }
     }
 
     uploadArchives {
