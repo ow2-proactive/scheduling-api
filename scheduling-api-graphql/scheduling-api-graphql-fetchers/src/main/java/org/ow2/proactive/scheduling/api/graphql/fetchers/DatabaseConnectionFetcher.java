@@ -84,7 +84,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
      * @param input a stream of entity objects.
      * @return a stream of GraphQL schema objects.
      */
-    protected abstract Stream<T> dataMapping(Stream<E> input);
+    protected abstract Stream<T> dataMapping(Stream<E> input, DataFetchingEnvironment environment);
 
     protected synchronized void initDialectCheck() {
         if (IS_HSQLDB == null) {
@@ -142,7 +142,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
             dataStream = dataStream.sorted(entityComparator);
         }
 
-        Stream<T> data = dataMapping(dataStream);
+        Stream<T> data = dataMapping(dataStream, environment);
         return createRelayConnection(entityRootJobs,
                                      entityClass,
                                      criteria,

@@ -37,8 +37,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.task.TaskStatus;
 import org.ow2.proactive.scheduler.core.db.TaskData;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TaskInput;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.TaskStatusInput;
@@ -63,6 +65,8 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
     public List<Predicate[]> inputToPredicates(DataFetchingEnvironment environment, CriteriaBuilder criteriaBuilder,
             Root<TaskData> root, List<TaskInput> input) {
         Job job = (Job) environment.getSource();
+        GraphqlContext graphqlContext = (GraphqlContext) environment.getContext();
+        UserData userData = graphqlContext.getUserData();
 
         List<Predicate[]> filters = input.stream().map(i -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -72,6 +76,10 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
             String taskName = i.getTaskName();
 
             predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
+
+            if (userData.isHandleOnlyMyJobsPermission()) {
+                predicates.add(criteriaBuilder.equal(root.get("owner"), userData.getUserName()));
+            }
 
             if (taskId != -1L) {
                 predicates.add(criteriaBuilder.equal(root.get("id").get("taskId"), taskId));
@@ -93,8 +101,12 @@ public class TaskInputConverter extends AbstractJobTaskInputConverter<TaskData, 
         }).filter(array -> array.length > 1).collect(Collectors.toList());
 
         if (filters.isEmpty()) {
-            filters = Collections.singletonList(new Predicate[] { criteriaBuilder.equal(root.get("id").get("jobId"),
-                                                                                        job.getId()) });
+            List<Predicate> predicates = new ArrayList<>();
+            if (userData.isHandleOnlyMyJobsPermission()) {
+                predicates.add(criteriaBuilder.equal(root.get("owner"), userData.getUserName()));
+            }
+            predicates.add(criteriaBuilder.equal(root.get("id").get("jobId"), job.getId()));
+            filters = Collections.singletonList(predicates.toArray(new Predicate[predicates.size()]));
         }
 
         return filters;

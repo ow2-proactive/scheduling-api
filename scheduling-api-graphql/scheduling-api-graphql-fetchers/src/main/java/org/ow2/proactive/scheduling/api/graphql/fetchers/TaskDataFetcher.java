@@ -79,7 +79,7 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
     }
 
     @Override
-    protected Stream<Task> dataMapping(Stream<TaskData> dataStream) {
+    protected Stream<Task> dataMapping(Stream<TaskData> dataStream, DataFetchingEnvironment environment) {
         // TODO Task progress not accessible from DB. It implies to establish a connection with
         // the SchedulerFrontend active object to get the value that is in the Scheduler memory
 

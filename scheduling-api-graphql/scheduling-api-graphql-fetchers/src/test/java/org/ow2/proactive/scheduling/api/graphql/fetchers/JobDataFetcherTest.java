@@ -109,7 +109,7 @@ public class JobDataFetcherTest {
         jobData.setVariables(ImmutableMap.of("vk1", variable1));
 
         List<JobData> jobs = Collections.singletonList(jobData);
-        Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream());
+        Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream(), null);
 
         Optional<Job> firstElement = jobStream.findFirst();
 

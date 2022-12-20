@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,9 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.JobCursorMapper;
@@ -81,45 +84,54 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     }
 
     @Override
-    protected Stream<Job> dataMapping(Stream<JobData> dataStream) {
-        return dataStream.map(jobData -> Job.builder()
-                                            .dataManagement(DataManagement.builder()
-                                                                          .globalSpaceUrl(jobData.getGlobalSpace())
-                                                                          .inputSpaceUrl(jobData.getInputSpace())
-                                                                          .outputSpaceUrl(jobData.getOutputSpace())
-                                                                          .userSpaceUrl(jobData.getUserSpace())
-                                                                          .build())
-                                            .description(jobData.getDescription())
-                                            .finishedTime(jobData.getFinishedTime())
-                                            .genericInformation(jobData.getGenericInformation())
-                                            .id(jobData.getId())
-                                            .inErrorTime(jobData.getInErrorTime())
-                                            .lastUpdatedTime(jobData.getLastUpdatedTime())
-                                            .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
-                                            .name(jobData.getJobName())
-                                            .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
-                                            .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
-                                            .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
-                                            .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
-                                            .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
-                                            .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
-                                            .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
-                                                                                   jobData.getOnTaskErrorString()))
-                                            .taskRetryDelay(jobData.getTaskRetryDelay())
-                                            .owner(jobData.getOwner())
-                                            .tenant(jobData.getTenant())
-                                            .priority(jobData.getPriority().name())
-                                            .projectName(jobData.getProjectName())
-                                            .removedTime(jobData.getRemovedTime())
-                                            .status(jobData.getStatus().name())
-                                            .startTime(jobData.getStartTime())
-                                            .submittedTime(jobData.getSubmittedTime())
-                                            .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
-                                            // TODO Currently map the JobVariable object to a simple string (its value).
-                                            // Need to map the whole object later
-                                            .variables(getVariables(jobData))
-                                            .resultMap(mapOfByteArrayToString(jobData.getResultMap()))
-                                            .build());
+    protected Stream<Job> dataMapping(Stream<JobData> dataStream, DataFetchingEnvironment environment) {
+        return dataStream.map(jobData -> {
+            boolean hideVariables = false;
+            if (environment != null) {
+                GraphqlContext graphqlContext = (GraphqlContext) environment.getContext();
+                UserData userData = graphqlContext.getUserData();
+                hideVariables = !userData.getUserName().equals(jobData.getOwner()) &&
+                                userData.isHandleOnlyMyJobsPermission();
+            }
+            return Job.builder()
+                      .dataManagement(DataManagement.builder()
+                                                    .globalSpaceUrl(jobData.getGlobalSpace())
+                                                    .inputSpaceUrl(jobData.getInputSpace())
+                                                    .outputSpaceUrl(jobData.getOutputSpace())
+                                                    .userSpaceUrl(jobData.getUserSpace())
+                                                    .build())
+                      .description(jobData.getDescription())
+                      .finishedTime(jobData.getFinishedTime())
+                      .genericInformation(jobData.getGenericInformation())
+                      .id(jobData.getId())
+                      .inErrorTime(jobData.getInErrorTime())
+                      .lastUpdatedTime(jobData.getLastUpdatedTime())
+                      .maxNumberOfExecution(jobData.getMaxNumberOfExecution())
+                      .name(jobData.getJobName())
+                      .numberOfFailedTasks(jobData.getNumberOfFailedTasks())
+                      .numberOfFaultyTasks(jobData.getNumberOfFaultyTasks())
+                      .numberOfFinishedTasks(jobData.getNumberOfFinishedTasks())
+                      .numberOfInErrorTasks(jobData.getNumberOfInErrorTasks())
+                      .numberOfPendingTasks(jobData.getNumberOfPendingTasks())
+                      .numberOfRunningTasks(jobData.getNumberOfRunningTasks())
+                      .onTaskError(CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE,
+                                                             jobData.getOnTaskErrorString()))
+                      .taskRetryDelay(jobData.getTaskRetryDelay())
+                      .owner(jobData.getOwner())
+                      .tenant(jobData.getTenant())
+                      .priority(jobData.getPriority().name())
+                      .projectName(jobData.getProjectName())
+                      .removedTime(jobData.getRemovedTime())
+                      .status(jobData.getStatus().name())
+                      .startTime(jobData.getStartTime())
+                      .submittedTime(jobData.getSubmittedTime())
+                      .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
+                      // TODO Currently map the JobVariable object to a simple string (its value).
+                      // Need to map the whole object later
+                      .variables(hideVariables ? Collections.emptyMap() : getVariables(jobData))
+                      .resultMap(hideVariables ? null : mapOfByteArrayToString(jobData.getResultMap()))
+                      .build();
+        });
     }
 
     /**
