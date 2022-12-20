@@ -40,7 +40,9 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.core.db.JobData;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.JobCursorMapper;
@@ -84,7 +86,13 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
     @Override
     protected Stream<Job> dataMapping(Stream<JobData> dataStream, DataFetchingEnvironment environment) {
         return dataStream.map(jobData -> {
-            boolean hideVariables = shouldHideVariables(environment, jobData.getOwner());
+            boolean hideVariables = false;
+            if (environment != null) {
+                GraphqlContext graphqlContext = (GraphqlContext) environment.getContext();
+                UserData userData = graphqlContext.getUserData();
+                hideVariables = !userData.getUserName().equals(jobData.getOwner()) &&
+                                userData.isHandleOnlyMyJobsPermission();
+            }
             return Job.builder()
                       .dataManagement(DataManagement.builder()
                                                     .globalSpaceUrl(jobData.getGlobalSpace())

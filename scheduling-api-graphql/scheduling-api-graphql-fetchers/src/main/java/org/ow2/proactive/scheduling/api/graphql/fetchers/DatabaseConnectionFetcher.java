@@ -47,8 +47,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.ow2.proactive.authentication.UserData;
-import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.connection.ExtendedConnection;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.CursorMapper;
 import org.springframework.stereotype.Repository;
@@ -374,16 +372,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
 
         return false;
-    }
-
-    protected boolean shouldHideVariables(DataFetchingEnvironment environment, String owner) {
-        boolean hideVariables = false;
-        if (environment != null) {
-            GraphqlContext graphqlContext = (GraphqlContext) environment.getContext();
-            UserData userData = graphqlContext.getUserData();
-            hideVariables = !userData.getUserName().equals(owner) && userData.isHandleOnlyMyJobsPermission();
-        }
-        return hideVariables;
     }
 
 }

@@ -25,7 +25,6 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,6 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
 
         return dataStream.map(taskData -> {
             TaskData.DBTaskId id = taskData.getId();
-            boolean hideVariables = shouldHideVariables(environment, taskData.getOwner());
 
             return Task.builder()
                        .additionalClasspath(taskData.getAdditionalClasspath())
@@ -117,13 +115,12 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                        .startTime(taskData.getStartTime())
                        .status(taskData.getTaskStatus().name())
                        .tag(taskData.getTag())
-                       .variables(hideVariables ? Collections.emptyMap() : taskData.getVariables()
-                                                                                   .values()
-                                                                                   .stream()
-                                                                                   .map(taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
-                                                                                                                                taskDataVariable.getValue()))
-                                                                                   .collect(Collectors.toMap(Map.Entry::getKey,
-                                                                                                             Map.Entry::getValue)))
+                       .variables(taskData.getVariables()
+                                          .values()
+                                          .stream()
+                                          .map(taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
+                                                                                       taskDataVariable.getValue()))
+                                          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                        .workingDir(taskData.getWorkingDir())
                        .walltime(taskData.getWallTime())
                        .build();
