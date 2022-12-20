@@ -39,6 +39,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.job.JobPriority;
 import org.ow2.proactive.scheduler.common.job.JobStatus;
 import org.ow2.proactive.scheduler.common.task.OnTaskError;
@@ -51,6 +52,8 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.Job;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import graphql.schema.DataFetchingEnvironment;
 
 
 /**
@@ -109,7 +112,7 @@ public class JobDataFetcherTest {
         jobData.setVariables(ImmutableMap.of("vk1", variable1));
 
         List<JobData> jobs = Collections.singletonList(jobData);
-        Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream());
+        Stream<Job> jobStream = jobDataFetcher.dataMapping(jobs.stream(), null);
 
         Optional<Job> firstElement = jobStream.findFirst();
 

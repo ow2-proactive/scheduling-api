@@ -136,7 +136,7 @@ public class TaskDataFetcherTest {
         taskData.setWorkingDir("workingDir");
 
         List<TaskData> tasks = Collections.singletonList(taskData);
-        Stream<Task> taskStream = taskDataFetcher.dataMapping(tasks.stream());
+        Stream<Task> taskStream = taskDataFetcher.dataMapping(tasks.stream(), null);
 
         Optional<Task> firstElement = taskStream.findFirst();
 

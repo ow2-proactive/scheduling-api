@@ -25,6 +25,7 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,10 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.core.db.TaskData;
+import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.TaskInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.TaskCursorMapper;
@@ -79,12 +82,13 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
     }
 
     @Override
-    protected Stream<Task> dataMapping(Stream<TaskData> dataStream) {
+    protected Stream<Task> dataMapping(Stream<TaskData> dataStream, DataFetchingEnvironment environment) {
         // TODO Task progress not accessible from DB. It implies to establish a connection with
         // the SchedulerFrontend active object to get the value that is in the Scheduler memory
 
         return dataStream.map(taskData -> {
             TaskData.DBTaskId id = taskData.getId();
+            boolean hideVariables = shouldHideVariables(environment, taskData.getOwner());
 
             return Task.builder()
                        .additionalClasspath(taskData.getAdditionalClasspath())
@@ -115,12 +119,13 @@ public class TaskDataFetcher extends DatabaseConnectionFetcher<TaskData, Task> {
                        .startTime(taskData.getStartTime())
                        .status(taskData.getTaskStatus().name())
                        .tag(taskData.getTag())
-                       .variables(taskData.getVariables()
-                                          .values()
-                                          .stream()
-                                          .map(taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
-                                                                                       taskDataVariable.getValue()))
-                                          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                       .variables(hideVariables ? Collections.emptyMap() : taskData.getVariables()
+                                                                                   .values()
+                                                                                   .stream()
+                                                                                   .map(taskDataVariable -> Maps.immutableEntry(taskDataVariable.getName(),
+                                                                                                                                taskDataVariable.getValue()))
+                                                                                   .collect(Collectors.toMap(Map.Entry::getKey,
+                                                                                                             Map.Entry::getValue)))
                        .workingDir(taskData.getWorkingDir())
                        .walltime(taskData.getWallTime())
                        .build();
