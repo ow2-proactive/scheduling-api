@@ -39,10 +39,8 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.ow2.proactive.authentication.UserData;
 import org.ow2.proactive.scheduler.common.task.RestartMode;
 import org.ow2.proactive.scheduler.core.db.TaskData;
-import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.JobTaskFilterInputBiFunction;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.converter.TaskInputConverter;
 import org.ow2.proactive.scheduling.api.graphql.fetchers.cursors.TaskCursorMapper;
