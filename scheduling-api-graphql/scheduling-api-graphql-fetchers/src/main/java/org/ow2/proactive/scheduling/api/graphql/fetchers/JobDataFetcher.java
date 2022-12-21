@@ -129,7 +129,8 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                       // TODO Currently map the JobVariable object to a simple string (its value).
                       // Need to map the whole object later
                       .variables(hideVariables ? Collections.emptyMap() : getVariables(jobData))
-                      .resultMap(hideVariables ? null : mapOfByteArrayToString(jobData.getResultMap()))
+                      .resultMap(hideVariables ? Collections.emptyMap()
+                                               : mapOfByteArrayToString(jobData.getResultMap()))
                       .build();
         });
     }
