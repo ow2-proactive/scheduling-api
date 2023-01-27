@@ -109,6 +109,14 @@ public class JobInput extends AbstractApiType {
 
         private String beforeNumberOfInErrorTasks;
 
+        private String cumulatedCoreTime;
+
+        private String parentId;
+
+        private String childrenCount;
+
+        private String numberOfNodes;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -276,6 +284,26 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder cumulatedCoreTime(String cumulatedCoreTime) {
+            this.cumulatedCoreTime = cumulatedCoreTime;
+            return this;
+        }
+
+        public JobInput.Builder parentId(String parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public JobInput.Builder childrenCount(String childrenCount) {
+            this.childrenCount = childrenCount;
+            return this;
+        }
+
+        public JobInput.Builder numberOfNodes(String numberOfNodes) {
+            this.numberOfNodes = numberOfNodes;
+            return this;
+        }
+
         public JobInput build() {
             sb.append("{");
             if (!excludeRemoved) {
@@ -340,6 +368,30 @@ public class JobInput extends AbstractApiType {
                 sb.append(Fields.STATUS.getName());
                 sb.append(" : ");
                 sb.append(this.status);
+            }
+            if (!Strings.isNullOrEmpty(this.cumulatedCoreTime)) {
+                sb.append(' ');
+                sb.append(InputFields.CUMULATED_CORE_TIME.getName());
+                sb.append(" : ");
+                sb.append(StringEscapeUtils.escapeJson(this.cumulatedCoreTime));
+            }
+            if (!Strings.isNullOrEmpty(this.parentId)) {
+                sb.append(' ');
+                sb.append(InputFields.PARENT_ID.getName());
+                sb.append(" : ");
+                sb.append(StringEscapeUtils.escapeJson(this.parentId));
+            }
+            if (!Strings.isNullOrEmpty(this.childrenCount)) {
+                sb.append(' ');
+                sb.append(InputFields.CHILDREN_COUNT.getName());
+                sb.append(" : ");
+                sb.append(StringEscapeUtils.escapeJson(this.childrenCount));
+            }
+            if (!Strings.isNullOrEmpty(this.numberOfNodes)) {
+                sb.append(' ');
+                sb.append(InputFields.NUMBER_OF_NODES.getName());
+                sb.append(" : ");
+                sb.append(StringEscapeUtils.escapeJson(this.numberOfNodes));
             }
 
             comparableLongString(InputFields.SUBMITTED_TIME.getName(),

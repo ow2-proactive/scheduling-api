@@ -101,6 +101,10 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             String jobName = i.getJobName();
             String owner = i.getOwner();
             String tenant = i.getTenant();
+            String cumulatedCoreTime = i.getCumulatedCoreTime();
+            String parentId = i.getParentId();
+            String childrenCount = i.getChildrenCount();
+            String numberOfNodes = i.getNumberOfNodes();
             String priority = i.getPriority();
             String projectName = i.getProjectName();
             JobStatusInput status = i.getJobStatus();
@@ -175,6 +179,37 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                                    tenant),
                                                                criteriaBuilder.isNull(root.get("tenant")));
                 predicates.add(tenantPredicate);
+            }
+
+            if (!Strings.isNullOrEmpty(cumulatedCoreTime)) {
+                Predicate cumulatedCoreTimePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                           root,
+                                                                                           "cumulatedCoreTime",
+                                                                                           cumulatedCoreTime);
+                predicates.add(cumulatedCoreTimePredicate);
+            }
+
+            if (!Strings.isNullOrEmpty(parentId)) {
+                Predicate parentIdPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                  root,
+                                                                                  "parentId",
+                                                                                  parentId);
+                predicates.add(parentIdPredicate);
+            }
+
+            if (!Strings.isNullOrEmpty(childrenCount)) {
+                Predicate childrenCountPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                       root,
+                                                                                       "childrenCount",
+                                                                                       childrenCount);
+                predicates.add(childrenCountPredicate);
+            }
+            if (!Strings.isNullOrEmpty(numberOfNodes)) {
+                Predicate numberOfNodesPredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                       root,
+                                                                                       "numberOfNodes",
+                                                                                       numberOfNodes);
+                predicates.add(numberOfNodesPredicate);
             }
 
             // Job priority based predicate
