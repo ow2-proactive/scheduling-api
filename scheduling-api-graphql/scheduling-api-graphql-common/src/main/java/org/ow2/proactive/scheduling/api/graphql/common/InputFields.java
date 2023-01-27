@@ -60,6 +60,10 @@ public enum InputFields {
     NUMBER_OF_FAILED_TASKS,
     NUMBER_OF_IN_ERROR_TASKS,
     TOTAL_NUMBER_OF_TASKS,
+    CUMULATED_CORE_TIME,
+    PARENT_ID,
+    CHILDREN_COUNT,
+    NUMBER_OF_NODES,
     VALUE;
 
     public String getName() {

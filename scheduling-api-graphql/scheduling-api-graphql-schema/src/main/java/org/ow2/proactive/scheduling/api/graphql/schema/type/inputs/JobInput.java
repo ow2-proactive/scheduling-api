@@ -26,10 +26,15 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
 import static graphql.Scalars.GraphQLBoolean;
+import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CHILDREN_COUNT;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CUMULATED_CORE_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_NODES;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PARENT_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TENANT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
@@ -151,6 +156,22 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Number of in-error tasks.")
                                                                .type(ComparableNumberOfInErrorTasksInput.TYPE.getInstance())
                                                                .build())
+                                   .field(newInputObjectField().name(CUMULATED_CORE_TIME.getName())
+                                                               .description("Cumulated core time consumed my all of the tasks of a job.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(PARENT_ID.getName())
+                                                               .description("Parent id of the job.")
+                                                               .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(CHILDREN_COUNT.getName())
+                                                               .description("The number of children jobs.")
+                                                               .type(GraphQLInt)
+                                                               .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_NODES.getName())
+                                                               .description("The total number of jobs used by the job.")
+                                                               .type(GraphQLInt)
+                                                               .build())
                                    .field(newInputObjectField().name(VARIABLES.getName())
                                                                .description("workflow variables")
                                                                .type(new GraphQLList(KeyValueInput.TYPE.getInstance())))
@@ -170,6 +191,14 @@ public class JobInput extends JobTaskCommonAbstractInput {
     private String priority;
 
     private String projectName;
+
+    private String cumulatedCoreTime;
+
+    private String parentId;
+
+    private String childrenCount;
+
+    private String numberOfNodes;
 
     private ComparableIdInput comparableId;
 
@@ -234,6 +263,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                     NUMBER_OF_IN_ERROR_TASKS.getName(),
                                                     ComparableNumberOfInErrorTasksInput::new,
                                                     null);
+            cumulatedCoreTime = Inputs.getValue(input, CUMULATED_CORE_TIME.getName(), null);
+            parentId = Inputs.getValue(input, PARENT_ID.getName(), null);
+            childrenCount = Inputs.getValue(input, CHILDREN_COUNT.getName(), null);
+            numberOfNodes = Inputs.getValue(input, NUMBER_OF_NODES.getName(), null);
         }
     }
 
