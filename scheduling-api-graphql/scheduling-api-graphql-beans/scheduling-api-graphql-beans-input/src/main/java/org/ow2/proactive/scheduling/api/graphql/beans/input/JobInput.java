@@ -109,6 +109,22 @@ public class JobInput extends AbstractApiType {
 
         private String beforeNumberOfInErrorTasks;
 
+        private String afterCumulatedCoreTime;
+
+        private String beforeCumulatedCoreTime;
+
+        private String afterParentId;
+
+        private String beforeParentId;
+
+        private String afterChildrenCount;
+
+        private String beforeChildrenCount;
+
+        private String afterNumberOfNodes;
+
+        private String beforeNumberOfNodes;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -183,6 +199,46 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder afterNumberOfFinishedTasks(String afterNumberOfFinishedTasks) {
             this.afterNumberOfFinishedTasks = afterNumberOfFinishedTasks;
+            return this;
+        }
+
+        public JobInput.Builder beforeCumulatedCoreTime(String beforeCumulatedCoreTime) {
+            this.beforeCumulatedCoreTime = beforeCumulatedCoreTime;
+            return this;
+        }
+
+        public JobInput.Builder afterCumulatedCoreTime(String afterCumulatedCoreTime) {
+            this.afterCumulatedCoreTime = afterCumulatedCoreTime;
+            return this;
+        }
+
+        public JobInput.Builder beforeParentId(String beforeParentId) {
+            this.beforeParentId = beforeParentId;
+            return this;
+        }
+
+        public JobInput.Builder afterParentId(String afterParentId) {
+            this.afterParentId = afterParentId;
+            return this;
+        }
+
+        public JobInput.Builder beforeChildrenCount(String beforeChildrenCount) {
+            this.beforeChildrenCount = beforeChildrenCount;
+            return this;
+        }
+
+        public JobInput.Builder afterChildrenCount(String afterChildrenCount) {
+            this.afterChildrenCount = afterChildrenCount;
+            return this;
+        }
+
+        public JobInput.Builder beforeNumberOfNodes(String beforeNumberOfNodes) {
+            this.beforeNumberOfNodes = beforeNumberOfNodes;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfNodes(String afterNumberOfNodes) {
+            this.afterNumberOfNodes = afterNumberOfNodes;
             return this;
         }
 
@@ -361,6 +417,20 @@ public class JobInput extends AbstractApiType {
             comparableLongString(InputFields.NUMBER_OF_RUNNING_TASKS.getName(),
                                  this.beforeNumberOfRunningTasks,
                                  this.afterNumberOfRunningTasks);
+
+            comparableLongString(InputFields.CUMULATED_CORE_TIME.getName(),
+                                 this.beforeCumulatedCoreTime,
+                                 this.afterCumulatedCoreTime);
+
+            comparableLongString(InputFields.PARENT_ID.getName(), this.beforeParentId, this.afterParentId);
+
+            comparableLongString(InputFields.CHILDREN_COUNT.getName(),
+                                 this.beforeChildrenCount,
+                                 this.afterChildrenCount);
+
+            comparableLongString(InputFields.NUMBER_OF_NODES.getName(),
+                                 this.beforeNumberOfNodes,
+                                 this.afterNumberOfNodes);
 
             comparableLongString(InputFields.NUMBER_OF_FINISHED_TASKS.getName(),
                                  this.beforeNumberOfFinishedTasks,

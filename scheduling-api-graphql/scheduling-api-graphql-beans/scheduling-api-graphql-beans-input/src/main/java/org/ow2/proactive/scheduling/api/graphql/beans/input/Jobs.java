@@ -79,6 +79,14 @@ public class Jobs extends AbstractApiType {
 
         private boolean totalNumberOfTasks = true;
 
+        private boolean cumulatedCoreTime = true;
+
+        private boolean parentId = true;
+
+        private boolean childrenCount = true;
+
+        private boolean numberOfNodes = true;
+
         private ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
 
         @Override
@@ -205,6 +213,26 @@ public class Jobs extends AbstractApiType {
 
         public Builder excludeTenant() {
             this.tenant = false;
+            return this;
+        }
+
+        public Builder excludeCumulatedCoreTime() {
+            this.cumulatedCoreTime = false;
+            return this;
+        }
+
+        public Builder excludeParentId() {
+            this.parentId = false;
+            return this;
+        }
+
+        public Builder excludeChildrenCount() {
+            this.childrenCount = false;
+            return this;
+        }
+
+        public Builder excludeNumberOfNodes() {
+            this.numberOfNodes = false;
             return this;
         }
 
@@ -340,6 +368,18 @@ public class Jobs extends AbstractApiType {
             }
             if (tenant) {
                 sb.append(Fields.TENANT.getName()).append(Constants.RETURN);
+            }
+            if (cumulatedCoreTime) {
+                sb.append(Fields.CUMULATED_CORE_TIME.getName()).append(Constants.RETURN);
+            }
+            if (parentId) {
+                sb.append(Fields.PARENT_ID.getName()).append(Constants.RETURN);
+            }
+            if (childrenCount) {
+                sb.append(Fields.CHILDREN_COUNT.getName()).append(Constants.RETURN);
+            }
+            if (numberOfNodes) {
+                sb.append(Fields.NUMBER_OF_NODES.getName()).append(Constants.RETURN);
             }
             if (priority) {
                 sb.append(Fields.PRIORITY.getName()).append(Constants.RETURN);
