@@ -211,6 +211,15 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                      predicates,
                                      true);
 
+            comparableLongPredicated(i.getCumulatedCoreTime(),
+                                     "cumulatedCoreTime",
+                                     root,
+                                     criteriaBuilder,
+                                     predicates,
+                                     true);
+
+            comparableLongPredicated(i.getParentId(), "parentId", root, criteriaBuilder, predicates, true);
+
             // Job start time based predicate
             comparableLongPredicated(i.getStartedTime(), "startTime", root, criteriaBuilder, predicates, true);
 
@@ -248,6 +257,10 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                         root,
                                         criteriaBuilder,
                                         predicates);
+
+            comparableIntegerPredicated(i.getChildrenCount(), "childrenCount", root, criteriaBuilder, predicates);
+
+            comparableIntegerPredicated(i.getNumberOfNodes(), "numberOfNodes", root, criteriaBuilder, predicates);
 
             return predicates.toArray(new Predicate[predicates.size()]);
 

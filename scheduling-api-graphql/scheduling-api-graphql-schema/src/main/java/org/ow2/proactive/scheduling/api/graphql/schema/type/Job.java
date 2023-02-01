@@ -180,6 +180,18 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(TOTAL_NUMBER_OF_TASKS.getName())
                                                                .description("Total number of Tasks of the Job.")
                                                                .type(GraphQLInt))
+                                    .field(newFieldDefinition().name(CUMULATED_CORE_TIME.getName())
+                                                               .description("Cumulated core time of the Job.")
+                                                               .type(GraphQLLong))
+                                    .field(newFieldDefinition().name(PARENT_ID.getName())
+                                                               .description("Parent id of the Job.")
+                                                               .type(GraphQLLong))
+                                    .field(newFieldDefinition().name(CHILDREN_COUNT.getName())
+                                                               .description("Children count of the Job.")
+                                                               .type(GraphQLInt))
+                                    .field(newFieldDefinition().name(NUMBER_OF_NODES.getName())
+                                                               .description("Total number of nodes used by the Job.")
+                                                               .type(GraphQLInt))
                                     .field(newFieldDefinition().name(VARIABLES.getName())
                                                                .description("Variable list. Empty if there is none.")
                                                                .type(new GraphQLList(Variable.TYPE.getInstance()))
@@ -228,6 +240,14 @@ public class Job extends JobTaskCommon {
 
     private Map<String, String> resultMap;
 
+    private long cumulatedCoreTime;
+
+    private Long parentId;
+
+    private int childrenCount;
+
+    private int numberOfNodes;
+
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
@@ -235,7 +255,8 @@ public class Job extends JobTaskCommon {
             int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
             String onTaskError, Long taskRetryDelay, String owner, String tenant, String priority, String projectName,
             long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
-            int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap) {
+            int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap,
+            long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes) {
 
         super(description,
               finishedTime,
@@ -267,6 +288,10 @@ public class Job extends JobTaskCommon {
         this.tasks = tasks;
         this.totalNumberOfTasks = totalNumberOfTasks;
         this.resultMap = resultMap;
+        this.cumulatedCoreTime = cumulatedCoreTime;
+        this.parentId = parentId;
+        this.childrenCount = childrenCount;
+        this.numberOfNodes = numberOfNodes;
     }
 
 }
