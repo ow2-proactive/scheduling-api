@@ -51,7 +51,7 @@ public class ComparableNumberOfNodesInParallel extends ComparableIntegerInput {
         @Override
         public GraphQLInputType buildType(DataFetcher... dataFetchers) {
             return newInputObject().name(Types.COMPARABLE_NUMBER_OF_NODES_IN_PARALLEL.getName())
-                                   .description("Number of nodes input.")
+                                   .description("Number of nodes in parallel input.")
                                    .field(newInputObjectField().name(BEFORE.getName())
                                                                .description("Jobs having number of nodes in parallel lower than this value.")
                                                                .type(GraphQLInt)

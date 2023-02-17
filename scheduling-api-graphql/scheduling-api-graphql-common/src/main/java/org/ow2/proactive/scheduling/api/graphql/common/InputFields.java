@@ -48,7 +48,6 @@ public enum InputFields {
     TENANT,
     PRIORITY,
     PROJECT_NAME,
-    BUCKET_NAME,
     JOB_STATUS,
     TASK_STATUS,
     SUBMITTED_TIME,
@@ -65,7 +64,6 @@ public enum InputFields {
     PARENT_ID,
     CHILDREN_COUNT,
     NUMBER_OF_NODES,
-    NUMBER_OF_NODES_IN_PARALLEL,
     VALUE;
 
     public String getName() {
