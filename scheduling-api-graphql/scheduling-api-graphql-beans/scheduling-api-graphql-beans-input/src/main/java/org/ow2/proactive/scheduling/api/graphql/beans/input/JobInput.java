@@ -79,6 +79,8 @@ public class JobInput extends AbstractApiType {
 
         private String projectName;
 
+        private String bucketName;
+
         private String status;
 
         private String variableName;
@@ -124,6 +126,10 @@ public class JobInput extends AbstractApiType {
         private String afterNumberOfNodes;
 
         private String beforeNumberOfNodes;
+
+        private String afterNumberOfNodesInParallel;
+
+        private String beforeNumberOfNodesInParallel;
 
         private StringBuilder sb = new StringBuilder();
 
@@ -242,6 +248,16 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder beforeNumberOfNodesInParallel(String beforeNumberOfNodesInParallel) {
+            this.beforeNumberOfNodesInParallel = beforeNumberOfNodesInParallel;
+            return this;
+        }
+
+        public JobInput.Builder afterNumberOfNodesInParallel(String afterNumberOfNodesInParallel) {
+            this.afterNumberOfNodesInParallel = afterNumberOfNodesInParallel;
+            return this;
+        }
+
         public JobInput.Builder beforeNumberOfFinishedTasks(String beforeNumberOfFinishedTasks) {
             this.beforeNumberOfFinishedTasks = beforeNumberOfFinishedTasks;
             return this;
@@ -322,6 +338,11 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder bucketName(String bucketName) {
+            this.bucketName = bucketName;
+            return this;
+        }
+
         public JobInput.Builder status(String status) {
             this.status = status;
             return this;
@@ -386,6 +407,14 @@ public class JobInput extends AbstractApiType {
                 sb.append(StringEscapeUtils.escapeJson(this.projectName));
                 sb.append(Constants.QUOTE);
             }
+            if (!Strings.isNullOrEmpty(this.bucketName)) {
+                sb.append(' ');
+                sb.append(InputFields.BUCKET_NAME.getName());
+                sb.append(" : ");
+                sb.append(Constants.QUOTE);
+                sb.append(StringEscapeUtils.escapeJson(this.bucketName));
+                sb.append(Constants.QUOTE);
+            }
             if (!Strings.isNullOrEmpty(this.variableName) || !Strings.isNullOrEmpty(this.variableValue)) {
                 sb.append(' ');
                 sb.append("variables: ");
@@ -431,6 +460,10 @@ public class JobInput extends AbstractApiType {
             comparableLongString(InputFields.NUMBER_OF_NODES.getName(),
                                  this.beforeNumberOfNodes,
                                  this.afterNumberOfNodes);
+
+            comparableLongString(InputFields.NUMBER_OF_NODES_IN_PARALLEL.getName(),
+                                 this.beforeNumberOfNodesInParallel,
+                                 this.afterNumberOfNodesInParallel);
 
             comparableLongString(InputFields.NUMBER_OF_FINISHED_TASKS.getName(),
                                  this.beforeNumberOfFinishedTasks,

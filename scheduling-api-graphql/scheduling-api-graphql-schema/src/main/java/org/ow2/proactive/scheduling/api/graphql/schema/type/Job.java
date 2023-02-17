@@ -143,6 +143,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(PROJECT_NAME.getName())
                                                                .description("Project name which the job belongs to.")
                                                                .type(GraphQLString))
+                                    .field(newFieldDefinition().name(BUCKET_NAME.getName())
+                                                               .description("Bucket name which the job belongs to.")
+                                                               .type(GraphQLString))
                                     .field(newFieldDefinition().name(REMOVED_TIME.getName())
                                                                .description("Job removed time.")
                                                                .type(GraphQLLong))
@@ -192,6 +195,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(NUMBER_OF_NODES.getName())
                                                                .description("Total number of nodes used by the Job.")
                                                                .type(GraphQLInt))
+                                    .field(newFieldDefinition().name(NUMBER_OF_NODES_IN_PARALLEL.getName())
+                                                               .description("Total number of nodes in parallel used by the Job.")
+                                                               .type(GraphQLInt))
                                     .field(newFieldDefinition().name(VARIABLES.getName())
                                                                .description("Variable list. Empty if there is none.")
                                                                .type(new GraphQLList(Variable.TYPE.getInstance()))
@@ -228,6 +234,8 @@ public class Job extends JobTaskCommon {
 
     private String projectName;
 
+    private String bucketName;
+
     private long removedTime;
 
     private String status;
@@ -248,15 +256,17 @@ public class Job extends JobTaskCommon {
 
     private int numberOfNodes;
 
+    private int numberOfNodesInParallel;
+
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
             int maxNumberOfExecution, String name, int numberOfFailedTasks, int numberOfFaultyTasks,
             int numberOfFinishedTasks, int numberOfInErrorTasks, int numberOfPendingTasks, int numberOfRunningTasks,
             String onTaskError, Long taskRetryDelay, String owner, String tenant, String priority, String projectName,
-            long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
+            String bucketName, long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
             int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap,
-            long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes) {
+            long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes, int numberOfNodesInParallel) {
 
         super(description,
               finishedTime,
@@ -282,6 +292,7 @@ public class Job extends JobTaskCommon {
         this.tenant = tenant;
         this.priority = priority;
         this.projectName = projectName;
+        this.bucketName = bucketName;
         this.removedTime = removedTime;
         this.status = status;
         this.submittedTime = submittedTime;
@@ -292,6 +303,7 @@ public class Job extends JobTaskCommon {
         this.parentId = parentId;
         this.childrenCount = childrenCount;
         this.numberOfNodes = numberOfNodes;
+        this.numberOfNodesInParallel = numberOfNodesInParallel;
     }
 
 }
