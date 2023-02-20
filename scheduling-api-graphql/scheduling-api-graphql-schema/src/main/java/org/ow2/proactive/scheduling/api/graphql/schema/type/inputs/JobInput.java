@@ -26,14 +26,15 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
 import static graphql.Scalars.GraphQLBoolean;
-import static graphql.Scalars.GraphQLInt;
 import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.BUCKET_NAME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CHILDREN_COUNT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CUMULATED_CORE_TIME;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_NODES;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_NODES_IN_PARALLEL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PARENT_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TENANT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
@@ -116,6 +117,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Project name which the job belongs to.")
                                                                .type(GraphQLString)
                                                                .build())
+                                   .field(newInputObjectField().name(BUCKET_NAME.getName())
+                                                               .description("Bucket name which the job belongs to.")
+                                                               .type(GraphQLString)
+                                                               .build())
                                    .field(newInputObjectField().name("status")
                                                                .description("Job status.")
                                                                .type(new GraphQLList(JobStatus.TYPE.getInstance()))
@@ -172,6 +177,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("The total number of jobs used by the job.")
                                                                .type(ComparableNumberOfNodes.TYPE.getInstance())
                                                                .build())
+                                   .field(newInputObjectField().name(NUMBER_OF_NODES_IN_PARALLEL.getName())
+                                                               .description("The total number of jobs in parallel used by the job.")
+                                                               .type(ComparableNumberOfNodesInParallel.TYPE.getInstance())
+                                                               .build())
                                    .field(newInputObjectField().name(VARIABLES.getName())
                                                                .description("workflow variables")
                                                                .type(new GraphQLList(KeyValueInput.TYPE.getInstance())))
@@ -192,6 +201,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private String projectName;
 
+    private String bucketName;
+
     private ComparableCumulatedCoreTime cumulatedCoreTime;
 
     private ComparableParentId parentId;
@@ -199,6 +210,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
     private ComparableChildrenCount childrenCount;
 
     private ComparableNumberOfNodes numberOfNodes;
+
+    private ComparableNumberOfNodesInParallel numberOfNodesInParallel;
 
     private ComparableIdInput comparableId;
 
@@ -234,6 +247,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             tenant = Inputs.getValue(input, TENANT.getName(), null);
             priority = Inputs.getValue(input, PRIORITY.getName(), null);
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
+            bucketName = Inputs.getValue(input, BUCKET_NAME.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
             lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
             startedTime = Inputs.getObject(input, START_TIME.getName(), StartTimeInput::new, null);
@@ -270,6 +284,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
             parentId = Inputs.getObject(input, PARENT_ID.getName(), ComparableParentId::new, null);
             childrenCount = Inputs.getObject(input, CHILDREN_COUNT.getName(), ComparableChildrenCount::new, null);
             numberOfNodes = Inputs.getObject(input, NUMBER_OF_NODES.getName(), ComparableNumberOfNodes::new, null);
+            numberOfNodesInParallel = Inputs.getObject(input,
+                                                       NUMBER_OF_NODES_IN_PARALLEL.getName(),
+                                                       ComparableNumberOfNodesInParallel::new,
+                                                       null);
         }
     }
 

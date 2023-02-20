@@ -71,6 +71,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean projectName = true;
 
+        private boolean bucketName = true;
+
         private boolean removedTime = true;
 
         private boolean submittedTime = true;
@@ -86,6 +88,8 @@ public class Jobs extends AbstractApiType {
         private boolean childrenCount = true;
 
         private boolean numberOfNodes = true;
+
+        private boolean numberOfNodesInParallel = true;
 
         private ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
 
@@ -236,6 +240,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeNumberOfNodesInParallel() {
+            this.numberOfNodesInParallel = false;
+            return this;
+        }
+
         @Override
         public Builder excludePageInfo() {
             super.excludePageInfo();
@@ -249,6 +258,12 @@ public class Jobs extends AbstractApiType {
 
         public Builder excludeProjectName() {
             this.projectName = false;
+            return this;
+
+        }
+
+        public Builder excludeBucketName() {
+            this.bucketName = false;
             return this;
         }
 
@@ -381,11 +396,17 @@ public class Jobs extends AbstractApiType {
             if (numberOfNodes) {
                 sb.append(Fields.NUMBER_OF_NODES.getName()).append(Constants.RETURN);
             }
+            if (numberOfNodesInParallel) {
+                sb.append(Fields.NUMBER_OF_NODES_IN_PARALLEL.getName()).append(Constants.RETURN);
+            }
             if (priority) {
                 sb.append(Fields.PRIORITY.getName()).append(Constants.RETURN);
             }
             if (projectName) {
                 sb.append(Fields.PROJECT_NAME.getName()).append(Constants.RETURN);
+            }
+            if (bucketName) {
+                sb.append(Fields.BUCKET_NAME.getName()).append(Constants.RETURN);
             }
             if (removedTime) {
                 sb.append(Fields.REMOVED_TIME.getName()).append(Constants.RETURN);

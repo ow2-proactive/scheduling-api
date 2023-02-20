@@ -103,6 +103,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             String tenant = i.getTenant();
             String priority = i.getPriority();
             String projectName = i.getProjectName();
+            String bucketName = i.getBucketName();
             JobStatusInput status = i.getJobStatus();
             VariablesInput variablesInput = i.getWithVariables();
 
@@ -190,6 +191,14 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                      projectName);
                 predicates.add(projectNamePredicate);
             }
+            // Bucket name based predicate
+            if (!Strings.isNullOrEmpty(bucketName)) {
+                Predicate bucketNamePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                    root,
+                                                                                    "bucketName",
+                                                                                    bucketName);
+                predicates.add(bucketNamePredicate);
+            }
 
             // Job status based predicate
             if (status != null && status.getStatus() != null && status.getStatus().size() > 0) {
@@ -261,6 +270,12 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             comparableIntegerPredicated(i.getChildrenCount(), "childrenCount", root, criteriaBuilder, predicates);
 
             comparableIntegerPredicated(i.getNumberOfNodes(), "numberOfNodes", root, criteriaBuilder, predicates);
+
+            comparableIntegerPredicated(i.getNumberOfNodesInParallel(),
+                                        "numberOfNodesInParallel",
+                                        root,
+                                        criteriaBuilder,
+                                        predicates);
 
             return predicates.toArray(new Predicate[predicates.size()]);
 
