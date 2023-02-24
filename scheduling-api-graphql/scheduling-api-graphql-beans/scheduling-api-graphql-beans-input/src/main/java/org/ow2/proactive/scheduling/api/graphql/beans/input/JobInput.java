@@ -131,6 +131,8 @@ public class JobInput extends AbstractApiType {
 
         private String beforeNumberOfNodesInParallel;
 
+        private String submissionMode;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -343,6 +345,11 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder submissionMode(String submissionMode) {
+            this.submissionMode = submissionMode;
+            return this;
+        }
+
         public JobInput.Builder status(String status) {
             this.status = status;
             return this;
@@ -413,6 +420,14 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
                 sb.append(StringEscapeUtils.escapeJson(this.bucketName));
+                sb.append(Constants.QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.submissionMode)) {
+                sb.append(' ');
+                sb.append(InputFields.SUBMISSION_MODE.getName());
+                sb.append(" : ");
+                sb.append(Constants.QUOTE);
+                sb.append(StringEscapeUtils.escapeJson(this.submissionMode));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.variableName) || !Strings.isNullOrEmpty(this.variableValue)) {

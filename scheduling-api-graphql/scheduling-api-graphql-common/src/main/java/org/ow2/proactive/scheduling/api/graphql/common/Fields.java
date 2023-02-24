@@ -110,7 +110,8 @@ public enum Fields {
     VERSION,
     VIEWER,
     WALLTIME,
-    WORKING_DIR;
+    WORKING_DIR,
+    SUBMISSION_MODE;
 
     public String getName() {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());

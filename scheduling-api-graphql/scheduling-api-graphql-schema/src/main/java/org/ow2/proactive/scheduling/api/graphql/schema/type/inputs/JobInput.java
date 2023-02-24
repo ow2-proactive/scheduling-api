@@ -36,6 +36,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.CUMULATED_C
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_NODES;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NUMBER_OF_NODES_IN_PARALLEL;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PARENT_ID;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMISSION_MODE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TENANT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
@@ -121,6 +122,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .description("Bucket name which the job belongs to.")
                                                                .type(GraphQLString)
                                                                .build())
+                                   .field(newInputObjectField().name(SUBMISSION_MODE.getName())
+                                                               .description("Submission mode of the ob.")
+                                                               .type(GraphQLString)
+                                                               .build())
                                    .field(newInputObjectField().name("status")
                                                                .description("Job status.")
                                                                .type(new GraphQLList(JobStatus.TYPE.getInstance()))
@@ -203,6 +208,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private String bucketName;
 
+    private String submissionMode;
+
     private ComparableCumulatedCoreTime cumulatedCoreTime;
 
     private ComparableParentId parentId;
@@ -248,6 +255,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
             priority = Inputs.getValue(input, PRIORITY.getName(), null);
             projectName = Inputs.getValue(input, PROJECT_NAME.getName(), null);
             bucketName = Inputs.getValue(input, BUCKET_NAME.getName(), null);
+            submissionMode = Inputs.getValue(input, SUBMISSION_MODE.getName(), null);
             submittedTime = Inputs.getObject(input, SUBMITTED_TIME.getName(), SubmittedTimeInput::new, null);
             lastUpdatedTime = Inputs.getObject(input, LAST_UPDATED_TIME.getName(), LastUpdatedTimeInput::new, null);
             startedTime = Inputs.getObject(input, START_TIME.getName(), StartTimeInput::new, null);

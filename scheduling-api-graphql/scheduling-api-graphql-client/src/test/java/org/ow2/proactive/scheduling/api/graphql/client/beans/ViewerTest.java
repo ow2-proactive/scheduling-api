@@ -112,6 +112,7 @@ public class ViewerTest {
                                                                               .add("}")
                                                                               .add(SUBMITTED_TIME.getName())
                                                                               .add(TOTAL_NUMBER_OF_TASKS.getName())
+                                                                              .add(SUBMISSION_MODE.getName())
                                                                               .add("}")
                                                                               .add("}")
                                                                               .add("}")
