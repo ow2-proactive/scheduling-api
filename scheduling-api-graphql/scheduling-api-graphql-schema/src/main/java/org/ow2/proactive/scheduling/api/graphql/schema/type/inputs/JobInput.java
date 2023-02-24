@@ -123,7 +123,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .type(GraphQLString)
                                                                .build())
                                    .field(newInputObjectField().name(SUBMISSION_MODE.getName())
-                                                               .description("Submission mode of the ob.")
+                                                               .description("Submission mode of the job.")
                                                                .type(GraphQLString)
                                                                .build())
                                    .field(newInputObjectField().name("status")
