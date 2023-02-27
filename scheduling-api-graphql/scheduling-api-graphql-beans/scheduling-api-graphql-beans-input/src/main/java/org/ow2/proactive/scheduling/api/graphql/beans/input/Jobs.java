@@ -91,6 +91,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean numberOfNodesInParallel = true;
 
+        private boolean submissionMode = true;
+
         private ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
 
         @Override
@@ -267,6 +269,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeSubmissionMode() {
+            this.submissionMode = false;
+            return this;
+        }
+
         public Builder excludeRemovedTime() {
             this.removedTime = false;
             return this;
@@ -407,6 +414,9 @@ public class Jobs extends AbstractApiType {
             }
             if (bucketName) {
                 sb.append(Fields.BUCKET_NAME.getName()).append(Constants.RETURN);
+            }
+            if (submissionMode) {
+                sb.append(Fields.SUBMISSION_MODE.getName()).append(Constants.RETURN);
             }
             if (removedTime) {
                 sb.append(Fields.REMOVED_TIME.getName()).append(Constants.RETURN);

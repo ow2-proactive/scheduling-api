@@ -101,6 +101,7 @@ public class JobTest {
                                                                               .add(PRIORITY.getName())
                                                                               .add(PROJECT_NAME.getName())
                                                                               .add(BUCKET_NAME.getName())
+                                                                              .add(SUBMISSION_MODE.getName())
                                                                               .add(REMOVED_TIME.getName())
                                                                               .add(RESULT_MAP.getName() + "{")
                                                                               .add(KEY.getName())

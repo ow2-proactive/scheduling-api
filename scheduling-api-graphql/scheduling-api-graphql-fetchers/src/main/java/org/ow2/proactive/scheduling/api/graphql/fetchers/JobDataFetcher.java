@@ -127,6 +127,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                       .priority(jobData.getPriority().name())
                       .projectName(jobData.getProjectName())
                       .bucketName(jobData.getBucketName())
+                      .submissionMode(jobData.getSubmissionMode())
                       .removedTime(jobData.getRemovedTime())
                       .status(jobData.getStatus().name())
                       .startTime(jobData.getStartTime())

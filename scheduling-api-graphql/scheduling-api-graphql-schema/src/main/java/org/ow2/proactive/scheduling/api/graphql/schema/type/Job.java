@@ -146,6 +146,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(BUCKET_NAME.getName())
                                                                .description("Bucket name which the job belongs to.")
                                                                .type(GraphQLString))
+                                    .field(newFieldDefinition().name(SUBMISSION_MODE.getName())
+                                                               .description("Submission mode of the job.")
+                                                               .type(GraphQLString))
                                     .field(newFieldDefinition().name(REMOVED_TIME.getName())
                                                                .description("Job removed time.")
                                                                .type(GraphQLLong))
@@ -258,6 +261,8 @@ public class Job extends JobTaskCommon {
 
     private int numberOfNodesInParallel;
 
+    private String submissionMode;
+
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
@@ -266,7 +271,8 @@ public class Job extends JobTaskCommon {
             String onTaskError, Long taskRetryDelay, String owner, String tenant, String priority, String projectName,
             String bucketName, long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
             int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap,
-            long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes, int numberOfNodesInParallel) {
+            long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes, int numberOfNodesInParallel,
+            String submissionMode) {
 
         super(description,
               finishedTime,
@@ -304,6 +310,7 @@ public class Job extends JobTaskCommon {
         this.childrenCount = childrenCount;
         this.numberOfNodes = numberOfNodes;
         this.numberOfNodesInParallel = numberOfNodesInParallel;
+        this.submissionMode = submissionMode;
     }
 
 }

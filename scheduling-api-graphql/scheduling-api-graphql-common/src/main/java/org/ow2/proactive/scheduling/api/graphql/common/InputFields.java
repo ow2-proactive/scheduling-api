@@ -66,7 +66,8 @@ public enum InputFields {
     CHILDREN_COUNT,
     NUMBER_OF_NODES,
     NUMBER_OF_NODES_IN_PARALLEL,
-    VALUE;
+    VALUE,
+    SUBMISSION_MODE;
 
     public String getName() {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());
