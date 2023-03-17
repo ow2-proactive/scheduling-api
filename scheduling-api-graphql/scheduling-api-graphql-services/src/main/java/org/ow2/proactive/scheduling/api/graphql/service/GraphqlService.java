@@ -40,11 +40,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.relay.Relay;
 import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLSchema;
+import graphql.schema.visibility.NoIntrospectionGraphqlFieldVisibility;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -87,15 +91,17 @@ public class GraphqlService {
 
     @PostConstruct
     public void init() {
-        graphql = new GraphQL(GraphQLSchema.newSchema()
-                                           .query(Query.TYPE.getInstance(genericInformationDataFetcher,
-                                                                         jobDataFetcher,
-                                                                         taskDataFetcher,
-                                                                         userDataFetcher,
-                                                                         variablesDataFetcher,
-                                                                         resultMapDataFetcher,
-                                                                         userDataFetcher))
-                                           .build());
+        graphql = GraphQL.newGraphQL(GraphQLSchema.newSchema()
+                                                  .query(Query.TYPE.getInstance(genericInformationDataFetcher,
+                                                                                jobDataFetcher,
+                                                                                taskDataFetcher,
+                                                                                userDataFetcher,
+                                                                                variablesDataFetcher,
+                                                                                resultMapDataFetcher,
+                                                                                userDataFetcher))
+                                                  .additionalType(Relay.pageInfoType)
+                                                  .build())
+                         .build();
     }
 
     public Map<String, Object> executeQuery(String query, String operationName, GraphqlContext graphqlContext,

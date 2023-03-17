@@ -86,7 +86,7 @@ public class User {
                                                                                                                                       variableDataFetcher,
                                                                                                                                       resultMapDataFetcher)))
                                                                                       .build())
-                                                               .argument(JobConnection.getConnectionFieldArguments())
+                                                               .arguments(JobConnection.getConnectionFieldArguments())
                                                                .argument(newArgument().name(Arguments.FIRST.getName())
                                                                                       .type(GraphQLInt)
                                                                                       .defaultValue(DefaultValues.PAGE_SIZE)

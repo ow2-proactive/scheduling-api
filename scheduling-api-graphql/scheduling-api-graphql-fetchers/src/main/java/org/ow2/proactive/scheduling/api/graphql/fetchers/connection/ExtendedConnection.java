@@ -25,16 +25,24 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.connection;
 
-import graphql.relay.Connection;
+import java.util.List;
+
+import graphql.relay.DefaultConnection;
+import graphql.relay.Edge;
+import graphql.relay.PageInfo;
 
 
 /**
  * @author ActiveEon Team
  * @since 11/04/2017
  */
-public class ExtendedConnection extends Connection {
+public class ExtendedConnection extends DefaultConnection {
 
     private Integer totalCount;
+
+    public ExtendedConnection(List<Edge> edges, PageInfo pageInfo) {
+        super(edges, pageInfo);
+    }
 
     public Integer getTotalCount() {
         return totalCount;

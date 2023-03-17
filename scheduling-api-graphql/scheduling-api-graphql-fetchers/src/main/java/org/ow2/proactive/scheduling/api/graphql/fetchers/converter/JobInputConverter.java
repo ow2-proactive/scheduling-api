@@ -57,6 +57,7 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.VariablesInpu
 import com.google.common.base.Strings;
 
 import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLType;
 
 
@@ -73,7 +74,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
     protected LinkedHashMap<String, Object> extraInputCheck(DataFetchingEnvironment environment) {
         // use the {@code user} parent field to create a new input filter on jobs connection,
         // so that the job list contains jobs belonging to the user only
-        GraphQLType parentType = environment.getParentType();
+        GraphQLNamedType parentType = (GraphQLNamedType) environment.getParentType();
         LinkedHashMap<String, Object> ownerInput = new LinkedHashMap<>();
 
         if (parentType != null && Types.USER.getName().equals(parentType.getName())) {

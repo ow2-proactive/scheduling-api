@@ -171,7 +171,7 @@ public class Job extends JobTaskCommon {
                                                                                       .description("Tasks input filter.")
                                                                                       .type(new GraphQLList(TaskInput.TYPE.getInstance()))
                                                                                       .build())
-                                                               .argument(TaskConnection.getConnectionFieldArguments())
+                                                               .arguments(TaskConnection.getConnectionFieldArguments())
                                                                .argument(newArgument().name(Arguments.FIRST.getName())
                                                                                       .type(GraphQLInt)
                                                                                       .defaultValue(DefaultValues.PAGE_SIZE)
