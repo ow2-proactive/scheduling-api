@@ -25,7 +25,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.fetchers.cursors;
 
-import graphql.relay.Base64;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 
 /**
@@ -42,13 +43,14 @@ public abstract class AbstractCursorMapper<F, T> implements CursorMapper<F, T> {
             return null;
         }
 
-        String string = Base64.fromBase64(cursor);
+        String string = new String(Base64.getDecoder().decode(cursor));
         return toOffset(string.substring(DUMMY_CURSOR_PREFIX.length()));
     }
 
     @Override
     public String createCursor(F field) {
-        return Base64.toBase64(DUMMY_CURSOR_PREFIX + toString(field));
+        return Base64.getEncoder()
+                     .encodeToString((DUMMY_CURSOR_PREFIX + toString(field)).getBytes(StandardCharsets.UTF_8));
     }
 
     abstract String toString(F field);

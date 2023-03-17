@@ -54,9 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import graphql.relay.ConnectionCursor;
-import graphql.relay.Edge;
-import graphql.relay.PageInfo;
+import graphql.relay.*;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
@@ -259,13 +257,6 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
         }
         List<Edge> edges = buildEdges(data, cursorMapper);
 
-        PageInfo pageInfo = new PageInfo();
-
-        if (!edges.isEmpty()) {
-            pageInfo.setStartCursor(edges.get(0).getCursor());
-            pageInfo.setEndCursor(edges.get(edges.size() - 1).getCursor());
-        }
-
         int nbEntriesBeforeSlicing = getNbEntriesBeforeSlicing(entityRootJobs,
                                                                entityClass,
                                                                criteria,
@@ -273,12 +264,17 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
                                                                after,
                                                                before);
 
-        pageInfo.setHasPreviousPage(hasPreviousPage(nbEntriesBeforeSlicing, last, after));
-        pageInfo.setHasNextPage(hasNextPage(nbEntriesBeforeSlicing, first, before));
+        PageInfo pageInfo = null;
+        if (!edges.isEmpty()) {
+            pageInfo = new DefaultPageInfo(edges.get(0).getCursor(),
+                                           edges.get(edges.size() - 1).getCursor(),
+                                           hasPreviousPage(nbEntriesBeforeSlicing, last, after),
+                                           hasNextPage(nbEntriesBeforeSlicing, first, before));
+        } else {
+            pageInfo = new DefaultPageInfo(null, null, false, false);
+        }
 
-        ExtendedConnection connection = new ExtendedConnection();
-        connection.setEdges(edges);
-        connection.setPageInfo(pageInfo);
+        ExtendedConnection connection = new ExtendedConnection(edges, pageInfo);
         connection.setTotalCount(nbEntriesBeforeSlicing);
 
         return connection;
@@ -318,7 +314,7 @@ public abstract class DatabaseConnectionFetcher<E, T> implements DataFetcher {
 
     @VisibleForTesting
     List<Edge> buildEdges(Stream<T> data, CursorMapper<T, Integer> cursorMapper) {
-        return data.map(entry -> new Edge(entry, new ConnectionCursor(cursorMapper.createCursor(entry))))
+        return data.map(entry -> new DefaultEdge(entry, new DefaultConnectionCursor(cursorMapper.createCursor(entry))))
                    .collect(Collectors.toList());
     }
 

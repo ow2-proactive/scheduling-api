@@ -816,7 +816,7 @@ public class GraphqlServiceIntegrationTest {
         addJobDataWithTasks(DefaultValues.PAGE_SIZE + 10);
 
         String query = "{ jobs { edges { cursor node { id tasks { edges { node { id } } " +
-                       "pageInfo { hasNextPage hasPreviousPage } } } } } } }";
+                       "pageInfo { hasNextPage hasPreviousPage } } } } } }";
 
         Map<String, Object> queryResult = executeGraphqlQuery(query);
 
@@ -837,7 +837,7 @@ public class GraphqlServiceIntegrationTest {
         addJobDataWithTasks(DefaultValues.PAGE_SIZE + 10);
 
         String query = "query($count:Int!) { jobs { edges { cursor node { id tasks(first: $count) " +
-                       "{ edges { node { id } } pageInfo { hasNextPage hasPreviousPage } } } } } } }";
+                       "{ edges { node { id } } pageInfo { hasNextPage hasPreviousPage } } } } } }";
 
         Map<String, Object> queryResult = executeGraphqlQuery(query, ImmutableMap.of("count", 2));
 
