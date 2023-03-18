@@ -63,10 +63,10 @@ public abstract class KeyValue {
                                        .field(newFieldDefinition().name(VALUE.getName())
                                                                   .description("Value as the value in a map.")
                                                                   .type(GraphQLString))
-                                       .typeResolver(object -> {
-                                           if (object instanceof GenericInformation) {
+                                       .typeResolver(env -> {
+                                           if (env.getObject() instanceof GenericInformation) {
                                                return GenericInformation.TYPE.getInstance();
-                                           } else if (object instanceof ResultMap) {
+                                           } else if (env.getObject() instanceof ResultMap) {
                                                return ResultMap.TYPE.getInstance();
                                            } else {
                                                return Variable.TYPE.getInstance();

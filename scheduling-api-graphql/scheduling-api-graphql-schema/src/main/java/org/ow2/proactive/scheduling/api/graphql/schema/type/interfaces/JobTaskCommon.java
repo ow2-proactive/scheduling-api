@@ -120,8 +120,8 @@ public abstract class JobTaskCommon {
                                                                                          .type(new GraphQLList(KeyValueInput.TYPE.getInstance()))
                                                                                          .build())
                                                                   .dataFetcher(variableDataFetcher))
-                                       .typeResolver(obj -> {
-                                           if (obj instanceof Job) {
+                                       .typeResolver(env -> {
+                                           if (env.getObject() instanceof Job) {
                                                return Job.TYPE.getInstance(dataFetchers);
                                            }
                                            return Task.TYPE.getInstance(dataFetchers);
