@@ -43,13 +43,15 @@ public class OnTaskError {
         public GraphQLEnumType buildType(DataFetcher... dataFetchers) {
             return newEnum().name(Types.ON_TASK_ERROR.getName())
                             .description("Defines the behaviour that is applied on Tasks when an error occurs.")
+                            // values below correspond to the UPPER_CAMEL UPPER_UNDERSCORE conversion of database values
+                            // see JobDataFetcher and TaskDataFetcher
                             .value("CANCEL_JOB", "CANCEL_JOB", "Cancel job after all execution attempts.")
                             .value("CONTINUE_JOB_EXECUTION",
                                    "CONTINUE_JOB_EXECUTION",
                                    "Continue job execution (try all execution attempts).")
                             .value("NONE", "NONE", "None.")
                             .value("PAUSE_JOB", "PAUSE_JOB", "Suspend task after first and pause job.")
-                            .value("PAUSE_TASK", "PAUSE_TASK", "Suspend task after first error and continue others.")
+                            .value("PAUSE_TASK", "SUSPEND_TASK", "Suspend task after first error and continue others.")
                             .build();
         }
     };

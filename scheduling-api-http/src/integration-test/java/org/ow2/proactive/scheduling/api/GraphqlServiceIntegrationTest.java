@@ -91,10 +91,27 @@ public class GraphqlServiceIntegrationTest {
     public void testQueryJobs() {
         addJobData(10);
 
-        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs { edges { node { id name } } } }");
+        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs { edges { node { id name onTaskError } } } }");
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
 
         assertThat(jobNodes).hasSize(10);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testOnErrorEnum() {
+        addJobData(1);
+
+        Map<String, Object> queryResult = executeGraphqlQuery("{ jobs { edges { node { id name onTaskError } } } }");
+        List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
+
+        List<?> errors = (List<?>) getField(queryResult, "errors");
+        assertThat(errors).isNull();
+
+        assertThat(jobNodes).hasSize(1);
+        Object onTaskError = ((Map) ((Map) jobNodes.get(0)).get("node")).get("onTaskError");
+        assertThat(onTaskError).isEqualTo("PAUSE_TASK");
     }
 
     @Rollback
@@ -1194,7 +1211,7 @@ public class GraphqlServiceIntegrationTest {
         jobData.setPriority(priority);
         jobData.setProjectName(projectName);
         jobData.setStatus(status);
-        jobData.setOnTaskErrorString(OnTaskError.NONE);
+        jobData.setOnTaskErrorString(OnTaskError.PAUSE_TASK.toString());
 
         return jobData;
     }
@@ -1213,7 +1230,7 @@ public class GraphqlServiceIntegrationTest {
         TaskData taskData = new TaskData();
         taskData.setId(dbTaskId);
         taskData.setJobData(jobData);
-        taskData.setOnTaskErrorString(OnTaskError.PAUSE_TASK);
+        taskData.setOnTaskErrorString(OnTaskError.PAUSE_TASK.toString());
         taskData.setRestartModeId(RestartMode.ANYWHERE.getIndex());
         taskData.setTaskName(name);
         taskData.setTaskStatus(id % 2 == 0 ? TaskStatus.SUBMITTED : TaskStatus.IN_ERROR);
