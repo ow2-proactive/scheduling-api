@@ -102,6 +102,7 @@ public class JobTest {
                                                                               .add(PROJECT_NAME.getName())
                                                                               .add(BUCKET_NAME.getName())
                                                                               .add(SUBMISSION_MODE.getName())
+                                                                              .add(LABEL.getName())
                                                                               .add(REMOVED_TIME.getName())
                                                                               .add(RESULT_MAP.getName() + "{")
                                                                               .add(KEY.getName())

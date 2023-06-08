@@ -106,6 +106,7 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             String projectName = i.getProjectName();
             String bucketName = i.getBucketName();
             String submissionMode = i.getSubmissionMode();
+            String label = i.getLabel();
             JobStatusInput status = i.getJobStatus();
             VariablesInput variablesInput = i.getWithVariables();
 
@@ -208,6 +209,14 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
                                                                                         "submissionMode",
                                                                                         submissionMode);
                 predicates.add(submissionModePredicate);
+            }
+            // Label mode based predicate
+            if (!Strings.isNullOrEmpty(label)) {
+                Predicate labelModePredicate = WildCardInputPredicateBuilder.build(criteriaBuilder,
+                                                                                   root,
+                                                                                   "label",
+                                                                                   label);
+                predicates.add(labelModePredicate);
             }
 
             // Job status based predicate
