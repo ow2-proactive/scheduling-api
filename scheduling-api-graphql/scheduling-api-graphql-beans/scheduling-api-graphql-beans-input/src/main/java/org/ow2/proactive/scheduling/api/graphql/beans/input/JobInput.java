@@ -133,6 +133,8 @@ public class JobInput extends AbstractApiType {
 
         private String submissionMode;
 
+        private String label;
+
         private StringBuilder sb = new StringBuilder();
 
         public JobInput.Builder afterLastUpdatedTime(String afterLastUpdatedTime) {
@@ -350,6 +352,11 @@ public class JobInput extends AbstractApiType {
             return this;
         }
 
+        public JobInput.Builder label(String label) {
+            this.label = label;
+            return this;
+        }
+
         public JobInput.Builder status(String status) {
             this.status = status;
             return this;
@@ -428,6 +435,14 @@ public class JobInput extends AbstractApiType {
                 sb.append(" : ");
                 sb.append(Constants.QUOTE);
                 sb.append(StringEscapeUtils.escapeJson(this.submissionMode));
+                sb.append(Constants.QUOTE);
+            }
+            if (!Strings.isNullOrEmpty(this.label)) {
+                sb.append(' ');
+                sb.append(InputFields.LABEL.getName());
+                sb.append(" : ");
+                sb.append(Constants.QUOTE);
+                sb.append(StringEscapeUtils.escapeJson(this.label));
                 sb.append(Constants.QUOTE);
             }
             if (!Strings.isNullOrEmpty(this.variableName) || !Strings.isNullOrEmpty(this.variableValue)) {

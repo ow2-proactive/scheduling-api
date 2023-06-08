@@ -93,6 +93,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean submissionMode = true;
 
+        private boolean label = true;
+
         private ResultMap resultMap = new ResultMap.ResultMapBuilder().build();
 
         @Override
@@ -274,6 +276,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeLabel() {
+            this.label = false;
+            return this;
+        }
+
         public Builder excludeRemovedTime() {
             this.removedTime = false;
             return this;
@@ -417,6 +424,9 @@ public class Jobs extends AbstractApiType {
             }
             if (submissionMode) {
                 sb.append(Fields.SUBMISSION_MODE.getName()).append(Constants.RETURN);
+            }
+            if (label) {
+                sb.append(Fields.LABEL.getName()).append(Constants.RETURN);
             }
             if (removedTime) {
                 sb.append(Fields.REMOVED_TIME.getName()).append(Constants.RETURN);
