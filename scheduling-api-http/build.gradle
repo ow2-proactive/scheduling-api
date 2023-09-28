@@ -71,7 +71,7 @@ dependencies {
     // see scheduling/PropertyDecrypter.java for default settings
     compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot', version: '1.9'
 
-    runtime 'org.hsqldb:hsqldb'
+    runtime 'org.hsqldb:hsqldb:2.7.2:jdk8'
 
     /**
      *    Support for Oracle DB version 12.1.0.2.
