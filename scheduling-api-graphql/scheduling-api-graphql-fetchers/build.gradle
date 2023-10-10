@@ -25,9 +25,9 @@
 
 dependencies {
     compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api"
-    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2:1.5.22.RELEASE'
 
-    compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
+    compile ('org.springframework.boot:spring-boot-starter-data-jpa:1.5.22.RELEASE') {
         exclude module: 'org.apache.tomcat'
     }
 
