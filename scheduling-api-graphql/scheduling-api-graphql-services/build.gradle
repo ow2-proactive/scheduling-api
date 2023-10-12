@@ -34,12 +34,12 @@ dependencies {
     compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider'
     compile 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations'
     compile 'org.springframework:spring-web'
-    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2:1.5.22.RELEASE'
     compile 'org.apache.httpcomponents:httpclient'
     compile 'commons-codec:commons-codec:1.13'
     compileOnly "org.ow2.proactive:common-api:$version"
     compile project(":scheduling-api-graphql:scheduling-api-graphql-fetchers")
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.boot:spring-boot-starter-test:1.5.22.RELEASE'
     testCompile "org.apache.logging.log4j:log4j-web:2.4.1"
     testCompile "org.apache.logging.log4j:log4j-api:2.4.1"
     testCompile "org.apache.logging.log4j:log4j-core:2.4.1"

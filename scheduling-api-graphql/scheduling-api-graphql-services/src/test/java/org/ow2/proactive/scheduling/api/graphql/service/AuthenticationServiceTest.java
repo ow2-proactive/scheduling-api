@@ -37,8 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ow2.proactive.authentication.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.ConfigFileApplicationContextInitializer;
-import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
@@ -53,7 +52,7 @@ import org.springframework.web.client.RestTemplate;
  * @since 31/05/2017
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { AuthenticationServiceTestConfig.class }, loader = SpringApplicationContextLoader.class, initializers = ConfigFileApplicationContextInitializer.class)
+@ContextConfiguration(classes = AuthenticationServiceTestConfig.class, initializers = ConfigFileApplicationContextInitializer.class)
 @ActiveProfiles("test")
 @PropertySource("classpath:application-test.properties")
 public class AuthenticationServiceTest {

@@ -57,7 +57,7 @@ import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -68,7 +68,7 @@ import com.google.common.collect.ImmutableMap;
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 public class GraphqlServiceIntegrationTest {
 
     private static final UserData CONTEXT_USER_DATA = new UserData();
