@@ -68,6 +68,9 @@ allprojects {
                 dependency "com.graphql-java:graphql-java:14.1"
             }
         }
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
     }
 
     dependencies {
