@@ -65,7 +65,8 @@ allprojects {
             mavenBom "org.ow2.proactive:parent-bom:${version}"
 
             dependencies {
-                dependency "com.graphql-java:graphql-java:14.1"
+                dependency "com.graphql-java:graphql-java:17.6"
+                dependency "com.graphql-java:graphql-java-extended-scalars:17.1"
             }
         }
         resolutionStrategy {

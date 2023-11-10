@@ -25,7 +25,6 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type;
 
-import static graphql.Scalars.GraphQLByte;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 

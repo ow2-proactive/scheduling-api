@@ -26,8 +26,8 @@
 package org.ow2.proactive.scheduling.api.graphql.schema.type.interfaces;
 
 import static graphql.Scalars.GraphQLInt;
-import static graphql.Scalars.GraphQLLong;
 import static graphql.Scalars.GraphQLString;
+import static graphql.scalars.java.JavaPrimitives.GraphQLLong;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.DESCRIPTION;
