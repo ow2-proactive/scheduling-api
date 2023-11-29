@@ -31,6 +31,33 @@ war {
     rootSpec.exclude("**/application-test.properties")
 }
 
+task updateWar(type: Zip, dependsOn: war) {
+    def originalWar = file("build/libs/scheduling-api-${version}.war")
+
+    archiveName = "scheduling-api-${version}.war"
+
+    from(zipTree(originalWar)) {
+        // Remove the original graphql jar if it exists
+        exclude("**/WEB-INF/lib/graphql-java-17.6.jar")
+    }
+
+    // Include our own graphql jar
+    from("$rootDir/lib/graphql-java-17.6.jar") {
+        into('WEB-INF/lib/')
+    }
+
+    destinationDir file("${buildDir}/distributions")
+}
+
+task copyWar(type:Copy, dependsOn: updateWar) {
+    // copy back the modified war into the libs folder
+    from "${buildDir}/distributions/scheduling-api-${version}.war"
+    into "${buildDir}/libs"
+
+}
+
+build.dependsOn copyWar
+
 // FIXME: investigate why transitive dependencies of dependencies defined
 // with providedCompile are still included in the WAR file that is generated
 dependencies {
