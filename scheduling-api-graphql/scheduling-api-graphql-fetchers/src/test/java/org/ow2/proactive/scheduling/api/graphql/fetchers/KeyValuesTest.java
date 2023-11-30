@@ -36,7 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.GenericInformation;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.KeyValueInput;
-import org.python.google.common.collect.ImmutableList;
+
+import com.google.common.collect.ImmutableList;
 
 
 public class KeyValuesTest {
