@@ -25,13 +25,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.AFTER;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.*;
 
 import java.util.Map;
 
 import org.ow2.proactive.scheduling.api.graphql.common.Inputs;
+import org.ow2.proactive.scheduling.api.graphql.common.NullStatus;
 
+import graphql.schema.GraphQLEnumType;
 import lombok.Data;
 
 
@@ -42,17 +43,29 @@ import lombok.Data;
 @Data
 public class ComparableInput<T> {
 
+    public final static GraphQLEnumType NullStatusEnum = GraphQLEnumType.newEnum()
+                                                                        .name(NULL_STATUS.getName())
+                                                                        .description("Check if the value is null or not null")
+                                                                        .value("NULL")
+                                                                        .value("NOT_NULL")
+                                                                        .value("ANY")
+                                                                        .build();
+
     protected final T before;
 
     protected final T after;
+
+    protected final NullStatus nullStatus;
 
     public ComparableInput(Map<String, Object> input, T defaultValue) {
         if (input != null) {
             before = Inputs.getValue(input, BEFORE.getName(), defaultValue);
             after = Inputs.getValue(input, AFTER.getName(), defaultValue);
+            nullStatus = Inputs.getEnumValue(input, NULL_STATUS.getName(), NullStatus.ANY);
         } else {
             before = defaultValue;
             after = defaultValue;
+            nullStatus = Inputs.getEnumValue(input, NULL_STATUS.getName(), NullStatus.ANY);
         }
     }
 }

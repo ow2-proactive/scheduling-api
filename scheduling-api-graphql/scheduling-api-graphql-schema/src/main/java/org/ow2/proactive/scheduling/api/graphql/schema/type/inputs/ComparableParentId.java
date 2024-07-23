@@ -28,6 +28,8 @@ package org.ow2.proactive.scheduling.api.graphql.schema.type.inputs;
 import static graphql.scalars.java.JavaPrimitives.GraphQLLong;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.NULL_STATUS;
+import static org.ow2.proactive.scheduling.api.graphql.common.Fields.STATUS;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.AFTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.BEFORE;
 
@@ -38,6 +40,8 @@ import org.ow2.proactive.scheduling.api.graphql.schema.type.TypeSingleton;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLNonNull;
 import lombok.Data;
 
 
@@ -59,6 +63,10 @@ public class ComparableParentId extends ComparableLongInput {
                                    .field(newInputObjectField().name(AFTER.getName())
                                                                .description("Jobs having parent id greater than this value.")
                                                                .type(GraphQLLong)
+                                                               .build())
+                                   .field(newInputObjectField().name(NULL_STATUS.getName())
+                                                               .description("Is the parent job id present")
+                                                               .type(NullStatusEnum)
                                                                .build())
                                    .build();
         }
