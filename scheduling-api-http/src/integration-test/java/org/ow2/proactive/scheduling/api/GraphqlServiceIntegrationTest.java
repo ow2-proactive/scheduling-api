@@ -54,6 +54,7 @@ import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduler.core.db.TaskData;
 import org.ow2.proactive.scheduling.api.graphql.common.DefaultValues;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
+import org.ow2.proactive.scheduling.api.graphql.common.NullStatus;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.Query;
 import org.ow2.proactive.scheduling.api.graphql.service.GraphqlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,6 +289,32 @@ public class GraphqlServiceIntegrationTest {
 
         List<?> jobNodes = (List<?>) getField(queryResult, "data", "jobs", "edges");
         assertThat(jobNodes).hasSize(10);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByEmptyParentId() {
+        addJobData(5);
+        addJobDataWithParentId(5);
+
+        String queryTest = "{\n" + "  jobs (filter: {parentId: {nullStatus:%s}}){\n" + "    edges {\n" +
+                           "      node {\n" + "        id\n" + "        parentId\n" + "        name\n" +
+                           "        owner\n" + "        submittedTime\n" + "        status\n" + "      }\n" +
+                           "    }\n" + "  }\n" + "}";
+
+        Map<String, Object> queryResultAny = executeGraphqlQuery(String.format(queryTest, NullStatus.ANY));
+        List<?> jobNodes = (List<?>) getField(queryResultAny, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(10);
+
+        Map<String, Object> queryResultNotNull = executeGraphqlQuery(String.format(queryTest, NullStatus.NOT_NULL));
+        jobNodes = (List<?>) getField(queryResultNotNull, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+        assertThat(jobNodes.stream().allMatch(jobNode -> getField(jobNode, "node", "parentId") != null)).isTrue();
+
+        Map<String, Object> queryResultNull = executeGraphqlQuery(String.format(queryTest, NullStatus.NULL));
+        jobNodes = (List<?>) getField(queryResultNull, "data", "jobs", "edges");
+        assertThat(jobNodes.stream().allMatch(jobNode -> getField(jobNode, "node", "parentId") == null)).isTrue();
     }
 
     @Rollback
@@ -1181,6 +1208,11 @@ public class GraphqlServiceIntegrationTest {
         jobData.forEach(job -> entityManager.persist(job));
     }
 
+    private void addJobDataWithParentId(int nbJobs) {
+        List<JobData> jobData = createJobDataWithParentId(nbJobs);
+        jobData.forEach(job -> entityManager.persist(job));
+    }
+
     private void addJobDataWithTasks(int nbTasks) {
         JobData jobData = createJobData("job" + UUID.randomUUID().toString(),
                                         CONTEXT_USER_DATA.getUserName(),
@@ -1204,6 +1236,18 @@ public class GraphqlServiceIntegrationTest {
                         .collect(Collectors.toList());
     }
 
+    private List<JobData> createJobDataWithParentId(int count) {
+        return IntStream.range(1, count + 1)
+                        .mapToObj(index -> createJobData("job" + index,
+                                                         index % 2 == 0 ? CONTEXT_USER_DATA.getUserName()
+                                                                        : "owner" + index,
+                                                         index % 2 == 0 ? JobPriority.IDLE : JobPriority.HIGH,
+                                                         "projectName" + index,
+                                                         index % 2 == 0 ? JobStatus.CANCELED : JobStatus.KILLED,
+                                                         (long) count))
+                        .collect(Collectors.toList());
+    }
+
     private JobData createJobData(String name, String owner, JobPriority priority, String projectName,
             JobStatus status) {
         JobData jobData = new JobData();
@@ -1212,6 +1256,20 @@ public class GraphqlServiceIntegrationTest {
         jobData.setPriority(priority);
         jobData.setProjectName(projectName);
         jobData.setStatus(status);
+        jobData.setOnTaskErrorString(OnTaskError.PAUSE_TASK.toString());
+
+        return jobData;
+    }
+
+    private JobData createJobData(String name, String owner, JobPriority priority, String projectName, JobStatus status,
+            Long parentId) {
+        JobData jobData = new JobData();
+        jobData.setJobName(name);
+        jobData.setOwner(owner);
+        jobData.setPriority(priority);
+        jobData.setProjectName(projectName);
+        jobData.setStatus(status);
+        jobData.setParentId(parentId);
         jobData.setOnTaskErrorString(OnTaskError.PAUSE_TASK.toString());
 
         return jobData;

@@ -119,6 +119,8 @@ public class JobInput extends AbstractApiType {
 
         private String beforeParentId;
 
+        private String parentIdNullStatus;
+
         private String afterChildrenCount;
 
         private String beforeChildrenCount;
@@ -229,6 +231,11 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder afterParentId(String afterParentId) {
             this.afterParentId = afterParentId;
+            return this;
+        }
+
+        public JobInput.Builder parentIdNullStatus(String nullStatus) {
+            this.parentIdNullStatus = nullStatus;
             return this;
         }
 
@@ -481,7 +488,10 @@ public class JobInput extends AbstractApiType {
                                  this.beforeCumulatedCoreTime,
                                  this.afterCumulatedCoreTime);
 
-            comparableLongString(InputFields.PARENT_ID.getName(), this.beforeParentId, this.afterParentId);
+            comparableLongStringWithNullStatus(InputFields.PARENT_ID.getName(),
+                                               this.beforeParentId,
+                                               this.afterParentId,
+                                               this.parentIdNullStatus);
 
             comparableLongString(InputFields.CHILDREN_COUNT.getName(),
                                  this.beforeChildrenCount,
@@ -525,6 +535,26 @@ public class JobInput extends AbstractApiType {
                 }
                 if (!Strings.isNullOrEmpty(afterValue)) {
                     sb.append(String.format(" %s : ", InputFields.AFTER.getName())).append(afterValue);
+                }
+                sb.append(" }").append(Constants.RETURN);
+            }
+        }
+
+        private void comparableLongStringWithNullStatus(String longName, String beforeValue, String afterValue,
+                String nullStatus) {
+            if (!Strings.isNullOrEmpty(beforeValue) || !Strings.isNullOrEmpty(afterValue) ||
+                !Strings.isNullOrEmpty(nullStatus)) {
+                sb.append(' ');
+                sb.append(longName);
+                sb.append(" : {");
+                if (!Strings.isNullOrEmpty(beforeValue)) {
+                    sb.append(String.format(" %s : ", InputFields.BEFORE.getName())).append(beforeValue);
+                }
+                if (!Strings.isNullOrEmpty(afterValue)) {
+                    sb.append(String.format(" %s : ", InputFields.AFTER.getName())).append(afterValue);
+                }
+                if (!Strings.isNullOrEmpty(nullStatus)) {
+                    sb.append(String.format(" %s : ", InputFields.NULL_STATUS.getName())).append(nullStatus);
                 }
                 sb.append(" }").append(Constants.RETURN);
             }

@@ -46,6 +46,7 @@ import org.ow2.proactive.scheduler.core.db.JobData;
 import org.ow2.proactive.scheduler.core.db.JobDataVariable;
 import org.ow2.proactive.scheduling.api.graphql.common.GraphqlContext;
 import org.ow2.proactive.scheduling.api.graphql.common.InputFields;
+import org.ow2.proactive.scheduling.api.graphql.common.NullStatus;
 import org.ow2.proactive.scheduling.api.graphql.common.Types;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.User;
 import org.ow2.proactive.scheduling.api.graphql.schema.type.inputs.ComparableIntegerInput;
@@ -353,9 +354,11 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
             CriteriaBuilder criteriaBuilder, List<Predicate> predicates, boolean filterZeroLess) {
         long before = -1;
         long after = -1;
+        NullStatus nullStatus = NullStatus.ANY;
         if (input != null) {
             before = input.getBefore();
             after = input.getAfter();
+            nullStatus = input.getNullStatus();
         }
         if (before != -1L) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
@@ -366,21 +369,37 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
         if (after != -1L) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
         }
+        if (nullStatus != NullStatus.ANY) {
+            if (nullStatus.equals(NullStatus.NOT_NULL)) {
+                predicates.add(criteriaBuilder.isNotNull(root.get(name)));
+            } else {
+                predicates.add(criteriaBuilder.isNull(root.get(name)));
+            }
+        }
     }
 
     private void comparableIntegerPredicated(ComparableIntegerInput input, String name, Root<JobData> root,
             CriteriaBuilder criteriaBuilder, List<Predicate> predicates) {
         int before = -1;
         int after = -1;
+        NullStatus nullStatus = NullStatus.ANY;
         if (input != null) {
             before = input.getBefore();
             after = input.getAfter();
+            nullStatus = input.getNullStatus();
         }
         if (before != -1) {
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get(name), before));
         }
         if (after != -1) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get(name), after));
+        }
+        if (nullStatus != NullStatus.ANY) {
+            if (nullStatus.equals(NullStatus.NOT_NULL)) {
+                predicates.add(criteriaBuilder.isNotNull(root.get(name)));
+            } else {
+                predicates.add(criteriaBuilder.isNull(root.get(name)));
+            }
         }
     }
 

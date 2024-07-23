@@ -46,6 +46,21 @@ public final class Inputs {
         }
     }
 
+    public static <T extends Enum> T getEnumValue(Map<String, Object> input, String fieldName, T defaultValue) {
+
+        Object fieldValue = input.get(fieldName);
+
+        if (fieldValue != null) {
+            if (fieldValue instanceof String) {
+                return (T) T.valueOf(defaultValue.getClass(), (String) fieldValue);
+            } else {
+                return (T) fieldValue;
+            }
+        } else {
+            return defaultValue;
+        }
+    }
+
     public static <T> T getObject(Map<String, Object> input, String fieldName, Function<Map<String, Object>, T> mapper,
             T defaultValue) {
 

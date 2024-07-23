@@ -25,54 +25,8 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.common;
 
-import com.google.common.base.CaseFormat;
-
-
-/**
- * Defines the name of the different GraphQL input types which are used in the API.
- *
- * @author ActiveEon Team
- */
-public enum InputFields {
-
-    //Items are ordered following alphabetic order
-    AFTER,
-    BEFORE,
-    COMPARABLE_ID,
-    EXCLUDE_REMOVED,
-    ID,
-    KEY,
-    LAST_UPDATED_TIME,
-    NAME,
-    NULL_STATUS,
-    OWNER,
-    TENANT,
-    PRIORITY,
-    PROJECT_NAME,
-    BUCKET_NAME,
-    JOB_STATUS,
-    TASK_STATUS,
-    SUBMITTED_TIME,
-    START_TIME,
-    FINISHED_TIME,
-    NUMBER_OF_PENDING_TASKS,
-    NUMBER_OF_RUNNING_TASKS,
-    NUMBER_OF_FINISHED_TASKS,
-    NUMBER_OF_FAULTY_TASKS,
-    NUMBER_OF_FAILED_TASKS,
-    NUMBER_OF_IN_ERROR_TASKS,
-    TOTAL_NUMBER_OF_TASKS,
-    CUMULATED_CORE_TIME,
-    PARENT_ID,
-    CHILDREN_COUNT,
-    NUMBER_OF_NODES,
-    NUMBER_OF_NODES_IN_PARALLEL,
-    VALUE,
-    SUBMISSION_MODE,
-    LABEL;
-
-    public String getName() {
-        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());
-    }
-
+public enum NullStatus {
+    NULL,
+    NOT_NULL,
+    ANY
 }
