@@ -128,7 +128,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                                .type(StartTimeInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(START_AT.getName())
-                                                               .description("Start at time defined in the generic information of the job.") // TODO clear desc
+                                                               .description("Start at time defined for the job.")
                                                                .type(StartAtInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(FINISHED_TIME.getName())
