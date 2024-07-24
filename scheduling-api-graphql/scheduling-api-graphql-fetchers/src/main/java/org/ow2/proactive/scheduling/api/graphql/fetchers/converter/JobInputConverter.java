@@ -59,7 +59,6 @@ import com.google.common.base.Strings;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLNamedType;
-import graphql.schema.GraphQLType;
 
 
 /**
@@ -251,6 +250,9 @@ public class JobInputConverter extends AbstractJobTaskInputConverter<JobData, Jo
 
             // Job start time based predicate
             comparableLongPredicated(i.getStartedTime(), "startTime", root, criteriaBuilder, predicates, true);
+
+            // Start_At predicate
+            comparableLongPredicated(i.getStartAt(), "startAt", root, criteriaBuilder, predicates, true);
 
             // Job start time based predicate
             comparableLongPredicated(i.getFinishedTime(), "finishedTime", root, criteriaBuilder, predicates, true);
