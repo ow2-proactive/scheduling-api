@@ -97,6 +97,7 @@ public enum Fields {
     RUN_AS_ME,
     SCHEDULED_TIME,
     SESSION_ID,
+    START_AT,
     START_CURSOR,
     START_TIME,
     STATUS,

@@ -132,6 +132,7 @@ public class JobDataFetcher extends DatabaseConnectionFetcher<JobData, Job> {
                       .removedTime(jobData.getRemovedTime())
                       .status(jobData.getStatus().name())
                       .startTime(jobData.getStartTime())
+                      .startAt(jobData.getStartAt())
                       .submittedTime(jobData.getSubmittedTime())
                       .totalNumberOfTasks(jobData.getTotalNumberOfTasks())
                       // TODO Currently map the JobVariable object to a simple string (its value).

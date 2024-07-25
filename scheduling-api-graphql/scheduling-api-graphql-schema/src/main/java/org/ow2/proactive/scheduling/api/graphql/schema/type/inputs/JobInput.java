@@ -40,23 +40,7 @@ import static org.ow2.proactive.scheduling.api.graphql.common.Fields.PARENT_ID;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.SUBMISSION_MODE;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.TENANT;
 import static org.ow2.proactive.scheduling.api.graphql.common.Fields.VARIABLES;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.COMPARABLE_ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.EXCLUDE_REMOVED;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.FINISHED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.ID;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.LAST_UPDATED_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FAILED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FAULTY_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_FINISHED_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_IN_ERROR_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_PENDING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NUMBER_OF_RUNNING_TASKS;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.OWNER;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PRIORITY;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.PROJECT_NAME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.START_TIME;
-import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.SUBMITTED_TIME;
+import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.*;
 
 import java.util.Map;
 
@@ -142,6 +126,10 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                    .field(newInputObjectField().name(START_TIME.getName())
                                                                .description("Job start time.")
                                                                .type(StartTimeInput.TYPE.getInstance())
+                                                               .build())
+                                   .field(newInputObjectField().name(START_AT.getName())
+                                                               .description("Start at time defined for the job.")
+                                                               .type(StartAtInput.TYPE.getInstance())
                                                                .build())
                                    .field(newInputObjectField().name(FINISHED_TIME.getName())
                                                                .description("Job finished time.")
@@ -231,6 +219,8 @@ public class JobInput extends JobTaskCommonAbstractInput {
 
     private SubmittedTimeInput submittedTime;
 
+    private StartAtInput startAt;
+
     private LastUpdatedTimeInput lastUpdatedTime;
 
     private StartTimeInput startedTime;
@@ -298,6 +288,7 @@ public class JobInput extends JobTaskCommonAbstractInput {
                                                  ComparableCumulatedCoreTime::new,
                                                  null);
             parentId = Inputs.getObject(input, PARENT_ID.getName(), ComparableParentId::new, null);
+            startAt = Inputs.getObject(input, START_AT.getName(), StartAtInput::new, null);
             childrenCount = Inputs.getObject(input, CHILDREN_COUNT.getName(), ComparableChildrenCount::new, null);
             numberOfNodes = Inputs.getObject(input, NUMBER_OF_NODES.getName(), ComparableNumberOfNodes::new, null);
             numberOfNodesInParallel = Inputs.getObject(input,

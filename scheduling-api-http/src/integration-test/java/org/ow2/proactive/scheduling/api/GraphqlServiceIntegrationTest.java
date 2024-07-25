@@ -29,6 +29,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.ow2.proactive.scheduling.api.graphql.common.Arguments.FILTER;
 import static org.ow2.proactive.scheduling.api.graphql.common.InputFields.NAME;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +66,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 
 @ActiveProfiles("test")
@@ -320,9 +322,95 @@ public class GraphqlServiceIntegrationTest {
     @Rollback
     @Test
     @Transactional
+    public void testQueryJobsFilterByStartAtIsNull() {
+        List<List<JobData>> jobDatas = Lists.partition(addJobData(10), 5);
+        List<JobData> jobDataWithStartAt = jobDatas.get(0);
+        jobDataWithStartAt.forEach(jobData -> {
+            jobData.setStartAt(Instant.now().toEpochMilli());
+            entityManager.persist(jobData);
+        });
+
+        String queryTest = "{\n" + "  jobs (filter: {startAt: {nullStatus:%s}}){\n" + "    edges {\n" +
+                           "      node {\n" + "        id\n" + "        startAt\n" + "        name\n" +
+                           "        owner\n" + "        submittedTime\n" + "        status\n" + "      }\n" +
+                           "    }\n" + "  }\n" + "}";
+
+        Map<String, Object> queryResultAny = executeGraphqlQuery(String.format(queryTest, NullStatus.ANY));
+        List<?> jobNodes = (List<?>) getField(queryResultAny, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(10);
+
+        Map<String, Object> queryResultNotNull = executeGraphqlQuery(String.format(queryTest, NullStatus.NOT_NULL));
+        jobNodes = (List<?>) getField(queryResultNotNull, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+        assertThat(jobNodes.stream().allMatch(jobNode -> getField(jobNode, "node", "startAt") != null)).isTrue();
+
+        Map<String, Object> queryResultNull = executeGraphqlQuery(String.format(queryTest, NullStatus.NULL));
+        jobNodes = (List<?>) getField(queryResultNull, "data", "jobs", "edges");
+        assertThat(jobNodes.stream().allMatch(jobNode -> getField(jobNode, "node", "startAt") == null)).isTrue();
+    }
+
+    @Rollback
+    @Test
+    @Transactional
+    public void testQueryJobsFilterByStartAtBeforeAndAfter() {
+        long nowMilli = Instant.now().toEpochMilli();
+        long nowMinusOneMinuteMilli = nowMilli - 60000L;
+        long nowPlusOneMinuteMilli = nowMilli + 60000L;
+
+        List<List<JobData>> jobDatas = Lists.partition(addJobData(10), 5);
+        List<JobData> jobDataWithStartAtBeforeNow = jobDatas.get(0);
+        List<JobData> jobDataWithStartAtAfterNow = jobDatas.get(1);
+
+        jobDataWithStartAtBeforeNow.forEach(jobData -> {
+            jobData.setStartAt(nowMinusOneMinuteMilli);
+            entityManager.persist(jobData);
+        });
+
+        jobDataWithStartAtAfterNow.forEach(jobData -> {
+            jobData.setStartAt(nowPlusOneMinuteMilli);
+            entityManager.persist(jobData);
+        });
+
+        String queryTest = "{\n" + "  jobs (filter: {startAt: {%s:%s}}){\n" + "    edges {\n" + "      node {\n" +
+                           "        id\n" + "        startAt\n" + "        name\n" + "        owner\n" +
+                           "        submittedTime\n" + "        status\n" + "      }\n" + "    }\n" + "  }\n" + "}";
+
+        Map<String, Object> queryResultBefore = executeGraphqlQuery(String.format(queryTest, "before", nowMilli));
+        List<?> jobNodes = (List<?>) getField(queryResultBefore, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+        assertThat(jobNodes.stream()
+                           .allMatch(jobNode -> (Long) getField(jobNode, "node", "startAt") < nowMilli)).isTrue();
+        assertThat(jobNodes.stream()
+                           .allMatch(jobNode -> jobDataWithStartAtBeforeNow.stream()
+                                                                           .anyMatch(jobData -> jobData.getId()
+                                                                                                       .equals(getField(jobNode,
+                                                                                                                        "node",
+                                                                                                                        "id")))));
+
+        Map<String, Object> queryResultAfter = executeGraphqlQuery(String.format(queryTest, "after", nowMilli));
+        jobNodes = (List<?>) getField(queryResultAfter, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(5);
+        assertThat(jobNodes.stream()
+                           .allMatch(jobNode -> (Long) getField(jobNode, "node", "startAt") > nowMilli)).isTrue();
+        assertThat(jobNodes.stream()
+                           .allMatch(jobNode -> jobDataWithStartAtAfterNow.stream()
+                                                                          .anyMatch(jobData -> jobData.getId()
+                                                                                                      .equals(getField(jobNode,
+                                                                                                                       "node",
+                                                                                                                       "id")))));
+
+        Map<String, Object> queryResultAfterNoResult = executeGraphqlQuery(String.format(queryTest,
+                                                                                         "after",
+                                                                                         nowMilli + 600000));
+        jobNodes = (List<?>) getField(queryResultAfterNoResult, "data", "jobs", "edges");
+        assertThat(jobNodes).hasSize(0);
+    }
+
+    @Rollback
+    @Test
+    @Transactional
     public void testQueryJobsFilterByNotContainNames() {
         addJobData(10);
-
         Map<String, Object> queryResult = executeGraphqlQuery(String.format("{ jobs(%s:{%s:\"!*ob7*\"}) { edges { cursor node { id name } } } }",
                                                                             FILTER.getName(),
                                                                             NAME.getName()));
@@ -1203,9 +1291,10 @@ public class GraphqlServiceIntegrationTest {
         return jobDataVariable;
     }
 
-    private void addJobData(int nbJobs) {
+    private List<JobData> addJobData(int nbJobs) {
         List<JobData> jobData = createJobData(nbJobs);
         jobData.forEach(job -> entityManager.persist(job));
+        return jobData;
     }
 
     private void addJobDataWithParentId(int nbJobs) {

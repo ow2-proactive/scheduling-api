@@ -166,6 +166,9 @@ public class Job extends JobTaskCommon {
                                     .field(newFieldDefinition().name(START_TIME.getName())
                                                                .description("Start time.")
                                                                .type(GraphQLLong))
+                                    .field(newFieldDefinition().name(START_AT.getName())
+                                                               .description("Start at.")
+                                                               .type(GraphQLLong))
                                     .field(newFieldDefinition().name(STATUS.getName())
                                                                .description("Scheduling status of a job.")
                                                                .type(JobStatus.TYPE.getInstance()))
@@ -268,6 +271,8 @@ public class Job extends JobTaskCommon {
 
     private String label;
 
+    private Long startAt;
+
     @Builder
     public Job(DataManagement dataManagement, String description, long finishedTime,
             Map<String, String> genericInformation, long id, long inErrorTime, long lastUpdatedTime,
@@ -277,7 +282,7 @@ public class Job extends JobTaskCommon {
             String bucketName, long removedTime, long startTime, String status, long submittedTime, List<Task> tasks,
             int totalNumberOfTasks, Map<String, String> variables, Map<String, String> resultMap,
             long cumulatedCoreTime, Long parentId, int childrenCount, int numberOfNodes, int numberOfNodesInParallel,
-            String submissionMode, String label) {
+            String submissionMode, String label, Long startAt) {
 
         super(description,
               finishedTime,
@@ -317,6 +322,7 @@ public class Job extends JobTaskCommon {
         this.numberOfNodesInParallel = numberOfNodesInParallel;
         this.submissionMode = submissionMode;
         this.label = label;
+        this.startAt = startAt;
     }
 
 }
