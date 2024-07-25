@@ -133,6 +133,12 @@ public class JobInput extends AbstractApiType {
 
         private String beforeNumberOfNodesInParallel;
 
+        private String afterStartAt;
+
+        private String beforeStartAt;
+
+        private String startAtNullStatus;
+
         private String submissionMode;
 
         private String label;
@@ -266,6 +272,21 @@ public class JobInput extends AbstractApiType {
 
         public JobInput.Builder afterNumberOfNodesInParallel(String afterNumberOfNodesInParallel) {
             this.afterNumberOfNodesInParallel = afterNumberOfNodesInParallel;
+            return this;
+        }
+
+        public JobInput.Builder afterStartAt(String afterStartAt) {
+            this.afterStartAt = afterStartAt;
+            return this;
+        }
+
+        public JobInput.Builder beforeStartAt(String beforeStartAt) {
+            this.beforeStartAt = beforeStartAt;
+            return this;
+        }
+
+        public JobInput.Builder startAtNullStatus(String startAtNullStatus) {
+            this.startAtNullStatus = startAtNullStatus;
             return this;
         }
 
@@ -492,6 +513,11 @@ public class JobInput extends AbstractApiType {
                                                this.beforeParentId,
                                                this.afterParentId,
                                                this.parentIdNullStatus);
+
+            comparableLongStringWithNullStatus(InputFields.START_AT.getName(),
+                                               this.beforeStartAt,
+                                               this.afterStartAt,
+                                               this.startAtNullStatus);
 
             comparableLongString(InputFields.CHILDREN_COUNT.getName(),
                                  this.beforeChildrenCount,
