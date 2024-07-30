@@ -109,6 +109,7 @@ public class JobTest {
                                                                               .add(VALUE.getName())
                                                                               .add("}")
                                                                               .add(SUBMITTED_TIME.getName())
+                                                                              .add(START_AT.getName())
                                                                               .add(TOTAL_NUMBER_OF_TASKS.getName())
                                                                               .add("}")
                                                                               .add("}")
