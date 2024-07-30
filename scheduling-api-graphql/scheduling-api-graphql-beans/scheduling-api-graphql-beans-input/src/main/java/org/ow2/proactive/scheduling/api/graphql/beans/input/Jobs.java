@@ -77,6 +77,8 @@ public class Jobs extends AbstractApiType {
 
         private boolean submittedTime = true;
 
+        private boolean startAt = true;
+
         private Tasks tasks = null;
 
         private boolean totalNumberOfTasks = true;
@@ -320,6 +322,11 @@ public class Jobs extends AbstractApiType {
             return this;
         }
 
+        public Builder excludeStartAt() {
+            this.startAt = false;
+            return this;
+        }
+
         public Builder excludeTotalNumberOfTasks() {
             this.totalNumberOfTasks = false;
             return this;
@@ -436,6 +443,9 @@ public class Jobs extends AbstractApiType {
             }
             if (submittedTime) {
                 sb.append(Fields.SUBMITTED_TIME.getName()).append(Constants.RETURN);
+            }
+            if (startAt) {
+                sb.append(Fields.START_AT.getName()).append(Constants.RETURN);
             }
             if (tasks != null) {
                 sb.append(tasks.getQueryString());
