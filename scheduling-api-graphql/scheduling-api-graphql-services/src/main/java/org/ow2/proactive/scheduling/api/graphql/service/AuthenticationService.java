@@ -54,6 +54,7 @@ import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 
 
 /**
@@ -129,7 +130,21 @@ public class AuthenticationService {
     }
 
     public UserData authenticate(String sessionId) throws InvalidSessionIdException {
-        return sessionCache.getUnchecked(sessionId);
+        try {
+            return sessionCache.getUnchecked(sessionId);
+        } catch (UncheckedExecutionException e) {
+            Throwable cause = e.getCause();
+            if (cause == null) {
+                throw e;
+            }
+            if (cause instanceof InvalidSessionIdException) {
+                throw (InvalidSessionIdException) cause;
+            } else if (cause instanceof MissingSessionIdException) {
+                throw (MissingSessionIdException) cause;
+            } else {
+                throw e;
+            }
+        }
     }
 
     private UserData getUserDataFromSessionId(String sessionId) {

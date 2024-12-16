@@ -89,6 +89,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:1.5.22.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-validation:1.5.22.RELEASE'
 
+    compile "org.ow2.proactive:microservices-common:$version"
+
 
     // The scope of this dependency has to be changed to runtime
     // in order to start the application from your IDE

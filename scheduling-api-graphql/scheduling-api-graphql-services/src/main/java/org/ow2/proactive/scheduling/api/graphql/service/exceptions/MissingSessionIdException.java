@@ -25,9 +25,14 @@
  */
 package org.ow2.proactive.scheduling.api.graphql.service.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+
 /**
  * @author ActiveEon Team
  */
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class MissingSessionIdException extends RuntimeException {
 
     public MissingSessionIdException() {
